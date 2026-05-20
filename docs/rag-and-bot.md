@@ -1,0 +1,182 @@
+# RAG And Bot Logic
+
+## Источники данных
+
+Основные источники:
+
+- Confluence pages с описанием витрин;
+- S2T Excel/CSV;
+- stakeholders со страниц Confluence;
+- `UserName` из S2T как ответственный на уровне атрибута/таблицы.
+
+Локальный тестовый источник:
+
+- `s2t_template_5_sheets_filled.xlsx`.
+
+## Парсинг S2T
+
+`S2TParser` выбирает конкретный parser по расширению:
+
+- `.xlsx`, `.xls` -> `ExcelS2TParser`;
+- `.csv` -> `CsvS2TParser`.
+
+Excel parser поддерживает 5-листовой шаблон:
+
+- `Rules`;
+- `Target columns`;
+- `Source columns`;
+- `Datamart info`;
+- `S2T`.
+
+Основные данные атрибута берутся из листа `S2T`. Описания целевых полей дополняются
+из `Target columns`. Код витрины и бизнес-описание дополняются из `Datamart info`.
+
+Колонка `UserName` мапится в `S2TAttribute.owner`.
+
+## Структурированное хранение
+
+После парсинга атрибуты сохраняются в `attributes`:
+
+```text
+attribute_key
+datamart_name
+payload_json
+content_hash
+parsed_at
+```
+
+`payload_json` содержит нормализованную модель `S2TAttribute`.
+
+## RAG indexing
+
+`RAGIndexer` преобразует каждый `S2TAttribute` в текстовый документ:
+
+```text
+Витрина: ...
+Код: ...
+Целевая таблица: ...
+Поле: ...
+Ответственный: ...
+Источник: ...
+Логика: ...
+Описание: ...
+Join: ...
+Where: ...
+```
+
+Документы сохраняются в:
+
+- SQLite `documents`;
+- JSONL vector store `data/vector_store/documents.jsonl`.
+
+Для полной пересборки используется:
+
+```bash
+.venv/bin/python -m app.cli build-rag --full
+```
+
+Для регулярного обновления Confluence используется:
+
+```bash
+.venv/bin/python -m app.cli update-rag
+```
+
+## Structured retriever
+
+`RAGRetriever` сначала классифицирует интент вопроса. Для точных вопросов он отвечает
+из SQLite без LLM:
+
+| Intent | Пример | Источник ответа |
+| --- | --- | --- |
+| `owner_lookup` | `кто владелец Витрина клиентских операций` | `S2TAttribute.owner` и stakeholders. |
+| `attribute_usage` | `В каких витринах есть атрибут epk_id?` | `MetadataRepository.find_attribute_usage`. |
+| `attribute_composition` | `Какие атрибуты у витрины?` | `attributes`. |
+| `source_lineage` | `Из какого источника берется account_balance_amt?` | `source_schema/table/field`. |
+| `transformation_logic` | `Какая логика преобразования epk_id?` | `transformation_logic`. |
+| `last_year_changes` | `Какие изменения за последний год?` | `change_log`. |
+
+Если structured intent не может ответить, retriever переходит в vector search и LLM.
+
+## Изменения за последний год
+
+Запросы вида:
+
+```text
+Какие изменения за последний год по витрине Витрина клиентов с датами?
+```
+
+обрабатываются структурно через `change_log`. Ответ содержит явный период и даты
+каждого изменения:
+
+```text
+Изменения за период 2025-05-18 - 2026-05-18:
+Добавлены атрибуты:
+- 2026-05-18: Витрина клиентов — new_client_status_cd
+```
+
+Изменения группируются по типам:
+
+- добавленные атрибуты;
+- удаленные атрибуты;
+- измененные атрибуты;
+- прочие изменения.
+
+Первичная baseline-загрузка S2T не считается изменением и не должна попадать в этот ответ.
+
+## Owner lookup
+
+Owner lookup не должен зависеть от LLM.
+
+Поведение:
+
+- если витрина найдена и `owner` заполнен — вернуть ответственных из S2T;
+- если витрина найдена, но owner пустой — явно сказать, что владелец/ответственный в S2T не указан;
+- если витрина не найдена — явно вернуть доступные витрины;
+- не переносить владельцев с похожей, но другой витрины.
+
+Пример:
+
+```text
+кто владелец Витрина клиентских операций
+```
+
+Ответ:
+
+```text
+Ответственные из S2T:
+- ivanov.ii@example.ru: dds_dm.dm_client_operations.epk_id
+- petrov.pp@example.ru: dds_dm.dm_client_operations.operation_amt
+- sidorova.as@example.ru: dds_dm.dm_client_operations.account_open_dt
+```
+
+Если спросить витрину, которой нет в локальной базе:
+
+```text
+Данных по витрине `Витрина счетов` нет. Доступные витрины: Витрина клиентских операций
+```
+
+## LLM fallback
+
+LLM используется только для генеративных вопросов, когда structured retriever не дал точного ответа.
+
+Если GigaChat недоступен, бот не должен падать traceback. Он возвращает понятную ошибку
+и сохраняет найденные источники:
+
+```text
+Не удалось вызвать LLM для генеративного ответа: ...
+```
+
+## Источники в ответе
+
+Каждый ответ должен по возможности возвращать sources:
+
+```text
+Витрина
+S2T file
+S2T date
+Confluence URL
+target/source field
+owner
+```
+
+Это нужно для проверки пользователем и для отладки качества RAG.

@@ -1,0 +1,43 @@
+[project]
+name = "confluence-s2t-rag-bot"
+version = "0.1.0"
+description = "RAG bot over Confluence datamart pages and S2T documentation"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12.0",
+    "fastapi>=0.111.0",
+    "httpx>=0.27.0",
+    "langchain-gigachat>=0.3.0",
+    "openpyxl>=3.1.0",
+    "pandas>=2.2.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-dotenv>=1.0.0",
+    "sqlalchemy>=2.0.0",
+    "typer>=0.12.0",
+    "uvicorn>=0.30.0",
+]
+
+[project.optional-dependencies]
+rag = [
+    "chromadb>=0.5.0",
+    "sentence-transformers>=3.0.0",
+]
+dev = [
+    "pytest>=8.2.0",
+    "ruff>=0.5.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools]
+packages = ["app"]

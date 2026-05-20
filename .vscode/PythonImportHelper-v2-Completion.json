@@ -1,0 +1,2811 @@
+[
+    {
+        "label": "BotInterface",
+        "importPath": "app.bot.ports",
+        "description": "app.bot.ports",
+        "isExtraImport": true,
+        "detail": "app.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "BotInterface",
+        "importPath": "app.bot.ports",
+        "description": "app.bot.ports",
+        "isExtraImport": true,
+        "detail": "app.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "RAGAnswer",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGAnswer",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RetrievedDocument",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "isExtraImport": true,
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "ChangeLogEntry",
+        "importPath": "app.changes.models",
+        "description": "app.changes.models",
+        "isExtraImport": true,
+        "detail": "app.changes.models",
+        "documentation": {}
+    },
+    {
+        "label": "ChangeLogEntry",
+        "importPath": "app.changes.models",
+        "description": "app.changes.models",
+        "isExtraImport": true,
+        "detail": "app.changes.models",
+        "documentation": {}
+    },
+    {
+        "label": "ChangeLogEntry",
+        "importPath": "app.changes.models",
+        "description": "app.changes.models",
+        "isExtraImport": true,
+        "detail": "app.changes.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseIssue",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseResult",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseIssue",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseResult",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseResult",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "isExtraImport": true,
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "stable_hash",
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "isExtraImport": true,
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "stable_hash",
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "isExtraImport": true,
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "stable_hash",
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "isExtraImport": true,
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "stable_hash",
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "isExtraImport": true,
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "Iterable",
+        "importPath": "collections.abc",
+        "description": "collections.abc",
+        "isExtraImport": true,
+        "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
+        "label": "Iterator",
+        "importPath": "collections.abc",
+        "description": "collections.abc",
+        "isExtraImport": true,
+        "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
+        "label": "urljoin",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urljoin",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "httpx",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "httpx",
+        "description": "httpx",
+        "detail": "httpx",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ParseResult",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Stakeholder",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "parse_date_from_text",
+        "importPath": "app.utils.date_utils",
+        "description": "app.utils.date_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.date_utils",
+        "documentation": {}
+    },
+    {
+        "label": "fuzzy_contains",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "Counter",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "DocumentRepository",
+        "importPath": "app.storage.document_repository",
+        "description": "app.storage.document_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "DocumentRepository",
+        "importPath": "app.storage.document_repository",
+        "description": "app.storage.document_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "DocumentRepository",
+        "importPath": "app.storage.document_repository",
+        "description": "app.storage.document_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ANSWER_SYSTEM_PROMPT",
+        "importPath": "app.rag.prompts",
+        "description": "app.rag.prompts",
+        "isExtraImport": true,
+        "detail": "app.rag.prompts",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "AnswerGenerator",
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "isExtraImport": true,
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "StubAnswerGenerator",
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "isExtraImport": true,
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "build_answer_generator",
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "isExtraImport": true,
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "AnswerGenerator",
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "isExtraImport": true,
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "LocalTextEmbedder",
+        "importPath": "app.rag.embeddings",
+        "description": "app.rag.embeddings",
+        "isExtraImport": true,
+        "detail": "app.rag.embeddings",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "ExcelS2TParser",
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "ExcelS2TParser",
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "CsvS2TParser",
+        "importPath": "app.s2t.csv_parser",
+        "description": "app.s2t.csv_parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.csv_parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseError",
+        "importPath": "app.s2t.exceptions",
+        "description": "app.s2t.exceptions",
+        "isExtraImport": true,
+        "detail": "app.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseError",
+        "importPath": "app.s2t.exceptions",
+        "description": "app.s2t.exceptions",
+        "isExtraImport": true,
+        "detail": "app.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "field",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "contextmanager",
+        "importPath": "contextlib",
+        "description": "contextlib",
+        "isExtraImport": true,
+        "detail": "contextlib",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "DiffService",
+        "importPath": "app.changes.diff_service",
+        "description": "app.changes.diff_service",
+        "isExtraImport": true,
+        "detail": "app.changes.diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "DiffService",
+        "importPath": "app.changes.diff_service",
+        "description": "app.changes.diff_service",
+        "isExtraImport": true,
+        "detail": "app.changes.diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "DiffService",
+        "importPath": "app.changes.diff_service",
+        "description": "app.changes.diff_service",
+        "isExtraImport": true,
+        "detail": "app.changes.diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "app.rag.indexer",
+        "description": "app.rag.indexer",
+        "isExtraImport": true,
+        "detail": "app.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "app.rag.indexer",
+        "description": "app.rag.indexer",
+        "isExtraImport": true,
+        "detail": "app.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "app.rag.indexer",
+        "description": "app.rag.indexer",
+        "isExtraImport": true,
+        "detail": "app.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "app.s2t.parser",
+        "description": "app.s2t.parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "app.s2t.parser",
+        "description": "app.s2t.parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "app.s2t.parser",
+        "description": "app.s2t.parser",
+        "isExtraImport": true,
+        "detail": "app.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TStateRepository",
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TState",
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TStateRepository",
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TStateRepository",
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "HashService",
+        "importPath": "app.sync.hash_service",
+        "description": "app.sync.hash_service",
+        "isExtraImport": true,
+        "detail": "app.sync.hash_service",
+        "documentation": {}
+    },
+    {
+        "label": "HashService",
+        "importPath": "app.sync.hash_service",
+        "description": "app.sync.hash_service",
+        "isExtraImport": true,
+        "detail": "app.sync.hash_service",
+        "documentation": {}
+    },
+    {
+        "label": "HashService",
+        "importPath": "app.sync.hash_service",
+        "description": "app.sync.hash_service",
+        "isExtraImport": true,
+        "detail": "app.sync.hash_service",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataSyncService",
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "S2TMetadataSnapshot",
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataSyncService",
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "S2TMetadataSnapshot",
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "StateComparator",
+        "importPath": "app.sync.state_comparator",
+        "description": "app.sync.state_comparator",
+        "isExtraImport": true,
+        "detail": "app.sync.state_comparator",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceParser",
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "isExtraImport": true,
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceParser",
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "isExtraImport": true,
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceParser",
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "isExtraImport": true,
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "SequenceMatcher",
+        "importPath": "difflib",
+        "description": "difflib",
+        "isExtraImport": true,
+        "detail": "difflib",
+        "documentation": {}
+    },
+    {
+        "label": "pandas.errors",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas.errors",
+        "description": "pandas.errors",
+        "detail": "pandas.errors",
+        "documentation": {}
+    },
+    {
+        "label": "typer",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "typer",
+        "description": "typer",
+        "detail": "typer",
+        "documentation": {}
+    },
+    {
+        "label": "CLIAdapter",
+        "importPath": "app.bot.cli_adapter",
+        "description": "app.bot.cli_adapter",
+        "isExtraImport": true,
+        "detail": "app.bot.cli_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "importPath": "app.bot.service",
+        "description": "app.bot.service",
+        "isExtraImport": true,
+        "detail": "app.bot.service",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "importPath": "app.bot.service",
+        "description": "app.bot.service",
+        "isExtraImport": true,
+        "detail": "app.bot.service",
+        "documentation": {}
+    },
+    {
+        "label": "build_retriever",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_retriever",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "configure_logging",
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "isExtraImport": true,
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdateResult",
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "BaseSettings",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "SettingsConfigDict",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "AskRequest",
+        "importPath": "app.bot.http_adapter",
+        "description": "app.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "app.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskResponse",
+        "importPath": "app.bot.http_adapter",
+        "description": "app.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "app.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "parse_s2t",
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "isExtraImport": true,
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "CLIAdapter",
+        "kind": 6,
+        "importPath": "app.bot.cli_adapter",
+        "description": "app.bot.cli_adapter",
+        "peekOfCode": "class CLIAdapter(BotInterface):\n    def send_message(self, text: str) -> None:\n        print(text)\n    def receive_message(self) -> str:\n        return input(\"> \")",
+        "detail": "app.bot.cli_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskRequest",
+        "kind": 6,
+        "importPath": "app.bot.http_adapter",
+        "description": "app.bot.http_adapter",
+        "peekOfCode": "class AskRequest(BaseModel):\n    question: str\nclass AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
+        "detail": "app.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskResponse",
+        "kind": 6,
+        "importPath": "app.bot.http_adapter",
+        "description": "app.bot.http_adapter",
+        "peekOfCode": "class AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
+        "detail": "app.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "BotInterface",
+        "kind": 6,
+        "importPath": "app.bot.ports",
+        "description": "app.bot.ports",
+        "peekOfCode": "class BotInterface(Protocol):\n    def send_message(self, text: str) -> None: ...\n    def receive_message(self) -> str: ...",
+        "detail": "app.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "SberChatAdapter",
+        "kind": 6,
+        "importPath": "app.bot.sberchat_adapter",
+        "description": "app.bot.sberchat_adapter",
+        "peekOfCode": "class SberChatAdapter(BotInterface):\n    def send_message(self, text: str) -> None:\n        raise NotImplementedError(\n            \"TODO: implement SberChat send_message when API documentation is available\"\n        )\n    def receive_message(self) -> str:\n        raise NotImplementedError(\n            \"TODO: implement SberChat receive_message when API documentation is available\"\n        )",
+        "detail": "app.bot.sberchat_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "kind": 6,
+        "importPath": "app.bot.service",
+        "description": "app.bot.service",
+        "peekOfCode": "class BotService:\n    def __init__(self, retriever: RAGRetriever) -> None:\n        self.retriever = retriever\n    def ask(self, question: str) -> RAGAnswer:\n        return self.retriever.answer(question)\n    @staticmethod\n    def format_answer(answer: RAGAnswer) -> str:\n        if not answer.sources:\n            return f\"Ответ:\\n{answer.answer}\"\n        source_lines = []",
+        "detail": "app.bot.service",
+        "documentation": {}
+    },
+    {
+        "label": "DiffService",
+        "kind": 6,
+        "importPath": "app.changes.diff_service",
+        "description": "app.changes.diff_service",
+        "peekOfCode": "class DiffService:\n    def diff_attributes(\n        self,\n        old: list[S2TAttribute],\n        new: list[S2TAttribute],\n        source_url: str | None = None,\n    ) -> list[ChangeLogEntry]:\n        old_by_key = {item.attribute_key: item for item in old}\n        new_by_key = {item.attribute_key: item for item in new}\n        changes: list[ChangeLogEntry] = []",
+        "detail": "app.changes.diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "IMPORTANT_FIELDS",
+        "kind": 5,
+        "importPath": "app.changes.diff_service",
+        "description": "app.changes.diff_service",
+        "peekOfCode": "IMPORTANT_FIELDS = [\n    \"source_schema\",\n    \"source_table\",\n    \"source_field\",\n    \"join_condition\",\n    \"where_condition\",\n    \"group_by\",\n    \"transformation_logic\",\n    \"target_field_description\",\n    \"refresh_frequency\",",
+        "detail": "app.changes.diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "kind": 6,
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "peekOfCode": "class HistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add_many(self, entries: list[ChangeLogEntry]) -> None:\n        with self.db.connect() as conn:\n            for entry in entries:\n                conn.execute(\n                    \"\"\"\n                    insert or ignore into change_log(\n                        id, datamart_name, datamart_code, entity_type, entity_name, change_type,",
+        "detail": "app.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ChangeLogEntry",
+        "kind": 6,
+        "importPath": "app.changes.models",
+        "description": "app.changes.models",
+        "peekOfCode": "class ChangeLogEntry(BaseModel):\n    id: str\n    datamart_name: str\n    datamart_code: str | None = None\n    entity_type: str\n    entity_name: str\n    change_type: str\n    old_value: str | None = None\n    new_value: str | None = None\n    change_date: datetime = Field(default_factory=datetime.utcnow)",
+        "detail": "app.changes.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "kind": 6,
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth = None\n        if settings.confluence_username and settings.confluence_api_token:\n            auth = (settings.confluence_username, settings.confluence_api_token)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, timeout=30\n        )\n    def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:",
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth = None\n        if settings.confluence_username and settings.confluence_api_token:\n            auth = (settings.confluence_username, settings.confluence_api_token)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, timeout=30\n        )",
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceError",
+        "kind": 6,
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "peekOfCode": "class ConfluenceError(RuntimeError):\n    \"\"\"Base Confluence integration error.\"\"\"\nclass ConfluenceAuthError(ConfluenceError):\n    \"\"\"Raised when Confluence authentication fails.\"\"\"",
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "kind": 6,
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "peekOfCode": "class ConfluenceAuthError(ConfluenceError):\n    \"\"\"Raised when Confluence authentication fails.\"\"\"",
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "Stakeholder",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class Stakeholder(BaseModel):\n    name: str | None = None\n    email: str | None = None\n    role: str | None = None\n    department: str | None = None\n    profile_url: str | None = None\nclass ConfluencePage(BaseModel):\n    id: str\n    title: str\n    url: str",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class ConfluencePage(BaseModel):\n    id: str\n    title: str\n    url: str\n    body_html: str | None = None\n    updated_at: datetime | None = None\n    version: int | None = None\n    version_when: datetime | None = None\n    last_modified: datetime | None = None\n    history_last_updated: datetime | None = None",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class S2TResource(BaseModel):\n    id: str | None = None\n    title: str\n    url: str | None = None\n    resource_type: str = \"unknown\"\n    file_name: str | None = None\n    file_date: date | None = None\n    updated_at: datetime | None = None\n    version: int | None = None\n    version_when: datetime | None = None",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class Datamart(BaseModel):\n    name: str\n    confluence_page_id: str\n    confluence_url: str\n    code: str | None = None\n    page_version: int | None = None\n    page_version_when: datetime | None = None\n    page_last_modified: datetime | None = None\n    page_history_last_updated: datetime | None = None\n    stakeholders: list[Stakeholder] = Field(default_factory=list)",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ParseResult",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class ParseResult(BaseModel):\n    datamarts: list[Datamart] = Field(default_factory=list)\n    warnings: list[str] = Field(default_factory=list)",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceParser",
+        "kind": 6,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "class ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():\n            if pattern not in normalize_text(page.title):\n                continue",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nOWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "OWNER_LABELS",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "OWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_RE",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "SUPPORTED_S2T_SUFFIXES",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "LATEST_MARKERS",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():\n            if pattern not in normalize_text(page.title):",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "LocalTextEmbedder",
+        "kind": 6,
+        "importPath": "app.rag.embeddings",
+        "description": "app.rag.embeddings",
+        "peekOfCode": "class LocalTextEmbedder:\n    \"\"\"Small dependency-free embedding fallback based on token frequencies.\"\"\"\n    def embed(self, text: str) -> Counter[str]:\n        return Counter(re.findall(r\"[\\wА-Яа-яЁё]+\", normalize_text(text)))\n    def similarity(self, left: str, right: str) -> float:\n        a = self.embed(left)\n        b = self.embed(right)\n        if not a or not b:\n            return 0.0\n        dot = sum(a[token] * b[token] for token in a.keys() & b.keys())",
+        "detail": "app.rag.embeddings",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "kind": 6,
+        "importPath": "app.rag.indexer",
+        "description": "app.rag.indexer",
+        "peekOfCode": "class RAGIndexer:\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        document_repo: DocumentRepository,\n        vector_store: JsonVectorStore,\n    ) -> None:\n        self.metadata_repo = metadata_repo\n        self.document_repo = document_repo\n        self.vector_store = vector_store",
+        "detail": "app.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "AnswerGenerator",
+        "kind": 6,
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "peekOfCode": "class AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(",
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "StubAnswerGenerator",
+        "kind": 6,
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "peekOfCode": "class StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"\n            )\n        self.settings = settings",
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "GigaChatAnswerGenerator",
+        "kind": 6,
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "peekOfCode": "class GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"\n            )\n        self.settings = settings\n        self.llm = None\n    def _get_llm(self):\n        if self.llm is not None:",
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "build_answer_generator",
+        "kind": 2,
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "peekOfCode": "def build_answer_generator(settings: Settings) -> AnswerGenerator:\n    if settings.llm_provider.lower() == \"gigachat\":\n        return GigaChatAnswerGenerator(settings)\n    return StubAnswerGenerator()",
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "kind": 6,
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "peekOfCode": "class RAGDocument(BaseModel):\n    id: str\n    text: str\n    metadata: dict = Field(default_factory=dict)\nclass RetrievedDocument(BaseModel):\n    document: RAGDocument\n    score: float\nclass RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RetrievedDocument",
+        "kind": 6,
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "peekOfCode": "class RetrievedDocument(BaseModel):\n    document: RAGDocument\n    score: float\nclass RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGAnswer",
+        "kind": 6,
+        "importPath": "app.rag.models",
+        "description": "app.rag.models",
+        "peekOfCode": "class RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
+        "detail": "app.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "ANSWER_SYSTEM_PROMPT",
+        "kind": 5,
+        "importPath": "app.rag.prompts",
+        "description": "app.rag.prompts",
+        "peekOfCode": "ANSWER_SYSTEM_PROMPT = \"\"\"\nТы отвечаешь по документации Confluence и S2T. Используй только найденный контекст.\nЕсли данных нет, честно скажи, что данных нет. В ответе указывай источники и дату актуальности,\nесли они есть в метаданных.\nНе выдумывай дату актуальности, версию документации, владельцев, атрибуты, источники и выводы.\nЕсли дата или версия отсутствует в контексте, прямо скажи, что дата актуальности не указана.\n\"\"\".strip()",
+        "detail": "app.rag.prompts",
+        "documentation": {}
+    },
+    {
+        "label": "IntentClassifier",
+        "kind": 6,
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if any(word in q for word in [\"владелец\", \"заинтересован\", \"ответствен\"]):\n            return \"owner_lookup\"\n        if \"измен\" in q and (\"год\" in q or \"период\" in q):\n            return \"last_year_changes\"\n        if \"атрибутный состав\" in q or \"какие атрибут\" in q:\n            return \"attribute_composition\"\n        if \"в каких витринах\" in q and \"атрибут\" in q:",
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "kind": 6,
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "peekOfCode": "class RAGRetriever:\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        vector_store: JsonVectorStore,\n        history_repo: HistoryRepository,\n        answer_generator: AnswerGenerator | None = None,\n    ) -> None:\n        self.metadata_repo = metadata_repo\n        self.vector_store = vector_store",
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "kind": 6,
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
+        "peekOfCode": "class JsonVectorStore:\n    def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:\n        self.directory = directory\n        self.directory.mkdir(parents=True, exist_ok=True)\n        self.path = self.directory / \"documents.jsonl\"\n        self.embedder = embedder or LocalTextEmbedder()\n    def replace_all(self, documents: list[RAGDocument]) -> None:\n        with self.path.open(\"w\", encoding=\"utf-8\") as file:\n            for document in documents:\n                file.write(document.model_dump_json() + \"\\n\")",
+        "detail": "app.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "CsvS2TParser",
+        "kind": 6,
+        "importPath": "app.s2t.csv_parser",
+        "description": "app.s2t.csv_parser",
+        "peekOfCode": "class CsvS2TParser:\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        df = pd.read_csv(path, dtype=str)\n        helper = ExcelS2TParser()\n        mapping = helper._build_column_mapping(df.columns)\n        result = S2TParseResult(processed_sheets=[path.name])\n        for idx, row in df.iterrows():\n            try:",
+        "detail": "app.s2t.csv_parser",
+        "documentation": {}
+    },
+    {
+        "label": "ExcelS2TParser",
+        "kind": 6,
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "peekOfCode": "class ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)\n        if TEMPLATE_SHEETS.issubset(set(workbook.sheet_names)):",
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nCOLUMN_ALIASES = {\n    \"owner\": [\n        \"UserName\",\n        \"owner\",\n        \"владелец\",\n        \"ответственный\",\n        \"заинтересованное лицо\",\n    ],\n    \"target_platform\": [\"T-trg-platform\", \"T-platform\", \"target platform\", \"целевая платформа\"],",
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "COLUMN_ALIASES",
+        "kind": 5,
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "peekOfCode": "COLUMN_ALIASES = {\n    \"owner\": [\n        \"UserName\",\n        \"owner\",\n        \"владелец\",\n        \"ответственный\",\n        \"заинтересованное лицо\",\n    ],\n    \"target_platform\": [\"T-trg-platform\", \"T-platform\", \"target platform\", \"целевая платформа\"],\n    \"target_instance\": [\"T-trg-instance\", \"T-instance\", \"target instance\", \"целевой инстанс\"],",
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "TEMPLATE_SHEETS",
+        "kind": 5,
+        "importPath": "app.s2t.excel_parser",
+        "description": "app.s2t.excel_parser",
+        "peekOfCode": "TEMPLATE_SHEETS = {\"Target columns\", \"Source columns\", \"Datamart info\", \"S2T\"}\nclass ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)",
+        "detail": "app.s2t.excel_parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseError",
+        "kind": 6,
+        "importPath": "app.s2t.exceptions",
+        "description": "app.s2t.exceptions",
+        "peekOfCode": "class S2TParseError(RuntimeError):\n    \"\"\"Raised when an S2T document cannot be parsed.\"\"\"",
+        "detail": "app.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "S2TAttribute",
+        "kind": 6,
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "peekOfCode": "class S2TAttribute(BaseModel):\n    datamart_name: str\n    datamart_code: str | None = None\n    owner: str | None = None\n    target_platform: str | None = None\n    target_instance: str | None = None\n    target_schema: str | None = None\n    target_table: str | None = None\n    target_field: str | None = None\n    target_table_description: str | None = None",
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseIssue",
+        "kind": 6,
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "peekOfCode": "class S2TParseIssue(BaseModel):\n    sheet: str | None = None\n    row_number: int | None = None\n    message: str\nclass S2TParseResult(BaseModel):\n    attributes: list[S2TAttribute] = Field(default_factory=list)\n    processed_sheets: list[str] = Field(default_factory=list)\n    issues: list[S2TParseIssue] = Field(default_factory=list)",
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseResult",
+        "kind": 6,
+        "importPath": "app.s2t.models",
+        "description": "app.s2t.models",
+        "peekOfCode": "class S2TParseResult(BaseModel):\n    attributes: list[S2TAttribute] = Field(default_factory=list)\n    processed_sheets: list[str] = Field(default_factory=list)\n    issues: list[S2TParseIssue] = Field(default_factory=list)",
+        "detail": "app.s2t.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "kind": 6,
+        "importPath": "app.s2t.parser",
+        "description": "app.s2t.parser",
+        "peekOfCode": "class S2TParser:\n    def __init__(self) -> None:\n        self.excel = ExcelS2TParser()\n        self.csv = CsvS2TParser()\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        suffix = path.suffix.lower()\n        if suffix in {\".xlsx\", \".xls\"}:\n            return self.excel.parse(path, datamart_name, s2t_file_date)",
+        "detail": "app.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "DocumentRepository",
+        "kind": 6,
+        "importPath": "app.storage.document_repository",
+        "description": "app.storage.document_repository",
+        "peekOfCode": "class DocumentRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def replace_all(self, documents: list[RAGDocument]) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\"delete from documents\")\n            for doc in documents:\n                self._insert_document(conn, doc)\n    def replace_for_datamart(self, datamart_name: str, documents: list[RAGDocument]) -> None:\n        with self.db.connect() as conn:",
+        "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "kind": 6,
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "peekOfCode": "class MetadataRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def upsert_datamart(self, datamart: Datamart) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into datamarts(\n                    name, code, confluence_page_id, confluence_url, stakeholders_json, updated_at\n                )",
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TState",
+        "kind": 6,
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "peekOfCode": "class S2TState:\n    resource_key: str\n    datamart_name: str\n    page_id: str | None\n    resource_type: str | None\n    title: str | None\n    file_name: str | None\n    url: str | None\n    metadata: dict\n    metadata_hash: str",
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TStateRepository",
+        "kind": 6,
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "peekOfCode": "class S2TStateRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, resource_key: str) -> S2TState | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select * from s2t_state where resource_key = ?\", (resource_key,)\n            ).fetchone()\n        return self._row_to_state(row) if row else None\n    def upsert(",
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "kind": 6,
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "peekOfCode": "class SQLite:\n    def __init__(self, path: Path) -> None:\n        self.path = path\n        self.path.parent.mkdir(parents=True, exist_ok=True)\n        self.init_schema()\n    @contextmanager\n    def connect(self) -> Iterator[sqlite3.Connection]:\n        conn = sqlite3.connect(self.path)\n        conn.row_factory = sqlite3.Row\n        try:",
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "HashService",
+        "kind": 6,
+        "importPath": "app.sync.hash_service",
+        "description": "app.sync.hash_service",
+        "peekOfCode": "class HashService:\n    @staticmethod\n    def sha256_bytes(content: bytes) -> str:\n        return hashlib.sha256(content).hexdigest()\n    @staticmethod\n    def stable_metadata_hash(metadata: dict) -> str:\n        payload = json.dumps(metadata, ensure_ascii=False, sort_keys=True, default=str)\n        return hashlib.sha256(payload.encode(\"utf-8\")).hexdigest()",
+        "detail": "app.sync.hash_service",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdateItem",
+        "kind": 6,
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "peekOfCode": "class IncrementalUpdateItem:\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool\n    reasons: list[str]\n    will_download: bool\n    will_parse: bool\n    will_reindex: bool\n    content_changed: bool | None = None",
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdateResult",
+        "kind": 6,
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "peekOfCode": "class IncrementalUpdateResult:\n    items: list[IncrementalUpdateItem] = field(default_factory=list)\n    @property\n    def downloaded_count(self) -> int:\n        return sum(1 for item in self.items if item.will_download)\n    @property\n    def parsed_count(self) -> int:\n        return sum(1 for item in self.items if item.will_parse)\n    @property\n    def reindexed_count(self) -> int:",
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "kind": 6,
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "peekOfCode": "class IncrementalUpdater:\n    def __init__(\n        self,\n        *,\n        metadata_sync: MetadataSyncService,\n        confluence_client: ConfluenceClient,\n        state_repo: S2TStateRepository,\n        metadata_repo: MetadataRepository,\n        history_repo: HistoryRepository,\n        indexer: RAGIndexer,",
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "S2TMetadataSnapshot",
+        "kind": 6,
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\nclass MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:",
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataSyncService",
+        "kind": 6,
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "peekOfCode": "class MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:\n        result = self.parser.parse(dry_run=True)\n        snapshots: list[S2TMetadataSnapshot] = []\n        for datamart in result.datamarts:\n            if not datamart.s2t_resource:\n                continue",
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataDecision",
+        "kind": 6,
+        "importPath": "app.sync.state_comparator",
+        "description": "app.sync.state_comparator",
+        "peekOfCode": "class MetadataDecision:\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:",
+        "detail": "app.sync.state_comparator",
+        "documentation": {}
+    },
+    {
+        "label": "StateComparator",
+        "kind": 6,
+        "importPath": "app.sync.state_comparator",
+        "description": "app.sync.state_comparator",
+        "peekOfCode": "class StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:\n            return MetadataDecision(changed=False, reasons=[\"metadata unchanged\"])\n        reasons = []\n        old_metadata = previous.metadata",
+        "detail": "app.sync.state_comparator",
+        "documentation": {}
+    },
+    {
+        "label": "parse_date_from_text",
+        "kind": 2,
+        "importPath": "app.utils.date_utils",
+        "description": "app.utils.date_utils",
+        "peekOfCode": "def parse_date_from_text(text: str) -> date | None:\n    for pattern, fmt in DATE_PATTERNS:\n        match = pattern.search(text)\n        if match:\n            try:\n                return datetime.strptime(match.group(0), fmt).date()\n            except ValueError:\n                continue\n    return None\ndef utc_now() -> datetime:",
+        "detail": "app.utils.date_utils",
+        "documentation": {}
+    },
+    {
+        "label": "utc_now",
+        "kind": 2,
+        "importPath": "app.utils.date_utils",
+        "description": "app.utils.date_utils",
+        "peekOfCode": "def utc_now() -> datetime:\n    return datetime.utcnow()",
+        "detail": "app.utils.date_utils",
+        "documentation": {}
+    },
+    {
+        "label": "DATE_PATTERNS",
+        "kind": 5,
+        "importPath": "app.utils.date_utils",
+        "description": "app.utils.date_utils",
+        "peekOfCode": "DATE_PATTERNS = [\n    (re.compile(r\"(?P<y>\\d{4})-(?P<m>\\d{2})-(?P<d>\\d{2})\"), \"%Y-%m-%d\"),\n    (re.compile(r\"(?P<d>\\d{2})\\.(?P<m>\\d{2})\\.(?P<y>\\d{4})\"), \"%d.%m.%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})(?P<m>\\d{2})(?P<d>\\d{2})\"), \"%Y%m%d\"),\n    (re.compile(r\"(?P<d>\\d{2})-(?P<m>\\d{2})-(?P<y>\\d{4})\"), \"%d-%m-%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})_(?P<m>\\d{2})_(?P<d>\\d{2})\"), \"%Y_%m_%d\"),\n]\ndef parse_date_from_text(text: str) -> date | None:\n    for pattern, fmt in DATE_PATTERNS:\n        match = pattern.search(text)",
+        "detail": "app.utils.date_utils",
+        "documentation": {}
+    },
+    {
+        "label": "stable_hash",
+        "kind": 2,
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "peekOfCode": "def stable_hash(value: Any) -> str:\n    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)\n    return hashlib.sha256(payload.encode(\"utf-8\")).hexdigest()",
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "kind": 2,
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "peekOfCode": "def normalize_text(value: str | None) -> str:\n    if not value:\n        return \"\"\n    return re.sub(r\"\\s+\", \" \", value.strip().lower())\ndef fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True\n    words = normalized.split()\n    for candidate in candidates:",
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "fuzzy_contains",
+        "kind": 2,
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "peekOfCode": "def fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True\n    words = normalized.split()\n    for candidate in candidates:\n        target = normalize_text(candidate)\n        for size in range(1, min(4, len(words)) + 1):\n            for i in range(0, len(words) - size + 1):\n                window = \" \".join(words[i : i + size])",
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "parse_confluence",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    parser = ConfluenceParser(ConfluenceClient(settings), settings)\n    result = parser.parse(dry_run=dry_run)\n    for datamart in result.datamarts:\n        typer.echo(f\"Витрина: {datamart.name}\")\n        typer.echo(f\"  stakeholders: {len(datamart.stakeholders)}\")\n        typer.echo(f\"  s2t: {datamart.s2t_resource.title if datamart.s2t_resource else '-'}\")\n@app.command(\"parse-s2t\")",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "parse_s2t",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def parse_s2t(\n    path: Path,\n    datamart: str = typer.Option(..., \"--datamart\"),\n) -> None:\n    if not path.exists():\n        raise typer.BadParameter(f\"S2T file not found: {path}\", param_hint=\"path\")\n    if not path.is_file():\n        raise typer.BadParameter(f\"S2T path is not a file: {path}\", param_hint=\"path\")\n    _, metadata_repo, history_repo, _ = _repos()\n    try:",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "build_rag",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def build_rag(full: bool = typer.Option(False, \"--full\")) -> None:\n    _, _, _, indexer = _repos()\n    docs = indexer.rebuild_from_storage()\n    typer.echo(f\"Indexed documents: {len(docs)}\")\n    if full:\n        typer.echo(\"Full rebuild completed\")\n@app.command(\"update-rag\")\ndef update_rag(\n    since: str | None = typer.Option(None, \"--since\"),\n    dry_run: bool = typer.Option(False, \"--dry-run\"),",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "update_rag",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def update_rag(\n    since: str | None = typer.Option(None, \"--since\"),\n    dry_run: bool = typer.Option(False, \"--dry-run\"),\n) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    document_repo = DocumentRepository(db)",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "ask",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def ask(question: str) -> None:\n    service = BotService(build_retriever())\n    typer.echo(service.format_answer(service.ask(question)))\n@app.command(\"chat\")\ndef chat() -> None:\n    service = BotService(build_retriever())\n    adapter = CLIAdapter()\n    adapter.send_message(\"Введите вопрос. Для выхода: exit\")\n    while True:\n        question = adapter.receive_message().strip()",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "chat",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def chat() -> None:\n    service = BotService(build_retriever())\n    adapter = CLIAdapter()\n    adapter.send_message(\"Введите вопрос. Для выхода: exit\")\n    while True:\n        question = adapter.receive_message().strip()\n        if not question:\n            continue\n        if question.lower() in {\"exit\", \"quit\", \"q\"}:\n            break",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "changes",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def changes(\n    datamart: str | None = typer.Option(None, \"--datamart\"),\n    last_year: bool = typer.Option(False, \"--last-year\"),\n) -> None:\n    _, _, history_repo, _ = _repos()\n    since = datetime.utcnow() - timedelta(days=365) if last_year else None\n    entries = history_repo.list_changes(since=since, datamart_name=datamart)\n    for entry in entries:\n        date = entry.change_date.date()\n        typer.echo(f\"{date} {entry.datamart_name} {entry.entity_name} {entry.change_type}\")",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "find_attribute",
+        "kind": 2,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "def find_attribute(attribute: str) -> None:\n    _, metadata_repo, _, _ = _repos()\n    attrs = metadata_repo.find_attribute_usage(attribute)\n    for attr in attrs:\n        target = f\"{attr.target_table}.{attr.target_field}\"\n        source = f\"{attr.source_table}.{attr.source_field}\"\n        typer.echo(f\"{attr.datamart_name}: {target} <- {source}\")\nif __name__ == \"__main__\":\n    app()",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "peekOfCode": "app = typer.Typer(no_args_is_help=True)\ndef _repos():\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    document_repo = DocumentRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    indexer = RAGIndexer(metadata_repo, document_repo, vector_store)",
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "kind": 6,
+        "importPath": "app.config",
+        "description": "app.config",
+        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_username: str | None = None\n    confluence_api_token: str | None = None\n    datamart_page_pattern: str = \"Витрина\"\n    s2t_section_patterns: str = \"s2t,S2T,Source to Target,Source-to-Target\"\n    data_dir: Path = Path(\"./data\")",
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "kind": 2,
+        "importPath": "app.config",
+        "description": "app.config",
+        "peekOfCode": "def get_settings() -> Settings:\n    return Settings()",
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "build_retriever",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_retriever(settings: Settings | None = None) -> RAGRetriever:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    answer_generator = build_answer_generator(settings)\n    return RAGRetriever(metadata_repo, vector_store, history_repo, answer_generator)",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "configure_logging",
+        "kind": 2,
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n    )",
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "ask",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def ask(request: AskRequest) -> AskResponse:\n    service = BotService(build_retriever())\n    answer = service.ask(request.question)\n    return AskResponse(answer=answer.answer, sources=answer.sources)\n@app.get(\"/health\")\ndef health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "health",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\n@app.post(\"/ask\", response_model=AskResponse)\ndef ask(request: AskRequest) -> AskResponse:\n    service = BotService(build_retriever())\n    answer = service.ask(request.question)\n    return AskResponse(answer=answer.answer, sources=answer.sources)\n@app.get(\"/health\")\ndef health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "test_parse_s2t_records_changes_on_reparse",
+        "kind": 2,
+        "importPath": "tests.test_cli",
+        "description": "tests.test_cli",
+        "peekOfCode": "def test_parse_s2t_records_changes_on_reparse(\n    tmp_path: Path, monkeypatch, capsys\n) -> None:\n    monkeypatch.setenv(\"SQLITE_DB_PATH\", str(tmp_path / \"app.db\"))\n    monkeypatch.setenv(\"DATA_DIR\", str(tmp_path / \"data\"))\n    monkeypatch.setenv(\"VECTOR_STORE_DIR\", str(tmp_path / \"vector_store\"))\n    get_settings.cache_clear()\n    try:\n        base_path = tmp_path / \"base.csv\"\n        updated_path = tmp_path / \"updated.csv\"",
+        "detail": "tests.test_cli",
+        "documentation": {}
+    },
+    {
+        "label": "test_gigachat_auth_key_prefers_credentials",
+        "kind": 2,
+        "importPath": "tests.test_config",
+        "description": "tests.test_config",
+        "peekOfCode": "def test_gigachat_auth_key_prefers_credentials() -> None:\n    settings = Settings(\n        gigachat_credentials=\"credentials\",\n        gigachat_api_key=\"api-key\",\n        gigachat_api_pers=\"api-pers\",\n    )\n    assert settings.gigachat_auth_key == \"credentials\"\ndef test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"",
+        "detail": "tests.test_config",
+        "documentation": {}
+    },
+    {
+        "label": "test_gigachat_auth_key_supports_legacy_api_pers",
+        "kind": 2,
+        "importPath": "tests.test_config",
+        "description": "tests.test_config",
+        "peekOfCode": "def test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"",
+        "detail": "tests.test_config",
+        "documentation": {}
+    },
+    {
+        "label": "FakeClient",
+        "kind": 6,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None):\n        self.children = children or []\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return []\n    def get_children(self, page_id: str):\n        return self.children\ndef test_extract_stakeholders_from_table() -> None:",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_extract_stakeholders_from_table",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_extract_stakeholders_from_table() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    html = \"\"\"\n    <table><tr><td>Заинтересованные лица</td>\n    <td><a href=\"/u/ivanov\">Иванов Иван</a> ivanov@example.ru;\n    Петров Петр petrov@example.ru</td></tr></table>\n    \"\"\"\n    stakeholders = parser.extract_stakeholders(html)\n    assert len(stakeholders) == 2\n    assert stakeholders[0].email == \"ivanov@example.ru\"",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_choose_latest_s2t_prefers_title_date_then_version",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_choose_latest_s2t_prefers_title_date_then_version() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidates = [\n        S2TResource(title=\"s2t_2024_01_01.xlsx\", updated_at=datetime(2026, 1, 1), version=10),\n        S2TResource(title=\"s2t_2025_01_01.xlsx\", updated_at=datetime(2025, 1, 1), version=1),\n        S2TResource(title=\"s2t.xlsx\", updated_at=datetime(2026, 5, 1), version=1),\n    ]\n    for item in candidates:\n        item.file_date = parser.choose_latest_s2t([item]).file_date\n    selected = parser.choose_latest_s2t(candidates)",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_find_s2t_candidate_from_table_date_and_neighbor_download_link",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_latest_row_without_date_is_not_warning",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_latest_row_without_date_is_not_warning(caplog) -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidate = S2TResource(\n        title=\"arbitrary_name.xlsx\",\n        resource_type=\"table_latest_row\",\n        updated_at=datetime(2026, 5, 16),\n        version=4,\n    )\n    selected = parser.choose_latest_s2t([candidate])\n    assert selected is candidate",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_find_s2t_candidate_from_child_s2t_page_table",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_find_s2t_candidate_from_child_s2t_page_table() -> None:\n    child = ConfluencePage(\n        id=\"491521\",\n        title=\"S2T\",\n        url=\"https://confluence.example.ru/spaces/TH/pages/491521/S2T\",\n        updated_at=datetime(2026, 5, 16),\n        body_html=\"\"\"\n        <table>\n          <tr><th>Дата</th><th>Файл</th></tr>\n          <tr>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_find_s2t_candidate_from_confluence_attachment_macro",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"491521\",\n        title=\"S2T\",\n        url=\"https://confluence.example.ru/spaces/TH/pages/491521/S2T\",\n        updated_at=datetime(2026, 5, 16),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_diff_detects_modified_attribute_logic",
+        "kind": 2,
+        "importPath": "tests.test_diff_service",
+        "description": "tests.test_diff_service",
+        "peekOfCode": "def test_diff_detects_modified_attribute_logic() -> None:\n    old = [\n        S2TAttribute(\n            datamart_name=\"dm\",\n            datamart_code=\"DM\",\n            target_schema=\"dds\",\n            target_table=\"t\",\n            target_field=\"f\",\n            transformation_logic=\"old\",\n        )",
+        "detail": "tests.test_diff_service",
+        "documentation": {}
+    },
+    {
+        "label": "FakeMetadataSync",
+        "kind": 6,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "class FakeMetadataSync:\n    def __init__(self, snapshots):\n        self.snapshots = snapshots\n    def collect(self):\n        return self.snapshots\nclass FakeConfluenceClient:\n    def __init__(self, content: bytes):\n        self.content = content\n        self.downloads = 0\n    def download(self, url: str) -> bytes:",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "FakeConfluenceClient",
+        "kind": 6,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "class FakeConfluenceClient:\n    def __init__(self, content: bytes):\n        self.content = content\n        self.downloads = 0\n    def download(self, url: str) -> bytes:\n        self.downloads += 1\n        return self.content\ndef _snapshot(version: int = 1) -> S2TMetadataSnapshot:\n    datamart = Datamart(\n        name=\"Витрина клиентов\",",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "test_dry_run_reports_changes_without_download",
+        "kind": 2,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "def test_dry_run_reports_changes_without_download(tmp_path: Path) -> None:\n    client = FakeConfluenceClient(b\"\")\n    updater = _updater(tmp_path, [_snapshot()], client)\n    result = updater.run(dry_run=True)\n    assert result.items[0].will_download is True\n    assert result.items[0].will_parse is True\n    assert client.downloads == 0\ndef test_incremental_update_skips_unchanged_metadata(tmp_path: Path) -> None:\n    content = (\n        b\"codeDatamart,target_table,target_field,UserName\\n\"",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "test_incremental_update_skips_unchanged_metadata",
+        "kind": 2,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "def test_incremental_update_skips_unchanged_metadata(tmp_path: Path) -> None:\n    content = (\n        b\"codeDatamart,target_table,target_field,UserName\\n\"\n        b\"DM_CLIENT,client_dm,epk_id,owner@example.ru\\n\"\n    )\n    snapshot = _snapshot()\n    client = FakeConfluenceClient(content)\n    updater = _updater(tmp_path, [snapshot], client)\n    first = updater.run()\n    second = updater.run()",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "test_changed_metadata_with_same_hash_skips_parse_and_reindex",
+        "kind": 2,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "def test_changed_metadata_with_same_hash_skips_parse_and_reindex(tmp_path: Path) -> None:\n    content = (\n        b\"codeDatamart,target_table,target_field,UserName\\n\"\n        b\"DM_CLIENT,client_dm,epk_id,owner@example.ru\\n\"\n    )\n    client = FakeConfluenceClient(content)\n    updater = _updater(tmp_path, [_snapshot(version=1)], client)\n    first = updater.run()\n    updater.metadata_sync = FakeMetadataSync([_snapshot(version=2)])\n    second = updater.run()",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "test_incremental_update_added_s2t_field_is_reported_with_date",
+        "kind": 2,
+        "importPath": "tests.test_incremental_updater",
+        "description": "tests.test_incremental_updater",
+        "peekOfCode": "def test_incremental_update_added_s2t_field_is_reported_with_date(tmp_path: Path) -> None:\n    base_content = (\n        b\"codeDatamart,target_table,target_field,UserName\\n\"\n        b\"DM_CLIENT,client_dm,epk_id,owner@example.ru\\n\"\n    )\n    updated_content = (\n        b\"codeDatamart,target_table,target_field,UserName\\n\"\n        b\"DM_CLIENT,client_dm,epk_id,owner@example.ru\\n\"\n        b\"DM_CLIENT,client_dm,new_client_status_cd,owner@example.ru\\n\"\n    )",
+        "detail": "tests.test_incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "FailingAnswerGenerator",
+        "kind": 6,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "class FailingAnswerGenerator(AnswerGenerator):\n    def generate(self, question: str, context: str) -> str:\n        raise ConnectionError(\"LLM is unavailable\")\ndef test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентов\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_attribute_usage_structured_answer",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентов\",\n                target_table=\"client_dm\",\n                target_field=\"epk_id\",\n                source_table=\"client_src\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_owner_lookup_uses_structured_s2t_owner",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_owner_lookup_uses_structured_s2t_owner(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентских операций\",\n                target_schema=\"dds_dm\",\n                target_table=\"dm_client_operations\",\n                target_field=\"epk_id\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_owner_lookup_does_not_answer_for_unknown_datamart",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентских операций\",\n                target_field=\"epk_id\",\n                owner=\"ivanov.ii@example.ru\",\n            )",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_last_year_changes_answer_includes_dates_and_added_fields",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_last_year_changes_answer_includes_dates_and_added_fields(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    change_date = datetime.utcnow() - timedelta(days=3)\n    history_repo.add_many(\n        [\n            ChangeLogEntry(\n                id=\"change-1\",\n                datamart_name=\"Витрина клиентских операций\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_current_year_changes_uses_january_first_period",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_current_year_changes_uses_january_first_period(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    now = datetime.utcnow()\n    change_date = datetime(now.year, 2, 10)\n    history_repo.add_many(\n        [\n            ChangeLogEntry(\n                id=\"change-current-year\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_source_lineage_skips_missing_schema",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_source_lineage_skips_missing_schema(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина счетов\",\n                target_table=\"dm_account_balance\",\n                target_field=\"account_balance_amt\",\n                source_table=\"account_balance\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_vector_answer_returns_friendly_llm_error",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина счетов\",\n                target_table=\"dm_account_balance\",\n                target_field=\"account_balance_amt\",\n                source_table=\"account_balance\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_parse_csv_s2t",
+        "kind": 2,
+        "importPath": "tests.test_s2t_parser",
+        "description": "tests.test_s2t_parser",
+        "peekOfCode": "def test_parse_csv_s2t(tmp_path: Path) -> None:\n    path = tmp_path / \"s2t.csv\"\n    path.write_text(\n        \"codeDatamart,target_table,target_field,source_table,source_field,transformation\\n\"\n        \"DM_CLIENT,client_dm,epk_id,client_src,epk_id,cast to string\\n\",\n        encoding=\"utf-8\",\n    )\n    result = S2TParser().parse(path, \"Витрина клиентов\")\n    assert len(result.attributes) == 1\n    attr = result.attributes[0]",
+        "detail": "tests.test_s2t_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_parse_real_5_sheet_template",
+        "kind": 2,
+        "importPath": "tests.test_s2t_parser",
+        "description": "tests.test_s2t_parser",
+        "peekOfCode": "def test_parse_real_5_sheet_template() -> None:\n    path = Path(\"s2t_template_5_sheets_filled.xlsx\")\n    result = S2TParser().parse(path, \"Витрина клиентских операций\")\n    assert len(result.attributes) == 3\n    epk = result.attributes[0]\n    assert epk.datamart_code == \"DM_CLIENT_OPS\"\n    assert epk.target_schema == \"dds_dm\"\n    assert epk.target_table == \"dm_client_operations\"\n    assert epk.target_field == \"epk_id\"\n    assert epk.source_field == \"epk_id\"",
+        "detail": "tests.test_s2t_parser",
+        "documentation": {}
+    }
+]
