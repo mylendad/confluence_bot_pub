@@ -1,7 +1,7 @@
 import logging
 import re
 from datetime import datetime
-from urllib.parse import urljoin
+from urllib.parse import unquote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
@@ -84,39 +84,66 @@ class ConfluenceParser:
         return stakeholders
 
     def find_s2t_candidates(self, page: ConfluencePage, html: str) -> list[S2TResource]:
-        candidates = self.client.get_attachments(page.id)
+        attachments = self.client.get_attachments(page.id)
+        candidates: list[S2TResource] = []
+        attachment_index = self._attachment_index(attachments)
         soup = BeautifulSoup(html, "html.parser")
-        candidates.extend(self._extract_s2t_table_resources(page, soup))
+        self._append_new_resources(
+            candidates,
+            self._enrich_resources(
+                self._extract_s2t_table_resources(page, soup), attachment_index
+            ),
+        )
         for link in soup.find_all("a"):
             title = link.get_text(" ", strip=True) or link.get("href", "")
             href = link.get("href")
             if self._looks_like_s2t(title) or self._looks_like_s2t(href or ""):
-                candidates.append(
-                    S2TResource(
-                        title=title,
-                        url=href,
-                        file_name=title,
-                        resource_type="link",
-                        file_date=parse_date_from_text(title),
-                        updated_at=page.updated_at,
-                    )
+                file_name = self._file_name_from_url(href)
+                resource_title = file_name or title
+                self._append_new_resources(
+                    candidates,
+                    [
+                        self._enrich_resource(
+                            S2TResource(
+                                title=resource_title,
+                                url=urljoin(page.url, href) if href else None,
+                                file_name=file_name or resource_title,
+                                resource_type="link",
+                                file_date=parse_date_from_text(resource_title),
+                                updated_at=page.updated_at,
+                            ),
+                            attachment_index,
+                        )
+                    ],
                 )
+        self._append_new_resources(candidates, attachments)
         for child in self.client.get_children(page.id):
             if self._looks_like_s2t(child.title):
+                child_attachments = self.client.get_attachments(child.id)
+                child_attachment_index = self._attachment_index(child_attachments)
                 if child.body_html:
                     child_soup = BeautifulSoup(child.body_html, "html.parser")
-                    candidates.extend(self._extract_s2t_table_resources(child, child_soup))
-                candidates.extend(self.client.get_attachments(child.id))
-                candidates.append(
-                    S2TResource(
-                        title=child.title,
-                        url=child.url,
-                        resource_type="page",
-                        file_name=child.title,
-                        file_date=parse_date_from_text(child.title),
-                        updated_at=child.updated_at,
-                        page_id=child.id,
+                    self._append_new_resources(
+                        candidates,
+                        self._enrich_resources(
+                            self._extract_s2t_table_resources(child, child_soup),
+                            child_attachment_index,
+                        ),
                     )
+                self._append_new_resources(candidates, child_attachments)
+                self._append_new_resources(
+                    candidates,
+                    [
+                        S2TResource(
+                            title=child.title,
+                            url=child.url,
+                            resource_type="page",
+                            file_name=child.title,
+                            file_date=parse_date_from_text(child.title),
+                            updated_at=child.updated_at,
+                            page_id=child.id,
+                        )
+                    ],
                 )
         for candidate in candidates:
             candidate.file_date = candidate.file_date or parse_date_from_text(candidate.title)
@@ -193,12 +220,13 @@ class ConfluenceParser:
                 continue
             for link in row.find_all("a"):
                 href = link.get("href")
-                title = link.get_text(" ", strip=True) or href or ""
+                file_name = self._file_name_from_url(href)
+                title = file_name or link.get_text(" ", strip=True) or href or ""
                 if href and self._looks_like_s2t_file(href, title):
                     return S2TResource(
                         title=title,
                         url=urljoin(page.url, href),
-                        file_name=title,
+                        file_name=file_name or title,
                         resource_type="table_latest_row",
                         updated_at=page.updated_at,
                         version=row_number,
@@ -226,13 +254,14 @@ class ConfluenceParser:
         for link_cell in self._neighbor_cells(cells, index):
             for link in link_cell.find_all("a"):
                 href = link.get("href")
-                title = link.get_text(" ", strip=True) or href or ""
+                file_name = self._file_name_from_url(href)
+                title = file_name or link.get_text(" ", strip=True) or href or ""
                 if href and self._looks_like_s2t_file(href, title):
                     resources.append(
                         S2TResource(
                             title=title,
                             url=urljoin(page.url, href),
-                            file_name=title,
+                            file_name=file_name or title,
                             resource_type=resource_type,
                             file_date=file_date,
                             updated_at=page.updated_at,
@@ -279,6 +308,90 @@ class ConfluenceParser:
             if file_name and self._looks_like_s2t_file(file_name, file_name):
                 names.append(file_name)
         return names
+
+    def _append_new_resources(
+        self, target: list[S2TResource], resources: list[S2TResource]
+    ) -> None:
+        known = {resource.resource_key for resource in target}
+        for resource in resources:
+            if resource.resource_key in known:
+                continue
+            target.append(resource)
+            known.add(resource.resource_key)
+
+    def _enrich_resources(
+        self, resources: list[S2TResource], attachment_index: dict[str, S2TResource]
+    ) -> list[S2TResource]:
+        return [self._enrich_resource(resource, attachment_index) for resource in resources]
+
+    def _enrich_resource(
+        self, resource: S2TResource, attachment_index: dict[str, S2TResource]
+    ) -> S2TResource:
+        attachment = self._find_attachment(resource, attachment_index)
+        if not attachment:
+            return resource
+        return resource.model_copy(
+            update={
+                "id": attachment.id,
+                "title": attachment.title or resource.title,
+                "url": attachment.url or resource.url,
+                "file_name": attachment.file_name or resource.file_name,
+                "updated_at": attachment.updated_at or resource.updated_at,
+                "version": attachment.version,
+                "version_when": attachment.version_when,
+                "file_size": attachment.file_size,
+                "download_url": attachment.download_url,
+                "media_type": attachment.media_type,
+                "page_id": attachment.page_id or resource.page_id,
+            }
+        )
+
+    def _find_attachment(
+        self, resource: S2TResource, attachment_index: dict[str, S2TResource]
+    ) -> S2TResource | None:
+        for value in (
+            resource.file_name,
+            resource.title,
+            self._file_name_from_url(resource.download_url),
+            self._file_name_from_url(resource.url),
+            resource.download_url,
+            resource.url,
+        ):
+            key = self._attachment_lookup_key(value)
+            if key and key in attachment_index:
+                return attachment_index[key]
+        return None
+
+    def _attachment_index(self, attachments: list[S2TResource]) -> dict[str, S2TResource]:
+        index: dict[str, S2TResource] = {}
+        for attachment in attachments:
+            for value in (
+                attachment.file_name,
+                attachment.title,
+                self._file_name_from_url(attachment.download_url),
+                self._file_name_from_url(attachment.url),
+                attachment.download_url,
+                attachment.url,
+            ):
+                key = self._attachment_lookup_key(value)
+                if key:
+                    index[key] = attachment
+        return index
+
+    @staticmethod
+    def _attachment_lookup_key(value: str | None) -> str | None:
+        if not value:
+            return None
+        return unquote(value).strip().casefold()
+
+    @staticmethod
+    def _file_name_from_url(url: str | None) -> str | None:
+        if not url:
+            return None
+        path = urlparse(url).path
+        if not path or path.endswith("/"):
+            return None
+        return unquote(path.rsplit("/", 1)[-1])
 
     @staticmethod
     def _table_has_latest_marker(rows) -> bool:

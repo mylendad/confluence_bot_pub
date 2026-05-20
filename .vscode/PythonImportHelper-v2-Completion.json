@@ -666,7 +666,23 @@
         "documentation": {}
     },
     {
+        "label": "unquote",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
         "label": "urljoin",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
         "importPath": "urllib.parse",
         "description": "urllib.parse",
         "isExtraImport": true,
@@ -2588,7 +2604,7 @@
         "kind": 6,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None):\n        self.children = children or []\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return []\n    def get_children(self, page_id: str):\n        return self.children\ndef test_extract_stakeholders_from_table() -> None:",
+        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None, attachments_by_page=None):\n        self.children = children or []\n        self.attachments_by_page = attachments_by_page or {}\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return self.attachments_by_page.get(page_id, [])\n    def get_children(self, page_id: str):\n        return self.children",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -2616,6 +2632,15 @@
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
         "peekOfCode": "def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_table_candidate_is_enriched_from_confluence_attachment_api",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_table_candidate_is_enriched_from_confluence_attachment_api() -> None:\n    attachment = S2TResource(\n        id=\"100500\",\n        title=\"random_name.xlsx\",\n        file_name=\"random_name.xlsx\",\n        resource_type=\"attachment\",\n        url=\"https://confluence.example.ru/download/attachments/42/random_name.xlsx\",\n        download_url=\"https://confluence.example.ru/download/attachments/42/random_name.xlsx?version=2\",\n        updated_at=datetime(2026, 5, 11),\n        version=2,",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },

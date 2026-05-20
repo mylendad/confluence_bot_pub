@@ -6,14 +6,15 @@ from app.confluence.parser import ConfluenceParser
 
 
 class FakeClient:
-    def __init__(self, children=None):
+    def __init__(self, children=None, attachments_by_page=None):
         self.children = children or []
+        self.attachments_by_page = attachments_by_page or {}
 
     def iter_top_level_pages(self):
         return []
 
     def get_attachments(self, page_id: str):
-        return []
+        return self.attachments_by_page.get(page_id, [])
 
     def get_children(self, page_id: str):
         return self.children
@@ -81,6 +82,50 @@ def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None
     assert selected.file_date.isoformat() == "2026-05-10"
     assert selected.resource_type == "table_link"
     assert selected.url == "https://confluence.example.ru/download/attachments/42/random_name.xlsx"
+
+
+def test_table_candidate_is_enriched_from_confluence_attachment_api() -> None:
+    attachment = S2TResource(
+        id="100500",
+        title="random_name.xlsx",
+        file_name="random_name.xlsx",
+        resource_type="attachment",
+        url="https://confluence.example.ru/download/attachments/42/random_name.xlsx",
+        download_url="https://confluence.example.ru/download/attachments/42/random_name.xlsx?version=2",
+        updated_at=datetime(2026, 5, 11),
+        version=2,
+        file_size=12345,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        page_id="42",
+    )
+    parser = ConfluenceParser(FakeClient(attachments_by_page={"42": [attachment]}), Settings())
+    page = ConfluencePage(
+        id="42",
+        title="Витрина клиентских операций",
+        url="https://confluence.example.ru/pages/42",
+        updated_at=datetime(2026, 1, 1),
+    )
+    html = """
+    <table>
+      <tr><th>Дата</th><th>Файл</th></tr>
+      <tr>
+        <td>2026-05-10</td>
+        <td><a href="/download/attachments/42/random_name.xlsx">download</a></td>
+      </tr>
+    </table>
+    """
+
+    candidates = parser.find_s2t_candidates(page, html)
+    selected = parser.choose_latest_s2t(candidates)
+
+    assert selected is not None
+    assert selected.resource_type == "table_link"
+    assert selected.id == "100500"
+    assert selected.title == "random_name.xlsx"
+    assert selected.version == 2
+    assert selected.file_size == 12345
+    assert selected.download_url == attachment.download_url
+    assert selected.media_type == attachment.media_type
 
 
 def test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new() -> None:
