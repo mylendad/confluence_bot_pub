@@ -45,7 +45,7 @@ Dry-run без фактического обновления:
 - `lastModified`;
 - `history.lastUpdated`.
 
-Для S2T attachment/link учитываются:
+Для S2T-вложений/ссылок учитываются:
 
 - `attachment.id`;
 - `attachment.title`;
