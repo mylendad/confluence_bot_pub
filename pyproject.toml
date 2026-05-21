@@ -48,3 +48,4 @@ pythonpath = ["."]
 
 [tool.setuptools]
 packages = ["app"]
+
