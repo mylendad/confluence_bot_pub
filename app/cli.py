@@ -46,8 +46,8 @@ def _repos():
 def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
     settings = get_settings()
     configure_logging(settings.log_level)
-    parser = ConfluenceParser(ConfluenceClient(settings), settings)
     try:
+        parser = ConfluenceParser(ConfluenceClient(settings), settings)
         result = parser.parse(dry_run=dry_run)
     except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
         _raise_confluence_cli_error(settings.confluence_base_url, exc)
@@ -112,18 +112,18 @@ def update_rag(
     document_repo = DocumentRepository(db)
     vector_store = JsonVectorStore(settings.vector_store_dir)
     indexer = RAGIndexer(metadata_repo, document_repo, vector_store)
-    confluence_client = ConfluenceClient(settings)
-    parser = ConfluenceParser(confluence_client, settings)
-    updater = IncrementalUpdater(
-        metadata_sync=MetadataSyncService(parser),
-        confluence_client=confluence_client,
-        state_repo=S2TStateRepository(db),
-        metadata_repo=metadata_repo,
-        history_repo=history_repo,
-        indexer=indexer,
-        data_dir=settings.data_dir,
-    )
     try:
+        confluence_client = ConfluenceClient(settings)
+        parser = ConfluenceParser(confluence_client, settings)
+        updater = IncrementalUpdater(
+            metadata_sync=MetadataSyncService(parser),
+            confluence_client=confluence_client,
+            state_repo=S2TStateRepository(db),
+            metadata_repo=metadata_repo,
+            history_repo=history_repo,
+            indexer=indexer,
+            data_dir=settings.data_dir,
+        )
         result = updater.run(dry_run=dry_run)
     except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
         _raise_confluence_cli_error(settings.confluence_base_url, exc)

@@ -23,11 +23,20 @@ class ConfluenceClient:
     @staticmethod
     def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:
         auth_type = settings.confluence_auth_type.lower().strip()
-        token = settings.confluence_api_token
+        token = settings.confluence_auth_token
         username = settings.confluence_username
 
+        if token and not token.isascii():
+            raise ConfluenceAuthError(
+                "CONFLUENCE_TOKEN/CONFLUENCE_API_TOKEN must contain only ASCII characters. "
+                "Check .env: the token may still be a placeholder or copied with extra text."
+            )
+
         if auth_type in {"bearer", "pat", "token"}:
-            return None, {"Authorization": f"Bearer {token}"} if token else None
+            headers = {"Accept": "application/json"}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            return None, headers
 
         if auth_type == "basic":
             return (username, token) if username and token else None, None
@@ -35,7 +44,7 @@ class ConfluenceClient:
         if username and token:
             return (username, token), None
         if token:
-            return None, {"Authorization": f"Bearer {token}"}
+            return None, {"Authorization": f"Bearer {token}", "Accept": "application/json"}
         return None, None
 
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:

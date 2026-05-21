@@ -2632,7 +2632,7 @@
         "kind": 2,
         "importPath": "app.cli",
         "description": "app.cli",
-        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    parser = ConfluenceParser(ConfluenceClient(settings), settings)\n    try:\n        result = parser.parse(dry_run=dry_run)\n    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:\n        _raise_confluence_cli_error(settings.confluence_base_url, exc)\n    for datamart in result.datamarts:\n        typer.echo(f\"Витрина: {datamart.name}\")",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    try:\n        parser = ConfluenceParser(ConfluenceClient(settings), settings)\n        result = parser.parse(dry_run=dry_run)\n    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:\n        _raise_confluence_cli_error(settings.confluence_base_url, exc)\n    for datamart in result.datamarts:\n        typer.echo(f\"Витрина: {datamart.name}\")",
         "detail": "app.cli",
         "documentation": {}
     },
@@ -2713,7 +2713,7 @@
         "kind": 6,
         "importPath": "app.config",
         "description": "app.config",
-        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_page_url: str | None = None\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_auth_type: str = \"auto\"\n    confluence_username: str | None = None\n    confluence_api_token: str | None = None\n    datamart_page_pattern: str = \"Витрина\"",
+        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_page_url: str | None = None\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_auth_type: str = \"auto\"\n    confluence_username: str | None = None\n    confluence_token: str | None = None\n    confluence_api_token: str | None = None",
         "detail": "app.config",
         "documentation": {}
     },
@@ -2803,7 +2803,16 @@
         "kind": 2,
         "importPath": "tests.test_config",
         "description": "tests.test_config",
-        "peekOfCode": "def test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(_env_file=None, gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"\ndef test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\"\n    )\n    assert settings.confluence_base_url == \"https://confluence.delta.sbrf.ru\"\n    assert settings.confluence_root_page_id == \"4700310446\"",
+        "peekOfCode": "def test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(_env_file=None, gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"\ndef test_confluence_auth_token_prefers_confluence_token() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_token=\"pat-token\",\n        confluence_api_token=\"legacy-token\",\n    )\n    assert settings.confluence_auth_token == \"pat-token\"",
+        "detail": "tests.test_config",
+        "documentation": {}
+    },
+    {
+        "label": "test_confluence_auth_token_prefers_confluence_token",
+        "kind": 2,
+        "importPath": "tests.test_config",
+        "description": "tests.test_config",
+        "peekOfCode": "def test_confluence_auth_token_prefers_confluence_token() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_token=\"pat-token\",\n        confluence_api_token=\"legacy-token\",\n    )\n    assert settings.confluence_auth_token == \"pat-token\"\ndef test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,",
         "detail": "tests.test_config",
         "documentation": {}
     },
@@ -2844,6 +2853,15 @@
         "documentation": {}
     },
     {
+        "label": "test_confluence_token_is_supported_for_bearer_auth",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_confluence_token_is_supported_for_bearer_auth() -> None:\n    auth, headers = ConfluenceClient._auth_config(\n        Settings(\n            _env_file=None,\n            confluence_auth_type=\"bearer\",\n            confluence_token=\"pat-token\",\n        )\n    )\n    assert auth is None\n    assert headers == {",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
         "label": "test_basic_auth_is_used_when_username_is_configured",
         "kind": 2,
         "importPath": "tests.test_confluence_client",
@@ -2853,11 +2871,20 @@
         "documentation": {}
     },
     {
+        "label": "test_non_ascii_api_token_is_auth_error",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_non_ascii_api_token_is_auth_error() -> None:\n    with pytest.raises(ConfluenceAuthError, match=\"CONFLUENCE_TOKEN\"):\n        ConfluenceClient._auth_config(\n            Settings(\n                _env_file=None,\n                confluence_auth_type=\"bearer\",\n                confluence_api_token=\"ваш_новый_api_token\",\n            )\n        )\ndef test_attachment_download_401_is_auth_error() -> None:",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
         "label": "test_attachment_download_401_is_auth_error",
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_attachment_download_401_is_auth_error() -> None:\n    client = ConfluenceClient(\n        Settings(confluence_base_url=\"https://example.atlassian.net/wiki\"),\n        httpx.Client(\n            base_url=\"https://example.atlassian.net/wiki\",\n            transport=httpx.MockTransport(lambda request: httpx.Response(401)),\n        ),\n    )\n    with pytest.raises(ConfluenceAuthError):\n        client.download(\"https://example.atlassian.net/wiki/download/attachments/42/s2t.xlsx\")",
+        "peekOfCode": "def test_attachment_download_401_is_auth_error() -> None:\n    client = ConfluenceClient(\n        Settings(_env_file=None, confluence_base_url=\"https://example.atlassian.net/wiki\"),\n        httpx.Client(\n            base_url=\"https://example.atlassian.net/wiki\",\n            transport=httpx.MockTransport(lambda request: httpx.Response(401)),\n        ),\n    )\n    with pytest.raises(ConfluenceAuthError):\n        client.download(\"https://example.atlassian.net/wiki/download/attachments/42/s2t.xlsx\")",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },

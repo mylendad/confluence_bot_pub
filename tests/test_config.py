@@ -18,6 +18,16 @@ def test_gigachat_auth_key_supports_legacy_api_pers() -> None:
     assert settings.gigachat_auth_key == "legacy"
 
 
+def test_confluence_auth_token_prefers_confluence_token() -> None:
+    settings = Settings(
+        _env_file=None,
+        confluence_token="pat-token",
+        confluence_api_token="legacy-token",
+    )
+
+    assert settings.confluence_auth_token == "pat-token"
+
+
 def test_confluence_page_url_sets_base_url_and_root_page_id() -> None:
     settings = Settings(
         _env_file=None,

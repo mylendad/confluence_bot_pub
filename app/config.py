@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     confluence_root_page_id: str | None = None
     confluence_auth_type: str = "auto"
     confluence_username: str | None = None
+    confluence_token: str | None = None
     confluence_api_token: str | None = None
 
     datamart_page_pattern: str = "Витрина"
@@ -43,6 +44,10 @@ class Settings(BaseSettings):
     @property
     def s2t_patterns(self) -> list[str]:
         return [item.strip() for item in self.s2t_section_patterns.split(",") if item.strip()]
+
+    @property
+    def confluence_auth_token(self) -> str | None:
+        return self.confluence_token or self.confluence_api_token
 
     @model_validator(mode="after")
     def populate_confluence_from_page_url(self) -> "Settings":

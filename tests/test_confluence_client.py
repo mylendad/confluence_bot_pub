@@ -25,7 +25,7 @@ def test_attachment_download_url_keeps_cloud_context_path() -> None:
         )
 
     client = ConfluenceClient(
-        Settings(confluence_base_url="https://example.atlassian.net/wiki"),
+        Settings(_env_file=None, confluence_base_url="https://example.atlassian.net/wiki"),
         httpx.Client(
             base_url="https://example.atlassian.net/wiki",
             transport=httpx.MockTransport(handler),
@@ -70,6 +70,23 @@ def test_api_token_without_username_uses_bearer_auth() -> None:
     client.get_page("42")
 
     assert requests[0].headers["Authorization"] == "Bearer secret-token"
+    assert requests[0].headers["Accept"] == "application/json"
+
+
+def test_confluence_token_is_supported_for_bearer_auth() -> None:
+    auth, headers = ConfluenceClient._auth_config(
+        Settings(
+            _env_file=None,
+            confluence_auth_type="bearer",
+            confluence_token="pat-token",
+        )
+    )
+
+    assert auth is None
+    assert headers == {
+        "Authorization": "Bearer pat-token",
+        "Accept": "application/json",
+    }
 
 
 def test_basic_auth_is_used_when_username_is_configured() -> None:
@@ -85,9 +102,20 @@ def test_basic_auth_is_used_when_username_is_configured() -> None:
     assert headers is None
 
 
+def test_non_ascii_api_token_is_auth_error() -> None:
+    with pytest.raises(ConfluenceAuthError, match="CONFLUENCE_TOKEN"):
+        ConfluenceClient._auth_config(
+            Settings(
+                _env_file=None,
+                confluence_auth_type="bearer",
+                confluence_api_token="ваш_новый_api_token",
+            )
+        )
+
+
 def test_attachment_download_401_is_auth_error() -> None:
     client = ConfluenceClient(
-        Settings(confluence_base_url="https://example.atlassian.net/wiki"),
+        Settings(_env_file=None, confluence_base_url="https://example.atlassian.net/wiki"),
         httpx.Client(
             base_url="https://example.atlassian.net/wiki",
             transport=httpx.MockTransport(lambda request: httpx.Response(401)),
@@ -110,7 +138,7 @@ def test_attachment_download_resource_falls_back_to_rest_endpoint() -> None:
         return httpx.Response(404)
 
     client = ConfluenceClient(
-        Settings(confluence_base_url="https://example.atlassian.net/wiki"),
+        Settings(_env_file=None, confluence_base_url="https://example.atlassian.net/wiki"),
         httpx.Client(
             base_url="https://example.atlassian.net/wiki",
             transport=httpx.MockTransport(handler),
