@@ -6,11 +6,11 @@
 cd /home/mylendad/Desktop/Projects/confluence_bot
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+.venv/bin/python -m pip install -e ".[dev]"
 cp .env.example .env
 ```
 
-Если `python` отсутствует в системе, используйте:
+Для всех команд проекта используйте Python из виртуального окружения:
 
 ```bash
 .venv/bin/python -m app.cli --help
@@ -145,7 +145,8 @@ http://127.0.0.1:8000/docs
 .venv/bin/python -m app.cli build-rag --full
 ```
 
-Для планового Confluence refresh использовать `update-rag`, а не full rebuild.
+Для планового Confluence refresh использовать `.venv/bin/python -m app.cli update-rag`,
+а не full rebuild.
 
 ## Inspect local state
 

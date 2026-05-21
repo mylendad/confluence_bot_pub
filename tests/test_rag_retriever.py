@@ -3,6 +3,7 @@ from pathlib import Path
 
 from app.changes.history_repository import HistoryRepository
 from app.changes.models import ChangeLogEntry
+from app.confluence.models import Datamart, DatamartFact, ReleaseChange
 from app.rag.llm import AnswerGenerator
 from app.rag.retriever import RAGRetriever
 from app.rag.vector_store import JsonVectorStore
@@ -77,6 +78,77 @@ def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> No
 
     assert "Данных по витрине `Витрина счетов` нет" in answer.answer
     assert "ivanov.ii@example.ru" not in answer.answer
+
+
+def test_datamart_list_question_uses_metadata_store(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Маркеры",
+            confluence_page_id="42",
+            confluence_url="https://confluence.example.ru/pages/42",
+        )
+    )
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+
+    answer = retriever.answer("какие есть витрины")
+
+    assert "Доступные витрины" in answer.answer
+    assert "Витрина Маркеры" in answer.answer
+
+
+def test_datamart_fact_question_uses_main_page_table(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Маркеры",
+            confluence_page_id="42",
+            confluence_url="https://confluence.example.ru/pages/42",
+            facts=[
+                DatamartFact(key="ke", label="КЭ", value="КЭ-123"),
+                DatamartFact(key="db_name", label="Имя витрины в БД", value="dm_markers"),
+            ],
+        )
+    )
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+
+    answer = retriever.answer("КЭ по витрине Витрина Маркеры")
+
+    assert "КЭ-123" in answer.answer
+    assert "dm_markers" not in answer.answer
+
+
+def test_release_changes_question_uses_confluence_release_page(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Маркеры",
+            confluence_page_id="42",
+            confluence_url="https://confluence.example.ru/pages/42",
+            release_changes=[
+                ReleaseChange(
+                    version="Версия 20260327",
+                    jira_key="SSDWH-3208",
+                    jira_title="Снятие тега SCH",
+                    change_type="изменение",
+                    summary="Снятия тэга SCH для конкретного ЕПК",
+                    status="ЗАКРЫТ",
+                    source_url="https://confluence.example.ru/pages/99",
+                )
+            ],
+        )
+    )
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+
+    answer = retriever.answer("Изменения в релизах по витрине Витрина Маркеры")
+
+    assert "Версия 20260327" in answer.answer
+    assert "SSDWH-3208" in answer.answer
+    assert "Снятия тэга SCH" in answer.answer
+    assert "ЗАКРЫТ" in answer.answer
 
 
 def test_last_year_changes_answer_includes_dates_and_added_fields(tmp_path: Path) -> None:

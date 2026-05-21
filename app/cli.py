@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import httpx
 import pandas.errors
 import typer
 
@@ -10,6 +11,7 @@ from app.changes.diff_service import DiffService
 from app.changes.history_repository import HistoryRepository
 from app.config import get_settings
 from app.confluence.client import ConfluenceClient
+from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from app.confluence.models import Datamart
 from app.confluence.parser import ConfluenceParser
 from app.factory import build_retriever
@@ -45,7 +47,10 @@ def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
     settings = get_settings()
     configure_logging(settings.log_level)
     parser = ConfluenceParser(ConfluenceClient(settings), settings)
-    result = parser.parse(dry_run=dry_run)
+    try:
+        result = parser.parse(dry_run=dry_run)
+    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
+        _raise_confluence_cli_error(settings.confluence_base_url, exc)
     for datamart in result.datamarts:
         typer.echo(f"Витрина: {datamart.name}")
         typer.echo(f"  stakeholders: {len(datamart.stakeholders)}")
@@ -118,7 +123,10 @@ def update_rag(
         indexer=indexer,
         data_dir=settings.data_dir,
     )
-    result = updater.run(dry_run=dry_run)
+    try:
+        result = updater.run(dry_run=dry_run)
+    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
+        _raise_confluence_cli_error(settings.confluence_base_url, exc)
     _print_incremental_update_result(result, dry_run=dry_run)
     if since:
         typer.echo(f"Since filter accepted for orchestration: {since}")
@@ -149,6 +157,29 @@ def _print_incremental_update_result(
         typer.echo(f"Parsed S2T files: {result.parsed_count}")
         typer.echo(f"Reindexed datamarts: {result.reindexed_count}")
     typer.echo(f"Detected changes: {result.changes_count}")
+
+
+def _raise_confluence_cli_error(base_url: str, exc: Exception) -> None:
+    if isinstance(exc, ConfluenceAuthError):
+        message = (
+            f"Confluence authentication failed for {base_url}. Проверьте "
+            "CONFLUENCE_USERNAME, CONFLUENCE_API_TOKEN и права на space/page/attachment. "
+            f"Детали: {exc}"
+        )
+    elif isinstance(exc, httpx.TimeoutException):
+        message = (
+            f"Confluence не ответил вовремя: {base_url}. Проверьте VPN/сеть "
+            "и доступность Confluence."
+        )
+    elif isinstance(exc, httpx.ConnectError):
+        message = (
+            f"Не удалось подключиться к Confluence: {base_url}. "
+            "Чаще всего это DNS/VPN/прокси или ошибка в CONFLUENCE_BASE_URL. "
+            f"Детали: {exc}"
+        )
+    else:
+        message = f"Confluence request failed for {base_url}: {exc}"
+    raise typer.BadParameter(message, param_hint="CONFLUENCE") from exc
 
 
 @app.command("ask")

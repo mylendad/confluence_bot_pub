@@ -1,7 +1,10 @@
 from pathlib import Path
 
+import httpx
+import pytest
+
 from app.changes.history_repository import HistoryRepository
-from app.cli import parse_s2t
+from app.cli import _raise_confluence_cli_error, parse_s2t
 from app.config import get_settings
 from app.storage.metadata_repository import MetadataRepository
 from app.storage.sqlite import SQLite
@@ -51,3 +54,16 @@ def test_parse_s2t_records_changes_on_reparse(
         ]
     finally:
         get_settings.cache_clear()
+
+
+def test_confluence_connect_error_is_reported_as_cli_hint() -> None:
+    with pytest.raises(Exception) as exc_info:
+        _raise_confluence_cli_error(
+            "https://confluence.example.ru",
+            httpx.ConnectError("[Errno -3] Temporary failure in name resolution"),
+        )
+
+    message = str(exc_info.value)
+    assert "CONFLUENCE_BASE_URL" in message
+    assert "DNS/VPN/прокси" in message
+    assert "Temporary failure in name resolution" in message

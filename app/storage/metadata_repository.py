@@ -16,14 +16,17 @@ class MetadataRepository:
             conn.execute(
                 """
                 insert into datamarts(
-                    name, code, confluence_page_id, confluence_url, stakeholders_json, updated_at
+                    name, code, confluence_page_id, confluence_url, stakeholders_json,
+                    facts_json, release_changes_json, updated_at
                 )
-                values (?, ?, ?, ?, ?, ?)
+                values (?, ?, ?, ?, ?, ?, ?, ?)
                 on conflict(name) do update set
                     code=excluded.code,
                     confluence_page_id=excluded.confluence_page_id,
                     confluence_url=excluded.confluence_url,
                     stakeholders_json=excluded.stakeholders_json,
+                    facts_json=excluded.facts_json,
+                    release_changes_json=excluded.release_changes_json,
                     updated_at=excluded.updated_at
                 """,
                 (
@@ -32,6 +35,11 @@ class MetadataRepository:
                     datamart.confluence_page_id,
                     datamart.confluence_url,
                     json.dumps([s.model_dump() for s in datamart.stakeholders], ensure_ascii=False),
+                    json.dumps([f.model_dump() for f in datamart.facts], ensure_ascii=False),
+                    json.dumps(
+                        [c.model_dump() for c in datamart.release_changes],
+                        ensure_ascii=False,
+                    ),
                     datetime.utcnow().isoformat(),
                 ),
             )
@@ -78,6 +86,11 @@ class MetadataRepository:
                 "select * from datamarts where lower(name)=lower(?)", (name,)
             ).fetchone()
         return dict(row) if row else None
+
+    def list_datamarts(self) -> list[dict]:
+        with self.db.connect() as conn:
+            rows = conn.execute("select * from datamarts").fetchall()
+        return [dict(row) for row in rows]
 
     @staticmethod
     def _upsert_attribute(conn, attribute: S2TAttribute) -> None:

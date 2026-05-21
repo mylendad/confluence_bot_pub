@@ -1,13 +1,13 @@
 import logging
 from collections.abc import Iterable
 from datetime import datetime
-from urllib.parse import urljoin
 
 import httpx
 
 from app.config import Settings
 from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from app.confluence.models import ConfluencePage, S2TResource
+from app.confluence.urls import confluence_urljoin
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,9 @@ class ConfluenceClient:
         for item in payload.get("results", []):
             title = item.get("title", "")
             links = item.get("_links", {})
-            download_url = urljoin(self.settings.confluence_base_url, links.get("download", ""))
+            download_url = confluence_urljoin(
+                self.settings.confluence_base_url, links.get("download", "")
+            )
             version = item.get("version", {})
             metadata = item.get("metadata", {})
             media_type = item.get("mediaType") or metadata.get("mediaType")
@@ -84,9 +86,40 @@ class ConfluenceClient:
         return resources
 
     def download(self, url: str) -> bytes:
-        response = self._client.get(url)
+        response = self._client.get(url, follow_redirects=True)
+        if response.status_code in {401, 403}:
+            raise ConfluenceAuthError(f"Attachment download forbidden: {response.status_code}")
         if response.is_error:
             raise ConfluenceError(f"Attachment download failed: {response.status_code}")
+        return response.content
+
+    def download_resource(self, resource: S2TResource) -> bytes:
+        url = resource.download_url or resource.url
+        if not url:
+            raise ConfluenceError("Attachment download URL is absent")
+        try:
+            return self.download(url)
+        except ConfluenceAuthError as exc:
+            if not resource.page_id or not resource.id:
+                raise
+            return self._download_attachment_via_rest(resource.page_id, resource.id, exc)
+
+    def _download_attachment_via_rest(
+        self, page_id: str, attachment_id: str, original_error: ConfluenceAuthError
+    ) -> bytes:
+        response = self._client.get(
+            f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download",
+            follow_redirects=True,
+        )
+        if response.status_code in {401, 403}:
+            raise ConfluenceAuthError(
+                "Attachment download forbidden via direct URL and REST fallback: "
+                f"{response.status_code}"
+            ) from original_error
+        if response.is_error:
+            raise ConfluenceError(
+                f"Attachment REST download failed: {response.status_code}"
+            ) from original_error
         return response.content
 
     def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
@@ -105,7 +138,7 @@ class ConfluenceClient:
         return ConfluencePage(
             id=str(payload["id"]),
             title=payload.get("title", ""),
-            url=urljoin(self.settings.confluence_base_url, webui),
+            url=confluence_urljoin(self.settings.confluence_base_url, webui),
             body_html=payload.get("body", {}).get("storage", {}).get("value"),
             updated_at=version_when,
             version=version.get("number"),

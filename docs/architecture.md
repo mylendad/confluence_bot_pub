@@ -24,7 +24,7 @@
 ### Локальная загрузка S2T
 
 ```text
-parse-s2t
+.venv/bin/python -m app.cli parse-s2t
 -> S2TParser
 -> MetadataRepository.upsert_datamart
 -> MetadataRepository.upsert_attributes
@@ -36,7 +36,7 @@ parse-s2t
 ### Полная локальная пересборка RAG
 
 ```text
-build-rag --full
+.venv/bin/python -m app.cli build-rag --full
 -> MetadataRepository.list_attributes
 -> RAGIndexer.rebuild_from_storage
 -> DocumentRepository.replace_all
@@ -44,12 +44,13 @@ build-rag --full
 ```
 
 Это полный rebuild локального индекса. Для регулярного Confluence refresh должен
-использоваться `update-rag`, а не `build-rag --full`.
+использоваться `.venv/bin/python -m app.cli update-rag`, а не
+`.venv/bin/python -m app.cli build-rag --full`.
 
 ### Инкрементальное обновление из Confluence
 
 ```text
-update-rag
+.venv/bin/python -m app.cli update-rag
 -> MetadataSyncService.collect
 -> StateComparator.compare
 -> ConfluenceClient.download only if metadata changed
@@ -109,5 +110,7 @@ id -> download_url -> url -> page_id:file_name
 
 - Локальный vector store — JSONL-файл, а не полноценная vector DB. Partial update реализован
   как замена документов конкретной витрины внутри JSONL.
-- `build-rag --full` остается полной пересборкой и должен использоваться вручную.
-- `update-rag` требует доступ к Confluence и корректные настройки `.env`.
+- `.venv/bin/python -m app.cli build-rag --full` остается полной пересборкой и должен
+  использоваться вручную.
+- `.venv/bin/python -m app.cli update-rag` требует доступ к Confluence и корректные
+  настройки `.env`.

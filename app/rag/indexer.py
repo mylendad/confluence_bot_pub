@@ -1,3 +1,5 @@
+import json
+
 from app.confluence.models import Datamart
 from app.rag.models import RAGDocument
 from app.rag.vector_store import JsonVectorStore
@@ -28,7 +30,10 @@ class RAGIndexer:
     ) -> list[RAGDocument]:
         self.metadata_repo.upsert_datamart(datamart)
         self.metadata_repo.replace_attributes_for_datamart(datamart.name, attributes)
-        documents = [self._attribute_document(datamart, attribute) for attribute in attributes]
+        documents = [
+            *[self._attribute_document(datamart, attribute) for attribute in attributes],
+            *self._datamart_documents(datamart),
+        ]
         self.document_repo.replace_for_datamart(datamart.name, documents)
         self.vector_store.replace_for_datamart(datamart.name, documents)
         return documents
@@ -36,6 +41,8 @@ class RAGIndexer:
     def rebuild_from_storage(self) -> list[RAGDocument]:
         attributes = self.metadata_repo.list_attributes()
         documents = [self._attribute_document(None, attribute) for attribute in attributes]
+        for datamart in self.metadata_repo.list_datamarts():
+            documents.extend(self._stored_datamart_documents(datamart))
         self.document_repo.replace_all(documents)
         self.vector_store.replace_all(documents)
         return documents
@@ -93,6 +100,64 @@ class RAGIndexer:
             "change_type": "unknown",
         }
         return RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
+
+    def _datamart_documents(self, datamart: Datamart) -> list[RAGDocument]:
+        documents: list[RAGDocument] = []
+        for fact in datamart.facts:
+            text = (
+                f"Витрина: {datamart.name}. Показатель: {fact.label}. "
+                f"Значение: {fact.value}."
+            )
+            if fact.links:
+                text += " Ссылки: " + "; ".join(
+                    f"{link.get('title')}: {link.get('url')}" for link in fact.links
+                )
+            metadata = {
+                "datamart_name": datamart.name,
+                "source_type": "datamart_fact",
+                "fact_key": fact.key,
+                "fact_label": fact.label,
+                "confluence_page_id": datamart.confluence_page_id,
+                "confluence_url": datamart.confluence_url,
+            }
+            documents.append(
+                RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
+            )
+        for change in datamart.release_changes:
+            text = (
+                f"Витрина: {datamart.name}. Изменения в релизах. "
+                f"Версия: {change.version or 'не указана'}. "
+                f"Jira: {change.jira_key or 'не указана'}. "
+                f"Название Jira: {change.jira_title or 'не указано'}. "
+                f"Тип: {change.change_type or 'не указан'}. "
+                f"Суть: {change.summary or 'не указана'}. "
+                f"Статус: {change.status or 'не указан'}."
+            )
+            metadata = {
+                "datamart_name": datamart.name,
+                "source_type": "release_change",
+                "version": change.version,
+                "jira_key": change.jira_key,
+                "change_type": change.change_type,
+                "source_url": change.source_url,
+                "confluence_url": datamart.confluence_url,
+            }
+            documents.append(
+                RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
+            )
+        return documents
+
+    def _stored_datamart_documents(self, row: dict) -> list[RAGDocument]:
+        datamart = Datamart(
+            name=row["name"],
+            code=row.get("code"),
+            confluence_page_id=row.get("confluence_page_id") or "",
+            confluence_url=row.get("confluence_url") or "",
+            stakeholders=[],
+            facts=json.loads(row.get("facts_json") or "[]"),
+            release_changes=json.loads(row.get("release_changes_json") or "[]"),
+        )
+        return self._datamart_documents(datamart)
 
     @staticmethod
     def _path(*parts: str | None) -> str:

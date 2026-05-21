@@ -81,3 +81,13 @@ class SQLite:
                     on s2t_state(datamart_name);
                 """
             )
+            self._ensure_column(conn, "datamarts", "facts_json", "text not null default '[]'")
+            self._ensure_column(
+                conn, "datamarts", "release_changes_json", "text not null default '[]'"
+            )
+
+    @staticmethod
+    def _ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) -> None:
+        columns = {row["name"] for row in conn.execute(f"pragma table_info({table})")}
+        if column not in columns:
+            conn.execute(f"alter table {table} add column {column} {ddl}")

@@ -297,10 +297,10 @@ Dry-run показывает:
 | Витрины не находятся                          | Неверный space/root/pattern.                                                                                                             | Проверить `CONFLUENCE_SPACE_KEY`, `CONFLUENCE_ROOT_PAGE_ID`, `DATAMART_PAGE_PATTERN`.                                                     |
 | S2T не находится                                     | Файл не похож на S2T или лежит вне ожидаемой страницы.                                                  | Проверить `S2T_SECTION_PATTERNS`, наличие `.xlsx/.xls/.csv`, дочерние S2T-страницы.                                  |
 | Выбрана старая S2T                                 | На странице нет даты/маркера актуальности или таблица оформлена нестандартно. | Проверить таблицу S2T в Confluence, маркеры `новый/latest/актуальный`, дату в названии файла. |
-| Metadata изменилась, но RAG не обновился | Содержимое файла не изменилось, совпал `content_hash`.                                                        | Проверить отчет `update-rag --dry-run` и состояние `s2t_state`.                                                              |
+| Metadata изменилась, но RAG не обновился | Содержимое файла не изменилось, совпал `content_hash`.                                                        | Проверить отчет `.venv/bin/python -m app.cli update-rag --dry-run` и состояние `s2t_state`.                                                              |
 | Файл найден, но не скачивается         | У ресурса нет `download_url` или ссылка не является вложением.                                          | Лучше прикрепить S2T как вложение Confluence, а не внешнюю ссылку.                                                    |
 | Парсинг S2T падает                                 | Неожиданный формат Excel/CSV или отсутствуют нужные колонки.                                         | Проверить листы `Target columns`, `Source columns`, `Datamart info`, `S2T`.                                                        |
-| Ответ говорит "данных нет"                 | Локальная база не обновлена или витрина не прошла фильтр.                                        | Запустить `update-rag --dry-run`, затем `update-rag`.                                                                                  |
+| Ответ говорит "данных нет"                 | Локальная база не обновлена или витрина не прошла фильтр.                                        | Запустить `.venv/bin/python -m app.cli update-rag --dry-run`, затем `.venv/bin/python -m app.cli update-rag`.                                                                                  |
 | Изменения за год пустые                     | Была только baseline-загрузка или нет записей в `change_log`.                                                  | Проверить дату первой синхронизации и историю `change_log`.                                                    |
 | GigaChat error                                                  | Неверные credentials/scope или недоступен LLM.                                                                              | Проверить `LLM_PROVIDER`, `GIGACHAT_CREDENTIALS`, `GIGACHAT_SCOPE`.                                                                       |
 
@@ -309,9 +309,9 @@ Dry-run показывает:
 Перед регулярным запуском:
 
 1. Заполнить `.env`.
-2. Проверить доступ к Confluence через `parse-confluence --dry-run`.
-3. Проверить план обновления через `update-rag --dry-run`.
-4. Выполнить `update-rag`.
+2. Проверить доступ к Confluence через `.venv/bin/python -m app.cli parse-confluence --dry-run`.
+3. Проверить план обновления через `.venv/bin/python -m app.cli update-rag --dry-run`.
+4. Выполнить `.venv/bin/python -m app.cli update-rag`.
 5. Задать smoke-вопрос через CLI или HTTP.
 
 Для планировщика использовать:
