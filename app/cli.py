@@ -163,7 +163,8 @@ def _raise_confluence_cli_error(base_url: str, exc: Exception) -> None:
     if isinstance(exc, ConfluenceAuthError):
         message = (
             f"Confluence authentication failed for {base_url}. Проверьте "
-            "CONFLUENCE_USERNAME, CONFLUENCE_API_TOKEN и права на space/page/attachment. "
+            "CONFLUENCE_AUTH_TYPE, CONFLUENCE_USERNAME, CONFLUENCE_API_TOKEN "
+            "и права на space/page/attachment. "
             f"Детали: {exc}"
         )
     elif isinstance(exc, httpx.TimeoutException):

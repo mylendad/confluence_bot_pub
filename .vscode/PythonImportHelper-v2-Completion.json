@@ -96,6 +96,14 @@
         "documentation": {}
     },
     {
+        "label": "model_validator",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "Protocol",
         "importPath": "typing",
         "description": "typing",
@@ -1013,6 +1021,22 @@
     },
     {
         "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "parse_qs",
         "importPath": "urllib.parse",
         "description": "urllib.parse",
         "isExtraImport": true,
@@ -2041,7 +2065,7 @@
         "kind": 6,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth = None\n        if settings.confluence_username and settings.confluence_api_token:\n            auth = (settings.confluence_username, settings.confluence_api_token)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, timeout=30\n        )\n    def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:",
+        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30\n        )\n    @staticmethod\n    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:\n        auth_type = settings.confluence_auth_type.lower().strip()",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2050,7 +2074,7 @@
         "kind": 5,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth = None\n        if settings.confluence_username and settings.confluence_api_token:\n            auth = (settings.confluence_username, settings.confluence_api_token)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, timeout=30\n        )",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30\n        )\n    @staticmethod\n    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2689,7 +2713,7 @@
         "kind": 6,
         "importPath": "app.config",
         "description": "app.config",
-        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_username: str | None = None\n    confluence_api_token: str | None = None\n    datamart_page_pattern: str = \"Витрина\"\n    s2t_section_patterns: str = \"s2t,S2T,Source to Target,Source-to-Target\"\n    data_dir: Path = Path(\"./data\")",
+        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_page_url: str | None = None\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_auth_type: str = \"auto\"\n    confluence_username: str | None = None\n    confluence_api_token: str | None = None\n    datamart_page_pattern: str = \"Витрина\"",
         "detail": "app.config",
         "documentation": {}
     },
@@ -2770,7 +2794,7 @@
         "kind": 2,
         "importPath": "tests.test_config",
         "description": "tests.test_config",
-        "peekOfCode": "def test_gigachat_auth_key_prefers_credentials() -> None:\n    settings = Settings(\n        gigachat_credentials=\"credentials\",\n        gigachat_api_key=\"api-key\",\n        gigachat_api_pers=\"api-pers\",\n    )\n    assert settings.gigachat_auth_key == \"credentials\"\ndef test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"",
+        "peekOfCode": "def test_gigachat_auth_key_prefers_credentials() -> None:\n    settings = Settings(\n        _env_file=None,\n        gigachat_credentials=\"credentials\",\n        gigachat_api_key=\"api-key\",\n        gigachat_api_pers=\"api-pers\",\n    )\n    assert settings.gigachat_auth_key == \"credentials\"\ndef test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(_env_file=None, gigachat_api_pers=\"legacy\")",
         "detail": "tests.test_config",
         "documentation": {}
     },
@@ -2779,7 +2803,25 @@
         "kind": 2,
         "importPath": "tests.test_config",
         "description": "tests.test_config",
-        "peekOfCode": "def test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"",
+        "peekOfCode": "def test_gigachat_auth_key_supports_legacy_api_pers() -> None:\n    settings = Settings(_env_file=None, gigachat_api_pers=\"legacy\")\n    assert settings.gigachat_auth_key == \"legacy\"\ndef test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\"\n    )\n    assert settings.confluence_base_url == \"https://confluence.delta.sbrf.ru\"\n    assert settings.confluence_root_page_id == \"4700310446\"",
+        "detail": "tests.test_config",
+        "documentation": {}
+    },
+    {
+        "label": "test_confluence_page_url_sets_base_url_and_root_page_id",
+        "kind": 2,
+        "importPath": "tests.test_config",
+        "description": "tests.test_config",
+        "peekOfCode": "def test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\"\n    )\n    assert settings.confluence_base_url == \"https://confluence.delta.sbrf.ru\"\n    assert settings.confluence_root_page_id == \"4700310446\"\ndef test_confluence_page_url_overrides_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,",
+        "detail": "tests.test_config",
+        "documentation": {}
+    },
+    {
+        "label": "test_confluence_page_url_overrides_root_page_id",
+        "kind": 2,
+        "importPath": "tests.test_config",
+        "description": "tests.test_config",
+        "peekOfCode": "def test_confluence_page_url_overrides_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\",\n        confluence_root_page_id=\"42\",\n    )\n    assert settings.confluence_root_page_id == \"4700310446\"",
         "detail": "tests.test_config",
         "documentation": {}
     },
@@ -2789,6 +2831,24 @@
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
         "peekOfCode": "def test_attachment_download_url_keeps_cloud_context_path() -> None:\n    def handler(request: httpx.Request) -> httpx.Response:\n        assert request.url.path == \"/wiki/rest/api/content/42/child/attachment\"\n        return httpx.Response(\n            200,\n            json={\n                \"results\": [\n                    {\n                        \"id\": \"att1\",\n                        \"title\": \"s2t.xlsx\",",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "test_api_token_without_username_uses_bearer_auth",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_api_token_without_username_uses_bearer_auth() -> None:\n    requests: list[httpx.Request] = []\n    def handler(request: httpx.Request) -> httpx.Response:\n        requests.append(request)\n        return httpx.Response(\n            200,\n            json={\n                \"id\": \"42\",\n                \"title\": \"Page\",\n                \"_links\": {\"webui\": \"/pages/viewpage.action?pageId=42\"},",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "test_basic_auth_is_used_when_username_is_configured",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_basic_auth_is_used_when_username_is_configured() -> None:\n    auth, headers = ConfluenceClient._auth_config(\n        Settings(\n            _env_file=None,\n            confluence_username=\"user\",\n            confluence_api_token=\"secret-token\",\n        )\n    )\n    assert auth == (\"user\", \"secret-token\")\n    assert headers is None",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },

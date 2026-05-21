@@ -15,12 +15,28 @@ logger = logging.getLogger(__name__)
 class ConfluenceClient:
     def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:
         self.settings = settings
-        auth = None
-        if settings.confluence_username and settings.confluence_api_token:
-            auth = (settings.confluence_username, settings.confluence_api_token)
+        auth, headers = self._auth_config(settings)
         self._client = client or httpx.Client(
-            base_url=settings.confluence_base_url, auth=auth, timeout=30
+            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30
         )
+
+    @staticmethod
+    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:
+        auth_type = settings.confluence_auth_type.lower().strip()
+        token = settings.confluence_api_token
+        username = settings.confluence_username
+
+        if auth_type in {"bearer", "pat", "token"}:
+            return None, {"Authorization": f"Bearer {token}"} if token else None
+
+        if auth_type == "basic":
+            return (username, token) if username and token else None, None
+
+        if username and token:
+            return (username, token), None
+        if token:
+            return None, {"Authorization": f"Bearer {token}"}
+        return None, None
 
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
         response = self._client.get(path, params=params)

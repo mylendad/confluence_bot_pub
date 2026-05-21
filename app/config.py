@@ -1,7 +1,8 @@
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,8 +10,10 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     confluence_base_url: str = "https://confluence.example.ru"
+    confluence_page_url: str | None = None
     confluence_space_key: str = "TEAM"
     confluence_root_page_id: str | None = None
+    confluence_auth_type: str = "auto"
     confluence_username: str | None = None
     confluence_api_token: str | None = None
 
@@ -40,6 +43,20 @@ class Settings(BaseSettings):
     @property
     def s2t_patterns(self) -> list[str]:
         return [item.strip() for item in self.s2t_section_patterns.split(",") if item.strip()]
+
+    @model_validator(mode="after")
+    def populate_confluence_from_page_url(self) -> "Settings":
+        if not self.confluence_page_url:
+            return self
+
+        parsed = urlparse(self.confluence_page_url)
+        if parsed.scheme and parsed.netloc:
+            self.confluence_base_url = f"{parsed.scheme}://{parsed.netloc}"
+
+        page_id = parse_qs(parsed.query).get("pageId", [None])[0]
+        if page_id:
+            self.confluence_root_page_id = page_id
+        return self
 
     @property
     def gigachat_auth_key(self) -> str | None:

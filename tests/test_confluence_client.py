@@ -40,6 +40,51 @@ def test_attachment_download_url_keeps_cloud_context_path() -> None:
     )
 
 
+def test_api_token_without_username_uses_bearer_auth() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "id": "42",
+                "title": "Page",
+                "_links": {"webui": "/pages/viewpage.action?pageId=42"},
+            },
+        )
+
+    client = ConfluenceClient(
+        Settings(
+            _env_file=None,
+            confluence_base_url="https://confluence.example.ru",
+            confluence_api_token="secret-token",
+        )
+    )
+    client._client = httpx.Client(
+        base_url="https://confluence.example.ru",
+        headers=client._client.headers,
+        transport=httpx.MockTransport(handler),
+    )
+
+    client.get_page("42")
+
+    assert requests[0].headers["Authorization"] == "Bearer secret-token"
+
+
+def test_basic_auth_is_used_when_username_is_configured() -> None:
+    auth, headers = ConfluenceClient._auth_config(
+        Settings(
+            _env_file=None,
+            confluence_username="user",
+            confluence_api_token="secret-token",
+        )
+    )
+
+    assert auth == ("user", "secret-token")
+    assert headers is None
+
+
 def test_attachment_download_401_is_auth_error() -> None:
     client = ConfluenceClient(
         Settings(confluence_base_url="https://example.atlassian.net/wiki"),

@@ -51,12 +51,19 @@ curl -X POST http://localhost:8000/ask \
 Токены и пароли не хранятся в коде. Задайте их в `.env`:
 
 ```env
-CONFLUENCE_USERNAME=...
+CONFLUENCE_PAGE_URL=https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446
+CONFLUENCE_AUTH_TYPE=bearer
 CONFLUENCE_API_TOKEN=...
 LLM_PROVIDER=gigachat
 GIGACHAT_CREDENTIALS=...
 GIGACHAT_SCOPE=GIGACHAT_API_PERS
 ```
+
+Для корпоративного Confluence с Personal Access Token используйте `CONFLUENCE_AUTH_TYPE=bearer`
+и оставьте `CONFLUENCE_USERNAME` пустым. `CONFLUENCE_PAGE_URL` автоматически задает
+`CONFLUENCE_BASE_URL` и `CONFLUENCE_ROOT_PAGE_ID` из ссылки с `pageId`. Для Atlassian
+Cloud совместимый режим Basic auth остается прежним: задайте `CONFLUENCE_USERNAME`
+и `CONFLUENCE_API_TOKEN`.
 
 `GIGACHAT_CREDENTIALS` не выводится в логи. Для совместимости приложение также умеет
 читать ключ из `GIGACHAT_API_KEY` или `GIGACHAT_API_PERS`, но основной вариант для
