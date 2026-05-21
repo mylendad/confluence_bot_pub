@@ -17,7 +17,11 @@ class ConfluenceClient:
         self.settings = settings
         auth, headers = self._auth_config(settings)
         self._client = client or httpx.Client(
-            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30
+            base_url=settings.confluence_base_url,
+            auth=auth,
+            headers=headers,
+            timeout=30,
+            verify=settings.confluence_verify_ssl,
         )
 
     @staticmethod

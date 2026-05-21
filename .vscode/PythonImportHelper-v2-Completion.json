@@ -2073,7 +2073,7 @@
         "kind": 6,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30\n        )\n    @staticmethod\n    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:\n        auth_type = settings.confluence_auth_type.lower().strip()",
+        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url,\n            auth=auth,\n            headers=headers,\n            timeout=30,\n            verify=settings.confluence_verify_ssl,",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2082,7 +2082,7 @@
         "kind": 5,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url, auth=auth, headers=headers, timeout=30\n        )\n    @staticmethod\n    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url,\n            auth=auth,\n            headers=headers,\n            timeout=30,",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2866,6 +2866,15 @@
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
         "peekOfCode": "def test_confluence_token_is_supported_for_bearer_auth() -> None:\n    auth, headers = ConfluenceClient._auth_config(\n        Settings(\n            _env_file=None,\n            confluence_auth_type=\"bearer\",\n            confluence_token=\"pat-token\",\n        )\n    )\n    assert auth is None\n    assert headers == {",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "test_client_uses_configured_ssl_verification",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_client_uses_configured_ssl_verification() -> None:\n    client = ConfluenceClient(\n        Settings(\n            _env_file=None,\n            confluence_base_url=\"https://confluence.example.ru\",\n            confluence_verify_ssl=False,\n        )\n    )\n    assert client._client._transport._pool._ssl_context.check_hostname is False\n    assert client._client._transport._pool._ssl_context.verify_mode == 0",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },

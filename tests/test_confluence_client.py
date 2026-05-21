@@ -89,6 +89,20 @@ def test_confluence_token_is_supported_for_bearer_auth() -> None:
     }
 
 
+def test_client_uses_configured_ssl_verification() -> None:
+    client = ConfluenceClient(
+        Settings(
+            _env_file=None,
+            confluence_base_url="https://confluence.example.ru",
+            confluence_verify_ssl=False,
+        )
+    )
+
+    assert client._client._transport._pool._ssl_context.check_hostname is False
+    assert client._client._transport._pool._ssl_context.verify_mode == 0
+    client._client.close()
+
+
 def test_basic_auth_is_used_when_username_is_configured() -> None:
     auth, headers = ConfluenceClient._auth_config(
         Settings(
