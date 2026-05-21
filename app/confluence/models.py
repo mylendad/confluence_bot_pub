@@ -11,6 +11,23 @@ class Stakeholder(BaseModel):
     profile_url: str | None = None
 
 
+class DatamartFact(BaseModel):
+    key: str
+    label: str
+    value: str
+    links: list[dict[str, str]] = Field(default_factory=list)
+
+
+class ReleaseChange(BaseModel):
+    version: str | None = None
+    jira_key: str | None = None
+    jira_title: str | None = None
+    change_type: str | None = None
+    summary: str | None = None
+    status: str | None = None
+    source_url: str | None = None
+
+
 class ConfluencePage(BaseModel):
     id: str
     title: str
@@ -53,6 +70,8 @@ class Datamart(BaseModel):
     page_last_modified: datetime | None = None
     page_history_last_updated: datetime | None = None
     stakeholders: list[Stakeholder] = Field(default_factory=list)
+    facts: list[DatamartFact] = Field(default_factory=list)
+    release_changes: list[ReleaseChange] = Field(default_factory=list)
     s2t_resource: S2TResource | None = None
 
 

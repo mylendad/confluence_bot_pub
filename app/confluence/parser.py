@@ -1,13 +1,22 @@
 import logging
 import re
 from datetime import datetime
-from urllib.parse import unquote, urljoin, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from bs4 import BeautifulSoup
 
 from app.config import Settings
 from app.confluence.client import ConfluenceClient
-from app.confluence.models import ConfluencePage, Datamart, ParseResult, S2TResource, Stakeholder
+from app.confluence.models import (
+    ConfluencePage,
+    Datamart,
+    DatamartFact,
+    ParseResult,
+    ReleaseChange,
+    S2TResource,
+    Stakeholder,
+)
+from app.confluence.urls import confluence_urljoin
 from app.utils.date_utils import parse_date_from_text
 from app.utils.text_utils import fuzzy_contains, normalize_text
 
@@ -23,6 +32,31 @@ OWNER_LABELS = [
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 SUPPORTED_S2T_SUFFIXES = (".xlsx", ".xls", ".csv")
 LATEST_MARKERS = {"новый", "new", "latest", "актуальный"}
+FACT_ALIASES = {
+    "business_stakeholders": [
+        "заинтересованные со стороны бизнеса",
+        "заинтересованное лица",
+        "заинтересованные лица",
+        "заинтересованные фио",
+    ],
+    "meta_links": ["мета", "ка фо", "карта данных", "смд"],
+    "ke": ["кэ"],
+    "db_name": ["имя витрины в бд", "витрина в бд", "название витрины в бд"],
+    "periodicity": ["периодичность", "частота"],
+    "depth": ["глубина"],
+    "bank_process": [
+        "процесс из реестра",
+        "процесс",
+        "реестр зарегистрированных процессов",
+        "реестр зарегестрированных процессов",
+    ],
+    "release_changes": ["изменения в релизах"],
+}
+JIRA_KEY_RE = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
+PLACEHOLDER_TEXTS = {
+    "получение подробных данных проблемы",
+    "статус",
+}
 
 
 class ConfluenceParser:
@@ -51,6 +85,8 @@ class ConfluenceParser:
     def parse_datamart_page(self, page: ConfluencePage) -> Datamart:
         html = page.body_html or ""
         stakeholders = self.extract_stakeholders(html)
+        facts = self.extract_datamart_facts(html)
+        release_changes = self.extract_release_changes(page, html)
         candidates = self.find_s2t_candidates(page, html)
         selected = self.choose_latest_s2t(candidates)
         return Datamart(
@@ -62,6 +98,8 @@ class ConfluenceParser:
             page_last_modified=page.last_modified,
             page_history_last_updated=page.history_last_updated,
             stakeholders=stakeholders,
+            facts=facts,
+            release_changes=release_changes,
             s2t_resource=selected,
         )
 
@@ -82,6 +120,92 @@ class ConfluenceParser:
                 stakeholders.extend(self._stakeholders_from_text(block, None))
                 break
         return stakeholders
+
+    def extract_datamart_facts(self, html: str) -> list[DatamartFact]:
+        soup = BeautifulSoup(html, "html.parser")
+        facts: list[DatamartFact] = []
+        seen: set[tuple[str, str, str]] = set()
+        for row in soup.find_all("tr"):
+            cells = row.find_all(["th", "td"], recursive=False) or row.find_all(["th", "td"])
+            if len(cells) < 2:
+                continue
+            label = self._clean_text(cells[0].get_text(" ", strip=True))
+            value = self._clean_text(cells[1].get_text(" ", strip=True))
+            if not label or not value:
+                continue
+            key = self._fact_key(label)
+            if key == "unknown":
+                continue
+            links = self._links_from_node(cells[1])
+            marker = (key, label.casefold(), value)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            facts.append(DatamartFact(key=key, label=label, value=value, links=links))
+        return facts
+
+    def extract_release_changes(self, page: ConfluencePage, html: str) -> list[ReleaseChange]:
+        release_page = self._release_page_from_link(page, html)
+        if not release_page or not release_page.body_html:
+            return []
+        return self.parse_release_changes_page(release_page.body_html, release_page.url)
+
+    def parse_release_changes_page(
+        self, html: str, source_url: str | None = None
+    ) -> list[ReleaseChange]:
+        soup = BeautifulSoup(html, "html.parser")
+        content = soup.find(id="main-content") or soup
+        changes: list[ReleaseChange] = []
+        current_version: str | None = None
+        pending_jira_key: str | None = None
+        pending_jira_title: str | None = None
+        pending_status: str | None = None
+        for node in content.find_all(["h1", "h2", "h3", "p", "ul", "ol"], recursive=False):
+            if node.name in {"h1", "h2", "h3"}:
+                text = self._clean_text(node.get_text(" ", strip=True))
+                if self._jira_key_from_node(node) and "версия" not in normalize_text(text):
+                    continue
+                if text:
+                    current_version = text
+                    pending_jira_key = None
+                    pending_jira_title = None
+                    pending_status = None
+                continue
+            if not current_version:
+                continue
+            jira_key = self._jira_key_from_node(node)
+            jira_title = self._jira_title_from_node(node)
+            status = self._jira_status_from_node(node)
+            if jira_key:
+                pending_jira_key = jira_key
+                pending_jira_title = jira_title
+                pending_status = status
+            items = node.find_all("li", recursive=False) if node.name in {"ul", "ol"} else []
+            if not items:
+                continue
+            for item in items:
+                item_jira_key = self._jira_key_from_node(item) or jira_key or pending_jira_key
+                change_type = self._release_change_type(item)
+                summary = self._release_summary(item, change_type)
+                if not any([item_jira_key, change_type, summary]):
+                    continue
+                changes.append(
+                    ReleaseChange(
+                        version=current_version,
+                        jira_key=item_jira_key,
+                        jira_title=self._jira_title_from_node(item)
+                        or jira_title
+                        or pending_jira_title,
+                        change_type=change_type,
+                        summary=summary,
+                        status=self._jira_status_from_node(item) or status or pending_status,
+                        source_url=source_url,
+                    )
+                )
+            pending_jira_key = None
+            pending_jira_title = None
+            pending_status = None
+        return changes
 
     def find_s2t_candidates(self, page: ConfluencePage, html: str) -> list[S2TResource]:
         attachments = self.client.get_attachments(page.id)
@@ -106,7 +230,7 @@ class ConfluenceParser:
                         self._enrich_resource(
                             S2TResource(
                                 title=resource_title,
-                                url=urljoin(page.url, href) if href else None,
+                                url=confluence_urljoin(page.url, href) if href else None,
                                 file_name=file_name or resource_title,
                                 resource_type="link",
                                 file_date=parse_date_from_text(resource_title),
@@ -148,6 +272,25 @@ class ConfluenceParser:
         for candidate in candidates:
             candidate.file_date = candidate.file_date or parse_date_from_text(candidate.title)
         return candidates
+
+    def _release_page_from_link(
+        self, page: ConfluencePage, html: str
+    ) -> ConfluencePage | None:
+        soup = BeautifulSoup(html, "html.parser")
+        for link in soup.find_all("a"):
+            title = link.get_text(" ", strip=True)
+            href = link.get("href")
+            if not href or "изменения в релизах" not in normalize_text(title):
+                continue
+            page_id = self._page_id_from_url(href)
+            if not page_id:
+                continue
+            try:
+                return self.client.get_page(page_id)
+            except Exception:
+                logger.warning("Cannot load release changes page %s for %s", href, page.title)
+                return None
+        return None
 
     def _extract_s2t_table_resources(
         self, page: ConfluencePage, soup: BeautifulSoup
@@ -225,7 +368,7 @@ class ConfluenceParser:
                 if href and self._looks_like_s2t_file(href, title):
                     return S2TResource(
                         title=title,
-                        url=urljoin(page.url, href),
+                        url=confluence_urljoin(page.url, href),
                         file_name=file_name or title,
                         resource_type="table_latest_row",
                         updated_at=page.updated_at,
@@ -260,7 +403,7 @@ class ConfluenceParser:
                     resources.append(
                         S2TResource(
                             title=title,
-                            url=urljoin(page.url, href),
+                            url=confluence_urljoin(page.url, href),
                             file_name=file_name or title,
                             resource_type=resource_type,
                             file_date=file_date,
@@ -291,7 +434,7 @@ class ConfluenceParser:
     ) -> S2TResource:
         return S2TResource(
             title=file_name,
-            url=urljoin(page.url, f"/download/attachments/{page.id}/{file_name}"),
+            url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{file_name}"),
             file_name=file_name,
             resource_type=resource_type,
             file_date=file_date,
@@ -406,6 +549,89 @@ class ConfluenceParser:
         start = max(0, index - 1)
         end = min(len(cells), index + 2)
         return [cells[i] for i in range(start, end) if i != index]
+
+    @staticmethod
+    def _clean_text(value: str) -> str:
+        return re.sub(r"\s+", " ", value).strip()
+
+    @staticmethod
+    def _fact_key(label: str) -> str:
+        normalized = normalize_text(label)
+        for key, aliases in FACT_ALIASES.items():
+            if any(alias in normalized for alias in aliases):
+                return key
+        return "unknown"
+
+    @staticmethod
+    def _links_from_node(node) -> list[dict[str, str]]:
+        links = []
+        for link in node.find_all("a"):
+            href = link.get("href")
+            if not href:
+                continue
+            links.append({"title": link.get_text(" ", strip=True) or href, "url": href})
+        return links
+
+    @staticmethod
+    def _page_id_from_url(url: str) -> str | None:
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query)
+        page_id = query.get("pageId", [None])[0]
+        if page_id:
+            return page_id
+        path_parts = [part for part in parsed.path.split("/") if part]
+        for part in path_parts:
+            if part.isdigit():
+                return part
+        return None
+
+    @staticmethod
+    def _jira_key_from_node(node) -> str | None:
+        jira_tag = node.find(attrs={"data-jira-key": True})
+        if jira_tag and jira_tag.get("data-jira-key"):
+            return str(jira_tag["data-jira-key"])
+        match = JIRA_KEY_RE.search(node.get_text(" ", strip=True))
+        return match.group(0) if match else None
+
+    @staticmethod
+    def _jira_title_from_node(node) -> str | None:
+        summary = node.find(class_="summary")
+        if not summary:
+            return None
+        text = ConfluenceParser._clean_text(summary.get_text(" ", strip=True))
+        if normalize_text(text) in PLACEHOLDER_TEXTS:
+            return None
+        return text or None
+
+    @staticmethod
+    def _jira_status_from_node(node) -> str | None:
+        for tag in node.find_all(class_=lambda value: value and "aui-lozenge" in value):
+            if tag.find_parent(class_=lambda value: value and "status-macro" in value):
+                continue
+            text = ConfluenceParser._clean_text(tag.get_text(" ", strip=True))
+            if text and normalize_text(text) not in PLACEHOLDER_TEXTS:
+                return text
+        return None
+
+    @staticmethod
+    def _release_change_type(node) -> str | None:
+        for tag in node.find_all(class_=lambda value: value and "status-macro" in value):
+            text = ConfluenceParser._clean_text(tag.get_text(" ", strip=True))
+            if text:
+                return text.lower()
+        text = normalize_text(node.get_text(" ", strip=True))
+        for change_type in ("изменение", "новое", "исправление"):
+            if change_type in text:
+                return change_type
+        return None
+
+    @staticmethod
+    def _release_summary(node, change_type: str | None) -> str | None:
+        text = ConfluenceParser._clean_text(node.get_text(" ", strip=True))
+        if change_type:
+            text = re.sub(change_type, "", text, count=1, flags=re.IGNORECASE).strip()
+        text = re.sub(r"^[\s:–—-]+", "", text)
+        return text or None
 
     def _stakeholders_from_text(self, text: str, row) -> list[Stakeholder]:
         emails = EMAIL_RE.findall(text)

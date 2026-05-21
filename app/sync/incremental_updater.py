@@ -145,7 +145,10 @@ class IncrementalUpdater:
                 will_reindex=False,
             )
 
-        content = self.confluence_client.download(url)
+        if hasattr(self.confluence_client, "download_resource"):
+            content = self.confluence_client.download_resource(resource)
+        else:
+            content = self.confluence_client.download(url)
         content_hash = self.hash_service.sha256_bytes(content)
         previous_content_hash = previous.content_hash if previous else None
         content_changed = content_hash != previous_content_hash

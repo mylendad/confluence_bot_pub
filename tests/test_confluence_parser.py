@@ -6,9 +6,10 @@ from app.confluence.parser import ConfluenceParser
 
 
 class FakeClient:
-    def __init__(self, children=None, attachments_by_page=None):
+    def __init__(self, children=None, attachments_by_page=None, pages_by_id=None):
         self.children = children or []
         self.attachments_by_page = attachments_by_page or {}
+        self.pages_by_id = pages_by_id or {}
 
     def iter_top_level_pages(self):
         return []
@@ -18,6 +19,9 @@ class FakeClient:
 
     def get_children(self, page_id: str):
         return self.children
+
+    def get_page(self, page_id: str):
+        return self.pages_by_id[page_id]
 
 
 def test_extract_stakeholders_from_table() -> None:
@@ -32,6 +36,50 @@ def test_extract_stakeholders_from_table() -> None:
 
     assert len(stakeholders) == 2
     assert stakeholders[0].email == "ivanov@example.ru"
+
+
+def test_parse_datamart_page_extracts_facts_and_release_changes() -> None:
+    release_page = ConfluencePage(
+        id="99",
+        title="Изменения в релизах",
+        url="https://confluence.example.ru/pages/viewpage.action?pageId=99",
+        body_html="""
+        <h1>Изменения</h1>
+        <h2>Версия 20260327</h2>
+        <p><span class="jira-issue" data-jira-key="SSDWH-3208">
+          <span class="summary">Снятие тега SCH</span>
+          <span class="aui-lozenge">ЗАКРЫТ</span>
+        </span></p>
+        <ul>
+          <li><span class="status-macro">ИЗМЕНЕНИЕ</span> - Снятия тэга SCH</li>
+        </ul>
+        """,
+    )
+    parser = ConfluenceParser(FakeClient(pages_by_id={"99": release_page}), Settings())
+    page = ConfluencePage(
+        id="42",
+        title="Витрина Маркеры",
+        url="https://confluence.example.ru/pages/viewpage.action?pageId=42",
+        body_html="""
+        <table>
+          <tr><th>Измерение</th><th>Факт</th></tr>
+          <tr><td>КЭ</td><td>КЭ-123</td></tr>
+          <tr><td>Имя витрины в БД</td><td>dm_markers</td></tr>
+          <tr><td>МЕТА</td><td><a href="/meta/42">паспорт</a></td></tr>
+          <tr><td>Изменения в релизах</td>
+              <td><a href="/pages/viewpage.action?pageId=99">Изменения в релизах</a></td></tr>
+        </table>
+        """,
+    )
+
+    datamart = parser.parse_datamart_page(page)
+
+    assert {fact.key for fact in datamart.facts} >= {"ke", "db_name", "meta_links"}
+    assert datamart.release_changes[0].version == "Версия 20260327"
+    assert datamart.release_changes[0].jira_key == "SSDWH-3208"
+    assert datamart.release_changes[0].jira_title == "Снятие тега SCH"
+    assert datamart.release_changes[0].change_type == "изменение"
+    assert datamart.release_changes[0].status == "ЗАКРЫТ"
 
 
 def test_choose_latest_s2t_prefers_title_date_then_version() -> None:
@@ -82,6 +130,30 @@ def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None
     assert selected.file_date.isoformat() == "2026-05-10"
     assert selected.resource_type == "table_link"
     assert selected.url == "https://confluence.example.ru/download/attachments/42/random_name.xlsx"
+
+
+def test_table_link_keeps_confluence_cloud_context_path() -> None:
+    parser = ConfluenceParser(FakeClient(), Settings())
+    page = ConfluencePage(
+        id="42",
+        title="Витрина клиентских операций",
+        url="https://example.atlassian.net/wiki/pages/viewpage.action?pageId=42",
+        updated_at=datetime(2026, 1, 1),
+    )
+    html = """
+    <table>
+      <tr><th>Дата</th><th>Файл</th></tr>
+      <tr>
+        <td>2026-05-10</td>
+        <td><a href="/download/attachments/42/current.xlsx">download</a></td>
+      </tr>
+    </table>
+    """
+
+    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page, html))
+
+    assert selected is not None
+    assert selected.url == "https://example.atlassian.net/wiki/download/attachments/42/current.xlsx"
 
 
 def test_table_candidate_is_enriched_from_confluence_attachment_api() -> None:

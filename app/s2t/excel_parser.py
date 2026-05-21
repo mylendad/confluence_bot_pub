@@ -163,7 +163,7 @@ class ExcelS2TParser:
                     payload.get(key)
                     for key in ("target_field", "source_field", "transformation_logic")
                 ):
-                    continue
+                    break
                 target_key = self._target_key(payload)
                 payload.update(
                     {

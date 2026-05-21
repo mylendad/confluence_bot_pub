@@ -175,7 +175,7 @@ S2T которой реально изменился.
 
 ## Dry-run поведение
 
-`update-rag --dry-run`:
+`.venv/bin/python -m app.cli update-rag --dry-run`:
 
 - получает metadata из Confluence;
 - сравнивает metadata с `s2t_state`;
@@ -214,8 +214,8 @@ Detected changes: 0
 .venv/bin/python -m app.cli build-rag --full
 ```
 
-`build-rag --full` допустим для ручного восстановления локального индекса, но не для регулярного
-обновления из Confluence.
+`.venv/bin/python -m app.cli build-rag --full` допустим для ручного восстановления
+локального индекса, но не для регулярного обновления из Confluence.
 
 ## Failure modes
 

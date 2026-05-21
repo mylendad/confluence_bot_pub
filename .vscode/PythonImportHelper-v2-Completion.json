@@ -658,46 +658,6 @@
         "documentation": {}
     },
     {
-        "label": "urljoin",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
-        "label": "unquote",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
-        "label": "urljoin",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
-        "label": "urlparse",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
-        "label": "urlparse",
-        "importPath": "urllib.parse",
-        "description": "urllib.parse",
-        "isExtraImport": true,
-        "detail": "urllib.parse",
-        "documentation": {}
-    },
-    {
         "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
@@ -779,6 +739,14 @@
         "documentation": {}
     },
     {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceAuthError",
         "importPath": "app.confluence.exceptions",
         "description": "app.confluence.exceptions",
@@ -788,6 +756,30 @@
     },
     {
         "label": "ConfluenceError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
         "importPath": "app.confluence.exceptions",
         "description": "app.confluence.exceptions",
         "isExtraImport": true,
@@ -827,7 +819,23 @@
         "documentation": {}
     },
     {
+        "label": "DatamartFact",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
         "label": "ParseResult",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
         "isExtraImport": true,
@@ -923,6 +931,46 @@
         "documentation": {}
     },
     {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFact",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "importPath": "app.confluence.urls",
+        "description": "app.confluence.urls",
+        "isExtraImport": true,
+        "detail": "app.confluence.urls",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "importPath": "app.confluence.urls",
+        "description": "app.confluence.urls",
+        "isExtraImport": true,
+        "detail": "app.confluence.urls",
+        "documentation": {}
+    },
+    {
         "label": "re",
         "kind": 6,
         "isExtraImport": true,
@@ -932,11 +980,67 @@
         "documentation": {}
     },
     {
+        "label": "parse_qs",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "unquote",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urljoin",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
         "label": "BeautifulSoup",
         "importPath": "bs4",
         "description": "bs4",
         "isExtraImport": true,
         "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
         "documentation": {}
     },
     {
@@ -1818,6 +1922,23 @@
         "documentation": {}
     },
     {
+        "label": "pytest",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pytest",
+        "description": "pytest",
+        "detail": "pytest",
+        "documentation": {}
+    },
+    {
+        "label": "_raise_confluence_cli_error",
+        "importPath": "app.cli",
+        "description": "app.cli",
+        "isExtraImport": true,
+        "detail": "app.cli",
+        "documentation": {}
+    },
+    {
         "label": "parse_s2t",
         "importPath": "app.cli",
         "description": "app.cli",
@@ -1956,7 +2077,25 @@
         "kind": 6,
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
-        "peekOfCode": "class Stakeholder(BaseModel):\n    name: str | None = None\n    email: str | None = None\n    role: str | None = None\n    department: str | None = None\n    profile_url: str | None = None\nclass ConfluencePage(BaseModel):\n    id: str\n    title: str\n    url: str",
+        "peekOfCode": "class Stakeholder(BaseModel):\n    name: str | None = None\n    email: str | None = None\n    role: str | None = None\n    department: str | None = None\n    profile_url: str | None = None\nclass DatamartFact(BaseModel):\n    key: str\n    label: str\n    value: str",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFact",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class DatamartFact(BaseModel):\n    key: str\n    label: str\n    value: str\n    links: list[dict[str, str]] = Field(default_factory=list)\nclass ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None",
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
+        "kind": 6,
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "peekOfCode": "class ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None\n    summary: str | None = None\n    status: str | None = None\n    source_url: str | None = None\nclass ConfluencePage(BaseModel):\n    id: str",
         "detail": "app.confluence.models",
         "documentation": {}
     },
@@ -2028,7 +2167,7 @@
         "kind": 5,
         "importPath": "app.confluence.parser",
         "description": "app.confluence.parser",
-        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)",
+        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],",
         "detail": "app.confluence.parser",
         "documentation": {}
     },
@@ -2037,7 +2176,7 @@
         "kind": 5,
         "importPath": "app.confluence.parser",
         "description": "app.confluence.parser",
-        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():",
+        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],",
         "detail": "app.confluence.parser",
         "documentation": {}
     },
@@ -2046,8 +2185,44 @@
         "kind": 5,
         "importPath": "app.confluence.parser",
         "description": "app.confluence.parser",
-        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():\n            if pattern not in normalize_text(page.title):",
+        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],",
         "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "FACT_ALIASES",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "FACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],\n    \"db_name\": [\"имя витрины в бд\", \"витрина в бд\", \"название витрины в бд\"],",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "JIRA_KEY_RE",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "PLACEHOLDER_TEXTS",
+        "kind": 5,
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()",
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "kind": 2,
+        "importPath": "app.confluence.urls",
+        "description": "app.confluence.urls",
+        "peekOfCode": "def confluence_urljoin(base_url: str, link: str | None) -> str:\n    if not link:\n        return base_url\n    if urlparse(link).scheme:\n        return link\n    base = urlparse(base_url)\n    base_path = _context_path(base.path)\n    if link.startswith(\"/\") and base_path and not link.startswith(f\"{base_path}/\"):\n        link = f\"{base_path}{link}\"\n        base_url = f\"{base.scheme}://{base.netloc}\"",
+        "detail": "app.confluence.urls",
         "documentation": {}
     },
     {
@@ -2145,7 +2320,7 @@
         "kind": 6,
         "importPath": "app.rag.retriever",
         "description": "app.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if any(word in q for word in [\"владелец\", \"заинтересован\", \"ответствен\"]):\n            return \"owner_lookup\"\n        if \"измен\" in q and (\"год\" in q or \"период\" in q):\n            return \"last_year_changes\"\n        if \"атрибутный состав\" in q or \"какие атрибут\" in q:\n            return \"attribute_composition\"\n        if \"в каких витринах\" in q and \"атрибут\" in q:",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\"])\n        ):\n            return \"datamart_list\"\n        if \"изменения в релизах\" in q:",
         "detail": "app.rag.retriever",
         "documentation": {}
     },
@@ -2271,7 +2446,7 @@
         "kind": 6,
         "importPath": "app.storage.metadata_repository",
         "description": "app.storage.metadata_repository",
-        "peekOfCode": "class MetadataRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def upsert_datamart(self, datamart: Datamart) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into datamarts(\n                    name, code, confluence_page_id, confluence_url, stakeholders_json, updated_at\n                )",
+        "peekOfCode": "class MetadataRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def upsert_datamart(self, datamart: Datamart) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into datamarts(\n                    name, code, confluence_page_id, confluence_url, stakeholders_json,\n                    facts_json, release_changes_json, updated_at",
         "detail": "app.storage.metadata_repository",
         "documentation": {}
     },
@@ -2433,7 +2608,7 @@
         "kind": 2,
         "importPath": "app.cli",
         "description": "app.cli",
-        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    parser = ConfluenceParser(ConfluenceClient(settings), settings)\n    result = parser.parse(dry_run=dry_run)\n    for datamart in result.datamarts:\n        typer.echo(f\"Витрина: {datamart.name}\")\n        typer.echo(f\"  stakeholders: {len(datamart.stakeholders)}\")\n        typer.echo(f\"  s2t: {datamart.s2t_resource.title if datamart.s2t_resource else '-'}\")\n@app.command(\"parse-s2t\")",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    parser = ConfluenceParser(ConfluenceClient(settings), settings)\n    try:\n        result = parser.parse(dry_run=dry_run)\n    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:\n        _raise_confluence_cli_error(settings.confluence_base_url, exc)\n    for datamart in result.datamarts:\n        typer.echo(f\"Витрина: {datamart.name}\")",
         "detail": "app.cli",
         "documentation": {}
     },
@@ -2582,6 +2757,15 @@
         "documentation": {}
     },
     {
+        "label": "test_confluence_connect_error_is_reported_as_cli_hint",
+        "kind": 2,
+        "importPath": "tests.test_cli",
+        "description": "tests.test_cli",
+        "peekOfCode": "def test_confluence_connect_error_is_reported_as_cli_hint() -> None:\n    with pytest.raises(Exception) as exc_info:\n        _raise_confluence_cli_error(\n            \"https://confluence.example.ru\",\n            httpx.ConnectError(\"[Errno -3] Temporary failure in name resolution\"),\n        )\n    message = str(exc_info.value)\n    assert \"CONFLUENCE_BASE_URL\" in message\n    assert \"DNS/VPN/прокси\" in message\n    assert \"Temporary failure in name resolution\" in message",
+        "detail": "tests.test_cli",
+        "documentation": {}
+    },
+    {
         "label": "test_gigachat_auth_key_prefers_credentials",
         "kind": 2,
         "importPath": "tests.test_config",
@@ -2600,11 +2784,47 @@
         "documentation": {}
     },
     {
+        "label": "test_attachment_download_url_keeps_cloud_context_path",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_attachment_download_url_keeps_cloud_context_path() -> None:\n    def handler(request: httpx.Request) -> httpx.Response:\n        assert request.url.path == \"/wiki/rest/api/content/42/child/attachment\"\n        return httpx.Response(\n            200,\n            json={\n                \"results\": [\n                    {\n                        \"id\": \"att1\",\n                        \"title\": \"s2t.xlsx\",",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "test_attachment_download_401_is_auth_error",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_attachment_download_401_is_auth_error() -> None:\n    client = ConfluenceClient(\n        Settings(confluence_base_url=\"https://example.atlassian.net/wiki\"),\n        httpx.Client(\n            base_url=\"https://example.atlassian.net/wiki\",\n            transport=httpx.MockTransport(lambda request: httpx.Response(401)),\n        ),\n    )\n    with pytest.raises(ConfluenceAuthError):\n        client.download(\"https://example.atlassian.net/wiki/download/attachments/42/s2t.xlsx\")",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "test_attachment_download_resource_falls_back_to_rest_endpoint",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def test_attachment_download_resource_falls_back_to_rest_endpoint() -> None:\n    calls: list[str] = []\n    def handler(request: httpx.Request) -> httpx.Response:\n        calls.append(request.url.path)\n        if request.url.path == \"/wiki/download/attachments/42/s2t.xlsx\":\n            return httpx.Response(401)\n        if request.url.path == \"/wiki/rest/api/content/42/child/attachment/att1/download\":\n            return httpx.Response(200, content=b\"file-content\")\n        return httpx.Response(404)\n    client = ConfluenceClient(",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
+        "label": "attachments_resource",
+        "kind": 2,
+        "importPath": "tests.test_confluence_client",
+        "description": "tests.test_confluence_client",
+        "peekOfCode": "def attachments_resource(page_id: str, attachment_id: str, url: str):\n    from app.confluence.models import S2TResource\n    return S2TResource(\n        id=attachment_id,\n        title=\"s2t.xlsx\",\n        file_name=\"s2t.xlsx\",\n        page_id=page_id,\n        url=url,\n        download_url=url,\n        resource_type=\"attachment\",",
+        "detail": "tests.test_confluence_client",
+        "documentation": {}
+    },
+    {
         "label": "FakeClient",
         "kind": 6,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None, attachments_by_page=None):\n        self.children = children or []\n        self.attachments_by_page = attachments_by_page or {}\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return self.attachments_by_page.get(page_id, [])\n    def get_children(self, page_id: str):\n        return self.children",
+        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None, attachments_by_page=None, pages_by_id=None):\n        self.children = children or []\n        self.attachments_by_page = attachments_by_page or {}\n        self.pages_by_id = pages_by_id or {}\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return self.attachments_by_page.get(page_id, [])\n    def get_children(self, page_id: str):",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -2614,6 +2834,15 @@
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
         "peekOfCode": "def test_extract_stakeholders_from_table() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    html = \"\"\"\n    <table><tr><td>Заинтересованные лица</td>\n    <td><a href=\"/u/ivanov\">Иванов Иван</a> ivanov@example.ru;\n    Петров Петр petrov@example.ru</td></tr></table>\n    \"\"\"\n    stakeholders = parser.extract_stakeholders(html)\n    assert len(stakeholders) == 2\n    assert stakeholders[0].email == \"ivanov@example.ru\"",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_parse_datamart_page_extracts_facts_and_release_changes",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_parse_datamart_page_extracts_facts_and_release_changes() -> None:\n    release_page = ConfluencePage(\n        id=\"99\",\n        title=\"Изменения в релизах\",\n        url=\"https://confluence.example.ru/pages/viewpage.action?pageId=99\",\n        body_html=\"\"\"\n        <h1>Изменения</h1>\n        <h2>Версия 20260327</h2>\n        <p><span class=\"jira-issue\" data-jira-key=\"SSDWH-3208\">\n          <span class=\"summary\">Снятие тега SCH</span>",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -2632,6 +2861,15 @@
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
         "peekOfCode": "def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_table_link_keeps_confluence_cloud_context_path",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_table_link_keeps_confluence_cloud_context_path() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://example.atlassian.net/wiki/pages/viewpage.action?pageId=42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -2776,6 +3014,33 @@
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
         "peekOfCode": "def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентских операций\",\n                target_field=\"epk_id\",\n                owner=\"ivanov.ii@example.ru\",\n            )",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_datamart_list_question_uses_metadata_store",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_datamart_list_question_uses_metadata_store(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеры\",\n            confluence_page_id=\"42\",\n            confluence_url=\"https://confluence.example.ru/pages/42\",\n        )\n    )",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_datamart_fact_question_uses_main_page_table",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_datamart_fact_question_uses_main_page_table(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеры\",\n            confluence_page_id=\"42\",\n            confluence_url=\"https://confluence.example.ru/pages/42\",\n            facts=[\n                DatamartFact(key=\"ke\", label=\"КЭ\", value=\"КЭ-123\"),",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_release_changes_question_uses_confluence_release_page",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_release_changes_question_uses_confluence_release_page(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеры\",\n            confluence_page_id=\"42\",\n            confluence_url=\"https://confluence.example.ru/pages/42\",\n            release_changes=[\n                ReleaseChange(",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },

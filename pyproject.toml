@@ -18,6 +18,10 @@ dependencies = [
     "uvicorn>=0.30.0",
 ]
 
+[project.scripts]
+"app.cli" = "app.cli:app"
+confluence-bot = "app.cli:app"
+
 [project.optional-dependencies]
 rag = [
     "chromadb>=0.5.0",
