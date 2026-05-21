@@ -1,6 +1,6 @@
 import logging
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 from urllib.parse import parse_qs, unquote, urlparse
 
 from bs4 import BeautifulSoup
@@ -331,10 +331,11 @@ class ConfluenceParser:
         def key(item: S2TResource) -> tuple[int, datetime, int]:
             priority = 1 if item.resource_type == "table_latest_row" else 0
             if item.file_date:
-                dt = datetime.combine(item.file_date, datetime.min.time())
+                dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:
-                dt = item.updated_at or datetime.min
-            return priority, dt, item.version or 0
+                dt = self._comparable_datetime(item.updated_at)
+            row_number = item.version or 0
+            return priority, dt, row_number
 
         selected = max(candidates, key=key)
         if not selected.file_date and selected.resource_type != "table_latest_row":
@@ -342,6 +343,14 @@ class ConfluenceParser:
                 "S2T date is absent in title, fallback to updated_at/version for %s", selected.title
             )
         return selected
+
+    @staticmethod
+    def _comparable_datetime(value: datetime | None) -> datetime:
+        if not value:
+            return datetime.min.replace(tzinfo=UTC)
+        if value.tzinfo is None:
+            return value.replace(tzinfo=UTC)
+        return value.astimezone(UTC)
 
     def _looks_like_s2t(self, value: str) -> bool:
         return any(

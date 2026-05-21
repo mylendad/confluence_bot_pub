@@ -132,6 +132,38 @@ def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None
     assert selected.url == "https://confluence.example.ru/download/attachments/42/random_name.xlsx"
 
 
+def test_same_table_date_prefers_bottom_link() -> None:
+    parser = ConfluenceParser(FakeClient(), Settings())
+    page = ConfluencePage(
+        id="42",
+        title="Витрина клиентских операций",
+        url="https://confluence.example.ru/pages/42",
+        updated_at=datetime(2026, 1, 1),
+    )
+    html = """
+    <table>
+      <tr>
+        <th>Дата</th>
+        <th>Файл</th>
+      </tr>
+      <tr>
+        <td>2026-05-10</td>
+        <td><a href="/download/attachments/42/top.xlsx">скачать</a></td>
+      </tr>
+      <tr>
+        <td>2026-05-10</td>
+        <td><a href="/download/attachments/42/bottom.xlsx">скачать</a></td>
+      </tr>
+    </table>
+    """
+
+    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page, html))
+
+    assert selected is not None
+    assert selected.file_name == "bottom.xlsx"
+    assert selected.version == 3
+
+
 def test_table_link_keeps_confluence_cloud_context_path() -> None:
     parser = ConfluenceParser(FakeClient(), Settings())
     page = ConfluencePage(

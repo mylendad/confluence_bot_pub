@@ -273,6 +273,14 @@
         "documentation": {}
     },
     {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -2948,6 +2956,15 @@
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
         "peekOfCode": "def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_same_table_date_prefers_bottom_link",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_same_table_date_prefers_bottom_link() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"42\",\n        title=\"Витрина клиентских операций\",\n        url=\"https://confluence.example.ru/pages/42\",\n        updated_at=datetime(2026, 1, 1),\n    )\n    html = \"\"\"\n    <table>",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
