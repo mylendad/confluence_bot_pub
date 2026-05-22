@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     confluence_request_delay: float = 0.0
     confluence_user_agent: str | None = None
     confluence_cookie_file: str | None = None
+    confluence_extra_headers: str | None = None
 
 
     datamart_page_pattern: str = "Витрина"

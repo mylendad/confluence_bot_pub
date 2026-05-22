@@ -1,3 +1,4 @@
+import json
 import logging
 from collections.abc import Iterable
 from datetime import datetime
@@ -30,6 +31,13 @@ class ConfluenceClient:
                     logger.warning("Cookie file not found at: %s", cookie_path)
             except Exception as exc:
                 logger.error("Failed to read cookie file %s: %s", settings.confluence_cookie_file, exc)
+        
+        if settings.confluence_extra_headers:
+            try:
+                extra_headers = json.loads(settings.confluence_extra_headers)
+                headers.update(extra_headers)
+            except json.JSONDecodeError:
+                logger.error("Failed to parse CONFLUENCE_EXTRA_HEADERS as JSON: %s", settings.confluence_extra_headers)
 
         self._client = client or httpx.Client(
             base_url=settings.confluence_base_url,
