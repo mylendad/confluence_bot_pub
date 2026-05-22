@@ -224,7 +224,8 @@ class ConfluenceParser:
         for link in soup.find_all("a"):
             title = link.get_text(" ", strip=True) or link.get("href", "")
             href = link.get("href")
-            if self._looks_like_s2t(title) or self._looks_like_s2t(href or ""):
+
+            if href and self._looks_like_s2t_file(href, title):
                 file_name = self._file_name_from_url(href)
                 resource_title = file_name or title
                 self._append_new_resources(
@@ -233,7 +234,7 @@ class ConfluenceParser:
                         self._enrich_resource(
                             S2TResource(
                                 title=resource_title,
-                                url=confluence_urljoin(page.url, href) if href else None,
+                                url=confluence_urljoin(page.url, href),
                                 file_name=file_name or resource_title,
                                 resource_type="link",
                                 file_date=parse_date_from_text(resource_title),
