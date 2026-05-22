@@ -60,6 +60,12 @@ class ConfluenceClient:
         return response.json()
     
     def _validate_download_response(self, response: httpx.Response, original_url: str):
+        logger.info(
+            "Validating download response. final_url=%s, status_code=%s, headers=%s",
+            response.url,
+            response.status_code,
+            response.headers,
+        )
         if "login.action" in str(response.url):
             raise ConfluenceAuthError(
                 f"Attachment download redirected to login page, check permissions for: {original_url}"
@@ -127,6 +133,7 @@ class ConfluenceClient:
         return resources
 
     def download(self, url: str) -> bytes:
+        logger.info("Downloading from URL: %s", url)
         response = self._client.get(url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
@@ -150,6 +157,7 @@ class ConfluenceClient:
         self, page_id: str, attachment_id: str, original_error: ConfluenceAuthError
     ) -> bytes:
         url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
+        logger.info("Downloading from URL (REST fallback): %s", url)
         response = self._client.get(url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
