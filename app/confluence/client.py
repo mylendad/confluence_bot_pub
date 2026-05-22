@@ -16,6 +16,13 @@ class ConfluenceClient:
     def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:
         self.settings = settings
         auth, headers = self._auth_config(settings)
+        
+        headers = headers or {}
+        if settings.confluence_user_agent:
+            headers["User-Agent"] = settings.confluence_user_agent
+        if settings.confluence_cookie_header:
+            headers["Cookie"] = settings.confluence_cookie_header
+        
         self._client = client or httpx.Client(
             base_url=settings.confluence_base_url,
             auth=auth,
@@ -25,10 +32,11 @@ class ConfluenceClient:
         )
 
     @staticmethod
-    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str] | None]:
+    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str]]:
         auth_type = settings.confluence_auth_type.lower().strip()
         token = settings.confluence_auth_token
         username = settings.confluence_username
+        headers: dict[str, str] = {"Accept": "application/json"}
 
         if token and not token.isascii():
             raise ConfluenceAuthError(
@@ -37,19 +45,18 @@ class ConfluenceClient:
             )
 
         if auth_type in {"bearer", "pat", "token"}:
-            headers = {"Accept": "application/json"}
             if token:
                 headers["Authorization"] = f"Bearer {token}"
             return None, headers
 
         if auth_type == "basic":
-            return (username, token) if username and token else None, None
+            return (username, token) if username and token else None, headers
 
         if username and token:
-            return (username, token), None
+            return (username, token), headers
         if token:
-            return None, {"Authorization": f"Bearer {token}", "Accept": "application/json"}
-        return None, None
+            headers["Authorization"] = f"Bearer {token}"
+        return None, headers
 
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
         response = self._client.get(path, params=params)

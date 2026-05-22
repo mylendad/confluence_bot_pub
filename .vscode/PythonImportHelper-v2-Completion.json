@@ -2082,7 +2082,7 @@
         "kind": 6,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url,\n            auth=auth,\n            headers=headers,\n            timeout=30,\n            verify=settings.confluence_verify_ssl,",
+        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_header:\n            headers[\"Cookie\"] = settings.confluence_cookie_header\n        self._client = client or httpx.Client(",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2091,7 +2091,7 @@
         "kind": 5,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        self._client = client or httpx.Client(\n            base_url=settings.confluence_base_url,\n            auth=auth,\n            headers=headers,\n            timeout=30,",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_header:\n            headers[\"Cookie\"] = settings.confluence_cookie_header",
         "detail": "app.confluence.client",
         "documentation": {}
     },

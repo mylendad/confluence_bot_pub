@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     confluence_api_token: str | None = None
     confluence_verify_ssl: bool = True
     confluence_request_delay: float = 0.0
+    confluence_user_agent: str | None = None
+    confluence_cookie_header: str | None = None
 
 
     datamart_page_pattern: str = "Витрина"
