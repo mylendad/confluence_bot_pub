@@ -58,6 +58,18 @@ class ConfluenceClient:
         if response.is_error:
             raise ConfluenceError(f"Confluence request failed: {response.status_code}")
         return response.json()
+    
+    def _validate_download_response(self, response: httpx.Response, original_url: str):
+        if "login.action" in str(response.url):
+            raise ConfluenceAuthError(
+                f"Attachment download redirected to login page, check permissions for: {original_url}"
+            )
+        
+        content_type = response.headers.get("Content-Type", "").lower()
+        if "text/html" in content_type and "application/json" not in content_type:
+            raise ConfluenceError(
+                f"Expected a file download, but received HTML content from: {original_url}"
+            )
 
     def get_page(self, page_id: str) -> ConfluencePage:
         payload = self._get(
@@ -116,6 +128,7 @@ class ConfluenceClient:
 
     def download(self, url: str) -> bytes:
         response = self._client.get(url, follow_redirects=True)
+        self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError(f"Attachment download forbidden: {response.status_code}")
         if response.is_error:
@@ -136,10 +149,9 @@ class ConfluenceClient:
     def _download_attachment_via_rest(
         self, page_id: str, attachment_id: str, original_error: ConfluenceAuthError
     ) -> bytes:
-        response = self._client.get(
-            f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download",
-            follow_redirects=True,
-        )
+        url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
+        response = self._client.get(url, follow_redirects=True)
+        self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError(
                 "Attachment download forbidden via direct URL and REST fallback: "
