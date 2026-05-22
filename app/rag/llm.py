@@ -1,7 +1,10 @@
+import logging
 from typing import Protocol
 
 from app.config import Settings
 from app.rag.prompts import ANSWER_SYSTEM_PROMPT
+
+logger = logging.getLogger(__name__)
 
 
 class AnswerGenerator(Protocol):
@@ -33,6 +36,7 @@ class GigaChatAnswerGenerator:
                 "langchain-gigachat is not installed. Run: pip install langchain-gigachat"
             ) from exc
 
+        logger.info("Initializing GigaChat LLM with model=%s", self.settings.gigachat_model)
         self.llm = GigaChat(
             credentials=self.settings.gigachat_auth_key,
             scope=self.settings.gigachat_scope,
@@ -55,5 +59,7 @@ class GigaChatAnswerGenerator:
 
 def build_answer_generator(settings: Settings) -> AnswerGenerator:
     if settings.llm_provider.lower() == "gigachat":
+        logger.info("Building GigaChat answer generator")
         return GigaChatAnswerGenerator(settings)
+    logger.info("Building stub answer generator")
     return StubAnswerGenerator()

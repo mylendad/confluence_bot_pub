@@ -1,5 +1,6 @@
 import logging
 import re
+import time
 from datetime import UTC, datetime
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -68,6 +69,8 @@ class ConfluenceParser:
         result = ParseResult()
         pattern = normalize_text(self.settings.datamart_page_pattern)
         for page in self.client.iter_top_level_pages():
+            if self.settings.confluence_request_delay > 0:
+                time.sleep(self.settings.confluence_request_delay)
             if pattern not in normalize_text(page.title):
                 continue
             logger.info("Found datamart page %s", page.title)

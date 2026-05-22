@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     confluence_token: str | None = None
     confluence_api_token: str | None = None
     confluence_verify_ssl: bool = True
+    confluence_request_delay: float = 0.0
+
 
     datamart_page_pattern: str = "Витрина"
     s2t_section_patterns: str = "s2t,S2T,Source to Target,Source-to-Target"

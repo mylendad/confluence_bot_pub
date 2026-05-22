@@ -996,6 +996,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "parse_qs",
         "importPath": "urllib.parse",
         "description": "urllib.parse",
@@ -2172,7 +2181,7 @@
         "kind": 6,
         "importPath": "app.confluence.parser",
         "description": "app.confluence.parser",
-        "peekOfCode": "class ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():\n            if pattern not in normalize_text(page.title):\n                continue",
+        "peekOfCode": "class ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()\n        pattern = normalize_text(self.settings.datamart_page_pattern)\n        for page in self.client.iter_top_level_pages():\n            if self.settings.confluence_request_delay > 0:\n                time.sleep(self.settings.confluence_request_delay)",
         "detail": "app.confluence.parser",
         "documentation": {}
     },
@@ -2307,7 +2316,16 @@
         "kind": 2,
         "importPath": "app.rag.llm",
         "description": "app.rag.llm",
-        "peekOfCode": "def build_answer_generator(settings: Settings) -> AnswerGenerator:\n    if settings.llm_provider.lower() == \"gigachat\":\n        return GigaChatAnswerGenerator(settings)\n    return StubAnswerGenerator()",
+        "peekOfCode": "def build_answer_generator(settings: Settings) -> AnswerGenerator:\n    if settings.llm_provider.lower() == \"gigachat\":\n        logger.info(\"Building GigaChat answer generator\")\n        return GigaChatAnswerGenerator(settings)\n    logger.info(\"Building stub answer generator\")\n    return StubAnswerGenerator()",
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:",
         "detail": "app.rag.llm",
         "documentation": {}
     },
