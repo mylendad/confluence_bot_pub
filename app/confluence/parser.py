@@ -363,13 +363,7 @@ class ConfluenceParser:
             return None
 
         def key(item: S2TResource) -> tuple[int, datetime, int]:
-            is_file = item.file_name and item.file_name.lower().endswith(SUPPORTED_S2T_SUFFIXES)
-            priority = 0
-            if is_file:
-                priority = 2
-            elif item.resource_type == "table_latest_row":
-                priority = 1
-
+            priority = 1 if item.resource_type == "table_latest_row" else 0
             if item.file_date:
                 dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:
