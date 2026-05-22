@@ -251,8 +251,12 @@ class ConfluenceParser:
             if not href:
                 continue
 
+            parent_text = link.parent.get_text(" ", strip=True) if link.parent else ""
+
             # Case A: Direct link to a downloadable file
-            if "/download/attachments/" in href and self._looks_like_s2t_file(href, title):
+            if "/download/attachments/" in href and (
+                self._looks_like_s2t_file(href, title) or self._looks_like_s2t(parent_text)
+            ):
                 file_name = self._file_name_from_url(href)
                 resource_title = file_name or title
                 self._append_new_resources(
@@ -272,7 +276,9 @@ class ConfluenceParser:
                     ],
                 )
             # Case B: Link to another page that might have S2T info, recurse
-            elif ("pageId=" in href or "/display/" in href) and self._looks_like_s2t(title):
+            elif ("pageId=" in href or "/display/" in href) and self._looks_like_s2t(
+                f"{title} {parent_text}"
+            ):
                 child_page_id = self._page_id_from_url(href)
                 if child_page_id and child_page_id not in visited:
                     try:
