@@ -1,98 +1,16 @@
 import logging
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 
-from app.s2t.models import S2TAttribute, S2TParseIssue, S2TParseResult
-from app.utils.text_utils import normalize_text
+from app.s2t.models import S2TAttribute, S2TParseIssue, S2TParseResult, TEMPLATE_SHEETS
+from app.s2t.parser_base import BaseS2TParser
 
 logger = logging.getLogger(__name__)
 
-COLUMN_ALIASES = {
-    "owner": [
-        "UserName",
-        "owner",
-        "владелец",
-        "ответственный",
-        "заинтересованное лицо",
-    ],
-    "target_platform": ["T-trg-platform", "T-platform", "target platform", "целевая платформа"],
-    "target_instance": ["T-trg-instance", "T-instance", "target instance", "целевой инстанс"],
-    "target_schema": [
-        "T-trg-schema",
-        "T-schema",
-        "target_schema",
-        "target schema",
-        "целевая схема",
-        "схема приемника",
-    ],
-    "target_table": [
-        "T-trg",
-        "T-name",
-        "target_table",
-        "target table",
-        "Наименование таблицы приемника",
-    ],
-    "target_field": [
-        "T-trg-f",
-        "T-col-name",
-        "target_field",
-        "target field",
-        "Наименование поля приемника",
-    ],
-    "target_table_description": ["T-note", "описание целевой таблицы", "target table description"],
-    "target_field_description": [
-        "T-col-note",
-        "описание целевого поля",
-        "target field description",
-        "Column Attribute Note",
-    ],
-    "source_name": ["T-src-main", "T-src-join", "источник данных", "source", "source name"],
-    "source_platform": ["T-src-platform", "source platform", "исходная платформа"],
-    "source_instance": ["T-src-instance", "source instance", "исходный инстанс"],
-    "source_schema": [
-        "T-src-schema",
-        "source_schema",
-        "source schema",
-        "исходная схема",
-        "схема источника",
-    ],
-    "source_table": ["T-src", "source_table", "source table", "Наименование таблицы источника"],
-    "source_field": ["T-src-f-name", "source_field", "source field", "Наименование поля источника"],
-    "join_condition": ["T-src-join-on", "join", "Условия соединения", "Условие соединения"],
-    "where_condition": ["T-src-where", "where", "Условия фильтрации", "Условие фильтрации"],
-    "group_by": ["T-src-group", "group", "Группировка"],
-    "keys": ["ключи", "keys"],
-    "history_type": ["T-hist-type", "target_data_hist", "тип историчности", "history type"],
-    "history_role": ["T-hist-role", "роль историчности", "history role"],
-    "datamart_code": ["codeDatamart", "codeApplication", "Код витрины", "ID Витрины"],
-    "refresh_frequency": [
-        "target_data_freq",
-        "частота обновления",
-        "Частота расчёта таблицы",
-        "refresh frequency",
-    ],
-    "data_actuality": ["target_data_relevance", "актуальность данных", "data actuality"],
-    "business_description": [
-        "Datamart.description_source",
-        "Table.description_source",
-        "бизнес-описание",
-        "business description",
-    ],
-    "transformation_logic": [
-        "T-src-f",
-        "техническая логика трансформации",
-        "transformation",
-        "logic",
-    ],
-}
 
-TEMPLATE_SHEETS = {"Target columns", "Source columns", "Datamart info", "S2T"}
-
-
-class ExcelS2TParser:
+class ExcelS2TParser(BaseS2TParser):
     def parse(
         self,
         path: Path,
@@ -100,11 +18,24 @@ class ExcelS2TParser:
         s2t_file_date: date | None = None,
     ) -> S2TParseResult:
         result = S2TParseResult()
-        workbook = pd.ExcelFile(path)
+        try:
+            workbook = pd.ExcelFile(path)
+        except Exception as exc:
+            result.issues.append(S2TParseIssue(message=f"Cannot open Excel file: {exc}"))
+            return result
+
         if TEMPLATE_SHEETS.issubset(set(workbook.sheet_names)):
             return self._parse_template(workbook, path, datamart_name, s2t_file_date)
+
         for sheet_name in workbook.sheet_names:
-            raw = pd.read_excel(workbook, sheet_name=sheet_name, header=None, dtype=str)
+            try:
+                raw = pd.read_excel(workbook, sheet_name=sheet_name, header=None, dtype=str)
+            except Exception as exc:
+                result.issues.append(
+                    S2TParseIssue(sheet=sheet_name, message=f"Cannot read sheet: {exc}")
+                )
+                continue
+
             header_row = self._find_header_row(raw)
             if header_row is None:
                 result.issues.append(
@@ -231,40 +162,3 @@ class ExcelS2TParser:
             (payload.get("target_table") or "").strip().lower(),
             (payload.get("target_field") or "").strip().lower(),
         )
-
-    def _find_header_row(self, df: pd.DataFrame) -> int | None:
-        aliases = {normalize_text(alias) for values in COLUMN_ALIASES.values() for alias in values}
-        best_row: int | None = None
-        best_score = 0
-        for idx, row in df.head(30).iterrows():
-            values = {normalize_text(str(value)) for value in row.dropna().tolist()}
-            score = len(values & aliases)
-            if score > best_score:
-                best_score = score
-                best_row = int(idx)
-        return best_row if best_score >= 2 else None
-
-    def _build_column_mapping(self, columns: Any) -> dict[str, str]:
-        mapping: dict[str, str] = {}
-        alias_lookup = {
-            normalize_text(alias): field
-            for field, aliases in COLUMN_ALIASES.items()
-            for alias in aliases
-        }
-        for column in columns:
-            field = alias_lookup.get(normalize_text(str(column)))
-            if field:
-                mapping[str(column)] = field
-        return mapping
-
-    @staticmethod
-    def _row_payload(row: pd.Series, mapping: dict[str, str]) -> dict[str, str | None]:
-        payload: dict[str, str | None] = {}
-        for column, field in mapping.items():
-            value = row.get(column)
-            if pd.isna(value):
-                payload[field] = None
-            else:
-                text = str(value).strip()
-                payload[field] = text or None
-        return payload
