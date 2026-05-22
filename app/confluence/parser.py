@@ -90,7 +90,7 @@ class ConfluenceParser:
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
         release_changes = self.extract_release_changes(page, html)
-        candidates = self.find_s2t_candidates(page, html)
+        candidates = self.find_s2t_candidates(page)
         selected = self.choose_latest_s2t(candidates)
         return Datamart(
             name=page.title,
@@ -210,22 +210,49 @@ class ConfluenceParser:
             pending_status = None
         return changes
 
-    def find_s2t_candidates(self, page: ConfluencePage, html: str) -> list[S2TResource]:
-        attachments = self.client.get_attachments(page.id)
+    def find_s2t_candidates(self, page: ConfluencePage) -> list[S2TResource]:
+        return self._find_s2t_recursive(page, depth=0, visited=set())
+
+    def _find_s2t_recursive(
+        self, page: ConfluencePage, depth: int, visited: set[str]
+    ) -> list[S2TResource]:
+        if page.id in visited or depth > 5:
+            return []
+        visited.add(page.id)
+
+        logger.info("Recursively searching for S2T files on page '%s' (depth %d)", page.title, depth)
+
+        html = page.body_html
+        if not html:
+            full_page = self.client.get_page(page.id)
+            html = full_page.body_html if full_page and full_page.body_html else ""
+        if not html:
+            return []
+
         candidates: list[S2TResource] = []
+        # 1. Add direct attachments from current page
+        attachments = self.client.get_attachments(page.id)
+        self._append_new_resources(candidates, attachments)
         attachment_index = self._attachment_index(attachments)
+
         soup = BeautifulSoup(html, "html.parser")
+        # 2. Add files found in tables on current page
         self._append_new_resources(
             candidates,
             self._enrich_resources(
                 self._extract_s2t_table_resources(page, soup), attachment_index
             ),
         )
+
+        # 3. Explore links on current page
         for link in soup.find_all("a"):
             title = link.get_text(" ", strip=True) or link.get("href", "")
             href = link.get("href")
+            if not href:
+                continue
 
-            if href and self._looks_like_s2t_file(href, title):
+            # Case A: Direct link to a downloadable file
+            if "/download/attachments/" in href and self._looks_like_s2t_file(href, title):
                 file_name = self._file_name_from_url(href)
                 resource_title = file_name or title
                 self._append_new_resources(
@@ -244,38 +271,37 @@ class ConfluenceParser:
                         )
                     ],
                 )
-        self._append_new_resources(candidates, attachments)
-        for child in self.client.get_children(page.id):
-            if self._looks_like_s2t(child.title):
-                child_attachments = self.client.get_attachments(child.id)
-                child_attachment_index = self._attachment_index(child_attachments)
-                if child.body_html:
-                    child_soup = BeautifulSoup(child.body_html, "html.parser")
-                    self._append_new_resources(
-                        candidates,
-                        self._enrich_resources(
-                            self._extract_s2t_table_resources(child, child_soup),
-                            child_attachment_index,
-                        ),
-                    )
-                self._append_new_resources(candidates, child_attachments)
-                self._append_new_resources(
-                    candidates,
-                    [
-                        S2TResource(
-                            title=child.title,
-                            url=child.url,
-                            resource_type="page",
-                            file_name=child.title,
-                            file_date=parse_date_from_text(child.title),
-                            updated_at=child.updated_at,
-                            page_id=child.id,
+            # Case B: Link to another page that might have S2T info, recurse
+            elif ("pageId=" in href or "/display/" in href) and self._looks_like_s2t(title):
+                child_page_id = self._page_id_from_url(href)
+                if child_page_id and child_page_id not in visited:
+                    try:
+                        child_page = self.client.get_page(child_page_id)
+                        if child_page:
+                            recursive_files = self._find_s2t_recursive(
+                                child_page, depth + 1, visited
+                            )
+                            self._append_new_resources(candidates, recursive_files)
+                    except Exception as exc:
+                        logger.warning(
+                            "Failed to fetch or process linked page %s: %s", child_page_id, exc
                         )
-                    ],
-                )
-        for candidate in candidates:
+        
+        # 4. Explore direct child pages
+        for child in self.client.get_children(page.id):
+             if self._looks_like_s2t(child.title):
+                recursive_files = self._find_s2t_recursive(child, depth + 1, visited)
+                self._append_new_resources(candidates, recursive_files)
+
+        # Final filtering: only return actual files
+        file_candidates = [
+            c for c in candidates if c.file_name and c.file_name.lower().endswith(SUPPORTED_S2T_SUFFIXES)
+        ]
+        
+        for candidate in file_candidates:
             candidate.file_date = candidate.file_date or parse_date_from_text(candidate.title)
-        return candidates
+        
+        return file_candidates
 
     def _release_page_from_link(
         self, page: ConfluencePage, html: str
@@ -329,11 +355,15 @@ class ConfluenceParser:
         if not candidates:
             logger.warning("S2T resource was not found")
             return None
-        for candidate in candidates:
-            candidate.file_date = candidate.file_date or parse_date_from_text(candidate.title)
 
         def key(item: S2TResource) -> tuple[int, datetime, int]:
-            priority = 1 if item.resource_type == "table_latest_row" else 0
+            is_file = item.file_name and item.file_name.lower().endswith(SUPPORTED_S2T_SUFFIXES)
+            priority = 0
+            if is_file:
+                priority = 2
+            elif item.resource_type == "table_latest_row":
+                priority = 1
+
             if item.file_date:
                 dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:

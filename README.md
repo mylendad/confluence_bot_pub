@@ -57,6 +57,7 @@ CONFLUENCE_TOKEN=...
 LLM_PROVIDER=gigachat
 GIGACHAT_CREDENTIALS=...
 GIGACHAT_SCOPE=GIGACHAT_API_PERS
+CONFLUENCE_REQUEST_DELAY=0.2
 ```
 
 Для корпоративного Confluence с Personal Access Token используйте `CONFLUENCE_AUTH_TYPE=bearer`
@@ -68,6 +69,9 @@ GIGACHAT_SCOPE=GIGACHAT_API_PERS
 `GIGACHAT_CREDENTIALS` не выводится в логи. Для совместимости приложение также умеет
 читать ключ из `GIGACHAT_API_KEY` или `GIGACHAT_API_PERS`, но основной вариант для
 новой настройки — `GIGACHAT_CREDENTIALS`.
+
+Переменная `CONFLUENCE_REQUEST_DELAY` задает задержку в секундах между запросами к
+Confluence, чтобы избежать блокировки при слишком частых запросах (ошибка 429).
 
 ## Архитектура
 

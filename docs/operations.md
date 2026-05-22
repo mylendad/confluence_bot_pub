@@ -201,3 +201,13 @@ Structured ответы должны работать без LLM. Генерат
 ### Confluence DNS/network error
 
 Проверьте сеть, VPN, URL Confluence и credentials в `.env`.
+
+### Confluence `429 Too Many Requests`
+
+Эта ошибка возникает, если сервер Confluence блокирует слишком частые запросы.
+Чтобы это исправить, добавьте в `.env` переменную `CONFLUENCE_REQUEST_DELAY`
+и задайте ей небольшую задержку в секундах, например:
+
+```env
+CONFLUENCE_REQUEST_DELAY=0.2
+```
