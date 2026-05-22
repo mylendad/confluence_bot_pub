@@ -1,6 +1,7 @@
 import logging
 from collections.abc import Iterable
 from datetime import datetime
+from pathlib import Path
 
 import httpx
 
@@ -20,9 +21,16 @@ class ConfluenceClient:
         headers = headers or {}
         if settings.confluence_user_agent:
             headers["User-Agent"] = settings.confluence_user_agent
-        if settings.confluence_cookie_header:
-            headers["Cookie"] = settings.confluence_cookie_header
-        
+        if settings.confluence_cookie_file:
+            try:
+                cookie_path = Path(settings.confluence_cookie_file)
+                if cookie_path.is_file():
+                    headers["Cookie"] = cookie_path.read_text().strip()
+                else:
+                    logger.warning("Cookie file not found at: %s", cookie_path)
+            except Exception as exc:
+                logger.error("Failed to read cookie file %s: %s", settings.confluence_cookie_file, exc)
+
         self._client = client or httpx.Client(
             base_url=settings.confluence_base_url,
             auth=auth,

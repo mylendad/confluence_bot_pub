@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     confluence_verify_ssl: bool = True
     confluence_request_delay: float = 0.0
     confluence_user_agent: str | None = None
-    confluence_cookie_header: str | None = None
+    confluence_cookie_file: str | None = None
 
 
     datamart_page_pattern: str = "Витрина"
