@@ -1,116 +1,86 @@
-# Architecture
+# Архитектура Confluence S2T RAG Bot
 
-## Назначение
+Данный документ описывает внутреннее устройство системы, основные компоненты и логику их взаимодействия.
 
-Проект реализует чат-бота по витринам данных. Бот получает документацию из Confluence,
-находит актуальные S2T-файлы, парсит атрибуты витрин, хранит структурированное состояние,
-строит RAG-индекс и отвечает на вопросы пользователя через CLI или HTTP.
+## Общий обзор
 
-## Основные модули
+Система представляет собой RAG-агента (Retrieval-Augmented Generation), который автоматизирует сбор и анализ документации по витринам данных. Бот объединяет структурированные данные из S2T-файлов (Excel/CSV) и неструктурированные описания из Confluence.
 
-| Модуль | Назначение |
-| --- | --- |
-| `app/confluence` | HTTP-клиент Confluence, модели страниц/ресурсов. Рекурсивно ищет страницы витрин и наиболее актуальные S2T-файлы, переходя по ссылкам. |
-| `app/s2t` | Парсинг Excel/CSV S2T в структурированные `S2TAttribute`. |
-| `app/storage` | SQLite-репозитории для витрин, атрибутов, RAG-документов, change log и S2T sync state. |
-| `app/sync` | Инкрементальное metadata-first обновление S2T и RAG. |
-| `app/rag` | Построение текстовых документов, JSONL vector store, retriever, LLM adapter. |
-| `app/changes` | Diff между старым и новым снимком атрибутов, запись change log. |
-| `app/bot` | Бизнес-сервис и адаптеры CLI/HTTP/SberChat. |
-| `app/cli.py` | CLI-команды для парсинга, обновления, вопросов и интерактивного чата. |
+## Ключевые компоненты
 
-## Основные CLI-потоки
+### 1. Модуль интеграции (app/confluence)
+«Глаза» системы. Отвечает за навигацию по Confluence.
+*   **ConfluenceParser:** Рекурсивно обходит дерево страниц. Ищет страницы, названия которых соответствуют паттерну «Витрина...».
+*   **Resource Finder:** Находит на страницах ссылки на S2T-файлы, выбирая наиболее актуальные версии на основе дат в названиях или метаданных вложений.
 
-### Локальная загрузка S2T
+### 2. Парсеры данных (app/s2t)
+«Переводчик». Превращает файлы маппингов в программные объекты.
+*   **ExcelS2TParser:** Поддерживает сложные многолистовые шаблоны. Извлекает не только состав полей, но и логику трансформации (SQL), типы данных и ответственных (UserName).
+*   **Normalization:** Приводит данные из разных форматов к единому стандарту `S2TAttribute`.
 
-```text
-.venv/bin/python -m app.cli parse-s2t
--> S2TParser
--> MetadataRepository.upsert_datamart
--> MetadataRepository.upsert_attributes
+### 3. Хранилище (app/storage)
+«Память» системы. Состоит из двух частей:
+*   **SQLite (Структурированная память):** Хранит «золотой слепок» метаданных. Таблицы для витрин, атрибутов, истории изменений (`change_log`) и состояния синхронизации.
+*   **Vector Store (Семантическая память):** JSONL-файл с векторными представлениями (эмбеддингами) текстовых описаний. Позволяет искать информацию «по смыслу», а не только по ключевым словам.
+
+### 4. Синхронизация и Diff (app/sync & app/changes)
+«Контролер». Обеспечивает актуальность данных.
+*   **Incremental Sync:** При каждом запуске сравнивает хэши текущих S2T-файлов в Confluence с локальными. Скачивает и парсит файлы только при наличии изменений.
+*   **Diff Service:** При обновлении витрины находит разницу между старым и новым составом атрибутов. Записывает каждое добавление, удаление или изменение в историю.
+
+### 5. Поисковый движок (app/rag)
+«Мозг». Решает, как ответить на вопрос пользователя.
+*   **Intent Classifier (Диспетчер):** Анализирует вопрос и выбирает путь:
+    *   *Технический путь:* Прямой SQL-запрос к SQLite (для вопросов о владельцах, составе полей или истории).
+    *   *Генеративный путь (RAG):* Поиск фрагментов в векторной базе + запрос к LLM (GigaChat) для синтеза ответа.
+*   **LLM Adapter:** Обертка над GigaChat с встроенной логикой повторных попыток (retries) при сетевых сбоях.
+
+## Жизненный цикл запроса (Data Flow)
+
+1.  **Пользователь** вводит вопрос в CLI или отправляет HTTP-запрос.
+2.  **RAGRetriever** через **IntentClassifier** определяет тип запроса.
+3.  Если запрос **структурированный** (напр., «Кто владелец витрины Х?»):
+    *   Из вопроса извлекается название витрины.
+    *   Выполняется запрос к **MetadataRepository**.
+    *   Формируется точный ответ на основе данных из SQLite.
+4.  Если запрос **генеративный** (напр., «Опиши логику расчета комиссии»):
+    *   Вопрос превращается в вектор (embedding).
+    *   В **JsonVectorStore** ищутся 5 наиболее похожих фрагментов текста.
+    *   Вопрос + найденный контекст отправляются в **LLM**.
+    *   LLM генерирует связный текст ответа.
+5.  **Пользователь** получает ответ вместе со списком источников (ссылки на Confluence, имена S2T-файлов).
+
+## Схема взаимодействия модулей
+
+```mermaid
+graph TD
+    User((Пользователь)) --> Bot[Bot Service / CLI]
+    Bot --> Retriever[RAG Retriever]
+    
+    subgraph "Уровень обработки (Logic)"
+        Retriever --> Classifier{Intent Classifier}
+        Classifier -- "Технический запрос" --> SQLiteRepo[Metadata Repository]
+        Classifier -- "Общий вопрос" --> VectorSearch[Vector Store Search]
+        VectorSearch --> LLM[GigaChat LLM]
+    end
+    
+    subgraph "Уровень данных (Storage)"
+        SQLiteRepo --> DB[(SQLite app.db)]
+        VectorSearch --> VDB[(Vector Store JSONL)]
+    end
+    
+    subgraph "Уровень сбора (Ingestion)"
+        Sync[Sync Service] --> Conf[Confluence API]
+        Sync --> Parsers[S2T Parsers]
+        Parsers --> DB
+        Parsers --> Indexer[RAG Indexer]
+        Indexer --> VDB
+    end
 ```
 
-Эта команда нужна для локальной разработки и smoke-тестов с файлом
-`s2t_template_5_sheets_filled.xlsx`.
+## Преимущества архитектуры
 
-### Полная локальная пересборка RAG
-
-```text
-.venv/bin/python -m app.cli build-rag --full
--> MetadataRepository.list_attributes
--> RAGIndexer.rebuild_from_storage
--> DocumentRepository.replace_all
--> JsonVectorStore.replace_all
-```
-
-Это полный rebuild локального индекса. Для регулярного Confluence refresh должен
-использоваться `.venv/bin/python -m app.cli update-rag`, а не
-`.venv/bin/python -m app.cli build-rag --full`.
-
-### Инкрементальное обновление из Confluence
-
-```text
-.venv/bin/python -m app.cli update-rag
--> MetadataSyncService.collect
--> StateComparator.compare
--> ConfluenceClient.download only if metadata changed
--> sha256(content)
--> S2TParser only if content changed
--> DiffService.diff_attributes
--> RAGIndexer.update_datamart
--> S2TStateRepository.upsert
-```
-
-Подробности описаны в [Incremental S2T Sync](incremental-sync.md).
-
-## Хранилища SQLite
-
-| Таблица | Назначение |
-| --- | --- |
-| `datamarts` | Витрины, Confluence page id/url, stakeholders. |
-| `attributes` | Распарсенные S2T-атрибуты в JSON, ключ атрибута и hash payload. |
-| `documents` | Текстовые документы RAG и metadata. |
-| `change_log` | История добавленных, удаленных и измененных атрибутов. |
-| `s2t_state` | Последнее metadata/content состояние S2T-ресурсов для incremental sync. |
-
-## Ключи и идентичность
-
-### Attribute key
-
-`S2TAttribute.attribute_key` строится из:
-
-```text
-datamart_code or datamart_name
-target_schema
-target_table
-target_field
-```
-
-Этот ключ используется для diff и upsert атрибутов.
-
-### S2T resource key
-
-`S2TResource.resource_key` выбирается в порядке:
-
-```text
-id -> download_url -> url -> page_id:file_name
-```
-
-Он используется как primary key в `s2t_state`.
-
-## Границы ответственности
-
-- `ConfluenceParser` рекурсивно обходит структуру страниц в Confluence, чтобы найти наиболее актуальный S2T-файл, но не скачивает и не парсит его.
-- `MetadataSyncService` превращает найденный S2T в стабильный metadata snapshot.
-- `IncrementalUpdater` принимает решение, нужно ли скачивать, парсить и обновлять RAG.
-- `RAGIndexer` отвечает только за преобразование структурированных атрибутов в RAG-документы.
-- `RAGRetriever` отвечает за выбор стратегии ответа на вопрос пользователя.
-
-## Ограничения текущей реализации
-
-- Локальный vector store — JSONL-файл, а не полноценная vector DB. Partial update реализован
-  как замена документов конкретной витрины внутри JSONL.
-- `.venv/bin/python -m app.cli build-rag --full` остается полной пересборкой и должен
-  использоваться вручную.
-- `.venv/bin/python -m app.cli update-rag` требует доступ к Confluence и корректные
-  настройки `.env`.
+1.  **Точность:** Прямое использование БД для метаданных исключает ошибки нейросети там, где нужен строгий факт.
+2.  **Эффективность:** Инкрементальное обновление экономит трафик и время, не перекачивая гигабайты неизменной документации.
+3.  **Прозрачность:** Каждый ответ сопровождается ссылками на первоисточники, что позволяет верифицировать информацию.
+4.  **Устойчивость:** Механизмы повторных попыток и локальное кэширование позволяют работать даже при временной недоступности внешних API.
