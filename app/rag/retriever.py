@@ -48,7 +48,6 @@ class IntentClassifier:
         if "заинтересован" in q:
             if any(p in q for p in ["бизнес", "лиц", "сторон"]):
                 return "datamart_fact"
-            # If they mention 'витрина' but we matched 'заинтересован', it's likely a stakeholder query
             if "витрин" in q:
                 return "datamart_fact"
             return "owner_lookup"
@@ -391,11 +390,36 @@ class RAGRetriever:
         requested_datamart = self._extract_datamart_name(question)
         if not requested_datamart:
             q = normalize_text(question)
-            if "витрин" in q and not any(
-                w in q for w in ["все", "список", "какие", "каждый", "каждой"]
-            ):
+            # If they mention specific keywords, it's a specific query. 
+            # If we didn't extract a name, don't dump everything.
+            is_broad = any(w in q for w in ["все", "список", "какие", "каждый", "каждой"])
+            
+            # If the query contains "витрина", it's almost certainly a specific query.
+            if "витрин" in q and not is_broad:
+                # If they ask "какие витрины", it's broad. 
+                # But if they ask "Заинтересованные по витрине Карта Ветерана", it's specific.
+                if any(w in q for w in ["какие", "есть", "список"]):
+                    return datamarts
                 return []
-            return datamarts
+            
+            is_specific = any(
+                p in q
+                for p in [
+                    "заинтересован",
+                    "владелец",
+                    "ответствен",
+                    "релиз",
+                    "измен",
+                    "атрибут",
+                ]
+            )
+            if is_specific and not is_broad:
+                return []
+            
+            if is_broad:
+                return datamarts
+            
+            return []
         return [
             datamart
             for datamart in datamarts
@@ -464,9 +488,16 @@ class RAGRetriever:
             reverse=True,
         )
 
-        # 1. First try exact match of known names in the question
+        # 1. First try exact match of known names (or names without 'Витрина' prefix)
         for name in names:
-            if normalize_text(name) in q_norm:
+            norm_name = normalize_text(name)
+            if not norm_name:
+                continue
+            if norm_name in q_norm:
+                return name
+            # Handle query without "Витрина" prefix
+            short_name = re.sub(r"^витрина\s+", "", norm_name).strip()
+            if short_name and len(short_name) > 3 and short_name in q_norm:
                 return name
 
         # 2. Try regex extraction with stop-word lookahead to handle multi-word names
@@ -480,7 +511,7 @@ class RAGRetriever:
             "ссылка",
             "мета",
             "ка фо",
-            "карта",
+            "карта данных", 
             "смд",
             "кэ",
             "имя",
@@ -504,7 +535,7 @@ class RAGRetriever:
                 value = match.group(1).strip(" ?:.,;\"'")
                 value = re.sub(r"\s+с\s+датами$", "", value, flags=re.IGNORECASE).strip()
                 if value and value.lower() not in {"за год", "за последний год", "изменения"}:
-                    if pattern.startswith("витрина"):
+                    if pattern.startswith("витрина") and not value.lower().startswith("витрина"):
                         return f"Витрина {value}"
                     return value
 
