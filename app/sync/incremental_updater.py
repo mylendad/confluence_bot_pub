@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlparse
@@ -5,6 +6,7 @@ from urllib.parse import urlparse
 from app.changes.diff_service import DiffService
 from app.changes.history_repository import HistoryRepository
 from app.confluence.client import ConfluenceClient
+from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from app.rag.indexer import RAGIndexer
 from app.s2t.parser import S2TParser
 from app.storage.metadata_repository import MetadataRepository
@@ -12,6 +14,8 @@ from app.storage.s2t_state_repository import S2TStateRepository
 from app.sync.hash_service import HashService
 from app.sync.metadata_sync_service import MetadataSyncService, S2TMetadataSnapshot
 from app.sync.state_comparator import StateComparator
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -81,7 +85,25 @@ class IncrementalUpdater:
     def run(self, dry_run: bool = False) -> IncrementalUpdateResult:
         items: list[IncrementalUpdateItem] = []
         for snapshot in self.metadata_sync.collect():
-            items.append(self._process_snapshot(snapshot, dry_run=dry_run))
+            try:
+                item = self._process_snapshot(snapshot, dry_run=dry_run)
+                items.append(item)
+            except (ConfluenceError, ConfluenceAuthError) as exc:
+                logger.error(
+                    "Failed to process datamart %s: %s", snapshot.datamart.name, exc
+                )
+                items.append(
+                    IncrementalUpdateItem(
+                        datamart_name=snapshot.datamart.name,
+                        resource_key=snapshot.resource.resource_key,
+                        file_name=snapshot.resource.file_name,
+                        metadata_changed=True,
+                        reasons=[f"Processing failed: {exc}"],
+                        will_download=False,
+                        will_parse=False,
+                        will_reindex=False,
+                    )
+                )
         return IncrementalUpdateResult(items=items)
 
     def _process_snapshot(

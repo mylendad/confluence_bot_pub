@@ -907,6 +907,22 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
         "label": "ConfluencePage",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
@@ -2568,6 +2584,15 @@
         "importPath": "app.sync.incremental_updater",
         "description": "app.sync.incremental_updater",
         "peekOfCode": "class IncrementalUpdater:\n    def __init__(\n        self,\n        *,\n        metadata_sync: MetadataSyncService,\n        confluence_client: ConfluenceClient,\n        state_repo: S2TStateRepository,\n        metadata_repo: MetadataRepository,\n        history_repo: HistoryRepository,\n        indexer: RAGIndexer,",
+        "detail": "app.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.sync.incremental_updater",
+        "description": "app.sync.incremental_updater",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass IncrementalUpdateItem:\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool\n    reasons: list[str]\n    will_download: bool\n    will_parse: bool",
         "detail": "app.sync.incremental_updater",
         "documentation": {}
     },

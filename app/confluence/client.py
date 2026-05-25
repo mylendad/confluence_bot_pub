@@ -39,6 +39,7 @@ class ConfluenceClient:
             except json.JSONDecodeError:
                 logger.error("Failed to parse CONFLUENCE_EXTRA_HEADERS as JSON: %s", settings.confluence_extra_headers)
 
+        logger.info("Initializing httpx.Client with headers: %s", headers)
         self._client = client or httpx.Client(
             base_url=settings.confluence_base_url,
             auth=auth,
@@ -75,6 +76,7 @@ class ConfluenceClient:
         return None, headers
 
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
+        logger.info("Making GET request to %s with headers: %s", path, self._client.headers)
         response = self._client.get(path, params=params)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError("Confluence authentication failed")
@@ -157,6 +159,7 @@ class ConfluenceClient:
 
     def download(self, url: str) -> bytes:
         logger.info("Downloading from URL: %s", url)
+        logger.info("Request headers: %s", self._client.headers)
         response = self._client.get(url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
@@ -181,6 +184,7 @@ class ConfluenceClient:
     ) -> bytes:
         url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
         logger.info("Downloading from URL (REST fallback): %s", url)
+        logger.info("Request headers: %s", self._client.headers)
         response = self._client.get(url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
