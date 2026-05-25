@@ -20,28 +20,28 @@ class IntentClassifier:
         ):
             return "datamart_list"
         if "изменения в релизах" in q or "последние релизы" in q:
-            if "изменения в релизах" in q or "последние релизы" in q:
-                return "release_changes"
-            if any(
-                phrase in q
-                for phrase in [
-                    "заинтересованные со стороны бизнеса",
-                    "заинтересованное лица",
-                    "заинтересованное лицо",
-                    "ссылка на мета",
-                    "ка фо",
-                    "карта данных",
-                    "смд",
-                    "кэ",
-                    "имя витрины в бд",
-                    "периодичность",
-                    "глубина",
-                    "процесс из реестра",
-                    "зарегистрированных процессов",
-                    "зарегестрированных процессов",
-                ]
-            ):
-                return "datamart_fact"
+            return "release_changes"
+
+        if any(
+            phrase in q
+            for phrase in [
+                "заинтересованные со стороны бизнеса",
+                "заинтересованное лица",
+                "заинтересованное лицо",
+                "ссылка на мета",
+                "ка фо",
+                "карта данных",
+                "смд",
+                "кэ",
+                "имя витрины в бд",
+                "периодичность",
+                "глубина",
+                "процесс из реестра",
+                "зарегистрированных процессов",
+                "зарегестрированных процессов",
+            ]
+        ):
+            return "datamart_fact"
 
         if any(word in q for word in ["владелец", "ответствен"]):
             return "owner_lookup"
@@ -449,10 +449,11 @@ class RAGRetriever:
 
     def _extract_datamart_name(self, question: str) -> str | None:
         patterns = [
-            r"по\s+витрин[еы]\s+(.+)$",
-            r"витрина\s+(.+)$",
-            r"витрин[еы]\s+(.+)$",
+            r"по\s+витрин[еы]\s+(.+?)(?:\s|$)",
+            r"витрина\s+(.+?)(?:\s|$)",
+            r"витрин[еы]\s+(.+?)(?:\s|$)",
         ]
+        q_norm = normalize_text(question)
         for pattern in patterns:
             match = re.search(pattern, question, flags=re.IGNORECASE)
             if match:
@@ -464,16 +465,20 @@ class RAGRetriever:
                     return value
 
         datamarts = self.metadata_repo.list_datamarts()
-        names = [dm.get("name") for dm in datamarts if dm.get("name")]
-        q = normalize_text(question)
+        # Sort names by length descending to match longest first
+        names = sorted(
+            [dm.get("name") for dm in datamarts if dm.get("name")],
+            key=len,
+            reverse=True,
+        )
         for name in names:
-            if normalize_text(name) in q:
+            if normalize_text(name) in q_norm:
                 return name
 
         words = question.split()
         if words:
             last_word = words[-1].strip(" ?:.,;\"'")
-            if len(last_word) > 4:
+            if len(last_word) > 4 and last_word.lower() not in {"бизнеса", "лица", "лицо"}:
                 from app.utils.text_utils import fuzzy_contains
 
                 for name in names:

@@ -5,7 +5,9 @@ from difflib import SequenceMatcher
 def normalize_text(value: str | None) -> str:
     if not value:
         return ""
-    return re.sub(r"\s+", " ", value.strip().lower())
+    # Remove punctuation and special characters, collapse spaces, lowercase
+    cleaned = re.sub(r"[^\w\s]", " ", value)
+    return re.sub(r"\s+", " ", cleaned.strip().lower())
 
 
 def fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:

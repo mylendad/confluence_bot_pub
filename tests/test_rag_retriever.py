@@ -268,3 +268,41 @@ def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:
 
     assert "Не удалось вызвать LLM" in answer.answer
     assert answer.sources
+
+def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Маркеров",
+            confluence_page_id="1",
+            confluence_url="url1",
+            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 1")]
+        )
+    )
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Маркеров Особенных решений",
+            confluence_page_id="2",
+            confluence_url="url2",
+            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 2")]
+        )
+    )
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина «Метрики ТБ»",
+            confluence_page_id="3",
+            confluence_url="url3",
+            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 3")]
+        )
+    )
+    
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+    
+    # Test longest match
+    answer1 = retriever.answer("Витрина Маркеров Особенных решений Заинтересованные со стороны бизнеса")
+    assert "Owner 2" in answer1.answer
+    
+    # Test punctuation normalization
+    answer2 = retriever.answer("Витрина Метрики ТБ Заинтересованные со стороны бизнеса")
+    assert "Owner 3" in answer2.answer

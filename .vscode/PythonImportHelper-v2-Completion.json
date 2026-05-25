@@ -2673,7 +2673,7 @@
         "kind": 2,
         "importPath": "app.utils.text_utils",
         "description": "app.utils.text_utils",
-        "peekOfCode": "def normalize_text(value: str | None) -> str:\n    if not value:\n        return \"\"\n    return re.sub(r\"\\s+\", \" \", value.strip().lower())\ndef fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True\n    words = normalized.split()\n    for candidate in candidates:",
+        "peekOfCode": "def normalize_text(value: str | None) -> str:\n    if not value:\n        return \"\"\n    # Remove punctuation and special characters, collapse spaces, lowercase\n    cleaned = re.sub(r\"[^\\w\\s]\", \" \", value)\n    return re.sub(r\"\\s+\", \" \", cleaned.strip().lower())\ndef fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True",
         "detail": "app.utils.text_utils",
         "documentation": {}
     },
@@ -3241,6 +3241,15 @@
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
         "peekOfCode": "def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина счетов\",\n                target_table=\"dm_account_balance\",\n                target_field=\"account_balance_amt\",\n                source_table=\"account_balance\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_datamart_fact_with_punctuation_and_longest_match",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеров\",\n            confluence_page_id=\"1\",\n            confluence_url=\"url1\",\n            facts=[DatamartFact(key=\"business_stakeholders\", label=\"Заинтересованные со стороны бизнеса\", value=\"Owner 1\")]\n        )",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
