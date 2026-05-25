@@ -1325,6 +1325,14 @@
         "documentation": {}
     },
     {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
@@ -3386,6 +3394,15 @@
         "description": "debug_extract",
         "peekOfCode": "matching = [n for n in names if _matches_datamart(n, requested)]\nprint(f\"Matching datamarts: {matching}\")\nif not requested:\n    print(\"Fallback to ALL datamarts\")\nelif not matching:\n    print(\"No matching datamarts found (would return 'not found')\")\nelse:\n    print(f\"Found {len(matching)} matching datamarts\")",
         "detail": "debug_extract",
+        "documentation": {}
+    },
+    {
+        "label": "question",
+        "kind": 5,
+        "importPath": "debug_extract_v2",
+        "description": "debug_extract_v2",
+        "peekOfCode": "question = \"Витрина Тестирование CX Заинтересованные со стороны бизнеса\"\nprint(f\"Question: {question}\")\nprint(f\"Extracted: {_extract_datamart_name(question)}\")",
+        "detail": "debug_extract_v2",
         "documentation": {}
     }
 ]
