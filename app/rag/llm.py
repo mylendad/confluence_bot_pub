@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import Protocol
 
 from app.config import Settings
@@ -53,8 +54,30 @@ class GigaChatAnswerGenerator:
             f"Вопрос:\n{question}\n\n"
             "Ответ:"
         )
-        response = self._get_llm().invoke(prompt)
-        return getattr(response, "content", str(response))
+
+        max_retries = 3
+        retry_delay = 1.0
+        last_exc = None
+
+        for attempt in range(max_retries):
+            try:
+                response = self._get_llm().invoke(prompt)
+                return getattr(response, "content", str(response))
+            except Exception as exc:
+                last_exc = exc
+                if "104" in str(exc) or "reset" in str(exc).lower():
+                    logger.warning(
+                        "GigaChat connection reset (attempt %d/%d), retrying in %.1fs...",
+                        attempt + 1,
+                        max_retries,
+                        retry_delay,
+                    )
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                    continue
+                raise exc
+
+        raise last_exc
 
 
 def build_answer_generator(settings: Settings) -> AnswerGenerator:

@@ -16,16 +16,17 @@ class IntentClassifier:
         if (
             "витрин" in q
             and any(word in q for word in ["какие", "список", "есть"])
-            and not any(word in q for word in ["атрибут", "измен", "релиз"])
+            and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id"])
         ):
             return "datamart_list"
-        if "изменения в релизах" in q:
+        if "изменения в релизах" in q or "последние релизы" in q:
             return "release_changes"
         if any(
             phrase in q
             for phrase in [
                 "заинтересованные со стороны бизнеса",
                 "заинтересованное лица",
+                "заинтересованное лицо",
                 "ссылка на мета",
                 "ка фо",
                 "карта данных",
@@ -40,13 +41,19 @@ class IntentClassifier:
             ]
         ):
             return "datamart_fact"
-        if any(word in q for word in ["владелец", "заинтересован", "ответствен"]):
+        if any(word in q for word in ["владелец", "ответствен"]):
             return "owner_lookup"
-        if "измен" in q and ("год" in q or "период" in q):
+        if "заинтересован" in q:
+            if any(p in q for p in ["бизнес", "лиц"]):
+                return "datamart_fact"
+            return "owner_lookup"
+        if "измен" in q and any(word in q for word in ["год", "период", "дата"]):
             return "last_year_changes"
         if "атрибутный состав" in q or "какие атрибут" in q:
             return "attribute_composition"
-        if "в каких витринах" in q and "атрибут" in q:
+        if ("в каких витринах" in q or "где есть" in q) and any(
+            c in q for c in ["epk_id", "_id", "_dt", "_cd"]
+        ):
             return "attribute_usage"
         if any(word in q for word in ["источник", "lineage", "откуда"]):
             return "source_lineage"
@@ -93,8 +100,6 @@ class RAGRetriever:
             exact = self._source_lineage(question)
             if exact:
                 return exact
-        if intent in {"source_lineage", "transformation_logic", "general_question"}:
-            return self._vector_answer(question)
         return self._vector_answer(question)
 
     def _owner_lookup(self, question: str) -> RAGAnswer:
@@ -135,20 +140,25 @@ class RAGRetriever:
 
         lines = ["Ответственные из S2T:"]
         for owner, fields in sorted(owner_to_fields.items()):
-            lines.append(f"- {owner}: {', '.join(sorted(set(fields)))}")
+            field_summary = (
+                f"{len(fields)} полей" if len(fields) > 5 else ", ".join(sorted(set(fields)))
+            )
+            lines.append(f"- {owner}: {field_summary}")
         return RAGAnswer(
             answer="\n".join(lines),
             sources=[self._source(attr) for attr in attrs if attr.owner][:10],
         )
 
     def _attribute_usage(self, question: str) -> RAGAnswer:
-        token = question.strip().split()[-1].strip(" ?\"'")
+        token = self._extract_attribute_name(question)
+        if not token:
+            return RAGAnswer(answer="Не удалось определить атрибут в вопросе.", sources=[])
         attrs = self.metadata_repo.find_attribute_usage(token)
         if not attrs:
             return RAGAnswer(answer=f"Данных по атрибуту `{token}` нет.", sources=[])
         marts = sorted({attr.datamart_name for attr in attrs})
         return RAGAnswer(
-            answer="Атрибут найден в витринах: " + ", ".join(marts),
+            answer=f"Атрибут `{token}` найден в витринах: " + ", ".join(marts),
             sources=[self._source(attr) for attr in attrs[:10]],
         )
 
@@ -351,7 +361,8 @@ class RAGRetriever:
         docs = self.vector_store.search(question, k=5)
         if not docs:
             return RAGAnswer(
-                answer="Данных для ответа нет. Сначала распарсьте S2T и соберите RAG.", sources=[]
+                answer="Данных для ответа нет. Сначала распарсьте S2T и соберите RAG.",
+                sources=[],
             )
         context = "\n".join(item.document.text for item in docs)
         try:
@@ -422,7 +433,19 @@ class RAGRetriever:
         return any(item in label for item in requested)
 
     @staticmethod
-    def _extract_datamart_name(question: str) -> str | None:
+    def _extract_attribute_name(question: str) -> str | None:
+        q = question.replace("?", " ").replace("!", " ").replace('"', " ").replace("'", " ")
+        tokens = q.split()
+        for token in reversed(tokens):
+            token = token.strip(" .,;:'`()[]{}")
+            if not token:
+                continue
+            if "_" in token or token.isidentifier():
+                if len(token) > 2:
+                    return token
+        return None
+
+    def _extract_datamart_name(self, question: str) -> str | None:
         patterns = [
             r"по\s+витрин[еы]\s+(.+)$",
             r"витрина\s+(.+)$",
@@ -430,17 +453,30 @@ class RAGRetriever:
         ]
         for pattern in patterns:
             match = re.search(pattern, question, flags=re.IGNORECASE)
-            if not match:
-                continue
-            value = match.group(1).strip(" ?:.,;\"'")
-            value = re.sub(r"\s+с\s+датами$", "", value, flags=re.IGNORECASE).strip()
-            if not value or value.lower() in {"за год", "за последний год", "изменения"}:
-                return None
-            if normalize_text(value) in {"в бд", "в базе данных"}:
-                return None
-            if pattern.startswith("витрина"):
-                return f"Витрина {value}"
-            return value
+            if match:
+                value = match.group(1).strip(" ?:.,;\"'")
+                value = re.sub(r"\s+с\s+датами$", "", value, flags=re.IGNORECASE).strip()
+                if value and value.lower() not in {"за год", "за последний год", "изменения"}:
+                    if pattern.startswith("витрина"):
+                        return f"Витрина {value}"
+                    return value
+
+        datamarts = self.metadata_repo.list_datamarts()
+        names = [dm.get("name") for dm in datamarts if dm.get("name")]
+        q = normalize_text(question)
+        for name in names:
+            if normalize_text(name) in q:
+                return name
+
+        words = question.split()
+        if words:
+            last_word = words[-1].strip(" ?:.,;\"'")
+            if len(last_word) > 4:
+                from app.utils.text_utils import fuzzy_contains
+
+                for name in names:
+                    if fuzzy_contains(name, [last_word], threshold=0.85):
+                        return name
         return None
 
     @staticmethod

@@ -2394,7 +2394,7 @@
         "kind": 6,
         "importPath": "app.rag.retriever",
         "description": "app.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\"])\n        ):\n            return \"datamart_list\"\n        if \"изменения в релизах\" in q:",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\", \"epk_id\", \"_id\"])\n        ):\n            return \"datamart_list\"\n        if \"изменения в релизах\" in q or \"последние релизы\" in q:",
         "detail": "app.rag.retriever",
         "documentation": {}
     },
