@@ -1261,6 +1261,14 @@
         "documentation": {}
     },
     {
+        "label": "fuzzy_contains",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
         "label": "normalize_text",
         "importPath": "app.utils.text_utils",
         "description": "app.utils.text_utils",

@@ -7,7 +7,7 @@ from app.rag.llm import AnswerGenerator, StubAnswerGenerator
 from app.rag.models import RAGAnswer
 from app.rag.vector_store import JsonVectorStore
 from app.storage.metadata_repository import MetadataRepository
-from app.utils.text_utils import normalize_text
+from app.utils.text_utils import fuzzy_contains, normalize_text
 
 
 class IntentClassifier:
@@ -26,7 +26,7 @@ class IntentClassifier:
             phrase in q
             for phrase in [
                 "заинтересованные со стороны бизнеса",
-                "заинтересованное лица",
+                "заинтересованные лица",
                 "заинтересованное лицо",
                 "ссылка на мета",
                 "ка фо",
@@ -46,7 +46,10 @@ class IntentClassifier:
         if any(word in q for word in ["владелец", "ответствен"]):
             return "owner_lookup"
         if "заинтересован" in q:
-            if any(p in q for p in ["бизнес", "лиц"]):
+            if any(p in q for p in ["бизнес", "лиц", "сторон"]):
+                return "datamart_fact"
+            # If they mention 'витрина' but we matched 'заинтересован', it's likely a stakeholder query
+            if "витрин" in q:
                 return "datamart_fact"
             return "owner_lookup"
         if "измен" in q and any(word in q for word in ["год", "период", "дата"]):
@@ -407,7 +410,7 @@ class RAGRetriever:
         checks = [
             (
                 "business_stakeholders",
-                ["заинтересованные со стороны бизнеса", "заинтересованное лица"],
+                ["заинтересованные со стороны бизнеса", "заинтересованные лица"],
             ),
             ("meta_links", ["ссылка на мета", "мета", "ка фо", "карта данных", "смд"]),
             ("ke", ["кэ"]),
@@ -510,8 +513,6 @@ class RAGRetriever:
         if words:
             last_word = words[-1].strip(" ?:.,;\"'")
             if len(last_word) > 4 and last_word.lower() not in {"бизнеса", "лица", "лицо"}:
-                from app.utils.text_utils import fuzzy_contains
-
                 for name in names:
                     if fuzzy_contains(name, [last_word], threshold=0.85):
                         return name
