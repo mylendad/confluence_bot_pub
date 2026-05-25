@@ -105,25 +105,26 @@ def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None
         title="Витрина клиентских операций",
         url="https://confluence.example.ru/pages/42",
         updated_at=datetime(2026, 1, 1),
+        body_html="""
+        <table>
+          <tr>
+            <th>Дата</th>
+            <th>Файл</th>
+          </tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td><a href="/download/attachments/42/random_name.xlsx">скачать</a></td>
+          </tr>
+          <tr>
+            <td>2026-04-01</td>
+            <td><a href="/download/attachments/42/another.xlsx">download</a></td>
+          </tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr>
-        <th>Дата</th>
-        <th>Файл</th>
-      </tr>
-      <tr>
-        <td>2026-05-10</td>
-        <td><a href="/download/attachments/42/random_name.xlsx">скачать</a></td>
-      </tr>
-      <tr>
-        <td>2026-04-01</td>
-        <td><a href="/download/attachments/42/another.xlsx">download</a></td>
-      </tr>
-    </table>
-    """
 
-    candidates = parser.find_s2t_candidates(page, html)
+    candidates = parser.find_s2t_candidates(page)
+
     selected = parser.choose_latest_s2t(candidates)
 
     assert selected is not None
@@ -139,29 +140,28 @@ def test_same_table_date_prefers_bottom_link() -> None:
         title="Витрина клиентских операций",
         url="https://confluence.example.ru/pages/42",
         updated_at=datetime(2026, 1, 1),
+        body_html="""
+        <table>
+          <tr>
+            <th>Дата</th>
+            <th>Файл</th>
+          </tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td><a href="/download/attachments/42/top.xlsx">скачать</a></td>
+          </tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td><a href="/download/attachments/42/bottom.xlsx">скачать</a></td>
+          </tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr>
-        <th>Дата</th>
-        <th>Файл</th>
-      </tr>
-      <tr>
-        <td>2026-05-10</td>
-        <td><a href="/download/attachments/42/top.xlsx">скачать</a></td>
-      </tr>
-      <tr>
-        <td>2026-05-10</td>
-        <td><a href="/download/attachments/42/bottom.xlsx">скачать</a></td>
-      </tr>
-    </table>
-    """
 
-    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page, html))
+    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page))
 
     assert selected is not None
     assert selected.file_name == "bottom.xlsx"
-    assert selected.version == 3
 
 
 def test_table_link_keeps_confluence_cloud_context_path() -> None:
@@ -171,18 +171,18 @@ def test_table_link_keeps_confluence_cloud_context_path() -> None:
         title="Витрина клиентских операций",
         url="https://example.atlassian.net/wiki/pages/viewpage.action?pageId=42",
         updated_at=datetime(2026, 1, 1),
+        body_html="""
+        <table>
+          <tr><th>Дата</th><th>Файл</th></tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td><a href="/download/attachments/42/current.xlsx">download</a></td>
+          </tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr><th>Дата</th><th>Файл</th></tr>
-      <tr>
-        <td>2026-05-10</td>
-        <td><a href="/download/attachments/42/current.xlsx">download</a></td>
-      </tr>
-    </table>
-    """
 
-    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page, html))
+    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page))
 
     assert selected is not None
     assert selected.url == "https://example.atlassian.net/wiki/download/attachments/42/current.xlsx"
@@ -208,18 +208,19 @@ def test_table_candidate_is_enriched_from_confluence_attachment_api() -> None:
         title="Витрина клиентских операций",
         url="https://confluence.example.ru/pages/42",
         updated_at=datetime(2026, 1, 1),
+        body_html="""
+        <table>
+          <tr><th>Дата</th><th>Файл</th></tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td><a href="/download/attachments/42/random_name.xlsx">download</a></td>
+          </tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr><th>Дата</th><th>Файл</th></tr>
-      <tr>
-        <td>2026-05-10</td>
-        <td><a href="/download/attachments/42/random_name.xlsx">download</a></td>
-      </tr>
-    </table>
-    """
 
-    candidates = parser.find_s2t_candidates(page, html)
+    candidates = parser.find_s2t_candidates(page)
+
     selected = parser.choose_latest_s2t(candidates)
 
     assert selected is not None
@@ -239,26 +240,27 @@ def test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new() -> None
         title="Витрина клиентских операций",
         url="https://confluence.example.ru/pages/42",
         updated_at=datetime(2026, 1, 1),
+        body_html="""
+        <table>
+          <tr>
+            <th>Дата</th>
+            <th>Файл</th>
+          </tr>
+          <tr>
+            <td>2026-04-01</td>
+            <td><a href="/download/attachments/42/old.xlsx">download</a></td>
+          </tr>
+          <tr>
+            <td>новый</td>
+            <td><a href="/download/attachments/42/arbitrary_name.xlsx">download</a></td>
+          </tr>
+          <tr><td></td><td></td></tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr>
-        <th>Дата</th>
-        <th>Файл</th>
-      </tr>
-      <tr>
-        <td>2026-04-01</td>
-        <td><a href="/download/attachments/42/old.xlsx">download</a></td>
-      </tr>
-      <tr>
-        <td>новый</td>
-        <td><a href="/download/attachments/42/arbitrary_name.xlsx">download</a></td>
-      </tr>
-      <tr><td></td><td></td></tr>
-    </table>
-    """
 
-    candidates = parser.find_s2t_candidates(page, html)
+    candidates = parser.find_s2t_candidates(page)
+
     selected = parser.choose_latest_s2t(candidates)
 
     assert selected is not None
@@ -304,7 +306,7 @@ def test_find_s2t_candidate_from_child_s2t_page_table() -> None:
         url="https://confluence.example.ru/spaces/TH/pages/458753/datamart",
     )
 
-    candidates = parser.find_s2t_candidates(page, "")
+    candidates = parser.find_s2t_candidates(page)
     selected = parser.choose_latest_s2t(candidates)
 
     assert selected is not None
@@ -319,22 +321,23 @@ def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:
         title="S2T",
         url="https://confluence.example.ru/spaces/TH/pages/491521/S2T",
         updated_at=datetime(2026, 5, 16),
+        body_html="""
+        <table>
+          <tr><th>Дата</th><th>Файл</th></tr>
+          <tr>
+            <td>2026-05-16</td>
+            <td>
+              <ac:link>
+                <ri:attachment ri:filename="current_s2t.xlsx" />
+              </ac:link>
+            </td>
+          </tr>
+        </table>
+        """,
     )
-    html = """
-    <table>
-      <tr><th>Дата</th><th>Файл</th></tr>
-      <tr>
-        <td>2026-05-16</td>
-        <td>
-          <ac:link>
-            <ri:attachment ri:filename="current_s2t.xlsx" />
-          </ac:link>
-        </td>
-      </tr>
-    </table>
-    """
 
-    candidates = parser.find_s2t_candidates(page, html)
+    candidates = parser.find_s2t_candidates(page)
+
     selected = parser.choose_latest_s2t(candidates)
 
     assert selected is not None

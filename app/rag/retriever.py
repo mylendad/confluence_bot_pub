@@ -387,6 +387,11 @@ class RAGRetriever:
         datamarts = self.metadata_repo.list_datamarts()
         requested_datamart = self._extract_datamart_name(question)
         if not requested_datamart:
+            q = normalize_text(question)
+            if "витрин" in q and not any(
+                w in q for w in ["все", "список", "какие", "каждый", "каждой"]
+            ):
+                return []
             return datamarts
         return [
             datamart
@@ -448,12 +453,48 @@ class RAGRetriever:
         return None
 
     def _extract_datamart_name(self, question: str) -> str | None:
-        patterns = [
-            r"по\s+витрин[еы]\s+(.+?)(?:\s|$)",
-            r"витрина\s+(.+?)(?:\s|$)",
-            r"витрин[еы]\s+(.+?)(?:\s|$)",
-        ]
         q_norm = normalize_text(question)
+        datamarts = self.metadata_repo.list_datamarts()
+        names = sorted(
+            [dm.get("name") for dm in datamarts if dm.get("name")],
+            key=len,
+            reverse=True,
+        )
+
+        # 1. First try exact match of known names in the question
+        for name in names:
+            if normalize_text(name) in q_norm:
+                return name
+
+        # 2. Try regex extraction with stop-word lookahead to handle multi-word names
+        stop_words = [
+            "заинтересован",
+            "атрибут",
+            "измен",
+            "релиз",
+            "владелец",
+            "ответствен",
+            "ссылка",
+            "мета",
+            "ка фо",
+            "карта",
+            "смд",
+            "кэ",
+            "имя",
+            "периодич",
+            "глубина",
+            "процесс",
+            "рейтинг",
+            "отчет",
+            "отчёт",
+            "бизнес",
+        ]
+        stop_pattern = "|".join(stop_words)
+        patterns = [
+            rf"по\s+витрин[еы]\s+(.+?)(?=\s+(?:{stop_pattern})|$)",
+            rf"витрина\s+(.+?)(?=\s+(?:{stop_pattern})|$)",
+            rf"витрин[еы]\s+(.+?)(?=\s+(?:{stop_pattern})|$)",
+        ]
         for pattern in patterns:
             match = re.search(pattern, question, flags=re.IGNORECASE)
             if match:
@@ -464,17 +505,7 @@ class RAGRetriever:
                         return f"Витрина {value}"
                     return value
 
-        datamarts = self.metadata_repo.list_datamarts()
-        # Sort names by length descending to match longest first
-        names = sorted(
-            [dm.get("name") for dm in datamarts if dm.get("name")],
-            key=len,
-            reverse=True,
-        )
-        for name in names:
-            if normalize_text(name) in q_norm:
-                return name
-
+        # 3. Last word fuzzy match
         words = question.split()
         if words:
             last_word = words[-1].strip(" ?:.,;\"'")
@@ -497,11 +528,18 @@ class RAGRetriever:
         ]
 
     @staticmethod
+    def _normalize_cx(text: str) -> str:
+        # Normalize both Cyrillic and Latin C/X to Latin C/X
+        return (
+            text.replace("С", "C").replace("с", "c").replace("Х", "X").replace("х", "x")
+        )
+
+    @staticmethod
     def _matches_datamart(
         actual_name: str | None, requested_name: str, actual_code: str | None = None
     ) -> bool:
-        requested = normalize_text(requested_name)
-        actual = normalize_text(actual_name or "")
+        requested = RAGRetriever._normalize_cx(normalize_text(requested_name))
+        actual = RAGRetriever._normalize_cx(normalize_text(actual_name or ""))
         code = normalize_text(actual_code or "")
         return requested in actual or actual in requested or requested == code
 

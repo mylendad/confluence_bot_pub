@@ -113,7 +113,7 @@ def test_basic_auth_is_used_when_username_is_configured() -> None:
     )
 
     assert auth == ("user", "secret-token")
-    assert headers is None
+    assert headers == {"Accept": "application/json"}
 
 
 def test_non_ascii_api_token_is_auth_error() -> None:
