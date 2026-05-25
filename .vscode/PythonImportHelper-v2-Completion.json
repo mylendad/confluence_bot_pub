@@ -216,6 +216,14 @@
         "documentation": {}
     },
     {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -649,6 +657,14 @@
         "documentation": {}
     },
     {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
@@ -671,6 +687,14 @@
         "description": "collections.abc",
         "isExtraImport": true,
         "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -1035,6 +1059,22 @@
         "documentation": {}
     },
     {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFact",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
         "label": "ConfluencePage",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
@@ -1277,6 +1317,14 @@
         "documentation": {}
     },
     {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
@@ -1342,11 +1390,11 @@
         "documentation": {}
     },
     {
-        "label": "DocumentRepository",
-        "importPath": "app.storage.document_repository",
-        "description": "app.storage.document_repository",
+        "label": "JsonVectorStore",
+        "importPath": "app.rag.vector_store",
+        "description": "app.rag.vector_store",
         "isExtraImport": true,
-        "detail": "app.storage.document_repository",
+        "detail": "app.rag.vector_store",
         "documentation": {}
     },
     {
@@ -1363,6 +1411,22 @@
         "description": "app.storage.document_repository",
         "isExtraImport": true,
         "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "DocumentRepository",
+        "importPath": "app.storage.document_repository",
+        "description": "app.storage.document_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
         "documentation": {}
     },
     {
@@ -1435,6 +1499,14 @@
         "description": "app.rag.prompts",
         "isExtraImport": true,
         "detail": "app.rag.prompts",
+        "documentation": {}
+    },
+    {
+        "label": "HistoryRepository",
+        "importPath": "app.changes.history_repository",
+        "description": "app.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "app.changes.history_repository",
         "documentation": {}
     },
     {
@@ -2831,6 +2903,15 @@
         "documentation": {}
     },
     {
+        "label": "test_datamart_fact_with_mismatched_datamart",
+        "kind": 2,
+        "importPath": "tests.reproduce_issue",
+        "description": "tests.reproduce_issue",
+        "peekOfCode": "def test_datamart_fact_with_mismatched_datamart(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеры\",\n            confluence_page_id=\"42\",\n            confluence_url=\"http://example.com/42\",\n            facts=[\n                DatamartFact(key=\"business_stakeholders\", label=\"Заинтересованные со стороны бизнеса\", value=\"Иванов\")",
+        "detail": "tests.reproduce_issue",
+        "documentation": {}
+    },
+    {
         "label": "test_parse_s2t_records_changes_on_reparse",
         "kind": 2,
         "importPath": "tests.test_cli",
@@ -3269,6 +3350,42 @@
         "description": "tests.test_s2t_parser",
         "peekOfCode": "def test_parse_real_5_sheet_template() -> None:\n    path = Path(\"s2t_template_5_sheets_filled.xlsx\")\n    result = S2TParser().parse(path, \"Витрина клиентских операций\")\n    assert len(result.attributes) == 3\n    epk = result.attributes[0]\n    assert epk.datamart_code == \"DM_CLIENT_OPS\"\n    assert epk.target_schema == \"dds_dm\"\n    assert epk.target_table == \"dm_client_operations\"\n    assert epk.target_field == \"epk_id\"\n    assert epk.source_field == \"epk_id\"",
         "detail": "tests.test_s2t_parser",
+        "documentation": {}
+    },
+    {
+        "label": "question",
+        "kind": 5,
+        "importPath": "debug_extract",
+        "description": "debug_extract",
+        "peekOfCode": "question = \"Витрина Тестирование CX Заинтересованные со стороны бизнеса\"\nrequested = _extract_datamart_name(question)\nprint(f\"Extracted: {requested}\")\nnames = [\"Витрина Пакеты услуг CX\", \"Витрина Маркеры\", \"Витрина Дети и Родители\"]\nmatching = [n for n in names if _matches_datamart(n, requested)]\nprint(f\"Matching datamarts: {matching}\")\nif not requested:\n    print(\"Fallback to ALL datamarts\")\nelif not matching:\n    print(\"No matching datamarts found (would return 'not found')\")",
+        "detail": "debug_extract",
+        "documentation": {}
+    },
+    {
+        "label": "requested",
+        "kind": 5,
+        "importPath": "debug_extract",
+        "description": "debug_extract",
+        "peekOfCode": "requested = _extract_datamart_name(question)\nprint(f\"Extracted: {requested}\")\nnames = [\"Витрина Пакеты услуг CX\", \"Витрина Маркеры\", \"Витрина Дети и Родители\"]\nmatching = [n for n in names if _matches_datamart(n, requested)]\nprint(f\"Matching datamarts: {matching}\")\nif not requested:\n    print(\"Fallback to ALL datamarts\")\nelif not matching:\n    print(\"No matching datamarts found (would return 'not found')\")\nelse:",
+        "detail": "debug_extract",
+        "documentation": {}
+    },
+    {
+        "label": "names",
+        "kind": 5,
+        "importPath": "debug_extract",
+        "description": "debug_extract",
+        "peekOfCode": "names = [\"Витрина Пакеты услуг CX\", \"Витрина Маркеры\", \"Витрина Дети и Родители\"]\nmatching = [n for n in names if _matches_datamart(n, requested)]\nprint(f\"Matching datamarts: {matching}\")\nif not requested:\n    print(\"Fallback to ALL datamarts\")\nelif not matching:\n    print(\"No matching datamarts found (would return 'not found')\")\nelse:\n    print(f\"Found {len(matching)} matching datamarts\")",
+        "detail": "debug_extract",
+        "documentation": {}
+    },
+    {
+        "label": "matching",
+        "kind": 5,
+        "importPath": "debug_extract",
+        "description": "debug_extract",
+        "peekOfCode": "matching = [n for n in names if _matches_datamart(n, requested)]\nprint(f\"Matching datamarts: {matching}\")\nif not requested:\n    print(\"Fallback to ALL datamarts\")\nelif not matching:\n    print(\"No matching datamarts found (would return 'not found')\")\nelse:\n    print(f\"Found {len(matching)} matching datamarts\")",
+        "detail": "debug_extract",
         "documentation": {}
     }
 ]
