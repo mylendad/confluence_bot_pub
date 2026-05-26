@@ -208,6 +208,13 @@ class ConfluenceClient:
         except Exception as exc:
             return {"status": "error", "message": str(exc)}
 
+    def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
+        if self.settings.confluence_root_page_id:
+            yield from self.get_children(self.settings.confluence_root_page_id)
+            return
+        cql = f'space="{self.settings.confluence_space_key}" and type=page'
+        yield from self.search_pages(cql)
+
     def _page_from_payload(self, payload: dict) -> ConfluencePage:
         links = payload.get("_links", {})
         webui = links.get("webui", "")
