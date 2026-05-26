@@ -98,6 +98,11 @@ class S2TStateRepository:
                 ),
             )
 
+    def list_all(self) -> list[S2TState]:
+        with self.db.connect() as conn:
+            rows = conn.execute("select * from s2t_state").fetchall()
+        return [self._row_to_state(row) for row in rows]
+
     @staticmethod
     def _row_to_state(row) -> S2TState:
         return S2TState(

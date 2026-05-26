@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluence S2T RAG Bot</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .app {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            padding: 16px 20px;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-dot.green { background: #4cd964; box-shadow: 0 0 4px #4cd964; }
+        .status-dot.red { background: #ff3b30; }
+        .settings-panel {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: none;
+        }
+        .settings-panel.show { display: block; }
+        .setting-row {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .setting-row label {
+            width: 140px;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .setting-row input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        .setting-row a {
+            font-size: 12px;
+            color: #007aff;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #007aff;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+        }
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .message.bot {
+            align-self: flex-start;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .message.user .avatar { background: #007aff; color: white; }
+        .bubble {
+            background: #e9ecef;
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        .message.user .bubble {
+            background: #007aff;
+            color: white;
+        }
+        .bubble pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 8px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .copy-btn {
+            margin-left: 8px;
+            font-size: 11px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        .input-area {
+            padding: 16px 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 12px;
+            background: white;
+        }
+        .input-area textarea {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            max-height: 100px;
+        }
+        .input-area button {
+            padding: 0 20px;
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .instruction-row {
+            margin-bottom: 16px;
+            padding-left: 152px;
+            font-size: 12px;
+            color: #666;
+        }
+        .instruction-row a {
+            color: #007aff;
+            text-decoration: none;
+        }
+        .instruction-row a:hover {
+            text-decoration: underline;
+        }
+        .instruction-row span {
+            color: #666;
+        }
+        .typing {
+            color: #666;
+            font-size: 13px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .typing span {
+            animation: blink 1.4s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <strong>🤖 Confluence S2T RAG Bot</strong>
+        <div class="status">
+            <span><span class="status-dot" id="confluence-status"></span> Confluence</span>
+            <span><span class="status-dot" id="llm-status"></span> GigaChat</span>
+        </div>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <div class="setting-row">
+            <label>🔑 Confluence Token</label>
+            <input type="password" id="confluenceToken" placeholder="Введите токен">
+        </div>
+        <div class="instruction-row">
+            <a href="https://confluence.delta.sbrf.ru/plugins/personalaccesstokens/usertokens.action" target="_blank">Пройдите по ссылке</a>
+            <span> - нажмите "Создать маркер" - задайте любое имя и срок действия</span>
+        </div>
+
+        <div class="setting-row">
+            <label>🤖 GigaChat API Key</label>
+            <input type="password" id="gigachatToken" placeholder="Введите API-ключ">
+        </div>
+        <div class="instruction-row">
+            <a href="https://developers.sber.ru/studio/login" target="_blank"> Авторизуйтесь по ссылке </a>
+            <span> удобным способом - настройть API </span>
+        </div>
+        <div class="setting-row">
+            <button class="btn btn-primary" id="saveSettingsBtn">💾 Сохранить</button>
+            <button class="btn btn-secondary" id="clearSettingsBtn">🗑️ Сбросить</button>
+            <button class="btn btn-secondary" id="testConnectionBtn">🔌 Проверить</button>
+        </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+        <div class="message bot">
+            <div class="avatar">🤖</div>
+            <div class="bubble">Введите токены Confluence и GigaChat в настройках (⚙️), затем задайте вопрос о витринах данных.</div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <textarea id="questionInput" rows="1" placeholder="Введите вопрос... (Enter для отправки)"></textarea>
+        <button id="sendBtn" disabled>📤</button>
+    </div>
+</div>
+
+<script>
+    // --- Конфигурация ---
+    const API_BASE = '';  // пусто = относительный путь к /ask
+    const CONFLUENCE_TOKEN_KEY = 'confluence_token';
+    const GIGACHAT_TOKEN_KEY = 'gigachat_token';
+
+    // --- DOM элементы ---
+    const settingsPanel = document.getElementById('settingsPanel');
+    const confluenceTokenInput = document.getElementById('confluenceToken');
+    const gigachatTokenInput = document.getElementById('gigachatToken');
+    const saveBtn = document.getElementById('saveSettingsBtn');
+    const clearBtn = document.getElementById('clearSettingsBtn');
+    const testBtn = document.getElementById('testConnectionBtn');
+    const sendBtn = document.getElementById('sendBtn');
+    const questionInput = document.getElementById('questionInput');
+    const chatArea = document.getElementById('chatArea');
+    const confluenceStatusDot = document.getElementById('confluence-status');
+    const llmStatusDot = document.getElementById('llm-status');
+
+    // Состояние
+    let isTyping = false;
+    let conversationHistory = [];
+    const SESSION_ID = 'session_' + Math.random().toString(36).substr(2, 9);
+
+    // --- Инициализация ---
+    function loadTokens() {
+        confluenceTokenInput.value = localStorage.getItem(CONFLUENCE_TOKEN_KEY) || '';
+        gigachatTokenInput.value = localStorage.getItem(GIGACHAT_TOKEN_KEY) || '';
+    }
+
+    function saveTokens() {
+        localStorage.setItem(CONFLUENCE_TOKEN_KEY, confluenceTokenInput.value);
+        localStorage.setItem(GIGACHAT_TOKEN_KEY, gigachatTokenInput.value);
+        updateSendButtonState();
+        showStatusMessage('Настройки сохранены', 'info');
+    }
+
+    function clearTokens() {
+        localStorage.removeItem(CONFLUENCE_TOKEN_KEY);
+        localStorage.removeItem(GIGACHAT_TOKEN_KEY);
+        confluenceTokenInput.value = '';
+        gigachatTokenInput.value = '';
+        updateSendButtonState();
+        showStatusMessage('Настройки сброшены', 'info');
+    }
+
+    function updateSendButtonState() {
+        const hasTokens = localStorage.getItem(CONFLUENCE_TOKEN_KEY) && localStorage.getItem(GIGACHAT_TOKEN_KEY);
+        sendBtn.disabled = !hasTokens || isTyping;
+    }
+
+    function showStatusMessage(text, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message bot`;
+        msgDiv.innerHTML = `<div class="avatar">ℹ️</div><div class="bubble" style="background:#fff3cd">${text}</div>`;
+        chatArea.appendChild(msgDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        setTimeout(() => msgDiv.remove(), 3000);
+    }
+
+    function updateStatusIndicators(confluenceOk, llmOk) {
+        confluenceStatusDot.className = confluenceOk ? 'status-dot green' : 'status-dot red';
+        llmStatusDot.className = llmOk ? 'status-dot green' : 'status-dot red';
+    }
+
+    async function testConnection() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/health/external`);
+            if (resp.ok) {
+                const data = await resp.json();
+                updateStatusIndicators(data.confluence.status === 'ok', data.gigachat.status === 'ok');
+                showStatusMessage('Проверка завершена', 'info');
+            }
+        } catch(e) {
+            updateStatusIndicators(false, false);
+        }
+    }
+
+    // --- Отправка сообщения ---
+    async function sendMessage() {
+        const question = questionInput.value.trim();
+        if (!question) return;
+        if (isTyping) return;
+
+        const confluenceToken = localStorage.getItem(CONFLUENCE_TOKEN_KEY);
+        const gigachatToken = localStorage.getItem(GIGACHAT_TOKEN_KEY);
+        if (!confluenceToken || !gigachatToken) {
+            showStatusMessage('Сначала сохраните токены в настройках (⚙️)', 'error');
+            return;
+        }
+
+        addMessage('user', question);
+        questionInput.value = '';
+        questionInput.style.height = 'auto';
+
+        isTyping = true;
+        updateSendButtonState();
+        const typingDiv = addTypingIndicator();
+
+        try {
+            const response = await fetch(`${API_BASE}/ask`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: question,
+                    session_id: SESSION_ID,
+                    confluence_token: confluenceToken,
+                    gigachat_token: gigachatToken
+                })
+            });
+
+            removeTypingIndicator(typingDiv);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                addMessage('bot', `❌ Ошибка ${response.status}: ${errorText}`);
+                updateStatusIndicators(false, false);
+                return;
+            }
+
+            const data = await response.json();
+            let answerText = data.answer || 'Ответ не получен';
+            if (data.sources && data.sources.length) {
+                answerText += '\n\n📎 Источники:\n' + data.sources.slice(0,3).map(s => 
+                    `- ${s.datamart || s.datamart_name || '?'}`
+                ).join('\n');
+            }
+            addMessage('bot', answerText);
+            updateStatusIndicators(true, true);
+        } catch (err) {
+            removeTypingIndicator(typingDiv);
+            addMessage('bot', `❌ Ошибка сети: ${err.message}`);
+            updateStatusIndicators(false, false);
+        } finally {
+            isTyping = false;
+            updateSendButtonState();
+            questionInput.focus();
+        }
+    }
+
+    function addMessage(role, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}`;
+        const avatar = role === 'user' ? '👤' : '🤖';
+        const formattedText = text.replace(/\n/g, '<br>').replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        messageDiv.innerHTML = `
+            <div class="avatar">${avatar}</div>
+            <div class="bubble">
+                ${formattedText}
+                ${role === 'bot' ? '<button class="copy-btn" onclick="copyToClipboard(this)">📋 Копировать</button>' : ''}
+            </div>
+        `;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function addTypingIndicator() {
+        const div = document.createElement('div');
+        div.className = 'message bot typing-message';
+        div.innerHTML = `<div class="avatar">🤖</div><div class="typing">🤖 <span>●</span><span>●</span><span>●</span> печатает...</div>`;
+        chatArea.appendChild(div);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        return div;
+    }
+
+    function removeTypingIndicator(element) {
+        if (element && element.remove) element.remove();
+    }
+
+    window.copyToClipboard = function(btn) {
+        const bubble = btn.closest('.bubble');
+        const text = bubble.innerText.replace('📋 Копировать', '').trim();
+        navigator.clipboard.writeText(text);
+        btn.textContent = '✅';
+        setTimeout(() => btn.textContent = '📋 Копировать', 1500);
+    };
+
+    function toggleSettings() {
+        settingsPanel.classList.toggle('show');
+    }
+
+    questionInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+    questionInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    saveBtn.onclick = saveTokens;
+    clearBtn.onclick = clearTokens;
+    testBtn.onclick = testConnection;
+    sendBtn.onclick = sendMessage;
+
+    const header = document.querySelector('.header');
+    const settingsBtn = document.createElement('button');
+    settingsBtn.textContent = '⚙️';
+    settingsBtn.style.background = 'none';
+    settingsBtn.style.border = 'none';
+    settingsBtn.style.color = 'white';
+    settingsBtn.style.fontSize = '20px';
+    settingsBtn.style.cursor = 'pointer';
+    settingsBtn.onclick = toggleSettings;
+    header.appendChild(settingsBtn);
+
+    loadTokens();
+    updateSendButtonState();
+    testConnection(); // Начальная проверка
+</script>
+</body>
+</html>

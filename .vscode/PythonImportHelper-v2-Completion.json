@@ -369,6 +369,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "date",
         "importPath": "datetime",
         "description": "datetime",
@@ -417,6 +425,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "timedelta",
         "importPath": "datetime",
         "description": "datetime",
@@ -574,6 +590,14 @@
         "description": "app.utils.hashing",
         "isExtraImport": true,
         "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
         "documentation": {}
     },
     {
@@ -658,6 +682,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "Iterable",
         "importPath": "collections.abc",
         "description": "collections.abc",
@@ -671,6 +704,14 @@
         "description": "collections.abc",
         "isExtraImport": true,
         "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -820,6 +861,14 @@
     },
     {
         "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
         "importPath": "app.config",
         "description": "app.config",
         "isExtraImport": true,
@@ -1116,15 +1165,6 @@
         "documentation": {}
     },
     {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
-        "documentation": {}
-    },
-    {
         "label": "parse_qs",
         "importPath": "urllib.parse",
         "description": "urllib.parse",
@@ -1229,6 +1269,14 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
         "label": "parse_date_from_text",
         "importPath": "app.utils.date_utils",
         "description": "app.utils.date_utils",
@@ -1295,6 +1343,14 @@
     },
     {
         "label": "Counter",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "deque",
         "importPath": "collections",
         "description": "collections",
         "isExtraImport": true,
@@ -1518,6 +1574,14 @@
         "documentation": {}
     },
     {
+        "label": "AnswerGenerator",
+        "importPath": "app.rag.llm",
+        "description": "app.rag.llm",
+        "isExtraImport": true,
+        "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
         "label": "build_answer_generator",
         "importPath": "app.rag.llm",
         "description": "app.rag.llm",
@@ -1588,6 +1652,14 @@
         "description": "app.s2t.exceptions",
         "isExtraImport": true,
         "detail": "app.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
         "documentation": {}
     },
     {
@@ -1761,6 +1833,14 @@
         "documentation": {}
     },
     {
+        "label": "S2TStateRepository",
+        "importPath": "app.storage.s2t_state_repository",
+        "description": "app.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
         "label": "HashService",
         "importPath": "app.sync.hash_service",
         "description": "app.sync.hash_service",
@@ -1907,6 +1987,30 @@
         "documentation": {}
     },
     {
+        "label": "build_chat_history_repository",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_confluence_client",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_llm_generator",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
         "label": "build_retriever",
         "importPath": "app.factory",
         "description": "app.factory",
@@ -1915,7 +2019,23 @@
         "documentation": {}
     },
     {
+        "label": "build_state_repository",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
         "label": "configure_logging",
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "isExtraImport": true,
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "memory_handler",
         "importPath": "app.logging_config",
         "description": "app.logging_config",
         "isExtraImport": true,
@@ -1971,11 +2091,60 @@
         "documentation": {}
     },
     {
+        "label": "ChatHistoryRepository",
+        "importPath": "app.storage.chat_history_repository",
+        "description": "app.storage.chat_history_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ChatMessage",
+        "importPath": "app.storage.chat_history_repository",
+        "description": "app.storage.chat_history_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "copy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "copy",
+        "description": "copy",
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
         "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "RedirectResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "StaticFiles",
+        "importPath": "fastapi.staticfiles",
+        "description": "fastapi.staticfiles",
+        "isExtraImport": true,
+        "detail": "fastapi.staticfiles",
         "documentation": {}
     },
     {
@@ -2033,7 +2202,7 @@
         "kind": 6,
         "importPath": "app.bot.http_adapter",
         "description": "app.bot.http_adapter",
-        "peekOfCode": "class AskRequest(BaseModel):\n    question: str\nclass AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
+        "peekOfCode": "class AskRequest(BaseModel):\n    question: str\n    session_id: str | None = None\n    confluence_token: str | None = None\n    gigachat_token: str | None = None\nclass AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
         "detail": "app.bot.http_adapter",
         "documentation": {}
     },
@@ -2321,7 +2490,7 @@
         "kind": 6,
         "importPath": "app.rag.llm",
         "description": "app.rag.llm",
-        "peekOfCode": "class AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(",
+        "peekOfCode": "class AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\n    def check_health(self) -> dict:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:\n        return {\"status\": \"ok\", \"provider\": \"stub\"}",
         "detail": "app.rag.llm",
         "documentation": {}
     },
@@ -2330,7 +2499,7 @@
         "kind": 6,
         "importPath": "app.rag.llm",
         "description": "app.rag.llm",
-        "peekOfCode": "class StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"\n            )\n        self.settings = settings",
+        "peekOfCode": "class StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:\n        return {\"status\": \"ok\", \"provider\": \"stub\"}\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"",
         "detail": "app.rag.llm",
         "documentation": {}
     },
@@ -2357,7 +2526,7 @@
         "kind": 5,
         "importPath": "app.rag.llm",
         "description": "app.rag.llm",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\n    def check_health(self) -> dict:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:",
         "detail": "app.rag.llm",
         "documentation": {}
     },
@@ -2512,6 +2681,24 @@
         "description": "app.s2t.parser",
         "peekOfCode": "class S2TParser:\n    def __init__(self) -> None:\n        self.excel = ExcelS2TParser()\n        self.csv = CsvS2TParser()\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        suffix = path.suffix.lower()\n        if suffix in {\".xlsx\", \".xls\"}:\n            return self.excel.parse(path, datamart_name, s2t_file_date)",
         "detail": "app.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "ChatMessage",
+        "kind": 6,
+        "importPath": "app.storage.chat_history_repository",
+        "description": "app.storage.chat_history_repository",
+        "peekOfCode": "class ChatMessage:\n    session_id: str\n    user_message: str\n    bot_response: str\n    sources: list[str]\n    created_at: datetime\nclass ChatHistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add(self, message: ChatMessage) -> None:",
+        "detail": "app.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ChatHistoryRepository",
+        "kind": 6,
+        "importPath": "app.storage.chat_history_repository",
+        "description": "app.storage.chat_history_repository",
+        "peekOfCode": "class ChatHistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add(self, message: ChatMessage) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into chat_history(\n                    session_id, user_message, bot_response, sources_json, created_at\n                )",
+        "detail": "app.storage.chat_history_repository",
         "documentation": {}
     },
     {
@@ -2798,8 +2985,62 @@
         "kind": 2,
         "importPath": "app.factory",
         "description": "app.factory",
-        "peekOfCode": "def build_retriever(settings: Settings | None = None) -> RAGRetriever:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    answer_generator = build_answer_generator(settings)\n    return RAGRetriever(metadata_repo, vector_store, history_repo, answer_generator)",
+        "peekOfCode": "def build_retriever(settings: Settings | None = None) -> RAGRetriever:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    answer_generator = build_answer_generator(settings)\n    return RAGRetriever(metadata_repo, vector_store, history_repo, answer_generator)\ndef build_state_repository(settings: Settings | None = None) -> S2TStateRepository:\n    settings = settings or get_settings()",
         "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_state_repository",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_state_repository(settings: Settings | None = None) -> S2TStateRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return S2TStateRepository(db)\ndef build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return MetadataRepository(db)\ndef build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_metadata_repository",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return MetadataRepository(db)\ndef build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return ChatHistoryRepository(db)\ndef build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_chat_history_repository",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return ChatHistoryRepository(db)\ndef build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_confluence_client",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_llm_generator",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "MemoryLogHandler",
+        "kind": 6,
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "peekOfCode": "class MemoryLogHandler(logging.Handler):\n    def __init__(self, maxlen: int = 1000) -> None:\n        super().__init__()\n        self.logs = deque(maxlen=maxlen)\n    def emit(self, record: logging.LogRecord) -> None:\n        msg = self.format(record)\n        self.logs.append(msg)\n    def get_logs(self) -> list[str]:\n        return list(self.logs)\nmemory_handler = MemoryLogHandler()",
+        "detail": "app.logging_config",
         "documentation": {}
     },
     {
@@ -2807,7 +3048,16 @@
         "kind": 2,
         "importPath": "app.logging_config",
         "description": "app.logging_config",
-        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n    )",
+        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    handlers = [logging.StreamHandler(), memory_handler]\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n        handlers=handlers,\n    )",
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "memory_handler",
+        "kind": 5,
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    handlers = [logging.StreamHandler(), memory_handler]\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n        handlers=handlers,\n    )",
         "detail": "app.logging_config",
         "documentation": {}
     },
@@ -2816,7 +3066,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def ask(request: AskRequest) -> AskResponse:\n    service = BotService(build_retriever())\n    answer = service.ask(request.question)\n    return AskResponse(answer=answer.answer, sources=answer.sources)\n@app.get(\"/health\")\ndef health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "peekOfCode": "def ask(request: AskRequest) -> AskResponse:\n    # Используем настройки из .env как базу, но позволяем переопределить токены из UI\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n        settings.confluence_api_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token\n        settings.gigachat_api_key = request.gigachat_token\n    try:",
         "detail": "app.main",
         "documentation": {}
     },
@@ -2825,7 +3075,61 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\ndef health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    return {\"confluence\": conf_client.check_health(), \"gigachat\": llm_gen.check_health()}\n@app.get(\"/api/logs\")\ndef get_logs() -> list[str]:\n    return memory_handler.get_logs()",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "health_external",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    return {\"confluence\": conf_client.check_health(), \"gigachat\": llm_gen.check_health()}\n@app.get(\"/api/logs\")\ndef get_logs() -> list[str]:\n    return memory_handler.get_logs()\n@app.get(\"/api/questions/templates\")\ndef get_question_templates() -> list[dict]:\n    return [",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_logs",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def get_logs() -> list[str]:\n    return memory_handler.get_logs()\n@app.get(\"/api/questions/templates\")\ndef get_question_templates() -> list[dict]:\n    return [\n        {\n            \"id\": \"owner\",\n            \"label\": \"Владелец витрины\",\n            \"template\": \"Кто владелец витрины {datamart}?\",\n        },",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_question_templates",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def get_question_templates() -> list[dict]:\n    return [\n        {\n            \"id\": \"owner\",\n            \"label\": \"Владелец витрины\",\n            \"template\": \"Кто владелец витрины {datamart}?\",\n        },\n        {\n            \"id\": \"attributes\",\n            \"label\": \"Состав атрибутов\",",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_sync_last_events",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def get_sync_last_events() -> dict:\n    state_repo = build_state_repository()\n    states = state_repo.list_all()\n    # Последний парсинг (синхронизация файлов)\n    last_parsing = None\n    if states:\n        last_parsing = max(s.last_synced_at for s in states if s.last_synced_at) if any(s.last_synced_at for s in states) else None\n    # Последнее обновление метаданных (витрин)\n    meta_repo = build_metadata_repository()\n    datamarts = meta_repo.list_datamarts()",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_sync_status",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def get_sync_status() -> dict:\n    repo = build_state_repository()\n    states = repo.list_all()\n    if not states:\n        return {\"last_sync\": None, \"total_datamarts\": 0, \"status\": \"no_data\"}\n    last_sync = (\n        max(s.last_synced_at for s in states if s.last_synced_at)\n        if any(s.last_synced_at for s in states)\n        else None\n    )",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_chat_history",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def get_chat_history(session_id: str) -> list[dict]:\n    repo = build_chat_history_repository()\n    messages = repo.list_by_session(session_id)\n    return [\n        {\n            \"user\": m.user_message,\n            \"bot\": m.bot_response,\n            \"sources\": m.sources,\n            \"timestamp\": m.created_at.isoformat(),\n        }",
         "detail": "app.main",
         "documentation": {}
     },
@@ -2834,7 +3138,16 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\n@app.post(\"/ask\", response_model=AskResponse)\ndef ask(request: AskRequest) -> AskResponse:\n    service = BotService(build_retriever())\n    answer = service.ask(request.question)\n    return AskResponse(answer=answer.answer, sources=answer.sources)\n@app.get(\"/health\")\ndef health() -> dict[str, str]:\n    return {\"status\": \"ok\"}",
+        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\n@app.post(\"/ask\", response_model=AskResponse)\ndef ask(request: AskRequest) -> AskResponse:\n    # Используем настройки из .env как базу, но позволяем переопределить токены из UI\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n        settings.confluence_api_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "static_path",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "static_path = Path(__file__).parent / \"static\"\nif not static_path.exists():\n    static_path.mkdir(parents=True, exist_ok=True)\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")",
         "detail": "app.main",
         "documentation": {}
     },

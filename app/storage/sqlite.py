@@ -79,6 +79,15 @@ class SQLite:
                 );
                 create index if not exists idx_s2t_state_datamart
                     on s2t_state(datamart_name);
+                create table if not exists chat_history (
+                    id integer primary key autoincrement,
+                    session_id text not null,
+                    user_message text not null,
+                    bot_response text not null,
+                    sources_json text not null default '[]',
+                    created_at text not null
+                );
+                create index if not exists idx_chat_history_session on chat_history(session_id);
                 """
             )
             self._ensure_column(conn, "datamarts", "facts_json", "text not null default '[]'")

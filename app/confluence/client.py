@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
@@ -198,12 +199,14 @@ class ConfluenceClient:
             ) from original_error
         return response.content
 
-    def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
-        if self.settings.confluence_root_page_id:
-            yield from self.get_children(self.settings.confluence_root_page_id)
-            return
-        cql = f'space="{self.settings.confluence_space_key}" and type=page'
-        yield from self.search_pages(cql)
+    def check_health(self) -> dict:
+        start_time = time.time()
+        try:
+            self._get("/rest/api/content", {"limit": 1})
+            latency = (time.time() - start_time) * 1000
+            return {"status": "ok", "latency_ms": round(latency, 2)}
+        except Exception as exc:
+            return {"status": "error", "message": str(exc)}
 
     def _page_from_payload(self, payload: dict) -> ConfluencePage:
         links = payload.get("_links", {})

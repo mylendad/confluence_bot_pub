@@ -12,10 +12,16 @@ class AnswerGenerator(Protocol):
     def generate(self, question: str, context: str) -> str:
         ...
 
+    def check_health(self) -> dict:
+        ...
+
 
 class StubAnswerGenerator:
     def generate(self, question: str, context: str) -> str:
         return f"Нашел релевантные фрагменты:\n{context}"
+
+    def check_health(self) -> dict:
+        return {"status": "ok", "provider": "stub"}
 
 
 class GigaChatAnswerGenerator:
@@ -78,6 +84,21 @@ class GigaChatAnswerGenerator:
                 raise exc
 
         raise last_exc
+
+    def check_health(self) -> dict:
+        start_time = time.time()
+        try:
+            # Simple ping to GigaChat
+            self._get_llm().invoke("ping")
+            latency = (time.time() - start_time) * 1000
+            return {
+                "status": "ok",
+                "provider": "gigachat",
+                "latency_ms": round(latency, 2),
+                "model": self.settings.gigachat_model,
+            }
+        except Exception as exc:
+            return {"status": "error", "provider": "gigachat", "message": str(exc)}
 
 
 def build_answer_generator(settings: Settings) -> AnswerGenerator:
