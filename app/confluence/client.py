@@ -79,6 +79,15 @@ class ConfluenceClient:
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
         logger.info("Making GET request to %s with headers: %s", path, self._client.headers)
         response = self._client.get(path, params=params)
+        
+        # Handle rate limiting
+        if response.status_code == 429:
+            import time
+            retry_after = int(response.headers.get("Retry-After", 5))
+            logger.warning(f"Rate limited (429). Retrying after {retry_after}s...")
+            time.sleep(retry_after)
+            response = self._client.get(path, params=params)
+            
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError("Confluence authentication failed")
         if response.is_error:
