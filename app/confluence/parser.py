@@ -198,10 +198,48 @@ class ConfluenceParser:
         return facts
 
     def extract_release_changes(self, page: ConfluencePage, html: str) -> list[ReleaseChange]:
-        release_page = self._release_page_from_link(page, html)
+        # Ищем страницу изменений рекурсивно
+        release_page = self._find_release_page_recursive(page, depth=0, visited=set())
         if not release_page or not release_page.body_html:
             return []
         return self.parse_release_changes_page(release_page.body_html, release_page.url)
+
+    def _find_release_page_recursive(self, page: ConfluencePage, depth: int, visited: set[str]) -> ConfluencePage | None:
+        if page.id in visited or depth > 3:
+            return None
+        visited.add(page.id)
+
+        html = page.body_html
+        if html is None:
+            try:
+                full_page = self.client.get_page(page.id)
+                html = full_page.body_html or ""
+            except Exception:
+                html = ""
+
+        # Пробуем найти ссылку на текущей странице
+        found = self._release_page_from_link(page, html)
+        if found:
+            return found
+
+        # Если не нашли, идем в дочерние страницы
+        try:
+            children = self.client.get_children(page.id)
+            for child in children:
+                # Если сама страница называется "Изменения...", берем её
+                norm_title = normalize_text(child.title)
+                if any(kw in norm_title for kw in ["изменения в релизах", "журнал изменений", "список изменений"]):
+                    logger.info(f"Found release changes by child page title: '{child.title}'")
+                    return self.client.get_page(child.id)
+                
+                # Иначе рекурсивно ищем внутри дочерней
+                res = self._find_release_page_recursive(child, depth + 1, visited)
+                if res:
+                    return res
+        except Exception:
+            pass
+
+        return None
 
     def parse_release_changes_page(
         self, html: str, source_url: str | None = None
@@ -397,7 +435,7 @@ class ConfluenceParser:
         # 1. Сначала ищем среди дочерних страниц по заголовку
         for child in self.client.get_children(page.id):
             norm_child_title = normalize_text(child.title)
-            if any(kw in norm_child_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений"]):
+            if any(kw in norm_child_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений", "релизы", "changes", "release notes"]):
                 logger.info(f"Found release changes child page: '{child.title}'")
                 return self.client.get_page(child.id)
 
@@ -425,7 +463,7 @@ class ConfluenceParser:
             if not href: continue
             
             norm_title = normalize_text(title)
-            if any(kw in norm_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений"]):
+            if any(kw in norm_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений", "релизы", "changes", "release notes"]):
                 page_id = self._page_id_from_url(href)
                 if page_id:
                     logger.info(f"Found release changes link by text: '{title}'")
