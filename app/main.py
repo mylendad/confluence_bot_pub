@@ -170,7 +170,7 @@ def get_chat_history(session_id: str) -> list[dict]:
 
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/ui")
+    return RedirectResponse(url="/ui/")
 
 
 # Монтируем статику

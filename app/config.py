@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     confluence_cookie_file: str | None = None
     confluence_extra_headers: str | None = None
 
+    jira_base_url: str = "https://jira.example.ru"
+    jira_username: str | None = None
+    jira_token: str | None = None
+    jira_api_token: str | None = None
+    jira_verify_ssl: bool = True
 
     datamart_page_pattern: str = "Витрина"
     s2t_section_patterns: str = "s2t,S2T,Source to Target,Source-to-Target"

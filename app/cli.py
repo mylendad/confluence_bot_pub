@@ -12,6 +12,7 @@ from app.changes.history_repository import HistoryRepository
 from app.config import get_settings
 from app.confluence.client import ConfluenceClient
 from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
+from app.confluence.jira_client import JiraClient
 from app.confluence.models import Datamart
 from app.confluence.parser import ConfluenceParser
 from app.factory import build_retriever
@@ -46,11 +47,17 @@ def _repos():
 def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
     settings = get_settings()
     configure_logging(settings.log_level)
+    jira_client = None
+    if settings.jira_username and (settings.jira_token or settings.jira_api_token):
+        jira_client = JiraClient(settings)
     try:
-        parser = ConfluenceParser(ConfluenceClient(settings), settings)
+        parser = ConfluenceParser(ConfluenceClient(settings), settings, jira_client=jira_client)
         result = parser.parse(dry_run=dry_run)
     except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
         _raise_confluence_cli_error(settings.confluence_base_url, exc)
+    finally:
+        if jira_client:
+            jira_client.close()
     for datamart in result.datamarts:
         typer.echo(f"Витрина: {datamart.name}")
         typer.echo(f"  stakeholders: {len(datamart.stakeholders)}")
@@ -112,9 +119,12 @@ def update_rag(
     document_repo = DocumentRepository(db)
     vector_store = JsonVectorStore(settings.vector_store_dir)
     indexer = RAGIndexer(metadata_repo, document_repo, vector_store)
+    jira_client = None
+    if settings.jira_username and (settings.jira_token or settings.jira_api_token):
+        jira_client = JiraClient(settings)
     try:
         confluence_client = ConfluenceClient(settings)
-        parser = ConfluenceParser(confluence_client, settings)
+        parser = ConfluenceParser(confluence_client, settings, jira_client=jira_client)
         updater = IncrementalUpdater(
             metadata_sync=MetadataSyncService(parser),
             confluence_client=confluence_client,
@@ -127,6 +137,9 @@ def update_rag(
         result = updater.run(dry_run=dry_run)
     except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:
         _raise_confluence_cli_error(settings.confluence_base_url, exc)
+    finally:
+        if jira_client:
+            jira_client.close()
     _print_incremental_update_result(result, dry_run=dry_run)
     if since:
         typer.echo(f"Since filter accepted for orchestration: {since}")

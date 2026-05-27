@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 
 from app.config import Settings
 from app.confluence.client import ConfluenceClient
-from app.confluence.jira_client import JiraClient
 from app.confluence.models import (
     ConfluencePage,
     Datamart,
@@ -62,15 +61,9 @@ PLACEHOLDER_TEXTS = {
 
 
 class ConfluenceParser:
-    def __init__(
-        self,
-        client: ConfluenceClient,
-        settings: Settings,
-        jira_client: JiraClient | None = None,
-    ) -> None:
+    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:
         self.client = client
         self.settings = settings
-        self.jira_client = jira_client
 
     def parse(self, dry_run: bool = False) -> ParseResult:
         result = ParseResult()
@@ -97,8 +90,6 @@ class ConfluenceParser:
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
         release_changes = self.extract_release_changes(page, html)
-        if self.jira_client:
-            self.enrich_release_changes(release_changes)
         candidates = self.find_s2t_candidates(page)
         selected = self.choose_latest_s2t(candidates)
         return Datamart(
@@ -114,47 +105,6 @@ class ConfluenceParser:
             release_changes=release_changes,
             s2t_resource=selected,
         )
-
-    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:
-        if not self.jira_client:
-            return
-        field_mapping = self.jira_client.get_field_mapping()
-        for change in changes:
-            if not change.jira_key:
-                continue
-            issue = self.jira_client.get_issue(change.jira_key)
-            if not issue:
-                continue
-            fields = issue.get("fields", {})
-            created = fields.get("created")
-            if created:
-                try:
-                    change.jira_created_at = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                except Exception:
-                    logger.warning("Failed to parse Jira created date: %s", created)
-
-            tag = (change.change_type or "").upper()
-            if not tag:
-                continue
-
-            changelog = issue.get("changelog", {})
-            histories = changelog.get("histories", [])
-            histories.sort(key=lambda x: x.get("created", ""), reverse=True)
-
-            found_value = None
-            for history in histories:
-                for item in history.get("items", []):
-                    if (item.get("field") or "").upper() == tag:
-                        found_value = item.get("toString")
-                        break
-                if found_value:
-                    break
-
-            if not found_value and tag in field_mapping:
-                field_id = field_mapping[tag]
-                found_value = fields.get(field_id)
-
-            change.jira_last_activity_value = found_value
 
     def extract_stakeholders(self, html: str) -> list[Stakeholder]:
         soup = BeautifulSoup(html, "html.parser")
@@ -273,13 +223,11 @@ class ConfluenceParser:
         logger.info("Recursively searching for S2T files on page '%s' (depth %d)", page.title, depth)
 
         html = page.body_html
-        if html is None:
-            try:
-                full_page = self.client.get_page(page.id)
-                html = full_page.body_html if full_page and full_page.body_html else ""
-            except Exception:
-                logger.warning("Failed to fetch page body for %s", page.id)
-                html = ""
+        if not html:
+            full_page = self.client.get_page(page.id)
+            html = full_page.body_html if full_page and full_page.body_html else ""
+        if not html:
+            return []
 
         candidates: list[S2TResource] = []
         # 1. Add direct attachments from current page
@@ -287,81 +235,83 @@ class ConfluenceParser:
         self._append_new_resources(candidates, attachments)
         attachment_index = self._attachment_index(attachments)
 
-        if html:
-            soup = BeautifulSoup(html, "html.parser")
-            # 2. Add files found in tables on current page
-            self._append_new_resources(
-                candidates,
-                self._enrich_resources(
-                    self._extract_s2t_table_resources(page, soup), attachment_index
-                ),
-            )
+        soup = BeautifulSoup(html, "html.parser")
+        # 2. Add files found in tables on current page
+        self._append_new_resources(
+            candidates,
+            self._enrich_resources(
+                self._extract_s2t_table_resources(page, soup), attachment_index
+            ),
+        )
 
-            # 3. Explore links on current page
-            for link in soup.find_all("a"):
-                title = link.get_text(" ", strip=True) or link.get("href", "")
-                href = link.get("href")
-                if not href:
-                    continue
+        # 3. Explore links on current page
+        for link in soup.find_all("a"):
+            title = link.get_text(" ", strip=True) or link.get("href", "")
+            href = link.get("href")
+            if not href:
+                continue
 
-                parent_text = link.parent.get_text(" ", strip=True) if link.parent else ""
+            parent_text = link.parent.get_text(" ", strip=True) if link.parent else ""
 
-                if "/download/attachments/" in href and (
-                    self._looks_like_s2t_file(href, title) or self._looks_like_s2t(parent_text)
-                ):
-                    file_name = self._file_name_from_url(href)
-                    resource_title = file_name or title
-                    self._append_new_resources(
-                        candidates,
-                        [
-                            self._enrich_resource(
-                                S2TResource(
-                                    title=resource_title,
-                                    url=confluence_urljoin(page.url, href),
-                                    file_name=file_name or resource_title,
-                                    resource_type="link",
-                                    file_date=parse_date_from_text(resource_title),
-                                    updated_at=page.updated_at,
-                                ),
-                                attachment_index,
+            # Case A: Direct link to a downloadable file
+            if "/download/attachments/" in href and (
+                self._looks_like_s2t_file(href, title) or self._looks_like_s2t(parent_text)
+            ):
+                file_name = self._file_name_from_url(href)
+                resource_title = file_name or title
+                self._append_new_resources(
+                    candidates,
+                    [
+                        self._enrich_resource(
+                            S2TResource(
+                                title=resource_title,
+                                url=confluence_urljoin(page.url, href),
+                                file_name=file_name or resource_title,
+                                resource_type="link",
+                                file_date=parse_date_from_text(resource_title),
+                                updated_at=page.updated_at,
+                            ),
+                            attachment_index,
+                        )
+                    ],
+                )
+            # Case B: Link to another page that might have S2T info, recurse
+            elif ("pageId=" in href or "/display/" in href) and self._looks_like_s2t(
+                f"{title} {parent_text}"
+            ):
+                child_page_id = self._page_id_from_url(href)
+                if child_page_id and child_page_id not in visited:
+                    try:
+                        child_page = self.client.get_page(child_page_id)
+                        if child_page:
+                            recursive_files = self._find_s2t_recursive(
+                                child_page, depth + 1, visited
                             )
-                        ],
-                    )
-                elif ("pageId=" in href or "/display/" in href) and self._looks_like_s2t(
-                    f"{title} {parent_text}"
-                ):
-                    child_page_id = self._page_id_from_url(href)
-                    if child_page_id and child_page_id not in visited:
-                        try:
-                            child_page = self.client.get_page(child_page_id)
-                            if child_page:
-                                recursive_files = self._find_s2t_recursive(
-                                    child_page, depth + 1, visited
-                                )
-                                self._append_new_resources(candidates, recursive_files)
-                        except Exception as exc:
-                            logger.warning(
-                                "Failed to fetch or process linked page %s: %s", child_page_id, exc
-                            )
-
+                            self._append_new_resources(candidates, recursive_files)
+                    except Exception as exc:
+                        logger.warning(
+                            "Failed to fetch or process linked page %s: %s", child_page_id, exc
+                        )
+        
         # 4. Explore direct child pages
         for child in self.client.get_children(page.id):
-            if self._looks_like_s2t(child.title):
+             if self._looks_like_s2t(child.title):
                 recursive_files = self._find_s2t_recursive(child, depth + 1, visited)
                 self._append_new_resources(candidates, recursive_files)
 
+        # Final filtering: only return actual files
         file_candidates = [
-            c
-            for c in candidates
-            if c.file_name and c.file_name.lower().endswith(SUPPORTED_S2T_SUFFIXES)
+            c for c in candidates if c.file_name and c.file_name.lower().endswith(SUPPORTED_S2T_SUFFIXES)
         ]
-
+        
         for candidate in file_candidates:
             candidate.file_date = candidate.file_date or parse_date_from_text(candidate.title)
-
+        
         return file_candidates
 
-    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:
+    def _release_page_from_link(
+        self, page: ConfluencePage, html: str
+    ) -> ConfluencePage | None:
         soup = BeautifulSoup(html, "html.parser")
         for link in soup.find_all("a"):
             title = link.get_text(" ", strip=True)
@@ -443,10 +393,14 @@ class ConfluenceParser:
         )
 
     def _looks_like_s2t_file(self, href: str, title: str) -> bool:
-        lowered = f"{href} {title}".lower()
-        return any(suffix in lowered for suffix in SUPPORTED_S2T_SUFFIXES)
+        value = normalize_text(f"{href} {title}")
+        return value.endswith(SUPPORTED_S2T_SUFFIXES) or any(
+            suffix in value for suffix in SUPPORTED_S2T_SUFFIXES
+        )
 
-    def _latest_non_empty_row_resource(self, page: ConfluencePage, rows) -> S2TResource | None:
+    def _latest_non_empty_row_resource(
+        self, page: ConfluencePage, rows
+    ) -> S2TResource | None:
         for row_number, row in reversed(list(enumerate(rows, start=1))):
             if not row.get_text(" ", strip=True):
                 continue
@@ -541,16 +495,15 @@ class ConfluenceParser:
                 names.append(file_name)
         return names
 
-    def _append_new_resources(self, target: list[S2TResource], resources: list[S2TResource]) -> None:
-        target_by_key = {resource.resource_key: i for i, resource in enumerate(target)}
+    def _append_new_resources(
+        self, target: list[S2TResource], resources: list[S2TResource]
+    ) -> None:
+        known = {resource.resource_key for resource in target}
         for resource in resources:
-            if resource.resource_key in target_by_key:
-                idx = target_by_key[resource.resource_key]
-                if target[idx].resource_type == "attachment" and resource.resource_type != "attachment":
-                    target[idx] = resource
+            if resource.resource_key in known:
                 continue
             target.append(resource)
-            target_by_key[resource.resource_key] = len(target) - 1
+            known.add(resource.resource_key)
 
     def _enrich_resources(
         self, resources: list[S2TResource], attachment_index: dict[str, S2TResource]

@@ -304,18 +304,48 @@ class RAGRetriever:
         if not matching:
             return RAGAnswer(answer="Изменения в релизах для витрины не найдены.", sources=[])
 
-        lines = ["Изменения в релизах:"]
+        # Sort by version/date descending
+        matching.sort(key=lambda x: x[1].get("version") or "", reverse=True)
+
+        lines = ["Изменения в релизах (от новых к старым):"]
         for datamart, change in matching[:30]:
-            parts = [
-                f"{datamart.get('name')}",
-                f"версия {change.get('version') or '-'}",
-                f"Jira {change.get('jira_key') or '-'}",
-                f"тип {change.get('change_type') or '-'}",
-            ]
-            if change.get("status"):
-                parts.append(f"статус {change['status']}")
+            version = change.get("version") or "Без версии"
+            change_type = (change.get("change_type") or "изменение").upper()
             summary = change.get("summary") or change.get("jira_title") or "-"
-            lines.append(f"- {', '.join(parts)}: {summary}")
+            
+            jira_key = change.get("jira_key")
+            jira_created = change.get("jira_created_at")
+            if jira_created and isinstance(jira_created, str):
+                try:
+                    jira_created = datetime.fromisoformat(jira_created).date()
+                except Exception:
+                    pass
+            
+            jira_status = change.get("jira_last_activity_value") or change.get("status") or "-"
+            
+            # Try to get jira_base_url from settings if available
+            jira_base_url = "https://jira.example.ru"
+            if hasattr(self.answer_generator, "settings"):
+                jira_base_url = getattr(self.answer_generator.settings, "jira_base_url", jira_base_url)
+            
+            jira_url = f"{jira_base_url.rstrip('/')}/browse/{jira_key}" if jira_key else None
+            conf_url = change.get("source_url") or datamart.get("confluence_url")
+            
+            parts = [
+                f"**Релиз {version}**",
+                f"- Тип: {change_type}",
+                f"- Суть: {summary}",
+            ]
+            if jira_key:
+                parts.append(f"- Задача Jira: [{jira_key}]({jira_url})" if jira_url else f"- Задача Jira: {jira_key}")
+            if jira_created:
+                parts.append(f"- Создана в Jira: {jira_created}")
+            parts.append(f"- Статус/Результат (Jira): {jira_status}")
+            parts.append(f"- Источник: [Confluence]({conf_url})")
+            
+            lines.append("\n".join(parts))
+            lines.append("") # Spacer
+            
         return RAGAnswer(
             answer="\n".join(lines),
             sources=[

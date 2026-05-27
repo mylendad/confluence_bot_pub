@@ -124,20 +124,29 @@ class RAGIndexer:
                 RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
             )
         for change in datamart.release_changes:
-            text = (
-                f"Витрина: {datamart.name}. Изменения в релизах. "
-                f"Версия: {change.version or 'не указана'}. "
-                f"Jira: {change.jira_key or 'не указана'}. "
-                f"Название Jira: {change.jira_title or 'не указано'}. "
-                f"Тип: {change.change_type or 'не указан'}. "
-                f"Суть: {change.summary or 'не указана'}. "
-                f"Статус: {change.status or 'не указан'}."
-            )
+            text_parts = [
+                f"Витрина: {datamart.name}",
+                "Изменения в релизах",
+                f"Версия: {change.version or 'не указана'}",
+                f"Jira: {change.jira_key or 'не указана'}",
+                f"Название Jira: {change.jira_title or 'не указано'}",
+                f"Тип: {change.change_type or 'не указан'}",
+                f"Суть: {change.summary or 'не указана'}",
+                f"Статус: {change.status or 'не указан'}",
+            ]
+            if change.jira_created_at:
+                text_parts.append(f"Создана в Jira: {change.jira_created_at.date()}")
+            if change.jira_last_activity_value:
+                text_parts.append(f"Результат из Jira: {change.jira_last_activity_value}")
+            
+            text = ". ".join(text_parts) + "."
             metadata = {
                 "datamart_name": datamart.name,
                 "source_type": "release_change",
                 "version": change.version,
                 "jira_key": change.jira_key,
+                "jira_created_at": change.jira_created_at.isoformat() if change.jira_created_at else None,
+                "jira_last_activity_value": change.jira_last_activity_value,
                 "change_type": change.change_type,
                 "source_url": change.source_url,
                 "confluence_url": datamart.confluence_url,
