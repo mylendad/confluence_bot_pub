@@ -82,13 +82,13 @@ class ConfluenceParser:
                 continue
             logger.info("Found datamart page %s", page.title)
             datamart = self.parse_datamart_page(page)
-            if dry_run:
-                logger.info(
-                    "Dry run datamart=%s stakeholders=%s s2t=%s",
-                    datamart.name,
-                    len(datamart.stakeholders),
-                    datamart.s2t_resource,
-                )
+            logger.info(
+                "Parsed datamart=%s stakeholders=%s release_changes=%s s2t=%s",
+                datamart.name,
+                len(datamart.stakeholders),
+                len(datamart.release_changes),
+                datamart.s2t_resource.title if datamart.s2t_resource else "-",
+            )
             result.datamarts.append(datamart)
         return result
 

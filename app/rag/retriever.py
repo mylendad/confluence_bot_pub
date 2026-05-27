@@ -19,7 +19,8 @@ class IntentClassifier:
             and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id"])
         ):
             return "datamart_list"
-        if "изменения в релизах" in q or "последние релизы" in q:
+        # Приоритет для "Изменений в релизах" согласно инструкции
+        if "релиз" in q or ("измен" in q and any(word in q for word in ["год", "последн"])):
             return "release_changes"
 
         if any(
@@ -51,7 +52,7 @@ class IntentClassifier:
             if "витрин" in q:
                 return "datamart_fact"
             return "owner_lookup"
-        if "измен" in q and any(word in q for word in ["год", "период", "дата"]):
+        if "измен" in q and any(word in q for word in ["период", "дата", "история"]):
             return "last_year_changes"
         if "атрибутный состав" in q or "какие атрибут" in q:
             return "attribute_composition"
