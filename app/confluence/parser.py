@@ -255,78 +255,49 @@ class ConfluenceParser:
         headers = soup.find_all(["h1", "h2", "h3", "h4", "p"])
         list_items = soup.find_all("li")
         
-        for item in list_items:
-            # 1. Find the version header (closest preceding header or paragraph with version info)
-            current_version = None
-            for prev in item.find_previous_siblings(["h1", "h2", "h3", "h4", "p"]):
-                text = self._clean_text(prev.get_text(" ", strip=True))
-                norm_text = normalize_text(text)
-                
-                # Check if it looks like a version header
+        current_version = "Неизвестная версия"
+        current_jira_keys = []
+        
+        # Перебираем ВСЕ элементы на странице последовательно
+        for node in soup.find_all(["h1", "h2", "h3", "h4", "p", "ul", "ol"]):
+            text = self._clean_text(node.get_text(" ", strip=True))
+            norm_text = normalize_text(text)
+            
+            # 1. Если это заголовок версии
+            if node.name in ["h1", "h2", "h3", "h4"] or ("версия" in norm_text and len(text) < 50):
                 if "версия" in norm_text or "релиз" in norm_text or re.search(r'202[0-9]', norm_text):
-                     # ensure it's not just a random sentence mentioning version
-                     if len(text) < 100: 
-                         current_version = text
-                         break
+                    current_version = text
+                    current_jira_keys = [] # Сбрасываем контекст задачи для новой версии
+                    continue
             
-            if not current_version:
-                # Let's try searching up the parent tree if previous siblings failed
-                parent = item.find_parent()
-                while parent and parent.name not in ['body', 'html']:
-                    for prev in parent.find_previous_siblings(["h1", "h2", "h3", "h4", "p"]):
-                        text = self._clean_text(prev.get_text(" ", strip=True))
-                        norm_text = normalize_text(text)
-                        if "версия" in norm_text or "релиз" in norm_text or re.search(r'202[0-9]', norm_text):
-                             if len(text) < 100: 
-                                 current_version = text
-                                 break
-                    if current_version:
-                        break
-                    parent = parent.find_parent()
-            
-            # If we STILL didn't find a version, skip or use a default (let's use default to at least capture it)
-            if not current_version:
-                current_version = "Неизвестная версия"
-            
-            # 2. Extract Jira Task
-            # It might be directly in the <li> or in a parent element (like a paragraph preceding the list)
-            item_jira_key = self._jira_key_from_node(item)
-            jira_title = self._jira_title_from_node(item)
-            status = self._jira_status_from_node(item)
-            
-            if not item_jira_key:
-                # Look at the immediate parent or previous sibling of the parent <ul>
-                parent_ul = item.find_parent(["ul", "ol"])
-                if parent_ul:
-                    prev_node = parent_ul.find_previous_sibling()
-                    if prev_node:
-                        item_jira_key = self._jira_key_from_node(prev_node)
-                        if not jira_title:
-                            jira_title = self._jira_title_from_node(prev_node)
-                        if not status:
-                            status = self._jira_status_from_node(prev_node)
-            
-            # 3. Extract Change Type (Macro or specific text)
-            change_type = self._release_change_type(item)
-            
-            # 4. Extract Summary
-            summary = self._release_summary(item, change_type)
-            
-            # We must have at least a Jira key or a change type to consider it a valid release change item
-            if not item_jira_key and not change_type:
-                continue
+            # 2. Ищем ключи Jira в текущем узле (параграфе или заголовке)
+            node_keys = self._jira_keys_from_node(node)
+            if node_keys:
+                current_jira_keys = node_keys
                 
-            changes.append(
-                ReleaseChange(
-                    version=current_version,
-                    jira_key=item_jira_key,
-                    jira_title=jira_title,
-                    change_type=change_type,
-                    summary=summary,
-                    status=status,
-                    source_url=source_url,
-                )
-            )
+            # 3. Если это список изменений
+            if node.name in ["ul", "ol"]:
+                for item in node.find_all("li", recursive=False):
+                    # Ключи могут быть внутри li или наследоваться от родительского p
+                    item_keys = self._jira_keys_from_node(item) or current_jira_keys
+                    
+                    if not item_keys: continue
+                    
+                    change_type = self._release_change_type(item)
+                    summary = self._release_summary(item, change_type)
+                    
+                    # Фильтр шаблонов
+                    if summary and ("[" in summary and "]" in summary): continue
+                    
+                    for key in item_keys:
+                        changes.append(ReleaseChange(
+                            version=current_version,
+                            jira_key=key,
+                            change_type=change_type,
+                            summary=summary,
+                            status=self._jira_status_from_node(item),
+                            source_url=source_url
+                        ))
             
         return changes
 
@@ -432,42 +403,67 @@ class ConfluenceParser:
         return file_candidates
 
     def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:
+        # Исключаем страницы-шаблоны
+        if "шаблон" in normalize_text(page.title):
+            return None
+
         # 1. Сначала ищем среди дочерних страниц по заголовку
-        for child in self.client.get_children(page.id):
-            norm_child_title = normalize_text(child.title)
-            if any(kw in norm_child_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений", "релизы", "changes", "release notes"]):
-                logger.info(f"Found release changes child page: '{child.title}'")
-                return self.client.get_page(child.id)
+        try:
+            children = self.client.get_children(page.id)
+            for child in children:
+                norm_child_title = normalize_text(child.title)
+                if any(kw in norm_child_title for kw in ["изменения в релизах", "журнал изменений", "список изменений"]):
+                    # Игнорируем если это шаблон
+                    if "шаблон" in norm_child_title: continue
+                    logger.info(f"Found release changes child page: '{child.title}'")
+                    return self.client.get_page(child.id)
+        except Exception:
+            pass
 
         soup = BeautifulSoup(html, "html.parser")
         
-        # 2. Ищем в таблицах (текст в одной ячейке, ссылка в другой)
-        for row in soup.find_all("tr"):
-            cells = row.find_all(["td", "th"])
-            for i, cell in enumerate(cells):
-                cell_text = normalize_text(cell.get_text(" ", strip=True))
-                if any(kw in cell_text for kw in ["изменения в релизах", "журнал изменений", "список изменений"]):
-                    # Ищем ссылку в этой же ячейке или в следующей
-                    for search_cell in [cell] + ([cells[i+1]] if i+1 < len(cells) else []):
-                        link = search_cell.find("a")
-                        if link and link.get("href"):
-                            page_id = self._page_id_from_url(link["href"])
-                            if page_id:
-                                logger.info(f"Found release changes link in table: '{link.get_text()}'")
-                                return self.client.get_page(page_id)
-
-        # 3. Ищем просто по тексту ссылки во всем документе
-        for link in soup.find_all("a"):
-            title = link.get_text(" ", strip=True)
-            href = link.get("href")
-            if not href: continue
+        # 2. Ищем все возможные ссылки (и <a> и <ac:link>)
+        # Confluence Storage Format использует ac:link для внутренних ссылок
+        for link_tag in soup.find_all(["a", "ac:link"]):
+            # Для ac:link текст может быть в разных местах, поэтому ищем текст во всем родительском блоке или атрибутах
+            link_text = ""
+            page_id = None
             
-            norm_title = normalize_text(title)
-            if any(kw in norm_title for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений", "релизы", "changes", "release notes"]):
-                page_id = self._page_id_from_url(href)
+            if link_tag.name == "a":
+                link_text = link_tag.get_text(" ", strip=True)
+                page_id = self._page_id_from_url(link_tag.get("href", ""))
+            else:
+                # ac:link - ищем ri:page
+                ri_page = link_tag.find("ri:page")
+                if ri_page:
+                    link_text = ri_page.get("ri:content-title") or ""
+                    # Если текста нет в ri:page, смотрим ac:link-body
+                    if not link_text:
+                        link_text = link_tag.get_text(" ", strip=True)
+                
+            if not link_text: continue
+            
+            norm_text = normalize_text(link_text)
+            if any(kw in norm_text for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений"]):
+                # Если нашли по тексту, но нет page_id (для ac:link), пробуем достать из ri:page
+                if not page_id and link_tag.name == "ac:link":
+                    ri_page = link_tag.find("ri:page")
+                    if ri_page:
+                        # В storage format обычно есть title, по нему можно найти
+                        title = ri_page.get("ri:content-title")
+                        if title:
+                            # Ищем страницу по заголовку в этом же пространстве (упрощенно - через детей)
+                            for child in self.client.get_children(page.id):
+                                if child.title == title:
+                                    page_id = child.id
+                                    break
+                
                 if page_id:
-                    logger.info(f"Found release changes link by text: '{title}'")
-                    return self.client.get_page(page_id)
+                    logger.info(f"Found release changes link '{link_text}' (ID: {page_id})")
+                    try:
+                        return self.client.get_page(page_id)
+                    except Exception:
+                        pass
         
         return None
         return None
@@ -770,12 +766,19 @@ class ConfluenceParser:
         return None
 
     @staticmethod
-    def _jira_key_from_node(node) -> str | None:
-        jira_tag = node.find(attrs={"data-jira-key": True})
-        if jira_tag and jira_tag.get("data-jira-key"):
-            return str(jira_tag["data-jira-key"])
-        match = JIRA_KEY_RE.search(node.get_text(" ", strip=True))
-        return match.group(0) if match else None
+    def _jira_keys_from_node(node) -> list[str]:
+        keys = []
+        for tag in node.find_all(attrs={"data-jira-key": True}):
+            if tag.get("data-jira-key"):
+                keys.append(str(tag["data-jira-key"]))
+        
+        # Also search in text
+        text = node.get_text(" ", strip=True)
+        found_in_text = JIRA_KEY_RE.findall(text)
+        for k in found_in_text:
+            if k not in keys:
+                keys.append(k)
+        return keys
 
     @staticmethod
     def _jira_title_from_node(node) -> str | None:

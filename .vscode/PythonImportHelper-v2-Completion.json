@@ -3231,7 +3231,7 @@
         "kind": 2,
         "importPath": "app.factory",
         "description": "app.factory",
-        "peekOfCode": "def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "peekOfCode": "def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)\ndef build_jira_client(settings: Settings | None = None):\n    from app.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
         "detail": "app.factory",
         "documentation": {}
     },
@@ -3240,7 +3240,16 @@
         "kind": 2,
         "importPath": "app.factory",
         "description": "app.factory",
-        "peekOfCode": "def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "peekOfCode": "def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)\ndef build_jira_client(settings: Settings | None = None):\n    from app.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_jira_client",
+        "kind": 2,
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "peekOfCode": "def build_jira_client(settings: Settings | None = None):\n    from app.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
         "detail": "app.factory",
         "documentation": {}
     },
@@ -3285,7 +3294,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\ndef health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    return {\"confluence\": conf_client.check_health(), \"gigachat\": llm_gen.check_health()}\n@app.get(\"/api/logs\")\ndef get_logs() -> list[str]:\n    return memory_handler.get_logs()",
+        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\ndef health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from app.factory import build_jira_client\n    jira_client = build_jira_client()\n    return {\n        \"confluence\": conf_client.check_health(),",
         "detail": "app.main",
         "documentation": {}
     },
@@ -3294,7 +3303,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    return {\"confluence\": conf_client.check_health(), \"gigachat\": llm_gen.check_health()}\n@app.get(\"/api/logs\")\ndef get_logs() -> list[str]:\n    return memory_handler.get_logs()\n@app.get(\"/api/questions/templates\")\ndef get_question_templates() -> list[dict]:\n    return [",
+        "peekOfCode": "def health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from app.factory import build_jira_client\n    jira_client = build_jira_client()\n    return {\n        \"confluence\": conf_client.check_health(),\n        \"gigachat\": llm_gen.check_health(),\n        \"jira\": jira_client.check_health()\n    }",
         "detail": "app.main",
         "documentation": {}
     },

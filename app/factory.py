@@ -46,3 +46,9 @@ def build_confluence_client(settings: Settings | None = None) -> ConfluenceClien
 def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:
     settings = settings or get_settings()
     return build_answer_generator(settings)
+
+
+def build_jira_client(settings: Settings | None = None):
+    from app.confluence.jira_client import JiraClient
+    settings = settings or get_settings()
+    return JiraClient(settings)

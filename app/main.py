@@ -63,8 +63,14 @@ def health() -> dict[str, str]:
 def health_external() -> dict:
     conf_client = build_confluence_client()
     llm_gen = build_llm_generator()
+    from app.factory import build_jira_client
+    jira_client = build_jira_client()
 
-    return {"confluence": conf_client.check_health(), "gigachat": llm_gen.check_health()}
+    return {
+        "confluence": conf_client.check_health(),
+        "gigachat": llm_gen.check_health(),
+        "jira": jira_client.check_health()
+    }
 
 
 @app.get("/api/logs")

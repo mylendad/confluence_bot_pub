@@ -51,5 +51,17 @@ class JiraClient:
             logger.warning("Failed to fetch Jira fields: %s", exc)
             return {}
 
+    def check_health(self) -> dict:
+        import time
+        start_time = time.time()
+        try:
+            url = f"{self.base_url}/rest/api/2/myself"
+            response = self.client.get(url)
+            response.raise_for_status()
+            latency = (time.time() - start_time) * 1000
+            return {"status": "ok", "latency_ms": round(latency, 2)}
+        except Exception as exc:
+            return {"status": "error", "message": str(exc)}
+
     def close(self) -> None:
         self.client.close()
