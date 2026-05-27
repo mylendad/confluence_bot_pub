@@ -60,6 +60,10 @@ class Settings(BaseSettings):
     def confluence_auth_token(self) -> str | None:
         return self.confluence_token or self.confluence_api_token
 
+    @property
+    def jira_auth_token(self) -> str | None:
+        return self.jira_token or self.jira_api_token
+
     @model_validator(mode="after")
     def populate_confluence_from_page_url(self) -> "Settings":
         if not self.confluence_page_url:

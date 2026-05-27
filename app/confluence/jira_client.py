@@ -20,7 +20,7 @@ class JiraClient:
         self._setup_auth()
 
     def _setup_auth(self) -> None:
-        token = self.settings.jira_token or self.settings.jira_api_token
+        token = self.settings.jira_auth_token
         if token:
             self.client.headers["Authorization"] = f"Bearer {token}"
         elif self.settings.jira_username and self.settings.jira_token:
@@ -31,6 +31,9 @@ class JiraClient:
         params = {"expand": "changelog"}
         try:
             response = self.client.get(url, params=params)
+            if response.status_code == 401:
+                logger.error("Jira authentication failed (401)")
+                return None
             response.raise_for_status()
             return response.json()
         except Exception as exc:
