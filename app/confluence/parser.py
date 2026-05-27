@@ -1,6 +1,5 @@
 import logging
 import re
-import time
 from datetime import UTC, datetime
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -76,8 +75,6 @@ class ConfluenceParser:
         result = ParseResult()
         pattern = normalize_text(self.settings.datamart_page_pattern)
         for page in self.client.iter_top_level_pages():
-            if self.settings.confluence_request_delay > 0:
-                time.sleep(self.settings.confluence_request_delay)
             if pattern not in normalize_text(page.title):
                 continue
             logger.info("Found datamart page %s", page.title)
@@ -204,7 +201,9 @@ class ConfluenceParser:
             return []
         return self.parse_release_changes_page(release_page.body_html, release_page.url)
 
-    def _find_release_page_recursive(self, page: ConfluencePage, depth: int, visited: set[str]) -> ConfluencePage | None:
+    def _find_release_page_recursive(
+        self, page: ConfluencePage, depth: int, visited: set[str]
+    ) -> ConfluencePage | None:
         if page.id in visited or depth > 3:
             return None
         visited.add(page.id)
@@ -228,10 +227,13 @@ class ConfluenceParser:
             for child in children:
                 # Если сама страница называется "Изменения...", берем её
                 norm_title = normalize_text(child.title)
-                if any(kw in norm_title for kw in ["изменения в релизах", "журнал изменений", "список изменений"]):
+                if any(
+                    kw in norm_title
+                    for kw in ["изменения в релизах", "журнал изменений", "список изменений"]
+                ):
                     logger.info(f"Found release changes by child page title: '{child.title}'")
                     return self.client.get_page(child.id)
-                
+
                 # Иначе рекурсивно ищем внутри дочерней
                 res = self._find_release_page_recursive(child, depth + 1, visited)
                 if res:
@@ -245,60 +247,63 @@ class ConfluenceParser:
         self, html: str, source_url: str | None = None
     ) -> list[ReleaseChange]:
         soup = BeautifulSoup(html, "html.parser")
-        
+
         # In Confluence, main content might be nested deep inside layouts, columns, or macros
         # So we search globally, not just at the top level
         changes: list[ReleaseChange] = []
-        
-        # We will iterate over all list items. For each list item, we look backwards to find the nearest header
-        # that looks like a version.
-        headers = soup.find_all(["h1", "h2", "h3", "h4", "p"])
-        list_items = soup.find_all("li")
-        
+
         current_version = "Неизвестная версия"
         current_jira_keys = []
-        
+
         # Перебираем ВСЕ элементы на странице последовательно
         for node in soup.find_all(["h1", "h2", "h3", "h4", "p", "ul", "ol"]):
             text = self._clean_text(node.get_text(" ", strip=True))
             norm_text = normalize_text(text)
-            
+
             # 1. Если это заголовок версии
             if node.name in ["h1", "h2", "h3", "h4"] or ("версия" in norm_text and len(text) < 50):
-                if "версия" in norm_text or "релиз" in norm_text or re.search(r'202[0-9]', norm_text):
+                if (
+                    "версия" in norm_text
+                    or "релиз" in norm_text
+                    or re.search(r"202[0-9]", norm_text)
+                ):
                     current_version = text
-                    current_jira_keys = [] # Сбрасываем контекст задачи для новой версии
+                    current_jira_keys = []  # Сбрасываем контекст задачи для новой версии
                     continue
-            
+
             # 2. Ищем ключи Jira в текущем узле (параграфе или заголовке)
             node_keys = self._jira_keys_from_node(node)
             if node_keys:
                 current_jira_keys = node_keys
-                
+
             # 3. Если это список изменений
             if node.name in ["ul", "ol"]:
                 for item in node.find_all("li", recursive=False):
                     # Ключи могут быть внутри li или наследоваться от родительского p
                     item_keys = self._jira_keys_from_node(item) or current_jira_keys
-                    
-                    if not item_keys: continue
-                    
+
+                    if not item_keys:
+                        continue
+
                     change_type = self._release_change_type(item)
                     summary = self._release_summary(item, change_type)
-                    
+
                     # Фильтр шаблонов
-                    if summary and ("[" in summary and "]" in summary): continue
-                    
+                    if summary and ("[" in summary and "]" in summary):
+                        continue
+
                     for key in item_keys:
-                        changes.append(ReleaseChange(
-                            version=current_version,
-                            jira_key=key,
-                            change_type=change_type,
-                            summary=summary,
-                            status=self._jira_status_from_node(item),
-                            source_url=source_url
-                        ))
-            
+                        changes.append(
+                            ReleaseChange(
+                                version=current_version,
+                                jira_key=key,
+                                change_type=change_type,
+                                summary=summary,
+                                status=self._jira_status_from_node(item),
+                                source_url=source_url,
+                            )
+                        )
+
         return changes
 
     def find_s2t_candidates(self, page: ConfluencePage) -> list[S2TResource]:
@@ -311,7 +316,9 @@ class ConfluenceParser:
             return []
         visited.add(page.id)
 
-        logger.info("Recursively searching for S2T files on page '%s' (depth %d)", page.title, depth)
+        logger.info(
+            "Recursively searching for S2T files on page '%s' (depth %d)", page.title, depth
+        )
 
         html = page.body_html
         if html is None:
@@ -412,23 +419,27 @@ class ConfluenceParser:
             children = self.client.get_children(page.id)
             for child in children:
                 norm_child_title = normalize_text(child.title)
-                if any(kw in norm_child_title for kw in ["изменения в релизах", "журнал изменений", "список изменений"]):
+                if any(
+                    kw in norm_child_title
+                    for kw in ["изменения в релизах", "журнал изменений", "список изменений"]
+                ):
                     # Игнорируем если это шаблон
-                    if "шаблон" in norm_child_title: continue
+                    if "шаблон" in norm_child_title:
+                        continue
                     logger.info(f"Found release changes child page: '{child.title}'")
                     return self.client.get_page(child.id)
         except Exception:
             pass
 
         soup = BeautifulSoup(html, "html.parser")
-        
+
         # 2. Ищем все возможные ссылки (и <a> и <ac:link>)
         # Confluence Storage Format использует ac:link для внутренних ссылок
         for link_tag in soup.find_all(["a", "ac:link"]):
-            # Для ac:link текст может быть в разных местах, поэтому ищем текст во всем родительском блоке или атрибутах
+            # Для ac:link текст может быть в разных местах
             link_text = ""
             page_id = None
-            
+
             if link_tag.name == "a":
                 link_text = link_tag.get_text(" ", strip=True)
                 page_id = self._page_id_from_url(link_tag.get("href", ""))
@@ -440,11 +451,20 @@ class ConfluenceParser:
                     # Если текста нет в ri:page, смотрим ac:link-body
                     if not link_text:
                         link_text = link_tag.get_text(" ", strip=True)
-                
-            if not link_text: continue
-            
+
+            if not link_text:
+                continue
+
             norm_text = normalize_text(link_text)
-            if any(kw in norm_text for kw in ["изменения в релизах", "журнал изменений", "список изменений", "история изменений"]):
+            if any(
+                kw in norm_text
+                for kw in [
+                    "изменения в релизах",
+                    "журнал изменений",
+                    "список изменений",
+                    "история изменений",
+                ]
+            ):
                 # Если нашли по тексту, но нет page_id (для ac:link), пробуем достать из ri:page
                 if not page_id and link_tag.name == "ac:link":
                     ri_page = link_tag.find("ri:page")
@@ -452,20 +472,19 @@ class ConfluenceParser:
                         # В storage format обычно есть title, по нему можно найти
                         title = ri_page.get("ri:content-title")
                         if title:
-                            # Ищем страницу по заголовку в этом же пространстве (упрощенно - через детей)
+                            # Ищем страницу по заголовку в этом же пространстве
                             for child in self.client.get_children(page.id):
                                 if child.title == title:
                                     page_id = child.id
                                     break
-                
+
                 if page_id:
                     logger.info(f"Found release changes link '{link_text}' (ID: {page_id})")
                     try:
                         return self.client.get_page(page_id)
                     except Exception:
                         pass
-        
-        return None
+
         return None
 
     def _extract_s2t_table_resources(
@@ -631,12 +650,17 @@ class ConfluenceParser:
                 names.append(file_name)
         return names
 
-    def _append_new_resources(self, target: list[S2TResource], resources: list[S2TResource]) -> None:
+    def _append_new_resources(
+        self, target: list[S2TResource], resources: list[S2TResource]
+    ) -> None:
         target_by_key = {resource.resource_key: i for i, resource in enumerate(target)}
         for resource in resources:
             if resource.resource_key in target_by_key:
                 idx = target_by_key[resource.resource_key]
-                if target[idx].resource_type == "attachment" and resource.resource_type != "attachment":
+                if (
+                    target[idx].resource_type == "attachment"
+                    and resource.resource_type != "attachment"
+                ):
                     target[idx] = resource
                 continue
             target.append(resource)
@@ -771,7 +795,7 @@ class ConfluenceParser:
         for tag in node.find_all(attrs={"data-jira-key": True}):
             if tag.get("data-jira-key"):
                 keys.append(str(tag["data-jira-key"]))
-        
+
         # Also search in text
         text = node.get_text(" ", strip=True)
         found_in_text = JIRA_KEY_RE.findall(text)

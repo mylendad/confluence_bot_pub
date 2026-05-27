@@ -19,7 +19,7 @@ class ConfluenceClient:
     def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:
         self.settings = settings
         auth, headers = self._auth_config(settings)
-        
+
         headers = headers or {}
         if settings.confluence_user_agent:
             headers["User-Agent"] = settings.confluence_user_agent
@@ -31,14 +31,19 @@ class ConfluenceClient:
                 else:
                     logger.warning("Cookie file not found at: %s", cookie_path)
             except Exception as exc:
-                logger.error("Failed to read cookie file %s: %s", settings.confluence_cookie_file, exc)
-        
+                logger.error(
+                    "Failed to read cookie file %s: %s", settings.confluence_cookie_file, exc
+                )
+
         if settings.confluence_extra_headers:
             try:
                 extra_headers = json.loads(settings.confluence_extra_headers)
                 headers.update(extra_headers)
             except json.JSONDecodeError:
-                logger.error("Failed to parse CONFLUENCE_EXTRA_HEADERS as JSON: %s", settings.confluence_extra_headers)
+                logger.error(
+                    "Failed to parse CONFLUENCE_EXTRA_HEADERS as JSON: %s",
+                    settings.confluence_extra_headers,
+                )
 
         logger.info("Initializing httpx.Client with headers: %s", headers)
         self._client = client or httpx.Client(
@@ -76,36 +81,57 @@ class ConfluenceClient:
             headers["Authorization"] = f"Bearer {token}"
         return None, headers
 
+    def _request(self, method: str, path: str, **kwargs) -> httpx.Response:
+        if self.settings.confluence_request_delay > 0:
+            time.sleep(self.settings.confluence_request_delay)
+
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                response = self._client.request(method, path, **kwargs)
+                if response.status_code == 429:
+                    retry_after = int(response.headers.get("Retry-After", 2**attempt))
+                    logger.warning(
+                        "Rate limited (429) on %s. Retrying after %ds (attempt %d/%d)...",
+                        path,
+                        retry_after,
+                        attempt + 1,
+                        max_retries,
+                    )
+                    time.sleep(retry_after)
+                    continue
+                return response
+            except httpx.RequestError as exc:
+                if attempt == max_retries - 1:
+                    raise
+                wait = 2**attempt
+                logger.warning("Request error %s. Retrying after %ds...", exc, wait)
+                time.sleep(wait)
+
+        return response
+
     def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
-        logger.info("Making GET request to %s with headers: %s", path, self._client.headers)
-        response = self._client.get(path, params=params)
-        
-        # Handle rate limiting
-        if response.status_code == 429:
-            import time
-            retry_after = int(response.headers.get("Retry-After", 5))
-            logger.warning(f"Rate limited (429). Retrying after {retry_after}s...")
-            time.sleep(retry_after)
-            response = self._client.get(path, params=params)
-            
+        logger.info("Making GET request to %s", path)
+        response = self._request("GET", path, params=params)
+
         if response.status_code in {401, 403}:
-            raise ConfluenceAuthError("Confluence authentication failed")
+            raise ConfluenceAuthError(f"Confluence authentication failed: {response.status_code}")
         if response.is_error:
             raise ConfluenceError(f"Confluence request failed: {response.status_code}")
         return response.json()
-    
+
     def _validate_download_response(self, response: httpx.Response, original_url: str):
         logger.info(
-            "Validating download response. final_url=%s, status_code=%s, headers=%s",
+            "Validating download response. final_url=%s, status_code=%s",
             response.url,
             response.status_code,
-            response.headers,
         )
         if "login.action" in str(response.url):
             raise ConfluenceAuthError(
-                f"Attachment download redirected to login page, check permissions for: {original_url}"
+                f"Attachment download redirected to login page, check permissions for: "
+                f"{original_url}"
             )
-        
+
         content_type = response.headers.get("Content-Type", "").lower()
         if "text/html" in content_type and "application/json" not in content_type:
             raise ConfluenceError(
@@ -169,8 +195,7 @@ class ConfluenceClient:
 
     def download(self, url: str) -> bytes:
         logger.info("Downloading from URL: %s", url)
-        logger.info("Request headers: %s", self._client.headers)
-        response = self._client.get(url, follow_redirects=True)
+        response = self._request("GET", url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError(f"Attachment download forbidden: {response.status_code}")
@@ -194,8 +219,7 @@ class ConfluenceClient:
     ) -> bytes:
         url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
         logger.info("Downloading from URL (REST fallback): %s", url)
-        logger.info("Request headers: %s", self._client.headers)
-        response = self._client.get(url, follow_redirects=True)
+        response = self._request("GET", url, follow_redirects=True)
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError(

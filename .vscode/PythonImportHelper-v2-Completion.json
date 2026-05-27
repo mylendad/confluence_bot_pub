@@ -257,14 +257,6 @@
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "date",
         "importPath": "datetime",
         "description": "datetime",
@@ -3816,7 +3808,7 @@
         "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
-        "peekOfCode": "parser_path = \"app/confluence/parser.py\"\nwith open(parser_path, \"r\") as f:\n    content = f.read()\n# 1. Update _release_page_from_link\nold_release_page = \"\"\"    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:\n        soup = BeautifulSoup(html, \"html.parser\")\n        for link in soup.find_all(\"a\"):\n            title = link.get_text(\" \", strip=True)\n            href = link.get(\"href\")\n            if not href or \"изменения в релизах\" not in normalize_text(title):",
+        "peekOfCode": "parser_path = \"app/confluence/parser.py\"\nwith open(parser_path) as f:\n    content = f.read()\n# 1. Update _release_page_from_link\nold_release_page = \"\"\"    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:\n        soup = BeautifulSoup(html, \"html.parser\")\n        for link in soup.find_all(\"a\"):\n            title = link.get_text(\" \", strip=True)\n            href = link.get(\"href\")\n            if not href or \"изменения в релизах\" not in normalize_text(title):",
         "detail": "fix_parser",
         "documentation": {}
     },

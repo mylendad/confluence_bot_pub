@@ -1,7 +1,6 @@
-import re
 
 parser_path = "app/confluence/parser.py"
-with open(parser_path, "r") as f:
+with open(parser_path) as f:
     content = f.read()
 
 # 1. Update _release_page_from_link
