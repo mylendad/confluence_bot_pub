@@ -58,9 +58,14 @@ def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
     finally:
         if jira_client:
             jira_client.close()
+    db = SQLite(settings.sqlite_db_path)
+    metadata_repo = MetadataRepository(db)
     for datamart in result.datamarts:
+        if not dry_run:
+            metadata_repo.upsert_datamart(datamart)
         typer.echo(f"Витрина: {datamart.name}")
         typer.echo(f"  stakeholders: {len(datamart.stakeholders)}")
+        typer.echo(f"  release_changes: {len(datamart.release_changes)}")
         typer.echo(f"  s2t: {datamart.s2t_resource.title if datamart.s2t_resource else '-'}")
 
 
