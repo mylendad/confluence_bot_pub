@@ -175,6 +175,8 @@ class IncrementalUpdater:
         previous_content_hash = previous.content_hash if previous else None
         content_changed = content_hash != previous_content_hash
         if not content_changed:
+            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
+            documents = self.indexer.update_datamart(snapshot.datamart, old_attrs)
             self.state_repo.upsert(
                 resource_key=resource_key,
                 datamart_name=snapshot.datamart.name,
@@ -194,10 +196,10 @@ class IncrementalUpdater:
                 resource_key=resource_key,
                 file_name=file_name,
                 metadata_changed=True,
-                reasons=[*decision.reasons, "content hash unchanged"],
+                reasons=[*decision.reasons, "content hash unchanged but metadata updated"],
                 will_download=True,
                 will_parse=False,
-                will_reindex=False,
+                will_reindex=True,
                 content_changed=False,
                 content_hash=content_hash,
             )

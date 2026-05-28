@@ -465,6 +465,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "ChangeLogEntry",
         "importPath": "app.changes.models",
         "description": "app.changes.models",
@@ -1229,6 +1237,14 @@
     },
     {
         "label": "Stakeholder",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
         "isExtraImport": true,
@@ -2129,6 +2145,14 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceParser",
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "isExtraImport": true,
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
         "label": "SequenceMatcher",
         "importPath": "difflib",
         "description": "difflib",
@@ -2378,6 +2402,15 @@
         "description": "app.cli",
         "isExtraImport": true,
         "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
         "documentation": {}
     },
     {
@@ -3839,6 +3872,60 @@
         "documentation": {}
     },
     {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_metadata = \"\"\"            \"file_name\": resource.file_name,\n        }\"\"\"\nnew_metadata = \"\"\"            \"file_name\": resource.file_name,\n            \"release_changes_hash\": str(hash(str([c.model_dump() for c in datamart.release_changes]))),\n        }\"\"\"\nif old_metadata in content:\n    content = content.replace(old_metadata, new_metadata)",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
+        "label": "old_metadata",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "old_metadata = \"\"\"            \"file_name\": resource.file_name,\n        }\"\"\"\nnew_metadata = \"\"\"            \"file_name\": resource.file_name,\n            \"release_changes_hash\": str(hash(str([c.model_dump() for c in datamart.release_changes]))),\n        }\"\"\"\nif old_metadata in content:\n    content = content.replace(old_metadata, new_metadata)\n    with open(file_path, 'w') as f:\n        f.write(content)\n    print(\"Updated metadata_sync_service.py\")",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
+        "label": "new_metadata",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "new_metadata = \"\"\"            \"file_name\": resource.file_name,\n            \"release_changes_hash\": str(hash(str([c.model_dump() for c in datamart.release_changes]))),\n        }\"\"\"\nif old_metadata in content:\n    content = content.replace(old_metadata, new_metadata)\n    with open(file_path, 'w') as f:\n        f.write(content)\n    print(\"Updated metadata_sync_service.py\")\n# 2. Update incremental_updater.py\nfile_path = 'app/sync/incremental_updater.py'",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "file_path = 'app/sync/incremental_updater.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_updater = \"\"\"        if not content_changed:\n            self.state_repo.upsert(\n                resource_key=resource_key,\n                datamart_name=snapshot.datamart.name,\n                page_id=resource.page_id,\n                resource_type=resource.resource_type,\n                title=resource.title,",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
+        "label": "old_updater",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "old_updater = \"\"\"        if not content_changed:\n            self.state_repo.upsert(\n                resource_key=resource_key,\n                datamart_name=snapshot.datamart.name,\n                page_id=resource.page_id,\n                resource_type=resource.resource_type,\n                title=resource.title,\n                file_name=file_name,\n                url=url,\n                metadata=snapshot.metadata,",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
+        "label": "new_updater",
+        "kind": 5,
+        "importPath": "fix_sync",
+        "description": "fix_sync",
+        "peekOfCode": "new_updater = \"\"\"        if not content_changed:\n            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)\n            documents = self.indexer.update_datamart(snapshot.datamart, old_attrs)\n            self.state_repo.upsert(\n                resource_key=resource_key,\n                datamart_name=snapshot.datamart.name,\n                page_id=resource.page_id,\n                resource_type=resource.resource_type,\n                title=resource.title,\n                file_name=file_name,",
+        "detail": "fix_sync",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceParser",
         "kind": 6,
         "importPath": "parser_backup",
@@ -3917,6 +4004,33 @@
         "description": "parser_backup",
         "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()",
         "detail": "parser_backup",
+        "documentation": {}
+    },
+    {
+        "label": "MockJiraClient",
+        "kind": 6,
+        "importPath": "test_jira_parser",
+        "description": "test_jira_parser",
+        "peekOfCode": "class MockJiraClient:\n    def get_field_mapping(self):\n        return {}\n    def get_issue(self, issue_key):\n        return {\n            \"fields\": {\n                \"created\": \"2025-10-01T10:00:00.000+0300\"\n            },\n            \"changelog\": {\n                \"histories\": [",
+        "detail": "test_jira_parser",
+        "documentation": {}
+    },
+    {
+        "label": "parser",
+        "kind": 5,
+        "importPath": "test_jira_parser",
+        "description": "test_jira_parser",
+        "peekOfCode": "parser = ConfluenceParser(client=None, settings=None, jira_client=MockJiraClient())\nchange = ReleaseChange(jira_key=\"TEST-123\", change_type=\"ИЗМЕНЕНИЕ\")\nparser.enrich_release_changes([change])\nprint(f\"Created: {change.jira_created_at}\")\nprint(f\"Done: {change.jira_done_at}\")",
+        "detail": "test_jira_parser",
+        "documentation": {}
+    },
+    {
+        "label": "change",
+        "kind": 5,
+        "importPath": "test_jira_parser",
+        "description": "test_jira_parser",
+        "peekOfCode": "change = ReleaseChange(jira_key=\"TEST-123\", change_type=\"ИЗМЕНЕНИЕ\")\nparser.enrich_release_changes([change])\nprint(f\"Created: {change.jira_created_at}\")\nprint(f\"Done: {change.jira_done_at}\")",
+        "detail": "test_jira_parser",
         "documentation": {}
     }
 ]

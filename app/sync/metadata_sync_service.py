@@ -64,4 +64,5 @@ class MetadataSyncService:
             "resource_page_id": resource.page_id,
             "resource_updated_at": resource.updated_at.isoformat() if resource.updated_at else None,
             "file_name": resource.file_name,
+            "release_changes_hash": str(hash(str([c.model_dump() for c in datamart.release_changes]))),
         }
