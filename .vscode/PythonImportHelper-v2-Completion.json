@@ -625,6 +625,14 @@
         "documentation": {}
     },
     {
+        "label": "stable_hash",
+        "importPath": "app.utils.hashing",
+        "description": "app.utils.hashing",
+        "isExtraImport": true,
+        "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
         "label": "SQLite",
         "importPath": "app.storage.sqlite",
         "description": "app.storage.sqlite",

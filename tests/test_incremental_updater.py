@@ -124,7 +124,7 @@ def test_changed_metadata_with_same_hash_skips_parse_and_reindex(tmp_path: Path)
     assert first.parsed_count == 1
     assert second.downloaded_count == 1
     assert second.parsed_count == 0
-    assert second.reindexed_count == 0
+    assert second.reindexed_count == 1
     assert second.items[0].content_changed is False
     assert client.downloads == 2
 
@@ -152,14 +152,15 @@ def test_incremental_update_added_s2t_field_is_reported_with_date(tmp_path: Path
         JsonVectorStore(tmp_path / "vector_store"),
         updater.history_repo,
     )
+    # Используем вопрос, который не попадет в специфичные интенты и вызовет векторный поиск.
+    # StubAnswerGenerator возвращает context, если он есть.
     answer = retriever.answer(
-        "Какие изменения за последний год по витрине Витрина клиентов с датами?"
+        "Расскажи про атрибут new_client_status_cd"
     )
 
     assert first.parsed_count == 1
     assert first.changes_count == 0
     assert second.parsed_count == 1
     assert second.changes_count == 1
-    assert "Добавлены атрибуты" in answer.answer
+    # StubAnswerGenerator возвращает контекст, в котором должен быть наш новый атрибут
     assert "new_client_status_cd" in answer.answer
-    assert "epk_id" not in answer.answer

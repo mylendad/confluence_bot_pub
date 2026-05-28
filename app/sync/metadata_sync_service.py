@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from app.confluence.models import Datamart, S2TResource
 from app.confluence.parser import ConfluenceParser
 from app.sync.hash_service import HashService
+from app.utils.hashing import stable_hash
 
 
 @dataclass(frozen=True)
@@ -64,5 +65,5 @@ class MetadataSyncService:
             "resource_page_id": resource.page_id,
             "resource_updated_at": resource.updated_at.isoformat() if resource.updated_at else None,
             "file_name": resource.file_name,
-            "release_changes_hash": str(hash(str([c.model_dump(mode='json') for c in datamart.release_changes]))),
+            "release_changes_hash": stable_hash([c.model_dump(mode='json') for c in datamart.release_changes]),
         }

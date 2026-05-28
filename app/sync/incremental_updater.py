@@ -175,8 +175,6 @@ class IncrementalUpdater:
         previous_content_hash = previous.content_hash if previous else None
         content_changed = content_hash != previous_content_hash
         if not content_changed:
-            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
-            documents = self.indexer.update_datamart(snapshot.datamart, old_attrs)
             self.state_repo.upsert(
                 resource_key=resource_key,
                 datamart_name=snapshot.datamart.name,
@@ -191,6 +189,12 @@ class IncrementalUpdater:
                 synced=True,
                 updated_at=resource.updated_at,
             )
+            # Если поменялись только метаданные (например, стейкхолдеры), 
+            # мы обновляем метаданные в БД и переиндексируем документы RAG, 
+            # но не перепаршиваем сам файл.
+            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
+            self.indexer.update_datamart(snapshot.datamart, old_attrs)
+
             return IncrementalUpdateItem(
                 datamart_name=snapshot.datamart.name,
                 resource_key=resource_key,
