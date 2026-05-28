@@ -34,10 +34,10 @@ class MetadataRepository:
                     datamart.code,
                     datamart.confluence_page_id,
                     datamart.confluence_url,
-                    json.dumps([s.model_dump() for s in datamart.stakeholders], ensure_ascii=False),
-                    json.dumps([f.model_dump() for f in datamart.facts], ensure_ascii=False),
+                    json.dumps([s.model_dump(mode='json') for s in datamart.stakeholders], ensure_ascii=False),
+                    json.dumps([f.model_dump(mode='json') for f in datamart.facts], ensure_ascii=False),
                     json.dumps(
-                        [c.model_dump() for c in datamart.release_changes],
+                        [c.model_dump(mode='json') for c in datamart.release_changes],
                         ensure_ascii=False,
                     ),
                     datetime.utcnow().isoformat(),

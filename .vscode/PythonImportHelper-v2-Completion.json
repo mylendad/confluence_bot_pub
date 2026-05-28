@@ -4025,6 +4025,60 @@
     {
         "label": "file_path",
         "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "file_path = 'app/storage/metadata_repository.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# We need to change .model_dump() to .model_dump(mode=\"json\")\ncontent = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "content",
+        "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "content = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "content",
+        "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "content = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "content",
+        "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "content = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/sync/metadata_sync_service.py\")",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "content",
+        "kind": 5,
+        "importPath": "fix_json",
+        "description": "fix_json",
+        "peekOfCode": "content = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/sync/metadata_sync_service.py\")",
+        "detail": "fix_json",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
         "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Расширяем логику поиска даты завершения\nold_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",",

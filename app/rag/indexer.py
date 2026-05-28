@@ -81,7 +81,7 @@ class RAGIndexer:
             "datamart_name": attribute.datamart_name,
             "datamart_code": attribute.datamart_code,
             "owner": attribute.owner,
-            "stakeholders": [s.model_dump() for s in datamart.stakeholders] if datamart else [],
+            "stakeholders": [s.model_dump(mode="json") for s in datamart.stakeholders] if datamart else [],
             "source_type": "s2t",
             "confluence_page_id": datamart.confluence_page_id if datamart else None,
             "confluence_url": datamart.confluence_url if datamart else None,
@@ -165,7 +165,7 @@ class RAGIndexer:
             code=row.get("code"),
             confluence_page_id=row.get("confluence_page_id") or "",
             confluence_url=row.get("confluence_url") or "",
-            stakeholders=[],
+            stakeholders=json.loads(row.get("stakeholders_json") or "[]"),
             facts=json.loads(row.get("facts_json") or "[]"),
             release_changes=json.loads(row.get("release_changes_json") or "[]"),
         )
