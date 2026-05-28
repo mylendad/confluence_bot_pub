@@ -130,28 +130,53 @@ class ConfluenceParser:
                 except Exception:
                     logger.warning("Failed to parse Jira created date: %s", created)
 
-            tag = (change.change_type or "").upper()
-            if not tag:
-                continue
-
             changelog = issue.get("changelog", {})
             histories = changelog.get("histories", [])
+            # Сортируем истории: от новых к старым
             histories.sort(key=lambda x: x.get("created", ""), reverse=True)
 
-            found_value = None
+            # 1. Ищем дату перехода в "Сделан"
             for history in histories:
+                history_created = history.get("created")
                 for item in history.get("items", []):
-                    if (item.get("field") or "").upper() == tag:
-                        found_value = item.get("toString")
-                        break
-                if found_value:
+                    if (item.get("field") or "").lower() == "status":
+                        status_name = (item.get("toString") or "").lower()
+                        if status_name in {
+                            "сделан",
+                            "сделано",
+                            "done",
+                            "resolved",
+                            "решено",
+                            "закрыт",
+                            "closed",
+                        }:
+                            try:
+                                change.jira_done_at = datetime.fromisoformat(
+                                    history_created.replace("Z", "+00:00")
+                                )
+                                break
+                            except Exception:
+                                pass
+                if change.jira_done_at:
                     break
 
-            if not found_value and tag in field_mapping:
-                field_id = field_mapping[tag]
-                found_value = fields.get(field_id)
+            # 2. Ищем значение для конкретного типа изменения (если есть)
+            tag = (change.change_type or "").upper()
+            if tag:
+                found_value = None
+                for history in histories:
+                    for item in history.get("items", []):
+                        if (item.get("field") or "").upper() == tag:
+                            found_value = item.get("toString")
+                            break
+                    if found_value:
+                        break
 
-            change.jira_last_activity_value = found_value
+                if not found_value and tag in field_mapping:
+                    field_id = field_mapping[tag]
+                    found_value = fields.get(field_id)
+
+                change.jira_last_activity_value = found_value
 
     def extract_stakeholders(self, html: str) -> list[Stakeholder]:
         soup = BeautifulSoup(html, "html.parser")

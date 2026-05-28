@@ -2539,7 +2539,7 @@
         "kind": 6,
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
-        "peekOfCode": "class ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None\n    summary: str | None = None\n    status: str | None = None\n    source_url: str | None = None\n    jira_created_at: datetime | None = None\n    jira_last_activity_value: str | None = None",
+        "peekOfCode": "class ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None\n    summary: str | None = None\n    status: str | None = None\n    source_url: str | None = None\n    jira_created_at: datetime | None = None\n    jira_done_at: datetime | None = None",
         "detail": "app.confluence.models",
         "documentation": {}
     },

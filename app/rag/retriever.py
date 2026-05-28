@@ -305,15 +305,21 @@ class RAGRetriever:
         if not matching:
             return RAGAnswer(answer="Изменения в релизах для витрины не найдены.", sources=[])
 
-        # Sort by version/date descending
-        matching.sort(key=lambda x: x[1].get("version") or "", reverse=True)
+        # Sort by version/date descending. Try to use jira_done_at if version is not a date.
+        def sort_key(item):
+            _, c = item
+            v = c.get("version") or ""
+            d = c.get("jira_done_at") or ""
+            return v, d
+
+        matching.sort(key=sort_key, reverse=True)
 
         lines = ["Изменения в релизах (от новых к старым):"]
         for datamart, change in matching[:30]:
             version = change.get("version") or "Без версии"
             change_type = (change.get("change_type") or "изменение").upper()
             summary = change.get("summary") or change.get("jira_title") or "-"
-            
+
             jira_key = change.get("jira_key")
             jira_created = change.get("jira_created_at")
             if jira_created and isinstance(jira_created, str):
@@ -321,32 +327,47 @@ class RAGRetriever:
                     jira_created = datetime.fromisoformat(jira_created).date()
                 except Exception:
                     pass
-            
+
+            jira_done = change.get("jira_done_at")
+            if jira_done and isinstance(jira_done, str):
+                try:
+                    jira_done = datetime.fromisoformat(jira_done).date()
+                except Exception:
+                    pass
+
             jira_status = change.get("jira_last_activity_value") or change.get("status") or "-"
-            
+
             # Try to get jira_base_url from settings if available
             jira_base_url = "https://jira.example.ru"
             if hasattr(self.answer_generator, "settings"):
-                jira_base_url = getattr(self.answer_generator.settings, "jira_base_url", jira_base_url)
-            
+                jira_base_url = getattr(
+                    self.answer_generator.settings, "jira_base_url", jira_base_url
+                )
+
             jira_url = f"{jira_base_url.rstrip('/')}/browse/{jira_key}" if jira_key else None
             conf_url = change.get("source_url") or datamart.get("confluence_url")
-            
+
             parts = [
                 f"**Релиз {version}**",
                 f"- Тип: {change_type}",
                 f"- Суть: {summary}",
             ]
             if jira_key:
-                parts.append(f"- Задача Jira: [{jira_key}]({jira_url})" if jira_url else f"- Задача Jira: {jira_key}")
+                parts.append(
+                    f"- Задача Jira: [{jira_key}]({jira_url})"
+                    if jira_url
+                    else f"- Задача Jira: {jira_key}"
+                )
             if jira_created:
                 parts.append(f"- Создана в Jira: {jira_created}")
+            if jira_done:
+                parts.append(f"- Выполнена в Jira: {jira_done}")
             parts.append(f"- Статус/Результат (Jira): {jira_status}")
             parts.append(f"- Источник: [Confluence]({conf_url})")
-            
+
             lines.append("\n".join(parts))
-            lines.append("") # Spacer
-            
+            lines.append("")  # Spacer
+
         return RAGAnswer(
             answer="\n".join(lines),
             sources=[

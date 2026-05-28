@@ -27,6 +27,7 @@ class ReleaseChange(BaseModel):
     status: str | None = None
     source_url: str | None = None
     jira_created_at: datetime | None = None
+    jira_done_at: datetime | None = None
     jira_last_activity_value: str | None = None
 
 
