@@ -135,20 +135,11 @@ class ConfluenceParser:
             # Сортируем истории: от новых к старым
             histories.sort(key=lambda x: x.get("created", ""), reverse=True)
 
-            # 1. Ищем дату завершения (переход в "Сделан" или установка значения в поле типа изменения)
+            # 1. Ищем дату завершения (поле Status или Решение)
             tag = (change.change_type or "").lower()
             done_statuses = {
-                "сделан",
-                "сделано",
-                "done",
-                "resolved",
-                "решено",
-                "закрыт",
-                "closed",
-                "выполнено",
-                "выполнен",
-                "завершено",
-                "завершен",
+                "сделан", "сделано", "done", "resolved", "решено", "закрыт", "closed",
+                "выполнено", "выполнен", "завершено", "завершен", "готово", "готов"
             }
 
             for history in histories:
@@ -158,22 +149,22 @@ class ConfluenceParser:
                     field_name = (item.get("field") or "").lower()
                     status_name = (item.get("toString") or "").lower()
                     
-                    # Либо это системный статус "Сделан"
-                    if field_name == "status" and status_name in done_statuses:
-                        found_done_in_this_history = True
+                    # Проверяем системные поля (Status, Resolution/Решение) или поле-тег из Confluence
+                    is_done_field = field_name in {"status", "resolution", "решение"}
+                    is_tag_field = tag and field_name == tag
                     
-                    # Либо это наше поле-тег (например ИСПРАВЛЕНИЕ) получило значение "Сделан"
-                    elif tag and field_name == tag and status_name in done_statuses:
+                    if (is_done_field or is_tag_field) and status_name in done_statuses:
                         found_done_in_this_history = True
-                    
-                if found_done_in_this_history:
-                    try:
-                        change.jira_done_at = datetime.fromisoformat(
-                            history_created.replace("Z", "+00:00")
-                        )
                         break
-                    except Exception:
-                        pass
+                    
+                if found_done_in_this_history and history_created:
+                    try:
+                        # Jira присылает дату типа 2025-10-15T14:04:57.000+0300
+                        clean_date = history_created.replace("Z", "+00:00")
+                        change.jira_done_at = datetime.fromisoformat(clean_date)
+                        break
+                    except Exception as exc:
+                        logger.warning("Failed to parse Jira history date %s: %s", history_created, exc)
             
             # 2. Ищем значение для конкретного типа изменения (если есть)
             if tag:

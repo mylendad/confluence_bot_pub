@@ -441,6 +441,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "UTC",
         "importPath": "datetime",
         "description": "datetime",
@@ -3804,65 +3812,29 @@
         "documentation": {}
     },
     {
-        "label": "parser_path",
+        "label": "file_path",
         "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
-        "peekOfCode": "parser_path = \"app/confluence/parser.py\"\nwith open(parser_path) as f:\n    content = f.read()\n# 1. Update _release_page_from_link\nold_release_page = \"\"\"    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:\n        soup = BeautifulSoup(html, \"html.parser\")\n        for link in soup.find_all(\"a\"):\n            title = link.get_text(\" \", strip=True)\n            href = link.get(\"href\")\n            if not href or \"изменения в релизах\" not in normalize_text(title):",
+        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Расширяем логику поиска даты завершения\nold_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",",
         "detail": "fix_parser",
         "documentation": {}
     },
     {
-        "label": "old_release_page",
+        "label": "old_block",
         "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
-        "peekOfCode": "old_release_page = \"\"\"    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:\n        soup = BeautifulSoup(html, \"html.parser\")\n        for link in soup.find_all(\"a\"):\n            title = link.get_text(\" \", strip=True)\n            href = link.get(\"href\")\n            if not href or \"изменения в релизах\" not in normalize_text(title):\n                continue\n            page_id = self._page_id_from_url(href)\n            if not page_id:\n                continue",
+        "peekOfCode": "old_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",\n                \"resolved\",\n                \"решено\",\n                \"закрыт\",\n                \"closed\",",
         "detail": "fix_parser",
         "documentation": {}
     },
     {
-        "label": "new_release_page",
+        "label": "new_block",
         "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
-        "peekOfCode": "new_release_page = \"\"\"    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:\n        soup = BeautifulSoup(html, \"html.parser\")\n        for link in soup.find_all(\"a\"):\n            title = link.get_text(\" \", strip=True)\n            href = link.get(\"href\")\n            if not href:\n                continue\n            norm_title = normalize_text(title)\n            if not any(kw in norm_title for kw in [\"изменения в релизах\", \"журнал изменений\", \"список изменений\", \"история изменений\"]):\n                continue",
-        "detail": "fix_parser",
-        "documentation": {}
-    },
-    {
-        "label": "content",
-        "kind": 5,
-        "importPath": "fix_parser",
-        "description": "fix_parser",
-        "peekOfCode": "content = content.replace(old_release_page, new_release_page)\n# 2. Update parse_release_changes_page\nold_parse = \"\"\"    def parse_release_changes_page(\n        self, html: str, source_url: str | None = None\n    ) -> list[ReleaseChange]:\n        soup = BeautifulSoup(html, \"html.parser\")\n        content = soup.find(id=\"main-content\") or soup\n        changes: list[ReleaseChange] = []\n        current_version: str | None = None\n        pending_jira_key: str | None = None",
-        "detail": "fix_parser",
-        "documentation": {}
-    },
-    {
-        "label": "old_parse",
-        "kind": 5,
-        "importPath": "fix_parser",
-        "description": "fix_parser",
-        "peekOfCode": "old_parse = \"\"\"    def parse_release_changes_page(\n        self, html: str, source_url: str | None = None\n    ) -> list[ReleaseChange]:\n        soup = BeautifulSoup(html, \"html.parser\")\n        content = soup.find(id=\"main-content\") or soup\n        changes: list[ReleaseChange] = []\n        current_version: str | None = None\n        pending_jira_key: str | None = None\n        pending_jira_title: str | None = None\n        pending_status: str | None = None",
-        "detail": "fix_parser",
-        "documentation": {}
-    },
-    {
-        "label": "new_parse",
-        "kind": 5,
-        "importPath": "fix_parser",
-        "description": "fix_parser",
-        "peekOfCode": "new_parse = \"\"\"    def parse_release_changes_page(\n        self, html: str, source_url: str | None = None\n    ) -> list[ReleaseChange]:\n        soup = BeautifulSoup(html, \"html.parser\")\n        # In Confluence, main content might be nested deep inside layouts, columns, or macros\n        # So we search globally, not just at the top level\n        changes: list[ReleaseChange] = []\n        # We will iterate over all list items. For each list item, we look backwards to find the nearest header\n        # that looks like a version.\n        headers = soup.find_all([\"h1\", \"h2\", \"h3\", \"h4\", \"p\"])",
-        "detail": "fix_parser",
-        "documentation": {}
-    },
-    {
-        "label": "content",
-        "kind": 5,
-        "importPath": "fix_parser",
-        "description": "fix_parser",
-        "peekOfCode": "content = content.replace(old_parse, new_parse)\nwith open(parser_path, \"w\") as f:\n    f.write(content)\nprint(\"Applied deep parsing fixes via script\")",
+        "peekOfCode": "new_block = \"\"\"            # 1. Ищем дату завершения (поле Status или Решение)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\", \"сделано\", \"done\", \"resolved\", \"решено\", \"закрыт\", \"closed\",\n                \"выполнено\", \"выполнен\", \"завершено\", \"завершен\", \"готово\", \"готов\"\n            }\n            for history in histories:\n                history_created = history.get(\"created\")\n                found_done_in_this_history = False\n                for item in history.get(\"items\", []):",
         "detail": "fix_parser",
         "documentation": {}
     },
