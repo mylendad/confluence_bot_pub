@@ -851,6 +851,14 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
@@ -949,6 +957,14 @@
     },
     {
         "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
         "importPath": "app.config",
         "description": "app.config",
         "isExtraImport": true,
@@ -3842,6 +3858,114 @@
         "description": "tests.test_s2t_parser",
         "peekOfCode": "def test_parse_real_5_sheet_template() -> None:\n    path = Path(\"s2t_template_5_sheets_filled.xlsx\")\n    result = S2TParser().parse(path, \"Витрина клиентских операций\")\n    assert len(result.attributes) == 3\n    epk = result.attributes[0]\n    assert epk.datamart_code == \"DM_CLIENT_OPS\"\n    assert epk.target_schema == \"dds_dm\"\n    assert epk.target_table == \"dm_client_operations\"\n    assert epk.target_field == \"epk_id\"\n    assert epk.source_field == \"epk_id\"",
         "detail": "tests.test_s2t_parser",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "check_app_db",
+        "description": "check_app_db",
+        "peekOfCode": "conn = sqlite3.connect(\"data/app.db\")\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):",
+        "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "conn.row_factory",
+        "kind": 5,
+        "importPath": "check_app_db",
+        "description": "check_app_db",
+        "peekOfCode": "conn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")",
+        "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "cursor",
+        "kind": 5,
+        "importPath": "check_app_db",
+        "description": "check_app_db",
+        "peekOfCode": "cursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True",
+        "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "rows",
+        "kind": 5,
+        "importPath": "check_app_db",
+        "description": "check_app_db",
+        "peekOfCode": "rows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break",
+        "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "found_done",
+        "kind": 5,
+        "importPath": "check_app_db",
+        "description": "check_app_db",
+        "peekOfCode": "found_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break\n    if found_done:",
+        "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "settings = get_settings()\ndb_path = settings.sqlite_db_path\nif not Path(db_path).exists():\n    print(f\"Database not found at {db_path}\")\n    exit(1)\nconn = sqlite3.connect(db_path)\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "db_path",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "db_path = settings.sqlite_db_path\nif not Path(db_path).exists():\n    print(f\"Database not found at {db_path}\")\n    exit(1)\nconn = sqlite3.connect(db_path)\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "conn = sqlite3.connect(db_path)\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "conn.row_factory",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "conn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "cursor",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "cursor = conn.cursor()\nrows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "rows",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "rows = cursor.execute(\"SELECT name, release_changes_json FROM datamarts WHERE release_changes_json IS NOT NULL AND release_changes_json != '[]'\").fetchall()\nfound_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break",
+        "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "found_done",
+        "kind": 5,
+        "importPath": "check_db",
+        "description": "check_db",
+        "peekOfCode": "found_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break\n    if found_done:",
+        "detail": "check_db",
         "documentation": {}
     },
     {

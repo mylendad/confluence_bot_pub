@@ -30,13 +30,20 @@ class JiraClient:
         params = {"expand": "changelog"}
         try:
             response = self.client.get(url, params=params)
-            if response.status_code == 401:
-                logger.error("Jira authentication failed (401)")
+            if response.status_code != 200:
+                logger.error(
+                    "Jira API error for %s. Status: %s. Response: %s", 
+                    issue_key, 
+                    response.status_code, 
+                    response.text[:200]
+                )
                 return None
-            response.raise_for_status()
             return response.json()
+        except httpx.RequestError as exc:
+            logger.error("Jira network/request error for %s: %s", issue_key, exc)
+            return None
         except Exception as exc:
-            logger.warning("Failed to fetch Jira issue %s: %s", issue_key, exc)
+            logger.exception("Unexpected error fetching Jira issue %s: %s", issue_key, exc)
             return None
 
     @lru_cache(maxsize=1)
