@@ -135,45 +135,60 @@ class ConfluenceParser:
             # Сортируем истории: от новых к старым
             histories.sort(key=lambda x: x.get("created", ""), reverse=True)
 
-            # 1. Ищем дату перехода в "Сделан"
+            # 1. Ищем дату завершения (переход в "Сделан" или установка значения в поле типа изменения)
+            tag = (change.change_type or "").lower()
+            done_statuses = {
+                "сделан",
+                "сделано",
+                "done",
+                "resolved",
+                "решено",
+                "закрыт",
+                "closed",
+                "выполнено",
+                "выполнен",
+                "завершено",
+                "завершен",
+            }
+
             for history in histories:
                 history_created = history.get("created")
+                found_done_in_this_history = False
                 for item in history.get("items", []):
-                    if (item.get("field") or "").lower() == "status":
-                        status_name = (item.get("toString") or "").lower()
-                        if status_name in {
-                            "сделан",
-                            "сделано",
-                            "done",
-                            "resolved",
-                            "решено",
-                            "закрыт",
-                            "closed",
-                        }:
-                            try:
-                                change.jira_done_at = datetime.fromisoformat(
-                                    history_created.replace("Z", "+00:00")
-                                )
-                                break
-                            except Exception:
-                                pass
-                if change.jira_done_at:
-                    break
-
+                    field_name = (item.get("field") or "").lower()
+                    status_name = (item.get("toString") or "").lower()
+                    
+                    # Либо это системный статус "Сделан"
+                    if field_name == "status" and status_name in done_statuses:
+                        found_done_in_this_history = True
+                    
+                    # Либо это наше поле-тег (например ИСПРАВЛЕНИЕ) получило значение "Сделан"
+                    elif tag and field_name == tag and status_name in done_statuses:
+                        found_done_in_this_history = True
+                    
+                if found_done_in_this_history:
+                    try:
+                        change.jira_done_at = datetime.fromisoformat(
+                            history_created.replace("Z", "+00:00")
+                        )
+                        break
+                    except Exception:
+                        pass
+            
             # 2. Ищем значение для конкретного типа изменения (если есть)
-            tag = (change.change_type or "").upper()
             if tag:
+                tag_upper = tag.upper()
                 found_value = None
                 for history in histories:
                     for item in history.get("items", []):
-                        if (item.get("field") or "").upper() == tag:
+                        if (item.get("field") or "").upper() == tag_upper:
                             found_value = item.get("toString")
                             break
                     if found_value:
                         break
 
-                if not found_value and tag in field_mapping:
-                    field_id = field_mapping[tag]
+                if not found_value and tag_upper in field_mapping:
+                    field_id = field_mapping[tag_upper]
                     found_value = fields.get(field_id)
 
                 change.jira_last_activity_value = found_value

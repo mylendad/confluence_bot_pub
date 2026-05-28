@@ -136,6 +136,8 @@ class RAGIndexer:
             ]
             if change.jira_created_at:
                 text_parts.append(f"Создана в Jira: {change.jira_created_at.date()}")
+            if change.jira_done_at:
+                text_parts.append(f"Завершена в Jira: {change.jira_done_at.date()}")
             if change.jira_last_activity_value:
                 text_parts.append(f"Результат из Jira: {change.jira_last_activity_value}")
             
@@ -146,6 +148,7 @@ class RAGIndexer:
                 "version": change.version,
                 "jira_key": change.jira_key,
                 "jira_created_at": change.jira_created_at.isoformat() if change.jira_created_at else None,
+                "jira_done_at": change.jira_done_at.isoformat() if change.jira_done_at else None,
                 "jira_last_activity_value": change.jira_last_activity_value,
                 "change_type": change.change_type,
                 "source_url": change.source_url,
