@@ -3145,7 +3145,7 @@
         "kind": 2,
         "importPath": "app.cli",
         "description": "app.cli",
-        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\n    try:\n        parser = ConfluenceParser(ConfluenceClient(settings), settings, jira_client=jira_client)\n        result = parser.parse(dry_run=dry_run)\n    except (httpx.ConnectError, httpx.TimeoutException, ConfluenceError) as exc:",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\n        import logging\n        logging.getLogger(__name__).info(\"Initializing JiraClient...\")\n        jira_client = JiraClient(settings)\n    else:",
         "detail": "app.cli",
         "documentation": {}
     },
@@ -3971,6 +3971,60 @@
     {
         "label": "file_path",
         "kind": 5,
+        "importPath": "fix_cli",
+        "description": "fix_cli",
+        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Мы ищем место, где создается JiraClient в parse-confluence\nold_block = \"\"\"    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\"\"\"\nnew_block = \"\"\"    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):",
+        "detail": "fix_cli",
+        "documentation": {}
+    },
+    {
+        "label": "old_block",
+        "kind": 5,
+        "importPath": "fix_cli",
+        "description": "fix_cli",
+        "peekOfCode": "old_block = \"\"\"    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\"\"\"\nnew_block = \"\"\"    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\n        import logging\n        logging.getLogger(__name__).info(\"Initializing JiraClient...\")\n        jira_client = JiraClient(settings)\n    else:",
+        "detail": "fix_cli",
+        "documentation": {}
+    },
+    {
+        "label": "new_block",
+        "kind": 5,
+        "importPath": "fix_cli",
+        "description": "fix_cli",
+        "peekOfCode": "new_block = \"\"\"    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\n        import logging\n        logging.getLogger(__name__).info(\"Initializing JiraClient...\")\n        jira_client = JiraClient(settings)\n    else:\n        import logging\n        logging.getLogger(__name__).warning(\"Jira credentials not found in settings! jira_auth_token and (jira_username + jira_token) are missing.\")\"\"\"\nif old_block in content:",
+        "detail": "fix_cli",
+        "documentation": {}
+    },
+    {
+        "label": "old_block2",
+        "kind": 5,
+        "importPath": "fix_cli",
+        "description": "fix_cli",
+        "peekOfCode": "old_block2 = \"\"\"    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\"\"\"\n# Мы знаем, что блок встречается дважды, первый раз мы его уже заменили, \n# если используем .replace без count, то заменим все вхождения. Но так как \n# мы уже заменили первое, то ищем заново исходный файл.",
+        "detail": "fix_cli",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "fix_cli2",
+        "description": "fix_cli2",
+        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Фиксим все оставшиеся вхождения старой логики (в update_rag)\ncontent = re.sub(\n    r'jira_client = None\\s+if settings\\.jira_username and \\(settings\\.jira_token or settings\\.jira_api_token\\):\\s+jira_client = JiraClient\\(settings\\)',\n    r'jira_client = None\\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\\n        jira_client = JiraClient(settings)',\n    content\n)\nwith open(file_path, 'w') as f:",
+        "detail": "fix_cli2",
+        "documentation": {}
+    },
+    {
+        "label": "content",
+        "kind": 5,
+        "importPath": "fix_cli2",
+        "description": "fix_cli2",
+        "peekOfCode": "content = re.sub(\n    r'jira_client = None\\s+if settings\\.jira_username and \\(settings\\.jira_token or settings\\.jira_api_token\\):\\s+jira_client = JiraClient\\(settings\\)',\n    r'jira_client = None\\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\\n        jira_client = JiraClient(settings)',\n    content\n)\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/cli.py (update_rag)\")",
+        "detail": "fix_cli2",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
         "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Расширяем логику поиска даты завершения\nold_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",",
@@ -3993,6 +4047,33 @@
         "description": "fix_parser",
         "peekOfCode": "new_block = \"\"\"            # 1. Ищем дату завершения (поле Status или Решение)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\", \"сделано\", \"done\", \"resolved\", \"решено\", \"закрыт\", \"closed\",\n                \"выполнено\", \"выполнен\", \"завершено\", \"завершен\", \"готово\", \"готов\"\n            }\n            for history in histories:\n                history_created = history.get(\"created\")\n                found_done_in_this_history = False\n                for item in history.get(\"items\", []):",
         "detail": "fix_parser",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "fix_parser_debug",
+        "description": "fix_parser_debug",
+        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        for change in changes:\n            if not change.jira_key:\n                continue\"\"\"",
+        "detail": "fix_parser_debug",
+        "documentation": {}
+    },
+    {
+        "label": "old_block",
+        "kind": 5,
+        "importPath": "fix_parser_debug",
+        "description": "fix_parser_debug",
+        "peekOfCode": "old_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        for change in changes:\n            if not change.jira_key:\n                continue\"\"\"\nnew_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            logger.warning(\"JiraClient is None. Skipping Jira enrichment.\")",
+        "detail": "fix_parser_debug",
+        "documentation": {}
+    },
+    {
+        "label": "new_block",
+        "kind": 5,
+        "importPath": "fix_parser_debug",
+        "description": "fix_parser_debug",
+        "peekOfCode": "new_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            logger.warning(\"JiraClient is None. Skipping Jira enrichment.\")\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        logger.info(f\"Enriching {len(changes)} release changes with Jira data...\")\n        for change in changes:\n            if not change.jira_key:\n                continue\n            logger.info(f\"Fetching Jira issue: {change.jira_key}\")\"\"\"",
+        "detail": "fix_parser_debug",
         "documentation": {}
     },
     {

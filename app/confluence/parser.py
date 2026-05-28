@@ -114,11 +114,14 @@ class ConfluenceParser:
 
     def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:
         if not self.jira_client:
+            logger.warning("JiraClient is None. Skipping Jira enrichment.")
             return
         field_mapping = self.jira_client.get_field_mapping()
+        logger.info(f"Enriching {len(changes)} release changes with Jira data...")
         for change in changes:
             if not change.jira_key:
                 continue
+            logger.info(f"Fetching Jira issue: {change.jira_key}")
             issue = self.jira_client.get_issue(change.jira_key)
             if not issue:
                 continue
