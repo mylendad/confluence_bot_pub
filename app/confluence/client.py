@@ -224,13 +224,13 @@ class ConfluenceClient:
             raise ConfluenceError("Attachment download URL is absent")
         try:
             return self.download(url)
-        except ConfluenceAuthError as exc:
+        except (ConfluenceAuthError, ConfluenceError) as exc:
             if not resource.page_id or not resource.id:
                 raise
             return self._download_attachment_via_rest(resource.page_id, resource.id, exc)
 
     def _download_attachment_via_rest(
-        self, page_id: str, attachment_id: str, original_error: ConfluenceAuthError
+        self, page_id: str, attachment_id: str, original_error: Exception
     ) -> bytes:
         url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
         logger.info("Downloading from URL (REST fallback): %s", url)
