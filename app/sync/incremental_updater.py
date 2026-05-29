@@ -271,11 +271,13 @@ class IncrementalUpdater:
             changes_detected=len(changes),
         )
 
-    def _write_raw_file(self, resource_key: str, file_name: str | None, content: bytes) -> Path:
+    def _write_raw_file(self, datamart_name: str, file_name: str | None, content: bytes) -> Path:
         raw_dir = self.data_dir / "raw"
         raw_dir.mkdir(parents=True, exist_ok=True)
-        safe_name = self._safe_file_name(file_name or resource_key)
-        key_hash = self.hash_service.stable_metadata_hash({"key": resource_key})[:12]
+        safe_name = self._safe_file_name(file_name or "s2t.bin")
+        # Use datamart_name and file_name to generate a stable, predictable hash for the filename
+        # This prevents the RAG context from losing files because the generated key changed.
+        key_hash = self.hash_service.stable_metadata_hash({"datamart": datamart_name, "file": safe_name})[:12]
         path = raw_dir / f"{key_hash}_{safe_name}"
         path.write_bytes(content)
         return path

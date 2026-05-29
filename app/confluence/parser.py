@@ -586,14 +586,15 @@ class ConfluenceParser:
             logger.warning("S2T resource was not found")
             return None
 
-        def key(item: S2TResource) -> tuple[int, datetime, int]:
+        def key(item: S2TResource) -> tuple[int, int, datetime, int]:
+            has_download = 1 if item.download_url else 0
             priority = 1 if item.resource_type == "table_latest_row" else 0
             if item.file_date:
                 dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:
                 dt = self._comparable_datetime(item.updated_at)
             row_number = item.version or 0
-            return priority, dt, row_number
+            return has_download, priority, dt, row_number
 
         selected = max(candidates, key=key)
         if not selected.file_date and selected.resource_type != "table_latest_row":
@@ -695,9 +696,11 @@ class ConfluenceParser:
         row_number: int,
         file_date=None,
     ) -> S2TResource:
+        import urllib.parse
+        encoded_name = urllib.parse.quote(file_name)
         return S2TResource(
             title=file_name,
-            url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{file_name}"),
+            url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{encoded_name}"),
             file_name=file_name,
             resource_type=resource_type,
             file_date=file_date,
