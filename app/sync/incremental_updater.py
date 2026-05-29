@@ -154,6 +154,22 @@ class IncrementalUpdater:
                 will_reindex=True,
             )
 
+        # Check if we can skip download based on version/id
+        # If attachment ID and version are same as before, content must be same.
+        can_skip_download = False
+        if previous and previous.content_hash:
+            old_id = previous.metadata.get("attachment_id")
+            new_id = snapshot.metadata.get("attachment_id")
+            old_ver = previous.metadata.get("attachment_version_number")
+            new_ver = snapshot.metadata.get("attachment_version_number")
+            
+            if old_id and old_id == new_id and old_ver == new_ver:
+                logger.info(
+                    "Skipping download for %s: attachment version %s is unchanged",
+                    resource_key, new_ver
+                )
+                can_skip_download = True
+
         url = resource.download_url or resource.url
         if not url:
             return IncrementalUpdateItem(
@@ -167,13 +183,21 @@ class IncrementalUpdater:
                 will_reindex=False,
             )
 
-        if hasattr(self.confluence_client, "download_resource"):
-            content = self.confluence_client.download_resource(resource)
+        if can_skip_download:
+            content_hash = previous.content_hash
+            content_changed = False
+            actually_downloaded = False
+            content = b"" # Not used if content_changed is False
         else:
-            content = self.confluence_client.download(url)
-        content_hash = self.hash_service.sha256_bytes(content)
-        previous_content_hash = previous.content_hash if previous else None
-        content_changed = content_hash != previous_content_hash
+            if hasattr(self.confluence_client, "download_resource"):
+                content = self.confluence_client.download_resource(resource)
+            else:
+                content = self.confluence_client.download(url)
+            content_hash = self.hash_service.sha256_bytes(content)
+            previous_content_hash = previous.content_hash if previous else None
+            content_changed = content_hash != previous_content_hash
+            actually_downloaded = True
+
         if not content_changed:
             self.state_repo.upsert(
                 resource_key=resource_key,
@@ -201,7 +225,7 @@ class IncrementalUpdater:
                 file_name=file_name,
                 metadata_changed=True,
                 reasons=[*decision.reasons, "content hash unchanged but metadata updated"],
-                will_download=True,
+                will_download=actually_downloaded,
                 will_parse=False,
                 will_reindex=True,
                 content_changed=False,

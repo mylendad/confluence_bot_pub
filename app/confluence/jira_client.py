@@ -56,6 +56,7 @@ class JiraClient:
 
         return response
 
+    @lru_cache(maxsize=1024)
     def get_issue(self, issue_key: str) -> dict | None:
         url = f"{self.base_url}/rest/api/2/issue/{issue_key}"
         params = {"expand": "changelog"}

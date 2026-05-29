@@ -288,6 +288,8 @@ class ConfluenceParser:
 
         current_version = "Неизвестная версия"
         current_jira_keys = []
+        current_jira_titles = {} # Map key -> title
+        current_status = None
 
         # Перебираем ВСЕ элементы на странице последовательно
         for node in soup.find_all(["h1", "h2", "h3", "h4", "p", "ul", "ol"]):
@@ -303,12 +305,26 @@ class ConfluenceParser:
                 ):
                     current_version = text
                     current_jira_keys = []  # Сбрасываем контекст задачи для новой версии
+                    current_jira_titles = {}
+                    current_status = None
                     continue
 
-            # 2. Ищем ключи Jira в текущем узле (параграфе или заголовке)
+            # 2. Ищем ключи Jira и статусы в текущем узле (параграфе или заголовке)
             node_keys = self._jira_keys_from_node(node)
             if node_keys:
                 current_jira_keys = node_keys
+                # Собираем заголовки
+                for key in node_keys:
+                    issue_node = node.find(attrs={"data-jira-key": key})
+                    if issue_node:
+                        title = self._jira_title_from_node(issue_node)
+                        if title:
+                            current_jira_titles[key] = title
+                
+                # Собираем статус, если он есть в узле
+                node_status = self._jira_status_from_node(node)
+                if node_status:
+                    current_status = node_status
 
             # 3. Если это список изменений
             if node.name in ["ul", "ol"]:
@@ -319,8 +335,19 @@ class ConfluenceParser:
                     if not item_keys:
                         continue
 
+                    # Если ключи в самом li, собираем заголовки и оттуда
+                    for key in self._jira_keys_from_node(item):
+                        issue_node = item.find(attrs={"data-jira-key": key})
+                        if issue_node:
+                            title = self._jira_title_from_node(issue_node)
+                            if title:
+                                current_jira_titles[key] = title
+
                     change_type = self._release_change_type(item)
                     summary = self._release_summary(item, change_type)
+                    
+                    # Статус в li имеет приоритет над статусом в p
+                    item_status = self._jira_status_from_node(item) or current_status
 
                     # Фильтр шаблонов
                     if summary and ("[" in summary and "]" in summary):
@@ -331,9 +358,10 @@ class ConfluenceParser:
                             ReleaseChange(
                                 version=current_version,
                                 jira_key=key,
+                                jira_title=current_jira_titles.get(key),
                                 change_type=change_type,
                                 summary=summary,
-                                status=self._jira_status_from_node(item),
+                                status=item_status,
                                 source_url=source_url,
                             )
                         )

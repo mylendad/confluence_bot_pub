@@ -19,7 +19,16 @@ class IntentClassifier:
             and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id"])
         ):
             return "datamart_list"
-        # Приоритет для "Изменений в релизах" согласно инструкции
+
+        # "Изменения за период/год/даты" -> структурированная история (из БД)
+        if "измен" in q and any(
+            word in q for word in ["период", "дата", "датам", "история", "год", "текущ"]
+        ):
+            # Но если прямо упомянут "релиз", то все же Confluence
+            if "релиз" not in q:
+                return "last_year_changes"
+
+        # Приоритет для "Изменений в релизах" (Confluence)
         if "релиз" in q or ("измен" in q and any(word in q for word in ["год", "последн"])):
             return "release_changes"
 
@@ -52,8 +61,6 @@ class IntentClassifier:
             if "витрин" in q:
                 return "datamart_fact"
             return "owner_lookup"
-        if "измен" in q and any(word in q for word in ["период", "дата", "история"]):
-            return "last_year_changes"
         if "атрибутный состав" in q or "какие атрибут" in q:
             return "attribute_composition"
         if ("в каких витринах" in q or "где есть" in q) and any(

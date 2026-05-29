@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import UTC
 
 from app.confluence.models import Datamart, S2TResource
 from app.confluence.parser import ConfluenceParser
@@ -39,31 +40,31 @@ class MetadataSyncService:
 
     @staticmethod
     def _metadata(datamart: Datamart, resource: S2TResource) -> dict:
+        def fmt_dt(dt) -> str | None:
+            if not dt:
+                return None
+            # Normalize to UTC and remove microseconds for stable hashing
+            if dt.tzinfo:
+                dt = dt.astimezone(UTC)
+            return dt.replace(microsecond=0).isoformat()
+
         return {
             "datamart_name": datamart.name,
             "datamart_page_id": datamart.confluence_page_id,
             "datamart_page_version": datamart.page_version,
-            "datamart_page_version_when": datamart.page_version_when.isoformat()
-            if datamart.page_version_when
-            else None,
-            "datamart_page_last_modified": datamart.page_last_modified.isoformat()
-            if datamart.page_last_modified
-            else None,
-            "datamart_page_history_last_updated": datamart.page_history_last_updated.isoformat()
-            if datamart.page_history_last_updated
-            else None,
+            "datamart_page_version_when": fmt_dt(datamart.page_version_when),
+            "datamart_page_last_modified": fmt_dt(datamart.page_last_modified),
+            "datamart_page_history_last_updated": fmt_dt(datamart.page_history_last_updated),
             "attachment_id": resource.id,
             "attachment_title": resource.title,
             "attachment_version_number": resource.version,
-            "attachment_version_when": resource.version_when.isoformat()
-            if resource.version_when
-            else None,
+            "attachment_version_when": fmt_dt(resource.version_when),
             "attachment_file_size": resource.file_size,
             "download_url": resource.download_url or resource.url,
             "media_type": resource.media_type,
             "resource_type": resource.resource_type,
             "resource_page_id": resource.page_id,
-            "resource_updated_at": resource.updated_at.isoformat() if resource.updated_at else None,
+            "resource_updated_at": fmt_dt(resource.updated_at),
             "file_name": resource.file_name,
             "release_changes_hash": stable_hash([c.model_dump(mode='json') for c in datamart.release_changes]),
         }

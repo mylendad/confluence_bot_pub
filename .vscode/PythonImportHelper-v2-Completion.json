@@ -377,6 +377,14 @@
         "documentation": {}
     },
     {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "date",
         "importPath": "datetime",
         "description": "datetime",
@@ -2838,7 +2846,7 @@
         "kind": 6,
         "importPath": "app.rag.retriever",
         "description": "app.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\", \"epk_id\", \"_id\"])\n        ):\n            return \"datamart_list\"\n        # Приоритет для \"Изменений в релизах\" согласно инструкции",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\", \"epk_id\", \"_id\"])\n        ):\n            return \"datamart_list\"\n        # \"Изменения за период/год/даты\" -> структурированная история (из БД)",
         "detail": "app.rag.retriever",
         "documentation": {}
     },
@@ -3974,6 +3982,51 @@
         "description": "check_db",
         "peekOfCode": "found_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break\n    if found_done:",
         "detail": "check_db",
+        "documentation": {}
+    },
+    {
+        "label": "db_path",
+        "kind": 5,
+        "importPath": "check_db_state",
+        "description": "check_db_state",
+        "peekOfCode": "db_path = \"data/confluence.db\"\nconn = sqlite3.connect(db_path)\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nprint(\"--- Table Info ---\")\nfor row in cursor.execute(\"PRAGMA table_info(s2t_state)\"):\n    print(dict(row))\nprint(\"\\n--- Current Data (top 1) ---\")\nrow = cursor.execute(\"SELECT * FROM s2t_state LIMIT 1\").fetchone()\nif row:",
+        "detail": "check_db_state",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "check_db_state",
+        "description": "check_db_state",
+        "peekOfCode": "conn = sqlite3.connect(db_path)\nconn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nprint(\"--- Table Info ---\")\nfor row in cursor.execute(\"PRAGMA table_info(s2t_state)\"):\n    print(dict(row))\nprint(\"\\n--- Current Data (top 1) ---\")\nrow = cursor.execute(\"SELECT * FROM s2t_state LIMIT 1\").fetchone()\nif row:\n    d = dict(row)",
+        "detail": "check_db_state",
+        "documentation": {}
+    },
+    {
+        "label": "conn.row_factory",
+        "kind": 5,
+        "importPath": "check_db_state",
+        "description": "check_db_state",
+        "peekOfCode": "conn.row_factory = sqlite3.Row\ncursor = conn.cursor()\nprint(\"--- Table Info ---\")\nfor row in cursor.execute(\"PRAGMA table_info(s2t_state)\"):\n    print(dict(row))\nprint(\"\\n--- Current Data (top 1) ---\")\nrow = cursor.execute(\"SELECT * FROM s2t_state LIMIT 1\").fetchone()\nif row:\n    d = dict(row)\n    # Truncate long fields",
+        "detail": "check_db_state",
+        "documentation": {}
+    },
+    {
+        "label": "cursor",
+        "kind": 5,
+        "importPath": "check_db_state",
+        "description": "check_db_state",
+        "peekOfCode": "cursor = conn.cursor()\nprint(\"--- Table Info ---\")\nfor row in cursor.execute(\"PRAGMA table_info(s2t_state)\"):\n    print(dict(row))\nprint(\"\\n--- Current Data (top 1) ---\")\nrow = cursor.execute(\"SELECT * FROM s2t_state LIMIT 1\").fetchone()\nif row:\n    d = dict(row)\n    # Truncate long fields\n    if \"metadata_json\" in d: d[\"metadata_json\"] = d[\"metadata_json\"][:100] + \"...\"",
+        "detail": "check_db_state",
+        "documentation": {}
+    },
+    {
+        "label": "row",
+        "kind": 5,
+        "importPath": "check_db_state",
+        "description": "check_db_state",
+        "peekOfCode": "row = cursor.execute(\"SELECT * FROM s2t_state LIMIT 1\").fetchone()\nif row:\n    d = dict(row)\n    # Truncate long fields\n    if \"metadata_json\" in d: d[\"metadata_json\"] = d[\"metadata_json\"][:100] + \"...\"\n    print(d)\nelse:\n    print(\"No data in s2t_state\")\nconn.close()",
+        "detail": "check_db_state",
         "documentation": {}
     },
     {
