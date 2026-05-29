@@ -190,7 +190,7 @@ class IncrementalUpdater:
             content = b"" # Not used if content_changed is False
         else:
             if hasattr(self.confluence_client, "download_resource"):
-                content = self.confluence_client.download_resource(resource)
+                content = self.confluence_client.download_resource(resource, datamart_page_id=snapshot.datamart.confluence_page_id)
             else:
                 content = self.confluence_client.download(url)
             content_hash = self.hash_service.sha256_bytes(content)

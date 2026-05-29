@@ -218,33 +218,50 @@ class ConfluenceClient:
             raise ConfluenceError(f"Attachment download failed: {response.status_code}")
         return response.content
 
-    def download_resource(self, resource: S2TResource) -> bytes:
+    def download_resource(self, resource: S2TResource, datamart_page_id: str | None = None) -> bytes:
         url = resource.download_url or resource.url
         if not url:
             raise ConfluenceError("Attachment download URL is absent")
         try:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
-            if not resource.page_id:
+            if not resource.page_id and not datamart_page_id:
                 raise
             
             attachment_id = resource.id
-            if not attachment_id:
-                # If we don't have the ID (e.g. parsed from a raw link), try to fetch it
-                try:
-                    logger.info("Fetching attachment ID for fallback: %s", resource.file_name)
-                    attachments = self.get_attachments(resource.page_id)
-                    for att in attachments:
-                        if att.file_name == resource.file_name or att.title == resource.title:
-                            attachment_id = att.id
-                            break
-                except Exception as lookup_exc:
-                    logger.warning("Failed to lookup attachment ID: %s", lookup_exc)
+            found_page_id = resource.page_id
             
             if not attachment_id:
+                # Try to fetch from the immediate sub-page
+                if resource.page_id:
+                    try:
+                        logger.info("Fetching attachment ID from resource page %s for fallback: %s", resource.page_id, resource.file_name)
+                        attachments = self.get_attachments(resource.page_id)
+                        for att in attachments:
+                            if att.file_name == resource.file_name or att.title == resource.title:
+                                attachment_id = att.id
+                                found_page_id = resource.page_id
+                                break
+                    except Exception as lookup_exc:
+                        logger.warning("Failed to lookup attachment ID on resource page: %s", lookup_exc)
+                
+                # If still not found and we have a datamart page, try the main datamart page
+                if not attachment_id and datamart_page_id and datamart_page_id != resource.page_id:
+                    try:
+                        logger.info("Fetching attachment ID from datamart page %s for fallback: %s", datamart_page_id, resource.file_name)
+                        attachments = self.get_attachments(datamart_page_id)
+                        for att in attachments:
+                            if att.file_name == resource.file_name or att.title == resource.title:
+                                attachment_id = att.id
+                                found_page_id = datamart_page_id
+                                break
+                    except Exception as lookup_exc:
+                        logger.warning("Failed to lookup attachment ID on datamart page: %s", lookup_exc)
+            
+            if not attachment_id or not found_page_id:
                 raise
                 
-            return self._download_attachment_via_rest(resource.page_id, attachment_id, exc)
+            return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
 
     def _download_attachment_via_rest(
         self, page_id: str, attachment_id: str, original_error: Exception
