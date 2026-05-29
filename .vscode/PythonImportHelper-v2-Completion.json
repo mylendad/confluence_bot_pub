@@ -3090,7 +3090,7 @@
         "kind": 6,
         "importPath": "app.sync.state_comparator",
         "description": "app.sync.state_comparator",
-        "peekOfCode": "class StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:\n            return MetadataDecision(changed=False, reasons=[\"metadata unchanged\"])\n        reasons = []\n        old_metadata = previous.metadata",
+        "peekOfCode": "class StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:\n            return MetadataDecision(changed=False, reasons=[\"metadata unchanged\"])\n        reasons = []\n        old_metadata = previous.metadata or {}",
         "detail": "app.sync.state_comparator",
         "documentation": {}
     },
