@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+import urllib.parse
 from collections.abc import Iterable
 from datetime import datetime
 from functools import lru_cache
@@ -231,6 +232,12 @@ class ConfluenceClient:
             attachment_id = resource.id
             found_page_id = resource.page_id
             
+            def compare_names(n1, n2):
+                if not n1 or not n2: return False
+                n1 = urllib.parse.unquote(n1).replace("+", " ").strip()
+                n2 = urllib.parse.unquote(n2).replace("+", " ").strip()
+                return n1 == n2
+
             if not attachment_id:
                 # Try to fetch from the immediate sub-page
                 if resource.page_id:
@@ -238,9 +245,10 @@ class ConfluenceClient:
                         logger.info("Fetching attachment ID from resource page %s for fallback: %s", resource.page_id, resource.file_name)
                         attachments = self.get_attachments(resource.page_id)
                         for att in attachments:
-                            if att.file_name == resource.file_name or att.title == resource.title:
+                            if compare_names(att.file_name, resource.file_name) or compare_names(att.title, resource.title):
                                 attachment_id = att.id
                                 found_page_id = resource.page_id
+                                logger.info("Found attachment ID %s on resource page.", attachment_id)
                                 break
                     except Exception as lookup_exc:
                         logger.warning("Failed to lookup attachment ID on resource page: %s", lookup_exc)
@@ -251,15 +259,16 @@ class ConfluenceClient:
                         logger.info("Fetching attachment ID from datamart page %s for fallback: %s", datamart_page_id, resource.file_name)
                         attachments = self.get_attachments(datamart_page_id)
                         for att in attachments:
-                            if att.file_name == resource.file_name or att.title == resource.title:
+                            if compare_names(att.file_name, resource.file_name) or compare_names(att.title, resource.title):
                                 attachment_id = att.id
                                 found_page_id = datamart_page_id
+                                logger.info("Found attachment ID %s on datamart page.", attachment_id)
                                 break
                     except Exception as lookup_exc:
                         logger.warning("Failed to lookup attachment ID on datamart page: %s", lookup_exc)
             
             if not attachment_id or not found_page_id:
-                raise
+                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' on pages {resource.page_id} or {datamart_page_id} to perform REST fallback.") from exc
                 
             return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
 
