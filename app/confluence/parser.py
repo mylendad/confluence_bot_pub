@@ -71,14 +71,14 @@ class ConfluenceParser:
         self.settings = settings
         self.jira_client = jira_client
 
-    def parse(self, dry_run: bool = False) -> ParseResult:
+    def parse(self, dry_run: bool = False, skip_jira: bool = False) -> ParseResult:
         result = ParseResult()
         pattern = normalize_text(self.settings.datamart_page_pattern)
         for page in self.client.iter_top_level_pages():
             if pattern not in normalize_text(page.title):
                 continue
             logger.info("Found datamart page %s", page.title)
-            datamart = self.parse_datamart_page(page)
+            datamart = self.parse_datamart_page(page, skip_jira=skip_jira)
             logger.info(
                 "Parsed datamart=%s stakeholders=%s release_changes=%s s2t=%s",
                 datamart.name,
@@ -89,12 +89,12 @@ class ConfluenceParser:
             result.datamarts.append(datamart)
         return result
 
-    def parse_datamart_page(self, page: ConfluencePage) -> Datamart:
+    def parse_datamart_page(self, page: ConfluencePage, skip_jira: bool = False) -> Datamart:
         html = page.body_html or ""
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
         release_changes = self.extract_release_changes(page, html)
-        if self.jira_client:
+        if self.jira_client and not skip_jira:
             self.enrich_release_changes(release_changes)
         candidates = self.find_s2t_candidates(page)
         selected = self.choose_latest_s2t(candidates)

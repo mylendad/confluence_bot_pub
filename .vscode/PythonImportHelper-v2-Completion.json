@@ -3080,7 +3080,7 @@
         "kind": 6,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "class MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:\n        result = self.parser.parse(dry_run=True)\n        snapshots: list[S2TMetadataSnapshot] = []\n        for datamart in result.datamarts:\n            if not datamart.s2t_resource:\n                continue",
+        "peekOfCode": "class MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:\n        # При сборе метаданных (Discovery) пропускаем тяжелое обогащение данными из Jira.\n        # Это ускоряет первичный опрос в десятки раз.\n        result = self.parser.parse(dry_run=True, skip_jira=True)\n        snapshots: list[S2TMetadataSnapshot] = []\n        for datamart in result.datamarts:",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },

@@ -21,7 +21,9 @@ class MetadataSyncService:
         self.hash_service = hash_service or HashService()
 
     def collect(self) -> list[S2TMetadataSnapshot]:
-        result = self.parser.parse(dry_run=True)
+        # При сборе метаданных (Discovery) пропускаем тяжелое обогащение данными из Jira.
+        # Это ускоряет первичный опрос в десятки раз.
+        result = self.parser.parse(dry_run=True, skip_jira=True)
         snapshots: list[S2TMetadataSnapshot] = []
         for datamart in result.datamarts:
             if not datamart.s2t_resource:
@@ -48,6 +50,18 @@ class MetadataSyncService:
                 dt = dt.astimezone(UTC)
             return dt.replace(microsecond=0).isoformat()
 
+        # Для хэша изменений в релизах используем только стабильные данные из Confluence,
+        # чтобы изменения в Jira (статус, даты) не триггерили полную переиндексацию RAG.
+        stable_release_changes = [
+            {
+                "version": c.version,
+                "jira_key": c.jira_key,
+                "change_type": c.change_type,
+                "summary": c.summary,
+            }
+            for c in datamart.release_changes
+        ]
+
         return {
             "datamart_name": datamart.name,
             "datamart_page_id": datamart.confluence_page_id,
@@ -66,5 +80,5 @@ class MetadataSyncService:
             "resource_page_id": resource.page_id,
             "resource_updated_at": fmt_dt(resource.updated_at),
             "file_name": resource.file_name,
-            "release_changes_hash": stable_hash([c.model_dump(mode='json') for c in datamart.release_changes]),
+            "release_changes_hash": stable_hash(stable_release_changes),
         }
