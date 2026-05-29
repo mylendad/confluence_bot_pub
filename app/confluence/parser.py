@@ -696,11 +696,9 @@ class ConfluenceParser:
         row_number: int,
         file_date=None,
     ) -> S2TResource:
-        import urllib.parse
-        encoded_name = urllib.parse.quote(file_name)
         return S2TResource(
             title=file_name,
-            url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{encoded_name}"),
+            url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{file_name}"),
             file_name=file_name,
             resource_type=resource_type,
             file_date=file_date,
