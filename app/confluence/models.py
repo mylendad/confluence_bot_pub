@@ -60,7 +60,10 @@ class S2TResource(BaseModel):
 
     @property
     def resource_key(self) -> str:
-        return self.id or self.download_url or self.url or f"{self.page_id}:{self.file_name}"
+        # Включаем page_id в ключ, чтобы один и тот же файл на разных страницах 
+        # считался разными ресурсами и не вызывал коллизий метаданных.
+        base_key = self.id or self.download_url or self.url or self.file_name
+        return f"{self.page_id}:{base_key}" if self.page_id else base_key
 
 
 class Datamart(BaseModel):

@@ -30,12 +30,26 @@ class MetadataSyncService:
                 continue
             resource = datamart.s2t_resource
             metadata = self._metadata(datamart, resource)
+            
+            # Для хэша используем только те поля, которые влияют на контент в RAG.
+            # Мы исключаем технические версии и даты изменения страниц из Confluence,
+            # так как любое сохранение страницы (даже без изменения смысла) меняет версию.
+            hash_metadata = {
+                "datamart_name": metadata["datamart_name"],
+                "datamart_page_id": metadata["datamart_page_id"],
+                "attachment_id": metadata["attachment_id"],
+                "attachment_version_number": metadata["attachment_version_number"],
+                "release_changes_hash": metadata["release_changes_hash"],
+                "stakeholders_hash": metadata["stakeholders_hash"],
+                "facts_hash": metadata["facts_hash"],
+            }
+            
             snapshots.append(
                 S2TMetadataSnapshot(
                     datamart=datamart,
                     resource=resource,
                     metadata=metadata,
-                    metadata_hash=self.hash_service.stable_metadata_hash(metadata),
+                    metadata_hash=self.hash_service.stable_metadata_hash(hash_metadata),
                 )
             )
         return snapshots
@@ -81,4 +95,6 @@ class MetadataSyncService:
             "resource_updated_at": fmt_dt(resource.updated_at),
             "file_name": resource.file_name,
             "release_changes_hash": stable_hash(stable_release_changes),
+            "stakeholders_hash": stable_hash([s.model_dump() for s in datamart.stakeholders]),
+            "facts_hash": stable_hash([f.model_dump() for f in datamart.facts]),
         }

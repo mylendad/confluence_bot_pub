@@ -3,6 +3,7 @@ import logging
 import time
 from collections.abc import Iterable
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 
 import httpx
@@ -53,6 +54,9 @@ class ConfluenceClient:
             timeout=30,
             verify=settings.confluence_verify_ssl,
         )
+        self._cache_get_page = {}
+        self._cache_get_children = {}
+        self._cache_get_attachments = {}
 
     @staticmethod
     def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str]]:
@@ -139,18 +143,26 @@ class ConfluenceClient:
             )
 
     def get_page(self, page_id: str) -> ConfluencePage:
+        if page_id in self._cache_get_page:
+            return self._cache_get_page[page_id]
         payload = self._get(
             f"/rest/api/content/{page_id}",
             {"expand": "body.storage,version,history.lastUpdated,_links"},
         )
-        return self._page_from_payload(payload)
+        page = self._page_from_payload(payload)
+        self._cache_get_page[page_id] = page
+        return page
 
     def get_children(self, page_id: str) -> list[ConfluencePage]:
+        if page_id in self._cache_get_children:
+            return self._cache_get_children[page_id]
         payload = self._get(
             f"/rest/api/content/{page_id}/child/page",
             {"expand": "body.storage,version,history.lastUpdated,_links", "limit": 100},
         )
-        return [self._page_from_payload(item) for item in payload.get("results", [])]
+        children = [self._page_from_payload(item) for item in payload.get("results", [])]
+        self._cache_get_children[page_id] = children
+        return children
 
     def search_pages(self, cql: str) -> list[ConfluencePage]:
         payload = self._get(
@@ -160,6 +172,8 @@ class ConfluenceClient:
         return [self._page_from_payload(item) for item in payload.get("results", [])]
 
     def get_attachments(self, page_id: str) -> list[S2TResource]:
+        if page_id in self._cache_get_attachments:
+            return self._cache_get_attachments[page_id]
         payload = self._get(
             f"/rest/api/content/{page_id}/child/attachment",
             {"expand": "version,metadata,_links", "limit": 100},
@@ -191,6 +205,7 @@ class ConfluenceClient:
                     page_id=page_id,
                 )
             )
+        self._cache_get_attachments[page_id] = resources
         return resources
 
     def download(self, url: str) -> bytes:

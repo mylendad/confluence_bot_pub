@@ -233,12 +233,15 @@ class ConfluenceParser:
         release_page = self._find_release_page_recursive(page, depth=0, visited=set())
         if not release_page or not release_page.body_html:
             return []
-        return self.parse_release_changes_page(release_page.body_html, release_page.url)
+        changes = self.parse_release_changes_page(release_page.body_html, release_page.url)
+        # Сортируем изменения для стабильного хэширования
+        changes.sort(key=lambda x: (x.version or "", x.jira_key or ""))
+        return changes
 
     def _find_release_page_recursive(
         self, page: ConfluencePage, depth: int, visited: set[str]
     ) -> ConfluencePage | None:
-        if page.id in visited or depth > 3:
+        if page.id in visited or depth > 1:
             return None
         visited.add(page.id)
 
@@ -374,7 +377,7 @@ class ConfluenceParser:
     def _find_s2t_recursive(
         self, page: ConfluencePage, depth: int, visited: set[str]
     ) -> list[S2TResource]:
-        if page.id in visited or depth > 5:
+        if page.id in visited or depth > 2:  # Уменьшаем глубину до 2
             return []
         visited.add(page.id)
 
