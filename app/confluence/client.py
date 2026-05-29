@@ -225,9 +225,26 @@ class ConfluenceClient:
         try:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
-            if not resource.page_id or not resource.id:
+            if not resource.page_id:
                 raise
-            return self._download_attachment_via_rest(resource.page_id, resource.id, exc)
+            
+            attachment_id = resource.id
+            if not attachment_id:
+                # If we don't have the ID (e.g. parsed from a raw link), try to fetch it
+                try:
+                    logger.info("Fetching attachment ID for fallback: %s", resource.file_name)
+                    attachments = self.get_attachments(resource.page_id)
+                    for att in attachments:
+                        if att.file_name == resource.file_name or att.title == resource.title:
+                            attachment_id = att.id
+                            break
+                except Exception as lookup_exc:
+                    logger.warning("Failed to lookup attachment ID: %s", lookup_exc)
+            
+            if not attachment_id:
+                raise
+                
+            return self._download_attachment_via_rest(resource.page_id, attachment_id, exc)
 
     def _download_attachment_via_rest(
         self, page_id: str, attachment_id: str, original_error: Exception
