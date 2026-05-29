@@ -1012,6 +1012,14 @@
         "documentation": {}
     },
     {
+        "label": "get_settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
         "label": "Settings",
         "importPath": "app.config",
         "description": "app.config",
@@ -1442,6 +1450,14 @@
         "description": "bs4",
         "isExtraImport": true,
         "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
         "documentation": {}
     },
     {
@@ -2453,12 +2469,12 @@
         "documentation": {}
     },
     {
-        "label": "inspect",
+        "label": "os",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "inspect",
-        "description": "inspect",
-        "detail": "inspect",
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
         "documentation": {}
     },
     {
@@ -2468,6 +2484,15 @@
         "importPath": "asyncio",
         "description": "asyncio",
         "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "inspect",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "inspect",
+        "description": "inspect",
+        "detail": "inspect",
         "documentation": {}
     },
     {
@@ -3944,6 +3969,24 @@
         "description": "check_app_db",
         "peekOfCode": "found_done = False\nprint(f\"Found {len(rows)} datamarts with release changes.\")\nfor row in rows:\n    changes = json.loads(row[\"release_changes_json\"])\n    for change in changes:\n        if change.get(\"jira_done_at\"):\n            print(f\"Datamart: {row['name']} | Jira: {change.get('jira_key')} | Done At: {change.get('jira_done_at')}\")\n            found_done = True\n            break\n    if found_done:",
         "detail": "check_app_db",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "check_attachments",
+        "description": "check_attachments",
+        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nprint(f\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")",
+        "detail": "check_attachments",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "check_attachments",
+        "description": "check_attachments",
+        "peekOfCode": "client = ConfluenceClient(settings)\nprint(f\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")\nexcept Exception as e:",
+        "detail": "check_attachments",
         "documentation": {}
     },
     {
