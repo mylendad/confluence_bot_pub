@@ -2193,6 +2193,14 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceParser",
+        "importPath": "app.confluence.parser",
+        "description": "app.confluence.parser",
+        "isExtraImport": true,
+        "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
         "label": "SequenceMatcher",
         "importPath": "difflib",
         "description": "difflib",
@@ -2442,6 +2450,15 @@
         "description": "app.cli",
         "isExtraImport": true,
         "detail": "app.cli",
+        "documentation": {}
+    },
+    {
+        "label": "inspect",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "inspect",
+        "description": "inspect",
+        "detail": "inspect",
         "documentation": {}
     },
     {
@@ -3079,7 +3096,7 @@
         "kind": 6,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\nclass MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:",
+        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.\n        # To avoid state collisions between datamarts sharing the same file,\n        # we prefix the resource key with the datamart's own page ID.",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },

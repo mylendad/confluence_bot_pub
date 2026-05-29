@@ -110,7 +110,7 @@ class IncrementalUpdater:
         self, snapshot: S2TMetadataSnapshot, dry_run: bool
     ) -> IncrementalUpdateItem:
         resource = snapshot.resource
-        resource_key = resource.resource_key
+        resource_key = snapshot.unique_key
         previous = self.state_repo.get(resource_key)
         decision = self.comparator.compare(previous, snapshot.metadata_hash, snapshot.metadata)
         file_name = resource.file_name or resource.title

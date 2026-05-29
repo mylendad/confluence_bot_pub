@@ -57,11 +57,10 @@ class S2TResource(BaseModel):
     download_url: str | None = None
     media_type: str | None = None
     page_id: str | None = None
-
+    # We will compute a unique key dynamically in the sync service or during processing
+    # but as a fallback property we can use the ID and page ID of the resource itself.
     @property
     def resource_key(self) -> str:
-        # Включаем page_id в ключ, чтобы один и тот же файл на разных страницах 
-        # считался разными ресурсами и не вызывал коллизий метаданных.
         base_key = self.id or self.download_url or self.url or self.file_name
         return f"{self.page_id}:{base_key}" if self.page_id else base_key
 

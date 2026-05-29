@@ -13,6 +13,14 @@ class S2TMetadataSnapshot:
     resource: S2TResource
     metadata: dict
     metadata_hash: str
+    
+    @property
+    def unique_key(self) -> str:
+        # A datamart can link to an attachment on another page.
+        # To avoid state collisions between datamarts sharing the same file,
+        # we prefix the resource key with the datamart's own page ID.
+        base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name
+        return f"{self.datamart.confluence_page_id}:{base_key}"
 
 
 class MetadataSyncService:
