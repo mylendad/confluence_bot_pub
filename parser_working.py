@@ -71,14 +71,14 @@ class ConfluenceParser:
         self.settings = settings
         self.jira_client = jira_client
 
-    def parse(self, dry_run: bool = False, skip_jira: bool = False) -> ParseResult:
+    def parse(self, dry_run: bool = False) -> ParseResult:
         result = ParseResult()
         pattern = normalize_text(self.settings.datamart_page_pattern)
         for page in self.client.iter_top_level_pages():
             if pattern not in normalize_text(page.title):
                 continue
             logger.info("Found datamart page %s", page.title)
-            datamart = self.parse_datamart_page(page, skip_jira=skip_jira)
+            datamart = self.parse_datamart_page(page)
             logger.info(
                 "Parsed datamart=%s stakeholders=%s release_changes=%s s2t=%s",
                 datamart.name,
@@ -89,12 +89,12 @@ class ConfluenceParser:
             result.datamarts.append(datamart)
         return result
 
-    def parse_datamart_page(self, page: ConfluencePage, skip_jira: bool = False) -> Datamart:
+    def parse_datamart_page(self, page: ConfluencePage) -> Datamart:
         html = page.body_html or ""
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
         release_changes = self.extract_release_changes(page, html)
-        if self.jira_client and not skip_jira:
+        if self.jira_client:
             self.enrich_release_changes(release_changes)
         candidates = self.find_s2t_candidates(page)
         selected = self.choose_latest_s2t(candidates)
@@ -233,10 +233,7 @@ class ConfluenceParser:
         release_page = self._find_release_page_recursive(page, depth=0, visited=set())
         if not release_page or not release_page.body_html:
             return []
-        changes = self.parse_release_changes_page(release_page.body_html, release_page.url)
-        # Сортируем изменения для стабильного хэширования
-        changes.sort(key=lambda x: (x.version or "", x.jira_key or ""))
-        return changes
+        return self.parse_release_changes_page(release_page.body_html, release_page.url)
 
     def _find_release_page_recursive(
         self, page: ConfluencePage, depth: int, visited: set[str]
@@ -291,8 +288,6 @@ class ConfluenceParser:
 
         current_version = "Неизвестная версия"
         current_jira_keys = []
-        current_jira_titles = {} # Map key -> title
-        current_status = None
 
         # Перебираем ВСЕ элементы на странице последовательно
         for node in soup.find_all(["h1", "h2", "h3", "h4", "p", "ul", "ol"]):
@@ -308,26 +303,12 @@ class ConfluenceParser:
                 ):
                     current_version = text
                     current_jira_keys = []  # Сбрасываем контекст задачи для новой версии
-                    current_jira_titles = {}
-                    current_status = None
                     continue
 
-            # 2. Ищем ключи Jira и статусы в текущем узле (параграфе или заголовке)
+            # 2. Ищем ключи Jira в текущем узле (параграфе или заголовке)
             node_keys = self._jira_keys_from_node(node)
             if node_keys:
                 current_jira_keys = node_keys
-                # Собираем заголовки
-                for key in node_keys:
-                    issue_node = node.find(attrs={"data-jira-key": key})
-                    if issue_node:
-                        title = self._jira_title_from_node(issue_node)
-                        if title:
-                            current_jira_titles[key] = title
-                
-                # Собираем статус, если он есть в узле
-                node_status = self._jira_status_from_node(node)
-                if node_status:
-                    current_status = node_status
 
             # 3. Если это список изменений
             if node.name in ["ul", "ol"]:
@@ -338,19 +319,8 @@ class ConfluenceParser:
                     if not item_keys:
                         continue
 
-                    # Если ключи в самом li, собираем заголовки и оттуда
-                    for key in self._jira_keys_from_node(item):
-                        issue_node = item.find(attrs={"data-jira-key": key})
-                        if issue_node:
-                            title = self._jira_title_from_node(issue_node)
-                            if title:
-                                current_jira_titles[key] = title
-
                     change_type = self._release_change_type(item)
                     summary = self._release_summary(item, change_type)
-                    
-                    # Статус в li имеет приоритет над статусом в p
-                    item_status = self._jira_status_from_node(item) or current_status
 
                     # Фильтр шаблонов
                     if summary and ("[" in summary and "]" in summary):
@@ -361,10 +331,9 @@ class ConfluenceParser:
                             ReleaseChange(
                                 version=current_version,
                                 jira_key=key,
-                                jira_title=current_jira_titles.get(key),
                                 change_type=change_type,
                                 summary=summary,
-                                status=item_status,
+                                status=self._jira_status_from_node(item),
                                 source_url=source_url,
                             )
                         )
@@ -586,15 +555,14 @@ class ConfluenceParser:
             logger.warning("S2T resource was not found")
             return None
 
-        def key(item: S2TResource) -> tuple[int, int, datetime, int]:
-            has_download = 1 if item.download_url else 0
+        def key(item: S2TResource) -> tuple[int, datetime, int]:
             priority = 1 if item.resource_type == "table_latest_row" else 0
             if item.file_date:
                 dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:
                 dt = self._comparable_datetime(item.updated_at)
             row_number = item.version or 0
-            return has_download, priority, dt, row_number
+            return priority, dt, row_number
 
         selected = max(candidates, key=key)
         if not selected.file_date and selected.resource_type != "table_latest_row":

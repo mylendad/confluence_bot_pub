@@ -88,9 +88,9 @@ class IncrementalUpdater:
             try:
                 item = self._process_snapshot(snapshot, dry_run=dry_run)
                 items.append(item)
-            except (ConfluenceError, ConfluenceAuthError) as exc:
+            except Exception as exc:
                 logger.error(
-                    "Failed to process datamart %s: %s", snapshot.datamart.name, exc
+                    "Failed to process datamart %s: %s", snapshot.datamart.name, exc, exc_info=True
                 )
                 items.append(
                     IncrementalUpdateItem(

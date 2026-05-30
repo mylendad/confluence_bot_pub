@@ -473,6 +473,22 @@
         "documentation": {}
     },
     {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -836,6 +852,30 @@
         "documentation": {}
     },
     {
+        "label": "parse_qs",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "unquote",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "urlparse",
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "isExtraImport": true,
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
         "label": "Iterable",
         "importPath": "collections.abc",
         "description": "collections.abc",
@@ -849,150 +889,6 @@
         "description": "collections.abc",
         "isExtraImport": true,
         "detail": "collections.abc",
-        "documentation": {}
-    },
-    {
-        "label": "lru_cache",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "lru_cache",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "lru_cache",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -1125,6 +1021,14 @@
         "documentation": {}
     },
     {
+        "label": "Settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceAuthError",
         "importPath": "app.confluence.exceptions",
         "description": "app.confluence.exceptions",
@@ -1405,6 +1309,62 @@
         "documentation": {}
     },
     {
+        "label": "ConfluencePage",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFact",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ParseResult",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Stakeholder",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
         "label": "ReleaseChange",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
@@ -1434,6 +1394,30 @@
         "description": "app.confluence.urls",
         "isExtraImport": true,
         "detail": "app.confluence.urls",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "importPath": "app.confluence.urls",
+        "description": "app.confluence.urls",
+        "isExtraImport": true,
+        "detail": "app.confluence.urls",
+        "documentation": {}
+    },
+    {
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -1462,6 +1446,22 @@
         "documentation": {}
     },
     {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceClient",
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
@@ -1534,6 +1534,22 @@
         "documentation": {}
     },
     {
+        "label": "JiraClient",
+        "importPath": "app.confluence.jira_client",
+        "description": "app.confluence.jira_client",
+        "isExtraImport": true,
+        "detail": "app.confluence.jira_client",
+        "documentation": {}
+    },
+    {
+        "label": "parse_date_from_text",
+        "importPath": "app.utils.date_utils",
+        "description": "app.utils.date_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.date_utils",
+        "documentation": {}
+    },
+    {
         "label": "parse_date_from_text",
         "importPath": "app.utils.date_utils",
         "description": "app.utils.date_utils",
@@ -1583,6 +1599,22 @@
     },
     {
         "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "fuzzy_contains",
         "importPath": "app.utils.text_utils",
         "description": "app.utils.text_utils",
         "isExtraImport": true,
@@ -1876,6 +1908,118 @@
         "description": "app.rag.llm",
         "isExtraImport": true,
         "detail": "app.rag.llm",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -2599,7 +2743,7 @@
         "kind": 6,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_file:\n            try:\n                cookie_path = Path(settings.confluence_cookie_file)",
+        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings) -> None:\n        self.settings = settings\n        self.http = httpx.Client(\n            auth=(settings.confluence_username, settings.confluence_api_token),\n            timeout=httpx.Timeout(30.0, connect=60.0),\n        )\n        self._cache_get_page: dict[str, ConfluencePage] = {}\n        self._cache_get_attachments: dict[str, list[S2TResource]] = {}\n    def _request(self, method: str, path: str, **kwargs) -> httpx.Response:",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -2608,7 +2752,7 @@
         "kind": 5,
         "importPath": "app.confluence.client",
         "description": "app.confluence.client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_file:\n            try:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings) -> None:\n        self.settings = settings\n        self.http = httpx.Client(\n            auth=(settings.confluence_username, settings.confluence_api_token),\n            timeout=httpx.Timeout(30.0, connect=60.0),\n        )\n        self._cache_get_page: dict[str, ConfluencePage] = {}\n        self._cache_get_attachments: dict[str, list[S2TResource]] = {}",
         "detail": "app.confluence.client",
         "documentation": {}
     },
@@ -4401,6 +4545,87 @@
         "description": "parser_backup",
         "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(self, client: ConfluenceClient, settings: Settings) -> None:\n        self.client = client\n        self.settings = settings\n    def parse(self, dry_run: bool = False) -> ParseResult:\n        result = ParseResult()",
         "detail": "parser_backup",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceParser",
+        "kind": 6,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "class ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,\n    ) -> None:\n        self.client = client\n        self.settings = settings\n        self.jira_client = jira_client",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nOWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "OWNER_LABELS",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "OWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_RE",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "SUPPORTED_S2T_SUFFIXES",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "LATEST_MARKERS",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "FACT_ALIASES",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "FACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],\n    \"db_name\": [\"имя витрины в бд\", \"витрина в бд\", \"название витрины в бд\"],",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "JIRA_KEY_RE",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,",
+        "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "PLACEHOLDER_TEXTS",
+        "kind": 5,
+        "importPath": "parser_working",
+        "description": "parser_working",
+        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
+        "detail": "parser_working",
         "documentation": {}
     },
     {

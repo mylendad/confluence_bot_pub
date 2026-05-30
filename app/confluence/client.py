@@ -4,8 +4,6 @@ import time
 import urllib.parse
 from collections.abc import Iterable
 from datetime import datetime
-from functools import lru_cache
-from pathlib import Path
 
 import httpx
 
@@ -18,105 +16,25 @@ logger = logging.getLogger(__name__)
 
 
 class ConfluenceClient:
-    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:
+    def __init__(self, settings: Settings) -> None:
         self.settings = settings
-        auth, headers = self._auth_config(settings)
-
-        headers = headers or {}
-        if settings.confluence_user_agent:
-            headers["User-Agent"] = settings.confluence_user_agent
-        if settings.confluence_cookie_file:
-            try:
-                cookie_path = Path(settings.confluence_cookie_file)
-                if cookie_path.is_file():
-                    headers["Cookie"] = cookie_path.read_text().strip()
-                else:
-                    logger.warning("Cookie file not found at: %s", cookie_path)
-            except Exception as exc:
-                logger.error(
-                    "Failed to read cookie file %s: %s", settings.confluence_cookie_file, exc
-                )
-
-        if settings.confluence_extra_headers:
-            try:
-                extra_headers = json.loads(settings.confluence_extra_headers)
-                headers.update(extra_headers)
-            except json.JSONDecodeError:
-                logger.error(
-                    "Failed to parse CONFLUENCE_EXTRA_HEADERS as JSON: %s",
-                    settings.confluence_extra_headers,
-                )
-
-        logger.info("Initializing httpx.Client with headers: %s", headers)
-        self._client = client or httpx.Client(
-            base_url=settings.confluence_base_url,
-            auth=auth,
-            headers=headers,
-            timeout=30,
-            verify=settings.confluence_verify_ssl,
+        self.http = httpx.Client(
+            auth=(settings.confluence_username, settings.confluence_api_token),
+            timeout=httpx.Timeout(30.0, connect=60.0),
         )
-        self._cache_get_page = {}
-        self._cache_get_children = {}
-        self._cache_get_attachments = {}
-
-    @staticmethod
-    def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str]]:
-        auth_type = settings.confluence_auth_type.lower().strip()
-        token = settings.confluence_auth_token
-        username = settings.confluence_username
-        headers: dict[str, str] = {"Accept": "application/json"}
-
-        if token and not token.isascii():
-            raise ConfluenceAuthError(
-                "CONFLUENCE_TOKEN/CONFLUENCE_API_TOKEN must contain only ASCII characters. "
-                "Check .env: the token may still be a placeholder or copied with extra text."
-            )
-
-        if auth_type in {"bearer", "pat", "token"}:
-            if token:
-                headers["Authorization"] = f"Bearer {token}"
-            return None, headers
-
-        if auth_type == "basic":
-            return (username, token) if username and token else None, headers
-
-        if username and token:
-            return (username, token), headers
-        if token:
-            headers["Authorization"] = f"Bearer {token}"
-        return None, headers
+        self._cache_get_page: dict[str, ConfluencePage] = {}
+        self._cache_get_attachments: dict[str, list[S2TResource]] = {}
 
     def _request(self, method: str, path: str, **kwargs) -> httpx.Response:
-        if self.settings.confluence_request_delay > 0:
-            time.sleep(self.settings.confluence_request_delay)
+        url = confluence_urljoin(self.settings.confluence_base_url, path)
+        try:
+            response = self.http.request(method, url, **kwargs)
+            return response
+        except httpx.HTTPError as exc:
+            logger.error("HTTP request failed: %s %s: %s", method, url, exc)
+            raise ConfluenceError(f"HTTP request failed: {exc}")
 
-        max_retries = 5
-        for attempt in range(max_retries):
-            try:
-                response = self._client.request(method, path, **kwargs)
-                if response.status_code == 429:
-                    retry_after = int(response.headers.get("Retry-After", 2**attempt))
-                    logger.warning(
-                        "Rate limited (429) on %s. Retrying after %ds (attempt %d/%d)...",
-                        path,
-                        retry_after,
-                        attempt + 1,
-                        max_retries,
-                    )
-                    time.sleep(retry_after)
-                    continue
-                return response
-            except httpx.RequestError as exc:
-                if attempt == max_retries - 1:
-                    raise
-                wait = 2**attempt
-                logger.warning("Request error %s. Retrying after %ds...", exc, wait)
-                time.sleep(wait)
-
-        return response
-
-    def _get(self, path: str, params: dict[str, str | int] | None = None) -> dict:
-        logger.info("Making GET request to %s", path)
+    def _get(self, path: str, params: dict | None = None) -> dict:
         response = self._request("GET", path, params=params)
 
         if response.status_code in {401, 403}:
@@ -148,33 +66,43 @@ class ConfluenceClient:
             return self._cache_get_page[page_id]
         payload = self._get(
             f"/rest/api/content/{page_id}",
-            {"expand": "body.storage,version,history.lastUpdated,_links"},
+            {"expand": "body.storage,version,history.lastUpdated"},
         )
         page = self._page_from_payload(payload)
         self._cache_get_page[page_id] = page
         return page
 
+    def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
+        limit = 50
+        start = 0
+        while True:
+            payload = self._get(
+                "/rest/api/content/search",
+                {
+                    "cql": cql,
+                    "expand": "body.storage,version,history.lastUpdated",
+                    "limit": limit,
+                    "start": start,
+                },
+            )
+            results = payload.get("results", [])
+            for item in results:
+                yield self._page_from_payload(item)
+            if len(results) < limit:
+                break
+            start += limit
+
     def get_children(self, page_id: str) -> list[ConfluencePage]:
-        if page_id in self._cache_get_children:
-            return self._cache_get_children[page_id]
         payload = self._get(
             f"/rest/api/content/{page_id}/child/page",
-            {"expand": "body.storage,version,history.lastUpdated,_links", "limit": 100},
-        )
-        children = [self._page_from_payload(item) for item in payload.get("results", [])]
-        self._cache_get_children[page_id] = children
-        return children
-
-    def search_pages(self, cql: str) -> list[ConfluencePage]:
-        payload = self._get(
-            "/rest/api/content/search",
-            {"cql": cql, "expand": "body.storage,version,history.lastUpdated,_links"},
+            {"expand": "body.storage,version,history.lastUpdated", "limit": 100},
         )
         return [self._page_from_payload(item) for item in payload.get("results", [])]
 
     def get_attachments(self, page_id: str) -> list[S2TResource]:
         if page_id in self._cache_get_attachments:
             return self._cache_get_attachments[page_id]
+
         payload = self._get(
             f"/rest/api/content/{page_id}/child/attachment",
             {"expand": "version,metadata,_links", "limit": 100},
@@ -226,46 +154,43 @@ class ConfluenceClient:
         try:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
+            logger.warning("Direct download failed for %s, trying REST fallback. Error: %s", resource.file_name, exc)
             if not resource.page_id and not datamart_page_id:
                 raise
             
             attachment_id = resource.id
             found_page_id = resource.page_id
             
-            def compare_names(n1, n2):
-                if not n1 or not n2: return False
-                n1 = urllib.parse.unquote(n1).replace("+", " ").strip()
-                n2 = urllib.parse.unquote(n2).replace("+", " ").strip()
-                return n1 == n2
+            def normalize_name(name):
+                if not name: return ""
+                # Unquote and replace both + and %20 with space for fuzzy comparison
+                # But ALSO keep the original for exact match
+                u = urllib.parse.unquote(name).strip().lower()
+                return [u, u.replace("+", " ")]
 
             if not attachment_id:
                 # Try to fetch from the immediate sub-page
-                if resource.page_id:
-                    try:
-                        logger.info("Fetching attachment ID from resource page %s for fallback: %s", resource.page_id, resource.file_name)
-                        attachments = self.get_attachments(resource.page_id)
-                        for att in attachments:
-                            if compare_names(att.file_name, resource.file_name) or compare_names(att.title, resource.title):
-                                attachment_id = att.id
-                                found_page_id = resource.page_id
-                                logger.info("Found attachment ID %s on resource page.", attachment_id)
-                                break
-                    except Exception as lookup_exc:
-                        logger.warning("Failed to lookup attachment ID on resource page: %s", lookup_exc)
+                pages_to_check = []
+                if resource.page_id: pages_to_check.append(resource.page_id)
+                if datamart_page_id and datamart_page_id != resource.page_id:
+                    pages_to_check.append(datamart_page_id)
+
+                target_names = normalize_name(resource.file_name) + normalize_name(resource.title)
                 
-                # If still not found and we have a datamart page, try the main datamart page
-                if not attachment_id and datamart_page_id and datamart_page_id != resource.page_id:
+                for pid in pages_to_check:
                     try:
-                        logger.info("Fetching attachment ID from datamart page %s for fallback: %s", datamart_page_id, resource.file_name)
-                        attachments = self.get_attachments(datamart_page_id)
+                        logger.info("Fetching attachments from page %s to find ID for %s", pid, resource.file_name)
+                        attachments = self.get_attachments(pid)
                         for att in attachments:
-                            if compare_names(att.file_name, resource.file_name) or compare_names(att.title, resource.title):
+                            att_names = normalize_name(att.file_name) + normalize_name(att.title)
+                            if any(tn in att_names for tn in target_names):
                                 attachment_id = att.id
-                                found_page_id = datamart_page_id
-                                logger.info("Found attachment ID %s on datamart page.", attachment_id)
+                                found_page_id = pid
+                                logger.info("Found attachment ID %s on page %s.", attachment_id, pid)
                                 break
+                        if attachment_id: break
                     except Exception as lookup_exc:
-                        logger.warning("Failed to lookup attachment ID on datamart page: %s", lookup_exc)
+                        logger.warning("Failed to lookup attachments on page %s: %s", pid, lookup_exc)
             
             if not attachment_id or not found_page_id:
                 raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' on pages {resource.page_id} or {datamart_page_id} to perform REST fallback.") from exc
