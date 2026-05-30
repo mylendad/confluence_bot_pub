@@ -124,11 +124,6 @@ class ConfluenceClient:
         return response.json()
 
     def _validate_download_response(self, response: httpx.Response, original_url: str):
-        logger.info(
-            "Validating download response. final_url=%s, status_code=%s",
-            response.url,
-            response.status_code,
-        )
         if "login.action" in str(response.url):
             raise ConfluenceAuthError(
                 f"Attachment download redirected to login page, check permissions for: "
@@ -141,16 +136,47 @@ class ConfluenceClient:
                 f"Expected a file download, but received HTML content from: {original_url}"
             )
 
-    def get_page(self, page_id: str) -> ConfluencePage:
-        if page_id in self._cache_get_page:
+    def get_page(self, page_id: str, expand: str = "body.storage,version,history.lastUpdated") -> ConfluencePage:
+        # We only cache if we fetched the full content
+        is_full = "body.storage" in expand
+        if is_full and page_id in self._cache_get_page:
             return self._cache_get_page[page_id]
+            
         payload = self._get(
             f"/rest/api/content/{page_id}",
-            {"expand": "body.storage,version,history.lastUpdated"},
+            {"expand": expand},
         )
         page = self._page_from_payload(payload)
-        self._cache_get_page[page_id] = page
+        if is_full:
+            self._cache_get_page[page_id] = page
         return page
+
+    def get_pages_metadata_bulk(self, page_ids: list[str]) -> dict[str, ConfluencePage]:
+        """Fetch metadata (version, title) for multiple pages in one call using CQL."""
+        if not page_ids:
+            return {}
+            
+        results: dict[str, ConfluencePage] = {}
+        # Batch by 50 to avoid URL length limits
+        for i in range(0, len(page_ids), 50):
+            batch = page_ids[i:i+50]
+            cql = f"id in ({','.join(batch)})"
+            payload = self._get(
+                "/rest/api/content/search",
+                {
+                    "cql": cql,
+                    "expand": "version,history.lastUpdated",
+                    "limit": len(batch),
+                },
+            )
+            for item in payload.get("results", []):
+                page = self._page_from_payload(item)
+                results[page.id] = page
+                # If we only need version, we don't overwrite full cache if it exists
+                if page.id not in self._cache_get_page:
+                    # We don't mark it as "full" cache because body.storage is missing
+                    pass 
+        return results
 
     def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
         limit = 50
@@ -221,8 +247,6 @@ class ConfluenceClient:
         logger.info("Downloading from URL: %s", url)
         # Handle full URLs and relative paths
         if url.startswith("http"):
-            # Use a fresh client or stripped request for full URLs to avoid base_url conflicts
-            # though httpx usually handles absolute URLs by ignoring base_url
             response = self.http.get(url, follow_redirects=True)
         else:
             response = self._request("GET", url, follow_redirects=True)
@@ -242,44 +266,40 @@ class ConfluenceClient:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
             logger.warning("Direct download failed for %s, trying REST fallback. Error: %s", resource.file_name, exc)
-            if not resource.page_id and not datamart_page_id:
-                raise
             
             attachment_id = resource.id
             found_page_id = resource.page_id
             
             def normalize_name(name):
-                if not name: return []
-                # Unquote and replace both + and %20 with space for fuzzy comparison
+                if not name: return set()
                 u = urllib.parse.unquote(name).strip().lower()
-                return [u, u.replace("+", " ")]
+                # Try original, space-replaced, and underscore-replaced for maximum fuzzy matching
+                return {u, u.replace("+", " "), u.replace("+", "_"), u.replace(" ", "_")}
 
             if not attachment_id:
-                # Try to fetch from the immediate sub-page
+                # SEARCH WIDER: if page_id is missing or direct lookup failed, 
+                # try to find it on the datamart page or its siblings
                 pages_to_check = []
                 if resource.page_id: pages_to_check.append(resource.page_id)
-                if datamart_page_id and datamart_page_id != resource.page_id:
-                    pages_to_check.append(datamart_page_id)
-
-                target_names = normalize_name(resource.file_name) + normalize_name(resource.title)
+                if datamart_page_id: pages_to_check.append(datamart_page_id)
+                
+                target_names = normalize_name(resource.file_name) | normalize_name(resource.title)
                 
                 for pid in pages_to_check:
                     try:
-                        logger.info("Fetching attachments from page %s to find ID for %s", pid, resource.file_name)
                         attachments = self.get_attachments(pid)
                         for att in attachments:
-                            att_names = normalize_name(att.file_name) + normalize_name(att.title)
+                            att_names = normalize_name(att.file_name) | normalize_name(att.title)
                             if any(tn in att_names for tn in target_names):
                                 attachment_id = att.id
                                 found_page_id = pid
-                                logger.info("Found attachment ID %s on page %s.", attachment_id, pid)
                                 break
                         if attachment_id: break
-                    except Exception as lookup_exc:
-                        logger.warning("Failed to lookup attachments on page %s: %s", pid, lookup_exc)
+                    except Exception:
+                        pass
             
             if not attachment_id or not found_page_id:
-                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' on pages {resource.page_id} or {datamart_page_id} to perform REST fallback.") from exc
+                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' to perform REST fallback.") from exc
                 
             return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
 

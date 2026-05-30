@@ -38,12 +38,36 @@ class MetadataSyncService:
         self.parser = parser
         self.hash_service = hash_service or HashService()
         self.snapshot_repo = snapshot_repo
+        self._prefetched_versions: dict[str, int] = {}
 
     def collect(self) -> list[S2TMetadataSnapshot]:
         snapshots: list[S2TMetadataSnapshot] = []
         pattern = normalize_text(self.parser.settings.datamart_page_pattern)
         
-        for page in self.parser.client.iter_top_level_pages():
+        # Pre-fetch top-level pages
+        logger.info("Discovery: fetching top-level pages...")
+        top_level_pages = list(self.parser.client.iter_top_level_pages())
+        
+        # Gather all required page IDs for bulk version check
+        all_required_page_ids = set()
+        if self.snapshot_repo:
+            for page in top_level_pages:
+                if pattern not in normalize_text(page.title):
+                    continue
+                snapshot = self.snapshot_repo.get(page.id)
+                if snapshot:
+                    version_map, _ = snapshot
+                    all_required_page_ids.update(version_map.keys())
+
+        # Bulk fetch metadata for all cached pages
+        if all_required_page_ids:
+            logger.info("Discovery: bulk fetching metadata for %d cached pages...", len(all_required_page_ids))
+            bulk_meta = self.parser.client.get_pages_metadata_bulk(list(all_required_page_ids))
+            for pid, meta_page in bulk_meta.items():
+                if meta_page.version is not None:
+                    self._prefetched_versions[pid] = meta_page.version
+
+        for page in top_level_pages:
             if pattern not in normalize_text(page.title):
                 continue
                 
@@ -97,12 +121,16 @@ class MetadataSyncService:
         return datamart
 
     def _verify_versions(self, version_map: dict[str, int]) -> bool:
-        # Check all dependent pages. This is still network calls, but fewer than full HTML parsing.
-        # Plus, ConfluenceClient caches these pages during the session.
         for page_id, expected_version in version_map.items():
+            # First try prefetched bulk map
+            if page_id in self._prefetched_versions:
+                if self._prefetched_versions[page_id] != expected_version:
+                    return False
+                continue
+                
+            # Fallback to single fast request if not in prefetched map
             try:
-                # We use get_page which might hit the cache if already fetched in this session
-                current_page = self.parser.client.get_page(page_id)
+                current_page = self.parser.client.get_page(page_id, expand="version,history.lastUpdated")
                 if not current_page or current_page.version != expected_version:
                     return False
             except Exception:
