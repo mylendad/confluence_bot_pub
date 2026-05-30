@@ -142,8 +142,9 @@ def update_rag(
     try:
         confluence_client = ConfluenceClient(settings)
         parser = ConfluenceParser(confluence_client, settings, jira_client=jira_client)
+        from app.storage.page_snapshot_repository import PageSnapshotRepository
         updater = IncrementalUpdater(
-            metadata_sync=MetadataSyncService(parser),
+            metadata_sync=MetadataSyncService(parser, snapshot_repo=PageSnapshotRepository(db)),
             confluence_client=confluence_client,
             state_repo=S2TStateRepository(db),
             metadata_repo=metadata_repo,

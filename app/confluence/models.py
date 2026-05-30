@@ -78,6 +78,8 @@ class Datamart(BaseModel):
     facts: list[DatamartFact] = Field(default_factory=list)
     release_changes: list[ReleaseChange] = Field(default_factory=list)
     s2t_resource: S2TResource | None = None
+    # Map of page_id -> version_number for all pages visited during parsing
+    visited_pages: dict[str, int] = Field(default_factory=dict)
 
 
 class ParseResult(BaseModel):

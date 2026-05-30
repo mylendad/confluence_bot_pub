@@ -369,6 +369,22 @@
         "documentation": {}
     },
     {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -654,6 +670,14 @@
         "description": "app.utils.hashing",
         "isExtraImport": true,
         "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
         "documentation": {}
     },
     {
@@ -1301,6 +1325,14 @@
         "documentation": {}
     },
     {
+        "label": "Datamart",
+        "importPath": "app.confluence.models",
+        "description": "app.confluence.models",
+        "isExtraImport": true,
+        "detail": "app.confluence.models",
+        "documentation": {}
+    },
+    {
         "label": "S2TResource",
         "importPath": "app.confluence.models",
         "description": "app.confluence.models",
@@ -1711,6 +1743,14 @@
     },
     {
         "label": "fuzzy_contains",
+        "importPath": "app.utils.text_utils",
+        "description": "app.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "app.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
         "importPath": "app.utils.text_utils",
         "description": "app.utils.text_utils",
         "isExtraImport": true,
@@ -2375,6 +2415,14 @@
         "description": "app.confluence.parser",
         "isExtraImport": true,
         "detail": "app.confluence.parser",
+        "documentation": {}
+    },
+    {
+        "label": "PageSnapshotRepository",
+        "importPath": "app.storage.page_snapshot_repository",
+        "description": "app.storage.page_snapshot_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.page_snapshot_repository",
         "documentation": {}
     },
     {
@@ -3206,6 +3254,24 @@
         "documentation": {}
     },
     {
+        "label": "PageSnapshotRepository",
+        "kind": 6,
+        "importPath": "app.storage.page_snapshot_repository",
+        "description": "app.storage.page_snapshot_repository",
+        "peekOfCode": "class PageSnapshotRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, datamart_page_id: str) -> tuple[dict[str, int], Datamart] | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select version_map_json, extracted_data_json from page_snapshots where datamart_page_id = ?\",\n                (datamart_page_id,),\n            ).fetchone()\n            if not row:",
+        "detail": "app.storage.page_snapshot_repository",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.storage.page_snapshot_repository",
+        "description": "app.storage.page_snapshot_repository",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass PageSnapshotRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, datamart_page_id: str) -> tuple[dict[str, int], Datamart] | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select version_map_json, extracted_data_json from page_snapshots where datamart_page_id = ?\",\n                (datamart_page_id,),\n            ).fetchone()",
+        "detail": "app.storage.page_snapshot_repository",
+        "documentation": {}
+    },
+    {
         "label": "S2TState",
         "kind": 6,
         "importPath": "app.storage.s2t_state_repository",
@@ -3291,7 +3357,16 @@
         "kind": 6,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "class MetadataSyncService:\n    def __init__(self, parser: ConfluenceParser, hash_service: HashService | None = None) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n    def collect(self) -> list[S2TMetadataSnapshot]:\n        # При сборе метаданных (Discovery) пропускаем тяжелое обогащение данными из Jira.\n        # Это ускоряет первичный опрос в десятки раз.\n        result = self.parser.parse(dry_run=True, skip_jira=True)\n        snapshots: list[S2TMetadataSnapshot] = []\n        for datamart in result.datamarts:",
+        "peekOfCode": "class MetadataSyncService:\n    def __init__(\n        self, \n        parser: ConfluenceParser, \n        hash_service: HashService | None = None,\n        snapshot_repo: PageSnapshotRepository | None = None\n    ) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n        self.snapshot_repo = snapshot_repo",
+        "detail": "app.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.sync.metadata_sync_service",
+        "description": "app.sync.metadata_sync_service",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },

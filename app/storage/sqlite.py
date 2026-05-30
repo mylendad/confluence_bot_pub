@@ -88,6 +88,12 @@ class SQLite:
                     created_at text not null
                 );
                 create index if not exists idx_chat_history_session on chat_history(session_id);
+                create table if not exists page_snapshots (
+                    datamart_page_id text primary key,
+                    version_map_json text not null,
+                    extracted_data_json text not null,
+                    updated_at text not null
+                );
                 """
             )
             self._ensure_column(conn, "datamarts", "facts_json", "text not null default '[]'")
