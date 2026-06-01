@@ -123,14 +123,14 @@ class MetadataSyncService:
     def _verify_versions(self, version_map: dict[str, int]) -> bool:
         for page_id, expected_version in version_map.items():
             # First try prefetched bulk map
-            if page_id in self._prefetched_versions:
+            if hasattr(self, "_prefetched_versions") and page_id in self._prefetched_versions:
                 if self._prefetched_versions[page_id] != expected_version:
                     return False
                 continue
                 
             # Fallback to single fast request if not in prefetched map
             try:
-                current_page = self.parser.client.get_page(page_id, expand="version,history.lastUpdated")
+                current_page = self.parser.client.get_page(page_id)
                 if not current_page or current_page.version != expected_version:
                     return False
             except Exception:

@@ -90,22 +90,14 @@ class ConfluenceParser:
         return result
 
     def parse_datamart_page(self, page: ConfluencePage, skip_jira: bool = False) -> Datamart:
-        # Track all pages visited for this specific datamart
-        visited_versions: dict[str, int] = {}
-        if page.version:
-            visited_versions[page.id] = page.version
-
         html = page.body_html or ""
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
-        
-        release_changes = self.extract_release_changes(page, html, visited_versions=visited_versions)
+        release_changes = self.extract_release_changes(page, html)
         if self.jira_client and not skip_jira:
             self.enrich_release_changes(release_changes)
-        
-        candidates = self.find_s2t_candidates(page, visited_versions=visited_versions)
+        candidates = self.find_s2t_candidates(page)
         selected = self.choose_latest_s2t(candidates)
-        
         return Datamart(
             name=page.title,
             confluence_page_id=page.id,
@@ -118,7 +110,6 @@ class ConfluenceParser:
             facts=facts,
             release_changes=release_changes,
             s2t_resource=selected,
-            visited_pages=visited_versions,
         )
 
     def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:
@@ -237,13 +228,9 @@ class ConfluenceParser:
             facts.append(DatamartFact(key=key, label=label, value=value, links=links))
         return facts
 
-    def extract_release_changes(
-        self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None
-    ) -> list[ReleaseChange]:
+    def extract_release_changes(self, page: ConfluencePage, html: str) -> list[ReleaseChange]:
         # Ищем страницу изменений рекурсивно
-        release_page = self._find_release_page_recursive(
-            page, depth=0, visited=set(), visited_versions=visited_versions
-        )
+        release_page = self._find_release_page_recursive(page, depth=0, visited=set())
         if not release_page or not release_page.body_html:
             return []
         changes = self.parse_release_changes_page(release_page.body_html, release_page.url)
@@ -252,30 +239,22 @@ class ConfluenceParser:
         return changes
 
     def _find_release_page_recursive(
-        self,
-        page: ConfluencePage,
-        depth: int,
-        visited: set[str],
-        visited_versions: dict[str, int] | None = None,
+        self, page: ConfluencePage, depth: int, visited: set[str]
     ) -> ConfluencePage | None:
         if page.id in visited or depth > 3:
             return None
         visited.add(page.id)
-        if visited_versions is not None and page.version:
-            visited_versions[page.id] = page.version
 
         html = page.body_html
         if html is None:
             try:
                 full_page = self.client.get_page(page.id)
                 html = full_page.body_html or ""
-                if visited_versions is not None and full_page.version:
-                    visited_versions[full_page.id] = full_page.version
             except Exception:
                 html = ""
 
         # Пробуем найти ссылку на текущей странице
-        found = self._release_page_from_link(page, html, visited_versions=visited_versions)
+        found = self._release_page_from_link(page, html)
         if found:
             return found
 
@@ -290,15 +269,10 @@ class ConfluenceParser:
                     for kw in ["изменения в релизах", "журнал изменений", "список изменений"]
                 ):
                     logger.info(f"Found release changes by child page title: '{child.title}'")
-                    full_child = self.client.get_page(child.id)
-                    if visited_versions is not None and full_child.version:
-                        visited_versions[full_child.id] = full_child.version
-                    return full_child
+                    return self.client.get_page(child.id)
 
                 # Иначе рекурсивно ищем внутри дочерней
-                res = self._find_release_page_recursive(
-                    child, depth + 1, visited, visited_versions=visited_versions
-                )
+                res = self._find_release_page_recursive(child, depth + 1, visited)
                 if res:
                     return res
         except Exception:
@@ -397,23 +371,15 @@ class ConfluenceParser:
 
         return changes
 
-    def find_s2t_candidates(
-        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None
-    ) -> list[S2TResource]:
-        return self._find_s2t_recursive(page, depth=0, visited=set(), visited_versions=visited_versions)
+    def find_s2t_candidates(self, page: ConfluencePage) -> list[S2TResource]:
+        return self._find_s2t_recursive(page, depth=0, visited=set())
 
     def _find_s2t_recursive(
-        self,
-        page: ConfluencePage,
-        depth: int,
-        visited: set[str],
-        visited_versions: dict[str, int] | None = None,
+        self, page: ConfluencePage, depth: int, visited: set[str]
     ) -> list[S2TResource]:
         if page.id in visited or depth > 5:
             return []
         visited.add(page.id)
-        if visited_versions is not None and page.version:
-            visited_versions[page.id] = page.version
 
         logger.info(
             "Recursively searching for S2T files on page '%s' (depth %d)", page.title, depth
@@ -424,8 +390,6 @@ class ConfluenceParser:
             try:
                 full_page = self.client.get_page(page.id)
                 html = full_page.body_html if full_page and full_page.body_html else ""
-                if visited_versions is not None and full_page and full_page.version:
-                    visited_versions[full_page.id] = full_page.version
             except Exception:
                 logger.warning("Failed to fetch page body for %s", page.id)
                 html = ""
@@ -485,7 +449,7 @@ class ConfluenceParser:
                             child_page = self.client.get_page(child_page_id)
                             if child_page:
                                 recursive_files = self._find_s2t_recursive(
-                                    child_page, depth + 1, visited, visited_versions=visited_versions
+                                    child_page, depth + 1, visited
                                 )
                                 self._append_new_resources(candidates, recursive_files)
                         except Exception as exc:
@@ -496,9 +460,7 @@ class ConfluenceParser:
         # 4. Explore direct child pages
         for child in self.client.get_children(page.id):
             if self._looks_like_s2t(child.title):
-                recursive_files = self._find_s2t_recursive(
-                    child, depth + 1, visited, visited_versions=visited_versions
-                )
+                recursive_files = self._find_s2t_recursive(child, depth + 1, visited)
                 self._append_new_resources(candidates, recursive_files)
 
         file_candidates = [
@@ -512,9 +474,7 @@ class ConfluenceParser:
 
         return file_candidates
 
-    def _release_page_from_link(
-        self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None
-    ) -> ConfluencePage | None:
+    def _release_page_from_link(self, page: ConfluencePage, html: str) -> ConfluencePage | None:
         # Исключаем страницы-шаблоны
         if "шаблон" in normalize_text(page.title):
             return None
@@ -532,10 +492,7 @@ class ConfluenceParser:
                     if "шаблон" in norm_child_title:
                         continue
                     logger.info(f"Found release changes child page: '{child.title}'")
-                    full_child = self.client.get_page(child.id)
-                    if visited_versions is not None and full_child.version:
-                        visited_versions[full_child.id] = full_child.version
-                    return full_child
+                    return self.client.get_page(child.id)
         except Exception:
             pass
 
@@ -589,10 +546,7 @@ class ConfluenceParser:
                 if page_id:
                     logger.info(f"Found release changes link '{link_text}' (ID: {page_id})")
                     try:
-                        full_page = self.client.get_page(page_id)
-                        if visited_versions is not None and full_page.version:
-                            visited_versions[full_page.id] = full_page.version
-                        return full_page
+                        return self.client.get_page(page_id)
                     except Exception:
                         pass
 
@@ -915,11 +869,6 @@ class ConfluenceParser:
             if k not in keys:
                 keys.append(k)
         return keys
-
-    @staticmethod
-    def _jira_key_from_node(node) -> str | None:
-        keys = ConfluenceParser._jira_keys_from_node(node)
-        return keys[0] if keys else None
 
     @staticmethod
     def _jira_title_from_node(node) -> str | None:
