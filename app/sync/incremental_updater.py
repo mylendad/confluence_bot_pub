@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from app.changes.diff_service import DiffService
 from app.changes.history_repository import HistoryRepository
 from app.confluence.client import ConfluenceClient
+from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from app.rag.indexer import RAGIndexer
 from app.s2t.parser import S2TParser
 from app.storage.metadata_repository import MetadataRepository
@@ -188,14 +189,34 @@ class IncrementalUpdater:
             actually_downloaded = False
             content = b"" # Not used if content_changed is False
         else:
-            if hasattr(self.confluence_client, "download_resource"):
-                content = self.confluence_client.download_resource(resource, datamart_page_id=snapshot.datamart.confluence_page_id)
-            else:
-                content = self.confluence_client.download(url)
-            content_hash = self.hash_service.sha256_bytes(content)
-            previous_content_hash = previous.content_hash if previous else None
-            content_changed = content_hash != previous_content_hash
-            actually_downloaded = True
+            try:
+                if hasattr(self.confluence_client, "download_resource"):
+                    content = self.confluence_client.download_resource(resource, datamart_page_id=snapshot.datamart.confluence_page_id)
+                else:
+                    content = self.confluence_client.download(url)
+                content_hash = self.hash_service.sha256_bytes(content)
+                previous_content_hash = previous.content_hash if previous else None
+                content_changed = content_hash != previous_content_hash
+                actually_downloaded = True
+            except (ConfluenceAuthError, ConfluenceError) as exc:
+                logger.warning("Failed to download S2T for %s: %s. Updating metadata only.", snapshot.datamart.name, exc)
+                # Если загрузка файла не удалась, мы все равно можем обновить метаданные самой витрины
+                # (стейкхолдеры, факты, изменения в релизах), которые мы уже получили из Confluence.
+                old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
+                self.indexer.update_datamart(snapshot.datamart, old_attrs)
+                
+                # Мы НЕ обновляем state_repo, чтобы при следующем запуске бот снова попробовал скачать файл.
+                return IncrementalUpdateItem(
+                    datamart_name=snapshot.datamart.name,
+                    resource_key=resource_key,
+                    file_name=file_name,
+                    metadata_changed=True,
+                    reasons=[*decision.reasons, f"Download failed: {exc}. Metadata updated."],
+                    will_download=True,
+                    will_parse=False,
+                    will_reindex=True,
+                    content_changed=None,
+                )
 
         if not content_changed:
             self.state_repo.upsert(

@@ -1229,6 +1229,22 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "importPath": "app.confluence.exceptions",
+        "description": "app.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "app.confluence.exceptions",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceAuthError",
         "importPath": "app.confluence.exceptions",
         "description": "app.confluence.exceptions",

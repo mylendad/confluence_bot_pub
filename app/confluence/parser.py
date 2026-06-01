@@ -642,15 +642,14 @@ class ConfluenceParser:
             logger.warning("S2T resource was not found")
             return None
 
-        def key(item: S2TResource) -> tuple[int, int, datetime, int]:
-            has_download = 1 if item.download_url else 0
+        def key(item: S2TResource) -> tuple[int, datetime, int]:
             priority = 1 if item.resource_type == "table_latest_row" else 0
             if item.file_date:
                 dt = datetime.combine(item.file_date, datetime.min.time(), tzinfo=UTC)
             else:
                 dt = self._comparable_datetime(item.updated_at)
             row_number = item.version or 0
-            return has_download, priority, dt, row_number
+            return priority, dt, row_number
 
         selected = max(candidates, key=key)
         if not selected.file_date and selected.resource_type != "table_latest_row":
@@ -851,7 +850,9 @@ class ConfluenceParser:
     def _attachment_lookup_key(value: str | None) -> str | None:
         if not value:
             return None
-        return unquote(value).strip().casefold()
+        unquoted = unquote(value).strip().casefold()
+        # Confluence treats '+' as space in many contexts, we normalize it to ensure matching
+        return unquoted.replace("+", " ")
 
     @staticmethod
     def _file_name_from_url(url: str | None) -> str | None:

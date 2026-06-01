@@ -180,6 +180,6 @@ class MetadataSyncService:
             "resource_updated_at": fmt_dt(resource.updated_at),
             "file_name": resource.file_name,
             "release_changes_hash": stable_hash(stable_release_changes),
-            "stakeholders_hash": stable_hash([s.model_dump() for s in datamart.stakeholders]),
-            "facts_hash": stable_hash([f.model_dump() for f in datamart.facts]),
+            "stakeholders_hash": stable_hash([s.model_dump(mode='json') for s in datamart.stakeholders]),
+            "facts_hash": stable_hash([f.model_dump(mode='json') for f in datamart.facts]),
         }

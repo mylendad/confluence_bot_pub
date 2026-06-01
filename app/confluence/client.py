@@ -248,11 +248,12 @@ class ConfluenceClient:
             attachment_id = resource.id
             found_page_id = resource.page_id
             
-            def normalize_name(name):
+            def normalize_names(name):
                 if not name: return []
                 # Unquote and replace both + and %20 with space for fuzzy comparison
-                u = urllib.parse.unquote(name).strip().lower()
-                return [u, u.replace("+", " ")]
+                unquoted = urllib.parse.unquote(name).strip().casefold()
+                variants = {unquoted, unquoted.replace("+", " "), name.strip().casefold(), name.strip().replace("+", " ").casefold()}
+                return list(variants)
 
             if not attachment_id:
                 # Try to fetch from the immediate sub-page
@@ -261,14 +262,14 @@ class ConfluenceClient:
                 if datamart_page_id and datamart_page_id != resource.page_id:
                     pages_to_check.append(datamart_page_id)
 
-                target_names = normalize_name(resource.file_name) + normalize_name(resource.title)
+                target_names = normalize_names(resource.file_name) + normalize_names(resource.title)
                 
                 for pid in pages_to_check:
                     try:
                         logger.info("Fetching attachments from page %s to find ID for %s", pid, resource.file_name)
                         attachments = self.get_attachments(pid)
                         for att in attachments:
-                            att_names = normalize_name(att.file_name) + normalize_name(att.title)
+                            att_names = normalize_names(att.file_name) + normalize_names(att.title)
                             if any(tn in att_names for tn in target_names):
                                 attachment_id = att.id
                                 found_page_id = pid
