@@ -312,6 +312,52 @@ class ConfluenceClient:
                         pass
             
             if not attachment_id or not found_page_id:
+                # GLOBAL SEARCH: Last resort, search entire space by filename
+                logger.info("Local attachment lookup failed. Attempting global CQL search for: %s", resource.file_name)
+                try:
+                    # Escape quotes in filename for CQL
+                    safe_name = (resource.file_name or resource.title or "").replace('"', '\\"')
+                    if safe_name:
+                        # Space key is required for performance, get it from settings
+                        space_key = self.settings.confluence_space_key
+                        # CQL for attachments matching title
+                        cql = f'space="{space_key}" and type=attachment and title~"{safe_name}"'
+                        
+                        payload = self._get(
+                            "/rest/api/content/search",
+                            {
+                                "cql": cql,
+                                "limit": 10,
+                                "expand": "container" # We need the parent page ID
+                            },
+                        )
+                        
+                        results = payload.get("results", [])
+                        for item in results:
+                            # Verify it's actually our file (fuzzy match again)
+                            att_title = item.get("title", "")
+                            att_names = normalize_name(att_title)
+                            
+                            match = False
+                            for t_name in target_names:
+                                for a_name in att_names:
+                                    if t_name == a_name or t_name in a_name or a_name in t_name:
+                                        match = True
+                                        break
+                                if match: break
+                            
+                            if match:
+                                attachment_id = str(item.get("id"))
+                                # The container is the parent page
+                                container = item.get("container", {})
+                                found_page_id = str(container.get("id")) if container else None
+                                if attachment_id and found_page_id:
+                                    logger.info("Global search found attachment %s on page %s", attachment_id, found_page_id)
+                                    break
+                except Exception as search_exc:
+                    logger.warning("Global CQL search for attachment failed: %s", search_exc)
+            
+            if not attachment_id or not found_page_id:
                 raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' to perform REST fallback.") from exc
                 
             return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
