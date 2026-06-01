@@ -95,8 +95,8 @@ class IncrementalUpdater:
                 items.append(
                     IncrementalUpdateItem(
                         datamart_name=snapshot.datamart.name,
-                        resource_key=snapshot.resource.resource_key,
-                        file_name=snapshot.resource.file_name,
+                        resource_key=snapshot.unique_key,
+                        file_name=snapshot.resource.file_name if snapshot.resource else None,
                         metadata_changed=True,
                         reasons=[f"Processing failed: {exc}"],
                         will_download=False,
@@ -113,23 +113,29 @@ class IncrementalUpdater:
         resource_key = snapshot.unique_key
         previous = self.state_repo.get(resource_key)
         decision = self.comparator.compare(previous, snapshot.metadata_hash, snapshot.metadata)
-        file_name = resource.file_name or resource.title
+        
+        file_name = resource.file_name or resource.title if resource else None
+        page_id = resource.page_id if resource else None
+        resource_type = resource.resource_type if resource else None
+        title = resource.title if resource else None
+        url = (resource.download_url or resource.url) if resource else None
+        updated_at = resource.updated_at if resource else None
 
         if not decision.changed:
             if not dry_run:
                 self.state_repo.upsert(
                     resource_key=resource_key,
                     datamart_name=snapshot.datamart.name,
-                    page_id=resource.page_id,
-                    resource_type=resource.resource_type,
-                    title=resource.title,
+                    page_id=page_id,
+                    resource_type=resource_type,
+                    title=title,
                     file_name=file_name,
-                    url=resource.download_url or resource.url,
+                    url=url,
                     metadata=snapshot.metadata,
                     metadata_hash=snapshot.metadata_hash,
                     content_hash=previous.content_hash if previous else None,
                     synced=False,
-                    updated_at=resource.updated_at,
+                    updated_at=updated_at,
                 )
             return IncrementalUpdateItem(
                 datamart_name=snapshot.datamart.name,
@@ -149,8 +155,8 @@ class IncrementalUpdater:
                 file_name=file_name,
                 metadata_changed=True,
                 reasons=decision.reasons,
-                will_download=True,
-                will_parse=True,
+                will_download=bool(resource),
+                will_parse=bool(resource),
                 will_reindex=True,
             )
 
@@ -170,17 +176,36 @@ class IncrementalUpdater:
                 )
                 can_skip_download = True
 
-        url = resource.download_url or resource.url
-        if not url:
+        if not resource or not url:
+            # Обновляем метаданные витрины даже если нет s2t файла
+            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
+            self.indexer.update_datamart(snapshot.datamart, old_attrs)
+            
+            self.state_repo.upsert(
+                resource_key=resource_key,
+                datamart_name=snapshot.datamart.name,
+                page_id=page_id,
+                resource_type=resource_type,
+                title=title,
+                file_name=file_name,
+                url=url,
+                metadata=snapshot.metadata,
+                metadata_hash=snapshot.metadata_hash,
+                content_hash=None,
+                synced=True,
+                updated_at=updated_at,
+            )
             return IncrementalUpdateItem(
                 datamart_name=snapshot.datamart.name,
                 resource_key=resource_key,
                 file_name=file_name,
                 metadata_changed=True,
-                reasons=[*decision.reasons, "download url is absent"],
+                reasons=[*decision.reasons, "no s2t resource" if not resource else "download url is absent"],
                 will_download=False,
                 will_parse=False,
-                will_reindex=False,
+                will_reindex=True,
+                content_changed=False,
+                content_hash=None,
             )
 
         if can_skip_download:
@@ -222,16 +247,16 @@ class IncrementalUpdater:
             self.state_repo.upsert(
                 resource_key=resource_key,
                 datamart_name=snapshot.datamart.name,
-                page_id=resource.page_id,
-                resource_type=resource.resource_type,
-                title=resource.title,
+                page_id=page_id,
+                resource_type=resource_type,
+                title=title,
                 file_name=file_name,
                 url=url,
                 metadata=snapshot.metadata,
                 metadata_hash=snapshot.metadata_hash,
                 content_hash=content_hash,
                 synced=True,
-                updated_at=resource.updated_at,
+                updated_at=updated_at,
             )
             # Если поменялись только метаданные (например, стейкхолдеры), 
             # мы обновляем метаданные в БД и переиндексируем документы RAG, 
@@ -266,16 +291,16 @@ class IncrementalUpdater:
         self.state_repo.upsert(
             resource_key=resource_key,
             datamart_name=snapshot.datamart.name,
-            page_id=resource.page_id,
-            resource_type=resource.resource_type,
-            title=resource.title,
+            page_id=page_id,
+            resource_type=resource_type,
+            title=title,
             file_name=file_name,
             url=url,
             metadata=snapshot.metadata,
             metadata_hash=snapshot.metadata_hash,
             content_hash=content_hash,
             synced=True,
-            updated_at=resource.updated_at,
+            updated_at=updated_at,
         )
         return IncrementalUpdateItem(
             datamart_name=snapshot.datamart.name,

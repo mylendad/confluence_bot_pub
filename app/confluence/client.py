@@ -242,45 +242,40 @@ class ConfluenceClient:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
             logger.warning("Direct download failed for %s, trying REST fallback. Error: %s", resource.file_name, exc)
-            if not resource.page_id and not datamart_page_id:
-                raise
             
             attachment_id = resource.id
             found_page_id = resource.page_id
             
-            def normalize_names(name):
-                if not name: return []
-                # Unquote and replace both + and %20 with space for fuzzy comparison
-                unquoted = urllib.parse.unquote(name).strip().casefold()
-                variants = {unquoted, unquoted.replace("+", " "), name.strip().casefold(), name.strip().replace("+", " ").casefold()}
-                return list(variants)
+            def normalize_name(name):
+                if not name: return set()
+                u = urllib.parse.unquote(name).strip().lower()
+                # Try original, space-replaced, and underscore-replaced for maximum fuzzy matching
+                return {u, u.replace("+", " "), u.replace("+", "_"), u.replace(" ", "_")}
 
             if not attachment_id:
-                # Try to fetch from the immediate sub-page
+                # SEARCH WIDER: if page_id is missing or direct lookup failed, 
+                # try to find it on the datamart page or its siblings
                 pages_to_check = []
                 if resource.page_id: pages_to_check.append(resource.page_id)
-                if datamart_page_id and datamart_page_id != resource.page_id:
-                    pages_to_check.append(datamart_page_id)
-
-                target_names = normalize_names(resource.file_name) + normalize_names(resource.title)
+                if datamart_page_id: pages_to_check.append(datamart_page_id)
+                
+                target_names = normalize_name(resource.file_name) | normalize_name(resource.title)
                 
                 for pid in pages_to_check:
                     try:
-                        logger.info("Fetching attachments from page %s to find ID for %s", pid, resource.file_name)
                         attachments = self.get_attachments(pid)
                         for att in attachments:
-                            att_names = normalize_names(att.file_name) + normalize_names(att.title)
+                            att_names = normalize_name(att.file_name) | normalize_name(att.title)
                             if any(tn in att_names for tn in target_names):
                                 attachment_id = att.id
                                 found_page_id = pid
-                                logger.info("Found attachment ID %s on page %s.", attachment_id, pid)
                                 break
                         if attachment_id: break
-                    except Exception as lookup_exc:
-                        logger.warning("Failed to lookup attachments on page %s: %s", pid, lookup_exc)
+                    except Exception:
+                        pass
             
             if not attachment_id or not found_page_id:
-                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' on pages {resource.page_id} or {datamart_page_id} to perform REST fallback.") from exc
+                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' to perform REST fallback.") from exc
                 
             return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
 

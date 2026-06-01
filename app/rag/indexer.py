@@ -32,7 +32,7 @@ class RAGIndexer:
         self.metadata_repo.replace_attributes_for_datamart(datamart.name, attributes)
         documents = [
             *[self._attribute_document(datamart, attribute) for attribute in attributes],
-            *self._datamart_documents(datamart),
+            *self._datamart_documents(datamart, has_s2t=len(attributes) > 0),
         ]
         self.document_repo.replace_for_datamart(datamart.name, documents)
         self.vector_store.replace_for_datamart(datamart.name, documents)
@@ -41,8 +41,8 @@ class RAGIndexer:
     def rebuild_from_storage(self) -> list[RAGDocument]:
         attributes = self.metadata_repo.list_attributes()
         documents = [self._attribute_document(None, attribute) for attribute in attributes]
-        for datamart in self.metadata_repo.list_datamarts():
-            documents.extend(self._stored_datamart_documents(datamart))
+        for row in self.metadata_repo.list_datamarts():
+            documents.extend(self._stored_datamart_documents(row))
         self.document_repo.replace_all(documents)
         self.vector_store.replace_all(documents)
         return documents
@@ -101,8 +101,22 @@ class RAGIndexer:
         }
         return RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
 
-    def _datamart_documents(self, datamart: Datamart) -> list[RAGDocument]:
+    def _datamart_documents(self, datamart: Datamart, has_s2t: bool = True) -> list[RAGDocument]:
         documents: list[RAGDocument] = []
+        
+        # Индикатор наличия S2T файла
+        if not has_s2t:
+            text = f"Витрина: {datamart.name}. Файл S2T: нет s2t на конфлюенсе."
+            metadata = {
+                "datamart_name": datamart.name,
+                "source_type": "datamart_status",
+                "confluence_page_id": datamart.confluence_page_id,
+                "confluence_url": datamart.confluence_url,
+            }
+            documents.append(
+                RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
+            )
+
         for fact in datamart.facts:
             text = (
                 f"Витрина: {datamart.name}. Показатель: {fact.label}. "
@@ -169,8 +183,10 @@ class RAGIndexer:
             facts=json.loads(row.get("facts_json") or "[]"),
             release_changes=json.loads(row.get("release_changes_json") or "[]"),
         )
-        return self._datamart_documents(datamart)
+        attrs = self.metadata_repo.list_attributes(datamart.name)
+        return self._datamart_documents(datamart, has_s2t=len(attrs) > 0)
 
     @staticmethod
     def _path(*parts: str | None) -> str:
         return ".".join(part for part in parts if part) or "не указано"
+

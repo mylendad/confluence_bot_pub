@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class S2TMetadataSnapshot:
     datamart: Datamart
-    resource: S2TResource
+    resource: S2TResource | None
     metadata: dict
     metadata_hash: str
     
@@ -24,6 +24,8 @@ class S2TMetadataSnapshot:
         # A datamart can link to an attachment on another page.
         # To avoid state collisions between datamarts sharing the same file,
         # we prefix the resource key with the datamart's own page ID.
+        if not self.resource:
+            return f"{self.datamart.confluence_page_id}:no_s2t"
         base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name
         return f"{self.datamart.confluence_page_id}:{base_key}"
 
@@ -74,7 +76,7 @@ class MetadataSyncService:
             logger.info("Discovery: processing datamart page '%s' (ID: %s)", page.title, page.id)
             
             datamart = self._get_datamart_with_cache(page)
-            if not datamart or not datamart.s2t_resource:
+            if not datamart:
                 continue
                 
             resource = datamart.s2t_resource
@@ -84,8 +86,8 @@ class MetadataSyncService:
             hash_metadata = {
                 "datamart_name": metadata["datamart_name"],
                 "datamart_page_id": metadata["datamart_page_id"],
-                "attachment_id": metadata["attachment_id"],
-                "attachment_version_number": metadata["attachment_version_number"],
+                "attachment_id": metadata.get("attachment_id"),
+                "attachment_version_number": metadata.get("attachment_version_number"),
                 "release_changes_hash": metadata["release_changes_hash"],
                 "stakeholders_hash": metadata["stakeholders_hash"],
                 "facts_hash": metadata["facts_hash"],
@@ -130,7 +132,7 @@ class MetadataSyncService:
                 
             # Fallback to single fast request if not in prefetched map
             try:
-                current_page = self.parser.client.get_page(page_id)
+                current_page = self.parser.client.get_page(page_id, expand="version,history.lastUpdated")
                 if not current_page or current_page.version != expected_version:
                     return False
             except Exception:
@@ -138,7 +140,7 @@ class MetadataSyncService:
         return True
 
     @staticmethod
-    def _metadata(datamart: Datamart, resource: S2TResource) -> dict:
+    def _metadata(datamart: Datamart, resource: S2TResource | None) -> dict:
         def fmt_dt(dt) -> str | None:
             if not dt:
                 return None
@@ -161,25 +163,30 @@ class MetadataSyncService:
             for c in datamart.release_changes
         ]
 
-        return {
+        meta = {
             "datamart_name": datamart.name,
             "datamart_page_id": datamart.confluence_page_id,
             "datamart_page_version": datamart.page_version,
             "datamart_page_version_when": fmt_dt(datamart.page_version_when),
             "datamart_page_last_modified": fmt_dt(datamart.page_last_modified),
             "datamart_page_history_last_updated": fmt_dt(datamart.page_history_last_updated),
-            "attachment_id": resource.id,
-            "attachment_title": resource.title,
-            "attachment_version_number": resource.version,
-            "attachment_version_when": fmt_dt(resource.version_when),
-            "attachment_file_size": resource.file_size,
-            "download_url": resource.download_url or resource.url,
-            "media_type": resource.media_type,
-            "resource_type": resource.resource_type,
-            "resource_page_id": resource.page_id,
-            "resource_updated_at": fmt_dt(resource.updated_at),
-            "file_name": resource.file_name,
             "release_changes_hash": stable_hash(stable_release_changes),
             "stakeholders_hash": stable_hash([s.model_dump(mode='json') for s in datamart.stakeholders]),
             "facts_hash": stable_hash([f.model_dump(mode='json') for f in datamart.facts]),
         }
+        
+        if resource:
+            meta.update({
+                "attachment_id": resource.id,
+                "attachment_title": resource.title,
+                "attachment_version_number": resource.version,
+                "attachment_version_when": fmt_dt(resource.version_when),
+                "attachment_file_size": resource.file_size,
+                "download_url": resource.download_url or resource.url,
+                "media_type": resource.media_type,
+                "resource_type": resource.resource_type,
+                "resource_page_id": resource.page_id,
+                "resource_updated_at": fmt_dt(resource.updated_at),
+                "file_name": resource.file_name,
+            })
+        return meta

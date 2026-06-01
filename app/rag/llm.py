@@ -50,6 +50,7 @@ class GigaChatAnswerGenerator:
             model=self.settings.gigachat_model,
             verify_ssl_certs=self.settings.gigachat_verify_ssl_certs,
             profanity_check=self.settings.gigachat_profanity_check,
+            timeout=30.0, # Add explicit timeout
         )
         return self.llm
 
@@ -71,19 +72,22 @@ class GigaChatAnswerGenerator:
                 return getattr(response, "content", str(response))
             except Exception as exc:
                 last_exc = exc
-                if "104" in str(exc) or "reset" in str(exc).lower():
+                err_str = str(exc).lower()
+                if "104" in err_str or "reset" in err_str or "time" in err_str or "deadline" in err_str:
                     logger.warning(
-                        "GigaChat connection reset (attempt %d/%d), retrying in %.1fs...",
+                        "GigaChat connection issue (attempt %d/%d), retrying in %.1fs... Error: %s",
                         attempt + 1,
                         max_retries,
                         retry_delay,
+                        err_str
                     )
                     time.sleep(retry_delay)
                     retry_delay *= 2
                     continue
                 raise exc
 
-        raise last_exc
+        logger.error("Failed to generate answer after %d attempts. Last error: %s", max_retries, last_exc)
+        return f"Не удалось вызвать LLM для генеративного ответа: {last_exc}"
 
     def check_health(self) -> dict:
         start_time = time.time()

@@ -3134,7 +3134,7 @@
         "kind": 5,
         "importPath": "app.rag.prompts",
         "description": "app.rag.prompts",
-        "peekOfCode": "ANSWER_SYSTEM_PROMPT = \"\"\"\nТы отвечаешь по документации Confluence и S2T. Используй только найденный контекст.\nЕсли данных нет, честно скажи, что данных нет. В ответе указывай источники и дату актуальности,\nесли они есть в метаданных.\nНе выдумывай дату актуальности, версию документации, владельцев, атрибуты, источники и выводы.\nЕсли дата или версия отсутствует в контексте, прямо скажи, что дата актуальности не указана.\n\"\"\".strip()",
+        "peekOfCode": "ANSWER_SYSTEM_PROMPT = \"\"\"\nТы отвечаешь по документации Confluence и S2T. Используй только найденный контекст.\nЕсли данных нет, честно скажи, что данных нет.\nЕсли в контексте сказано \"нет s2t на конфлюенсе\", обязательно используй эту фразу в ответе.\nВ ответе указывай источники и дату актуальности, если они есть в метаданных.\nНе выдумывай дату актуальности, версию документации, владельцев, атрибуты, источники и выводы.\nЕсли дата или версия отсутствует в контексте, прямо скажи, что дата актуальности не указана.\n\"\"\".strip()",
         "detail": "app.rag.prompts",
         "documentation": {}
     },
@@ -3386,7 +3386,7 @@
         "kind": 6,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.\n        # To avoid state collisions between datamarts sharing the same file,\n        # we prefix the resource key with the datamart's own page ID.",
+        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.\n        # To avoid state collisions between datamarts sharing the same file,\n        # we prefix the resource key with the datamart's own page ID.",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3404,7 +3404,7 @@
         "kind": 5,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },
