@@ -273,8 +273,11 @@ class ConfluenceClient:
             def normalize_name(name):
                 if not name: return set()
                 u = urllib.parse.unquote(name).strip().lower()
-                # Try original, space-replaced, and underscore-replaced for maximum fuzzy matching
-                return {u, u.replace("+", " "), u.replace("+", "_"), u.replace(" ", "_")}
+                # Remove common problematic characters for fuzzy matching
+                clean = u.replace("+", " ").replace("_", " ").replace("-", " ")
+                import re
+                clean = re.sub(r"\s+", " ", clean).strip()
+                return {u, clean}
 
             if not attachment_id:
                 # SEARCH WIDER: if page_id is missing or direct lookup failed, 
@@ -290,7 +293,17 @@ class ConfluenceClient:
                         attachments = self.get_attachments(pid)
                         for att in attachments:
                             att_names = normalize_name(att.file_name) | normalize_name(att.title)
-                            if any(tn in att_names for tn in target_names):
+                            
+                            # Check intersection or if one string is fully inside another
+                            match = False
+                            for t_name in target_names:
+                                for a_name in att_names:
+                                    if t_name == a_name or t_name in a_name or a_name in t_name:
+                                        match = True
+                                        break
+                                if match: break
+                            
+                            if match:
                                 attachment_id = att.id
                                 found_page_id = pid
                                 break
