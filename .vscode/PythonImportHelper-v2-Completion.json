@@ -465,14 +465,6 @@
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "UTC",
         "importPath": "datetime",
         "description": "datetime",
@@ -490,14 +482,6 @@
     },
     {
         "label": "UTC",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
         "isExtraImport": true,
@@ -1202,22 +1186,6 @@
         "description": "app.config",
         "isExtraImport": true,
         "detail": "app.config",
-        "documentation": {}
-    },
-    {
-        "label": "ConfluenceAuthError",
-        "importPath": "app.confluence.exceptions",
-        "description": "app.confluence.exceptions",
-        "isExtraImport": true,
-        "detail": "app.confluence.exceptions",
-        "documentation": {}
-    },
-    {
-        "label": "ConfluenceError",
-        "importPath": "app.confluence.exceptions",
-        "description": "app.confluence.exceptions",
-        "isExtraImport": true,
-        "detail": "app.confluence.exceptions",
         "documentation": {}
     },
     {
@@ -2750,24 +2718,6 @@
         "documentation": {}
     },
     {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "asyncio",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
-        "documentation": {}
-    },
-    {
         "label": "inspect",
         "kind": 6,
         "isExtraImport": true,
@@ -4284,7 +4234,7 @@
         "kind": 5,
         "importPath": "check_attachments",
         "description": "check_attachments",
-        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nprint(f\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")",
+        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nprint(\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")",
         "detail": "check_attachments",
         "documentation": {}
     },
@@ -4293,7 +4243,7 @@
         "kind": 5,
         "importPath": "check_attachments",
         "description": "check_attachments",
-        "peekOfCode": "client = ConfluenceClient(settings)\nprint(f\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")\nexcept Exception as e:",
+        "peekOfCode": "client = ConfluenceClient(settings)\nprint(\"Fetching attachments for page 17281847916...\")\ntry:\n    attachments = client.get_attachments(\"17281847916\")\n    print(f\"Found {len(attachments)} attachments.\")\n    for att in attachments:\n        print(f\" - ID: {att.id}\")\n        print(f\"   Title: {att.title}\")\n        print(f\"   File Name: {att.file_name}\")\nexcept Exception as e:",
         "detail": "check_attachments",
         "documentation": {}
     },
@@ -4410,7 +4360,7 @@
         "kind": 5,
         "importPath": "fix_cli",
         "description": "fix_cli",
-        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Мы ищем место, где создается JiraClient в parse-confluence\nold_block = \"\"\"    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\"\"\"\nnew_block = \"\"\"    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):",
+        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path) as f:\n    content = f.read()\n# Мы ищем место, где создается JiraClient в parse-confluence\nold_block = \"\"\"    jira_client = None\n    if settings.jira_username and (settings.jira_token or settings.jira_api_token):\n        jira_client = JiraClient(settings)\"\"\"\nnew_block = \"\"\"    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):",
         "detail": "fix_cli",
         "documentation": {}
     },
@@ -4446,7 +4396,7 @@
         "kind": 5,
         "importPath": "fix_cli2",
         "description": "fix_cli2",
-        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Фиксим все оставшиеся вхождения старой логики (в update_rag)\ncontent = re.sub(\n    r'jira_client = None\\s+if settings\\.jira_username and \\(settings\\.jira_token or settings\\.jira_api_token\\):\\s+jira_client = JiraClient\\(settings\\)',\n    r'jira_client = None\\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\\n        jira_client = JiraClient(settings)',\n    content\n)\nwith open(file_path, 'w') as f:",
+        "peekOfCode": "file_path = 'app/cli.py'\nwith open(file_path) as f:\n    content = f.read()\n# Фиксим все оставшиеся вхождения старой логики (в update_rag)\ncontent = re.sub(\n    r'jira_client = None\\s+if settings\\.jira_username and \\(settings\\.jira_token or settings\\.jira_api_token\\):\\s+jira_client = JiraClient\\(settings\\)',\n    r'jira_client = None\\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\\n        jira_client = JiraClient(settings)',\n    content\n)\nwith open(file_path, 'w') as f:",
         "detail": "fix_cli2",
         "documentation": {}
     },
@@ -4464,7 +4414,7 @@
         "kind": 5,
         "importPath": "fix_json",
         "description": "fix_json",
-        "peekOfCode": "file_path = 'app/storage/metadata_repository.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# We need to change .model_dump() to .model_dump(mode=\"json\")\ncontent = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")",
+        "peekOfCode": "file_path = 'app/storage/metadata_repository.py'\nwith open(file_path) as f:\n    content = f.read()\n# We need to change .model_dump() to .model_dump(mode=\"json\")\ncontent = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")",
         "detail": "fix_json",
         "documentation": {}
     },
@@ -4473,7 +4423,7 @@
         "kind": 5,
         "importPath": "fix_json",
         "description": "fix_json",
-        "peekOfCode": "content = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()",
+        "peekOfCode": "content = content.replace(\"s.model_dump()\", \"s.model_dump(mode='json')\")\ncontent = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path) as f:\n    content = f.read()",
         "detail": "fix_json",
         "documentation": {}
     },
@@ -4482,7 +4432,7 @@
         "kind": 5,
         "importPath": "fix_json",
         "description": "fix_json",
-        "peekOfCode": "content = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")",
+        "peekOfCode": "content = content.replace(\"f.model_dump()\", \"f.model_dump(mode='json')\")\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path) as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")",
         "detail": "fix_json",
         "documentation": {}
     },
@@ -4491,7 +4441,7 @@
         "kind": 5,
         "importPath": "fix_json",
         "description": "fix_json",
-        "peekOfCode": "content = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:",
+        "peekOfCode": "content = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/storage/metadata_repository.py\")\n# 2. Update metadata_sync_service.py\nfile_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path) as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:",
         "detail": "fix_json",
         "documentation": {}
     },
@@ -4500,7 +4450,7 @@
         "kind": 5,
         "importPath": "fix_json",
         "description": "fix_json",
-        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/sync/metadata_sync_service.py\")",
+        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path) as f:\n    content = f.read()\ncontent = content.replace(\"c.model_dump()\", \"c.model_dump(mode='json')\")\nwith open(file_path, 'w') as f:\n    f.write(content)\nprint(\"Updated app/sync/metadata_sync_service.py\")",
         "detail": "fix_json",
         "documentation": {}
     },
@@ -4518,7 +4468,7 @@
         "kind": 5,
         "importPath": "fix_parser",
         "description": "fix_parser",
-        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\n# Расширяем логику поиска даты завершения\nold_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",",
+        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path) as f:\n    content = f.read()\n# Расширяем логику поиска даты завершения\nold_block = \"\"\"            # 1. Ищем дату завершения (переход в \"Сделан\" или установка значения в поле типа изменения)\n            tag = (change.change_type or \"\").lower()\n            done_statuses = {\n                \"сделан\",\n                \"сделано\",\n                \"done\",",
         "detail": "fix_parser",
         "documentation": {}
     },
@@ -4545,7 +4495,7 @@
         "kind": 5,
         "importPath": "fix_parser_debug",
         "description": "fix_parser_debug",
-        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        for change in changes:\n            if not change.jira_key:\n                continue\"\"\"",
+        "peekOfCode": "file_path = 'app/confluence/parser.py'\nwith open(file_path) as f:\n    content = f.read()\nold_block = \"\"\"    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        for change in changes:\n            if not change.jira_key:\n                continue\"\"\"",
         "detail": "fix_parser_debug",
         "documentation": {}
     },
@@ -4572,7 +4522,7 @@
         "kind": 5,
         "importPath": "fix_sync",
         "description": "fix_sync",
-        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_metadata = \"\"\"            \"file_name\": resource.file_name,\n        }\"\"\"\nnew_metadata = \"\"\"            \"file_name\": resource.file_name,\n            \"release_changes_hash\": str(hash(str([c.model_dump() for c in datamart.release_changes]))),\n        }\"\"\"\nif old_metadata in content:\n    content = content.replace(old_metadata, new_metadata)",
+        "peekOfCode": "file_path = 'app/sync/metadata_sync_service.py'\nwith open(file_path) as f:\n    content = f.read()\nold_metadata = \"\"\"            \"file_name\": resource.file_name,\n        }\"\"\"\nnew_metadata = \"\"\"            \"file_name\": resource.file_name,\n            \"release_changes_hash\": str(hash(str([c.model_dump() for c in datamart.release_changes]))),\n        }\"\"\"\nif old_metadata in content:\n    content = content.replace(old_metadata, new_metadata)",
         "detail": "fix_sync",
         "documentation": {}
     },
@@ -4599,7 +4549,7 @@
         "kind": 5,
         "importPath": "fix_sync",
         "description": "fix_sync",
-        "peekOfCode": "file_path = 'app/sync/incremental_updater.py'\nwith open(file_path, 'r') as f:\n    content = f.read()\nold_updater = \"\"\"        if not content_changed:\n            self.state_repo.upsert(\n                resource_key=resource_key,\n                datamart_name=snapshot.datamart.name,\n                page_id=resource.page_id,\n                resource_type=resource.resource_type,\n                title=resource.title,",
+        "peekOfCode": "file_path = 'app/sync/incremental_updater.py'\nwith open(file_path) as f:\n    content = f.read()\nold_updater = \"\"\"        if not content_changed:\n            self.state_repo.upsert(\n                resource_key=resource_key,\n                datamart_name=snapshot.datamart.name,\n                page_id=resource.page_id,\n                resource_type=resource.resource_type,\n                title=resource.title,",
         "detail": "fix_sync",
         "documentation": {}
     },

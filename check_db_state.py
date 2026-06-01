@@ -1,6 +1,5 @@
 
 import sqlite3
-import json
 
 db_path = "data/confluence.db"
 conn = sqlite3.connect(db_path)

@@ -1,8 +1,7 @@
-import re
 
 # 1. Update metadata_sync_service.py
 file_path = 'app/sync/metadata_sync_service.py'
-with open(file_path, 'r') as f:
+with open(file_path) as f:
     content = f.read()
 
 old_metadata = """            "file_name": resource.file_name,
@@ -20,7 +19,7 @@ if old_metadata in content:
 
 # 2. Update incremental_updater.py
 file_path = 'app/sync/incremental_updater.py'
-with open(file_path, 'r') as f:
+with open(file_path) as f:
     content = f.read()
 
 old_updater = """        if not content_changed:

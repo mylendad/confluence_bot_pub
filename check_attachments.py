@@ -1,12 +1,10 @@
-import os
-import asyncio
 from app.config import get_settings
 from app.confluence.client import ConfluenceClient
 
 settings = get_settings()
 client = ConfluenceClient(settings)
 
-print(f"Fetching attachments for page 17281847916...")
+print("Fetching attachments for page 17281847916...")
 try:
     attachments = client.get_attachments("17281847916")
     print(f"Found {len(attachments)} attachments.")

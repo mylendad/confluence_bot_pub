@@ -4,10 +4,10 @@ from datetime import UTC
 
 from app.confluence.models import Datamart, S2TResource
 from app.confluence.parser import ConfluenceParser
+from app.storage.page_snapshot_repository import PageSnapshotRepository
 from app.sync.hash_service import HashService
 from app.utils.hashing import stable_hash
 from app.utils.text_utils import normalize_text
-from app.storage.page_snapshot_repository import PageSnapshotRepository
 
 logger = logging.getLogger(__name__)
 
@@ -147,14 +147,16 @@ class MetadataSyncService:
                 dt = dt.astimezone(UTC)
             return dt.replace(microsecond=0).isoformat()
 
-        # Для хэша изменений в релизах используем только стабильные данные из Confluence,
-        # чтобы изменения в Jira (статус, даты) не триггерили полную переиндексацию RAG.
+        # Для хэша изменений в релизах используем стабильные данные из Confluence,
+        # включая те, что парсер смог достать из HTML (заголовок задачи, статус).
         stable_release_changes = [
             {
                 "version": c.version,
                 "jira_key": c.jira_key,
                 "change_type": c.change_type,
                 "summary": c.summary,
+                "jira_title": c.jira_title,
+                "status": c.status,
             }
             for c in datamart.release_changes
         ]

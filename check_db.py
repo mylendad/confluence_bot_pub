@@ -1,6 +1,7 @@
 import json
 import sqlite3
 from pathlib import Path
+
 from app.config import get_settings
 
 settings = get_settings()

@@ -1,7 +1,6 @@
-import asyncio
-from datetime import datetime
 from app.confluence.models import ReleaseChange
 from app.confluence.parser import ConfluenceParser
+
 
 class MockJiraClient:
     def get_field_mapping(self):

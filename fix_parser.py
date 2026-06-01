@@ -1,8 +1,6 @@
-import re
-from datetime import datetime
 
 file_path = 'app/confluence/parser.py'
-with open(file_path, 'r') as f:
+with open(file_path) as f:
     content = f.read()
 
 # Расширяем логику поиска даты завершения

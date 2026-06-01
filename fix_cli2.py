@@ -1,7 +1,7 @@
 import re
 
 file_path = 'app/cli.py'
-with open(file_path, 'r') as f:
+with open(file_path) as f:
     content = f.read()
 
 # Фиксим все оставшиеся вхождения старой логики (в update_rag)

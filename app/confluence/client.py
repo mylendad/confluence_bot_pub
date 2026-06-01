@@ -107,7 +107,7 @@ class ConfluenceClient:
             except httpx.RequestError as exc:
                 if attempt == max_retries - 1:
                     logger.error("HTTP request failed after %d attempts: %s %s: %s", max_retries, method, path, exc)
-                    raise ConfluenceError(f"HTTP request failed: {exc}")
+                    raise ConfluenceError(f"HTTP request failed: {exc}") from exc
                 wait = 2**attempt
                 logger.warning("Request failed: %s. Retrying in %ds...", exc, wait)
                 time.sleep(wait)
@@ -300,6 +300,34 @@ class ConfluenceClient:
                 f"Attachment REST download failed: {response.status_code}"
             ) from original_error
         return response.content
+
+    def get_pages_metadata_bulk(self, page_ids: list[str]) -> dict[str, ConfluencePage]:
+        if not page_ids:
+            return {}
+        
+        # Confluence doesn't have a direct bulk get by IDs in the V1 API that returns everything we need easily,
+        # but we can use CQL or multiple requests. For "fast update", we mostly need versions.
+        
+        result = {}
+        # Chunk IDs to avoid too long CQL
+        chunk_size = 20
+        for i in range(0, len(page_ids), chunk_size):
+            chunk = page_ids[i : i + chunk_size]
+            # Use 'id in (...)' CQL search
+            cql = f"id in ({','.join(chunk)})"
+            try:
+                pages = self.search_pages(cql)
+                for page in pages:
+                    result[page.id] = page
+            except Exception as exc:
+                logger.warning("Bulk metadata fetch failed for chunk %s: %s", chunk, exc)
+                # Fallback to individual requests for this chunk
+                for pid in chunk:
+                    try:
+                        result[pid] = self.get_page(pid)
+                    except Exception:
+                        pass
+        return result
 
     def check_health(self) -> dict:
         start_time = time.time()

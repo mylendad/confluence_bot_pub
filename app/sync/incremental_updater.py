@@ -6,7 +6,6 @@ from urllib.parse import urlparse
 from app.changes.diff_service import DiffService
 from app.changes.history_repository import HistoryRepository
 from app.confluence.client import ConfluenceClient
-from app.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from app.rag.indexer import RAGIndexer
 from app.s2t.parser import S2TParser
 from app.storage.metadata_repository import MetadataRepository
