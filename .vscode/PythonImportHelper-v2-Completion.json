@@ -3259,7 +3259,7 @@
         "kind": 6,
         "importPath": "app.s2t.excel_parser",
         "description": "app.s2t.excel_parser",
-        "peekOfCode": "class ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)\n        if TEMPLATE_SHEETS.issubset(set(workbook.sheet_names)):",
+        "peekOfCode": "class ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)\n        sheet_names = set(workbook.sheet_names)",
         "detail": "app.s2t.excel_parser",
         "documentation": {}
     },

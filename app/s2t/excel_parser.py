@@ -101,8 +101,20 @@ class ExcelS2TParser:
     ) -> S2TParseResult:
         result = S2TParseResult()
         workbook = pd.ExcelFile(path)
-        if TEMPLATE_SHEETS.issubset(set(workbook.sheet_names)):
-            return self._parse_template(workbook, path, datamart_name, s2t_file_date)
+        sheet_names = set(workbook.sheet_names)
+
+        # Template detection: must have metadata sheets and ONE sheet that looks like S2T
+        base_template_sheets = {"Target columns", "Source columns", "Datamart info"}
+        if base_template_sheets.issubset(sheet_names):
+            s2t_sheet = next(
+                (s for s in workbook.sheet_names if s == "S2T" or s.startswith("S2T-") or s.startswith("S2T -")), 
+                None
+            )
+            if s2t_sheet:
+                return self._parse_template(
+                    workbook, path, datamart_name, s2t_file_date, s2t_sheet_name=s2t_sheet
+                )
+
         for sheet_name in workbook.sheet_names:
             raw = pd.read_excel(workbook, sheet_name=sheet_name, header=None, dtype=str)
             header_row = self._find_header_row(raw)
@@ -149,13 +161,14 @@ class ExcelS2TParser:
         path: Path,
         datamart_name: str,
         s2t_file_date: date | None,
+        s2t_sheet_name: str = "S2T",
     ) -> S2TParseResult:
         result = S2TParseResult()
         target_notes = self._read_target_notes(workbook)
         datamart_info = self._read_datamart_info(workbook)
-        s2t = pd.read_excel(workbook, sheet_name="S2T", header=0, dtype=str)
+        s2t = pd.read_excel(workbook, sheet_name=s2t_sheet_name, header=0, dtype=str)
         mapping = self._build_column_mapping(s2t.columns)
-        result.processed_sheets.extend(["Target columns", "Datamart info", "S2T"])
+        result.processed_sheets.extend(["Target columns", "Datamart info", s2t_sheet_name])
         for idx, row in s2t.iloc[1:].iterrows():
             try:
                 payload = self._row_payload(row, mapping)
@@ -187,7 +200,7 @@ class ExcelS2TParser:
                 )
             except Exception as exc:
                 result.issues.append(
-                    S2TParseIssue(sheet="S2T", row_number=int(idx) + 2, message=str(exc))
+                    S2TParseIssue(sheet=s2t_sheet_name, row_number=int(idx) + 2, message=str(exc))
                 )
         logger.info("Parsed %s template S2T attributes from %s", len(result.attributes), path)
         return result

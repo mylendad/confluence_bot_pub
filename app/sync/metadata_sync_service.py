@@ -56,7 +56,15 @@ class MetadataSyncService:
         all_required_page_ids = set()
         if self.snapshot_repo:
             for page in top_level_pages:
-                if pattern not in normalize_text(page.title):
+                title_clean = page.title.replace('\u00a0', ' ')
+                norm_title = normalize_text(title_clean)
+                
+                # Pre-filter to avoid unnecessary bulk fetching for obviously non-datamart pages
+                helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах"]
+                if any(kw in norm_title for kw in helper_keywords):
+                    continue
+
+                if pattern and pattern not in norm_title:
                     continue
                 if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
                     continue
@@ -78,10 +86,19 @@ class MetadataSyncService:
             title_clean = page.title.replace('\u00a0', ' ')
             norm_title = normalize_text(title_clean)
             
+            # 1. Skip helper pages from being primary datamarts
+            helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах"]
+            if any(kw in norm_title for kw in helper_keywords):
+                logger.info("Discovery: skipping helper page '%s' (ID: %s)", page.title, page.id)
+                continue
+
+            # 2. Check pattern
             if pattern and pattern not in norm_title:
                 logger.info("Discovery: skipping page '%s' (ID: %s) - title doesn't match pattern '%s'", 
                             page.title, page.id, pattern)
                 continue
+            
+            # 3. Check exclusions
             if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
                 logger.info("Discovery: skipping page '%s' (ID: %s) - excluded by pattern '%s'", 
                             page.title, page.id, exclude_pattern)
@@ -165,7 +182,8 @@ class MetadataSyncService:
 
         # Для хэша изменений в релизах используем стабильные данные из Confluence,
         # включая те, что парсер смог достать из HTML (заголовок задачи, статус).
-        stable_release_changes = [
+        # СОРТИРУЕМ для стабильности хэша.
+        stable_release_changes = sorted([
             {
                 "version": c.version,
                 "jira_key": c.jira_key,
@@ -175,7 +193,13 @@ class MetadataSyncService:
                 "status": c.status,
             }
             for c in datamart.release_changes
-        ]
+        ], key=lambda x: (x["version"] or "", x["jira_key"] or ""))
+
+        # СОРТИРУЕМ факты для стабильности хэша.
+        stable_facts = sorted(
+            [f.model_dump(mode='json') for f in datamart.facts],
+            key=lambda x: x["key"]
+        )
 
         meta = {
             "datamart_name": datamart.name,
@@ -185,8 +209,8 @@ class MetadataSyncService:
             "datamart_page_last_modified": fmt_dt(datamart.page_last_modified),
             "datamart_page_history_last_updated": fmt_dt(datamart.page_history_last_updated),
             "release_changes_hash": stable_hash(stable_release_changes),
-            "stakeholders_hash": stable_hash([s.model_dump(mode='json') for s in datamart.stakeholders]),
-            "facts_hash": stable_hash([f.model_dump(mode='json') for f in datamart.facts]),
+            "stakeholders_hash": stable_hash(sorted([s.model_dump(mode='json') for s in datamart.stakeholders], key=lambda x: x.get("email") or "")),
+            "facts_hash": stable_hash(stable_facts),
         }
         
         if resource:
