@@ -52,7 +52,12 @@ FACT_ALIASES = {
         "реестр зарегестрированных процессов",
     ],
     "release_changes": ["изменения в релизах"],
-    "data_location": ["расположение данных", "место публикации"],
+    "data_location": [
+        "расположение данных",
+        "место публикации",
+        "источники данных",
+        "источник данных",
+    ],
     "data_category": ["категория данных продукта", "категория данных"],
 }
 JIRA_KEY_RE = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
@@ -110,8 +115,8 @@ class ConfluenceParser:
                 if cf.key not in existing_keys:
                     facts.append(cf)
                     existing_keys.add(cf.key)
-        
-        # FINAL DEDUPLICATION: just in case there are multiple facts with same key 
+
+        # FINAL DEDUPLICATION: just in case there are multiple facts with same key
         # from the same page or merged. We keep the FIRST occurrence.
         unique_facts = []
         seen_keys = set()
@@ -761,22 +766,50 @@ class ConfluenceParser:
                 latest = self._latest_non_empty_row_resource(page, rows)
                 if latest:
                     resources.append(latest)
+
             for row_number, row in enumerate(rows, start=1):
                 cells = row.find_all(["th", "td"])
-                for index, cell in enumerate(cells):
+
+                # First check for dated rows
+                table_date = None
+                date_cell_index = -1
+                for i, cell in enumerate(cells):
                     table_date = parse_date_from_text(cell.get_text(" ", strip=True))
-                    if not table_date:
-                        continue
+                    if table_date:
+                        date_cell_index = i
+                        break
+
+                if table_date and date_cell_index >= 0:
                     resources.extend(
                         self._resources_from_neighbor_links(
                             page=page,
                             cells=cells,
-                            index=index,
+                            index=date_cell_index,
                             file_date=table_date,
                             resource_type="table_link",
                             row_number=row_number,
                         )
                     )
+                else:
+                    # LIBERAL PASS: Look for any link that looks like S2T in ANY row
+                    for link in row.find_all("a"):
+                        href = link.get("href")
+                        if not href:
+                            continue
+                        title = link.get_text(" ", strip=True)
+                        # Here we require keyword check because it's a generic row
+                        if self._looks_like_s2t_file(href, title) or self._looks_like_s2t(title):
+                            resources.append(
+                                S2TResource(
+                                    title=title,
+                                    url=confluence_urljoin(page.url, href),
+                                    file_name=self._file_name_from_url(href) or title,
+                                    resource_type="table_generic_link",
+                                    updated_at=page.updated_at,
+                                    version=row_number,
+                                    page_id=page.id,
+                                )
+                            )
         return resources
 
     def choose_latest_s2t(self, candidates: list[S2TResource]) -> S2TResource | None:
@@ -815,9 +848,12 @@ class ConfluenceParser:
             for pattern in self.settings.s2t_patterns
         )
 
+    def _has_s2t_extension(self, value: str) -> bool:
+        return any(suffix in value.lower() for suffix in SUPPORTED_S2T_SUFFIXES)
+
     def _looks_like_s2t_file(self, href: str, title: str) -> bool:
         lowered = f"{href} {title}".lower()
-        if not any(suffix in lowered for suffix in SUPPORTED_S2T_SUFFIXES):
+        if not self._has_s2t_extension(lowered):
             return False
         return self._looks_like_s2t(lowered)
 
@@ -829,7 +865,8 @@ class ConfluenceParser:
                 href = link.get("href")
                 file_name = self._file_name_from_url(href)
                 title = file_name or link.get_text(" ", strip=True) or href or ""
-                if href and self._looks_like_s2t_file(href, title):
+                # Here we only check extension because it's in a "latest" row
+                if href and self._has_s2t_extension(href or title):
                     return S2TResource(
                         title=title,
                         url=confluence_urljoin(page.url, href),
@@ -863,7 +900,8 @@ class ConfluenceParser:
                 href = link.get("href")
                 file_name = self._file_name_from_url(href)
                 title = file_name or link.get_text(" ", strip=True) or href or ""
-                if href and self._looks_like_s2t_file(href, title):
+                # Here we only check extension because it's in a dated row
+                if href and self._has_s2t_extension(href or title):
                     resources.append(
                         S2TResource(
                             title=title,

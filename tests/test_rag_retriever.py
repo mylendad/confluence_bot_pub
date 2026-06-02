@@ -98,6 +98,31 @@ def test_datamart_list_question_uses_metadata_store(tmp_path: Path) -> None:
     assert "Витрина Маркеры" in answer.answer
 
 
+def test_datamart_list_filters_junk(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(name="Витрина Маркеры", confluence_page_id="1", confluence_url="url1")
+    )
+    metadata_repo.upsert_datamart(
+        Datamart(name="Техническое задание -- Витрина карта мигранта", confluence_page_id="2", confluence_url="url2")
+    )
+    metadata_repo.upsert_datamart(
+        Datamart(name="Функцональное решение -- Витрина", confluence_page_id="3", confluence_url="url3")
+    )
+    metadata_repo.upsert_datamart(
+        Datamart(name="ТЗ - Витрина", confluence_page_id="4", confluence_url="url4")
+    )
+    
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+    answer = retriever.answer("какие есть витрины")
+    
+    assert "Витрина Маркеры" in answer.answer
+    assert "Техническое задание" not in answer.answer
+    assert "Функцональное решение" not in answer.answer
+    assert "ТЗ -" not in answer.answer
+
+
 def test_datamart_fact_question_uses_main_page_table(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)

@@ -13,12 +13,6 @@ from app.utils.text_utils import fuzzy_contains, normalize_text
 class IntentClassifier:
     def classify(self, question: str) -> str:
         q = normalize_text(question)
-        if (
-            "витрин" in q
-            and any(word in q for word in ["какие", "список", "есть"])
-            and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id"])
-        ):
-            return "datamart_list"
 
         # "Изменения за период/год/даты" -> структурированная история (из БД)
         if "измен" in q and any(
@@ -75,6 +69,14 @@ class IntentClassifier:
             return "source_lineage"
         if any(word in q for word in ["логика", "преобразован", "расчет", "расчёт"]):
             return "transformation_logic"
+            
+        if (
+            "витрин" in q
+            and any(word in q for word in ["какие", "список", "есть"])
+            and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id", "источник", "логика"])
+        ):
+            return "datamart_list"
+            
         return "general_question"
 
 
@@ -256,9 +258,9 @@ class RAGRetriever:
 
         # Фильтруем мусор (ТЗ, Чек-листы, Спец. решения и т.д.)
         junk_patterns = [
-            r"тз\s*-", r"тз\s*--", r"технические задания", r"чек-лист", 
-            r"препятствия", r"функциональное решение", r"страниц[аы] для 2лс",
-            r"копия", r"изменения в релизах"
+            r"\bтз\b", r"техническ[ои][еи] задани[ея]", r"чек лист", 
+            r"препятствия", r"функциональное решение", r"функцональное решение",
+            r"страниц[аы] для 2лс", r"копия", r"изменения в релизах"
         ]
         combined_junk = "|".join(junk_patterns)
         
@@ -272,10 +274,15 @@ class RAGRetriever:
                 filtered_names.append(name)
                 continue
                 
-            # Иначе проверяем на мусорные слова
-            if re.search(combined_junk, name.lower()):
+            # Проверяем нормализованное имя на мусорные слова
+            norm_name = normalize_text(name)
+            if re.search(combined_junk, norm_name):
                 continue
             
+            # Дополнительная проверка на оригинальное имя (на всякий случай)
+            if re.search(r"тз\s*-|тз\s*--", name.lower()):
+                continue
+
             filtered_names.append(name)
 
         lines = ["Доступные витрины:"]

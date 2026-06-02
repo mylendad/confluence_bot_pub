@@ -3223,7 +3223,7 @@
         "kind": 6,
         "importPath": "app.rag.retriever",
         "description": "app.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if (\n            \"витрин\" in q\n            and any(word in q for word in [\"какие\", \"список\", \"есть\"])\n            and not any(word in q for word in [\"атрибут\", \"измен\", \"релиз\", \"epk_id\", \"_id\"])\n        ):\n            return \"datamart_list\"\n        # \"Изменения за период/год/даты\" -> структурированная история (из БД)",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        # \"Изменения за период/год/даты\" -> структурированная история (из БД)\n        if \"измен\" in q and any(\n            word in q for word in [\"период\", \"дата\", \"датам\", \"история\", \"год\", \"текущ\"]\n        ):\n            # Но если прямо упомянут \"релиз\", то все же Confluence\n            if \"релиз\" not in q:\n                return \"last_year_changes\"",
         "detail": "app.rag.retriever",
         "documentation": {}
     },
@@ -4223,6 +4223,15 @@
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
         "peekOfCode": "def test_datamart_list_question_uses_metadata_store(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеры\",\n            confluence_page_id=\"42\",\n            confluence_url=\"https://confluence.example.ru/pages/42\",\n        )\n    )",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_datamart_list_filters_junk",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_datamart_list_filters_junk(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(name=\"Витрина Маркеры\", confluence_page_id=\"1\", confluence_url=\"url1\")\n    )\n    metadata_repo.upsert_datamart(\n        Datamart(name=\"Техническое задание -- Витрина карта мигранта\", confluence_page_id=\"2\", confluence_url=\"url2\")\n    )\n    metadata_repo.upsert_datamart(",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
