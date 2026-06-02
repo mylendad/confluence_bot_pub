@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     jira_verify_ssl: bool = True
 
     datamart_page_pattern: str = ""
-    datamart_exclude_pattern: str = r"^[0-9]+|(?i)архив|archive|черновик|draft"
+    datamart_exclude_pattern: str = r"^[0-9]+|архив|archive|черновик|draft"
     s2t_section_patterns: str = "s2t,S2T,Source to Target,Source-to-Target"
 
     data_dir: Path = Path("./data")

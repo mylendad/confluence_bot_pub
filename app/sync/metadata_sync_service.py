@@ -58,7 +58,7 @@ class MetadataSyncService:
             for page in top_level_pages:
                 if pattern not in normalize_text(page.title):
                     continue
-                if exclude_pattern and re.search(exclude_pattern, page.title):
+                if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
                     continue
                 snapshot = self.snapshot_repo.get(page.id)
                 if snapshot:
@@ -76,7 +76,7 @@ class MetadataSyncService:
         for page in top_level_pages:
             if pattern not in normalize_text(page.title):
                 continue
-            if exclude_pattern and re.search(exclude_pattern, page.title):
+            if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
                 logger.info("Discovery: skipping excluded datamart page '%s'", page.title)
                 continue
                 
