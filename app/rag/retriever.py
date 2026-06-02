@@ -49,6 +49,9 @@ class IntentClassifier:
                 "процесс из реестра",
                 "зарегистрированных процессов",
                 "зарегестрированных процессов",
+                "расположение данных",
+                "место публикации",
+                "категория данных",
             ]
         ):
             return "datamart_fact"
@@ -508,6 +511,8 @@ class RAGRetriever:
                     "зарегестрированных процессов",
                 ],
             ),
+            ("data_location", ["расположение данных", "место публикации"]),
+            ("data_category", ["категория данных"]),
         ]
         for key, aliases in checks:
             if any(alias in q for alias in aliases):
