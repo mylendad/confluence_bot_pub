@@ -817,7 +817,9 @@ class ConfluenceParser:
 
     def _looks_like_s2t_file(self, href: str, title: str) -> bool:
         lowered = f"{href} {title}".lower()
-        return any(suffix in lowered for suffix in SUPPORTED_S2T_SUFFIXES)
+        if not any(suffix in lowered for suffix in SUPPORTED_S2T_SUFFIXES):
+            return False
+        return self._looks_like_s2t(lowered)
 
     def _latest_non_empty_row_resource(self, page: ConfluencePage, rows) -> S2TResource | None:
         for row_number, row in reversed(list(enumerate(rows, start=1))):
