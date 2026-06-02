@@ -22,9 +22,6 @@ class S2TMetadataSnapshot:
     
     @property
     def unique_key(self) -> str:
-        # A datamart can link to an attachment on another page.
-        # To avoid state collisions between datamarts sharing the same file,
-        # we prefix the resource key with the datamart's own page ID.
         if not self.resource:
             return f"{self.datamart.confluence_page_id}:no_s2t"
         base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name
@@ -48,64 +45,41 @@ class MetadataSyncService:
         pattern = normalize_text(self.parser.settings.datamart_page_pattern)
         exclude_pattern = self.parser.settings.datamart_exclude_pattern
         
-        # Pre-fetch top-level pages
         logger.info("Discovery: fetching all accessible pages recursively...")
         top_level_pages = list(self.parser.client.iter_top_level_pages())
-        logger.info("Discovery: found %d pages total in Confluence", len(top_level_pages))
+        logger.info("Discovery: found %d pages total in Confluence tree", len(top_level_pages))
         
-        # Helper keywords for filtering
-        helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах", "страница для 2лс"]
-        norm_helpers = [normalize_text(kw) for kw in helper_keywords]
+        # Keywords for identifying helper pages (only if they are at the START of the title)
+        helper_prefixes = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах", "страница для 2лс", "копия"]
+        norm_prefixes = [normalize_text(kw) for kw in helper_prefixes]
 
-        # Gather all required page IDs for bulk version check
-        all_required_page_ids = set()
-        if self.snapshot_repo:
-            for page in top_level_pages:
-                title_clean = page.title.replace('\u00a0', ' ')
-                norm_title = normalize_text(title_clean)
-                
-                # Pre-filter helper pages
-                if any(kw in norm_title for kw in norm_helpers):
-                    continue
-
-                if pattern and pattern not in norm_title:
-                    continue
-                if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
-                    continue
-                snapshot = self.snapshot_repo.get(page.id)
-                if snapshot:
-                    version_map, _ = snapshot
-                    all_required_page_ids.update(version_map.keys())
-
-        # Bulk fetch metadata for all cached pages
-        if all_required_page_ids:
-            logger.info("Discovery: bulk fetching metadata for %d cached pages...", len(all_required_page_ids))
-            bulk_meta = self.parser.client.get_pages_metadata_bulk(list(all_required_page_ids))
-            for pid, meta_page in bulk_meta.items():
-                if meta_page.version is not None:
-                    self._prefetched_versions[pid] = meta_page.version
-
-        # Regular crawl
         for page in top_level_pages:
-            # Replace non-breaking spaces and normalize
-            title_clean = page.title.replace('\u00a0', ' ')
+            title_clean = page.title.replace('\u00a0', ' ').strip()
             norm_title = normalize_text(title_clean)
             
-            # 1. Skip helper pages from being primary datamarts
-            if any(kw in norm_title for kw in norm_helpers):
-                logger.info("Discovery: skipping helper page '%s' (ID: %s)", page.title, page.id)
+            # 1. Skip helper pages only if they START with helper keywords
+            is_helper = False
+            for prefix in norm_prefixes:
+                if norm_title.startswith(prefix):
+                    is_helper = True
+                    break
+            
+            if is_helper:
+                logger.debug("Discovery: skipping helper page '%s'", page.title)
                 continue
 
-            # 2. Check pattern
+            # 2. Check pattern (if configured)
             if pattern and pattern not in norm_title:
-                logger.debug("Discovery: skipping page '%s' (ID: %s) - doesn't match pattern '%s'", 
-                            page.title, page.id, pattern)
-                continue
+                # Special check for Inner Source even if pattern doesn't match
+                if "inner" not in norm_title:
+                    logger.debug("Discovery: skipping page '%s' - title doesn't match pattern '%s'", page.title, pattern)
+                    continue
+                else:
+                    logger.info("Discovery: page '%s' matches 'inner' keyword, bypassing pattern filter", page.title)
             
             # 3. Check exclusions
             if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
-                logger.info("Discovery: skipping page '%s' (ID: %s) - excluded by pattern '%s'", 
-                            page.title, page.id, exclude_pattern)
+                logger.info("Discovery: skipping page '%s' - excluded by pattern", page.title)
                 continue
                 
             logger.info("Discovery: processing datamart page '%s' (ID: %s)", page.title, page.id)
@@ -116,22 +90,20 @@ class MetadataSyncService:
                 
             snapshots.append(self._to_snapshot(datamart))
 
-        # 4. MANUAL OVERRIDE: specifically try to find "Inner Source" if it's missing
+        # 4. Final attempt for Inner Source if still missing
         discovered_names = {s.datamart.name.lower() for s in snapshots}
         if not any("inner source" in name for name in discovered_names):
-            logger.info("Discovery: 'Inner Source' not found in regular crawl, attempting direct lookup...")
+            logger.info("Discovery: 'Inner Source' still missing, attempting GLOBAL direct search...")
             try:
-                # Try common variations
                 for name in ["Витрина Inner Source", "Inner Source", "Витрина InnerSource"]:
-                    page = self.parser.client.find_page_by_title(name)
-                    if page:
-                        logger.info("Discovery: found '%s' via direct title lookup (ID: %s)", name, page.id)
-                        datamart = self._get_datamart_with_cache(page)
-                        if datamart:
-                            snapshots.append(self._to_snapshot(datamart))
+                    found_page = self.parser.client.find_page_by_title(name)
+                    if found_page:
+                        logger.info("Discovery: FOUND '%s' via direct API lookup! (ID: %s)", name, found_page.id)
+                        dm = self._get_datamart_with_cache(found_page)
+                        if dm: snapshots.append(self._to_snapshot(dm))
                         break
-            except Exception as exc:
-                logger.warning("Discovery: manual direct lookup failed: %s", exc)
+            except Exception as e:
+                logger.warning("Discovery: direct search failed: %s", e)
 
         return snapshots
 
@@ -164,12 +136,8 @@ class MetadataSyncService:
         if snapshot:
             version_map, cached_datamart = snapshot
             if self._verify_versions(version_map):
-                logger.info("Using cached parsing result for datamart '%s'", page.title)
                 return cached_datamart
-            else:
-                logger.info("Cache invalidated for datamart '%s' due to version changes", page.title)
         
-        # Parse from scratch
         datamart = self.parser.parse_datamart_page(page, skip_jira=True)
         if datamart:
             self.snapshot_repo.upsert(page.id, datamart.visited_pages, datamart)
@@ -177,44 +145,26 @@ class MetadataSyncService:
 
     def _verify_versions(self, version_map: dict[str, int]) -> bool:
         for page_id, expected_version in version_map.items():
-            # First try prefetched bulk map
             if hasattr(self, "_prefetched_versions") and page_id in self._prefetched_versions:
-                if self._prefetched_versions[page_id] != expected_version:
-                    return False
+                if self._prefetched_versions[page_id] != expected_version: return False
                 continue
-                
-            # Fallback to single fast request if not in prefetched map
             try:
-                current_page = self.parser.client.get_page(page_id, expand="version,history.lastUpdated")
-                if not current_page or current_page.version != expected_version:
-                    return False
-            except Exception:
-                return False
+                current_page = self.parser.client.get_page(page_id)
+                if not current_page or current_page.version != expected_version: return False
+            except Exception: return False
         return True
 
     @staticmethod
     def _metadata(datamart: Datamart, resource: S2TResource | None) -> dict:
         def fmt_dt(dt) -> str | None:
-            if not dt:
-                return None
-            # Normalize to UTC and remove microseconds for stable hashing
-            if dt.tzinfo:
-                dt = dt.astimezone(UTC)
+            if not dt: return None
+            if dt.tzinfo: dt = dt.astimezone(UTC)
             return dt.replace(microsecond=0).isoformat()
 
-        # Для хэша изменений в релизах используем стабильные данные из Confluence,
-        # включая те, что парсер смог достать из HTML (заголовок задачи, статус).
         stable_release_changes = sorted([
-            {
-                "version": c.version,
-                "jira_key": c.jira_key,
-                "change_type": c.change_type,
-                "summary": c.summary,
-                "jira_title": c.jira_title,
-                "status": c.status,
-            }
+            {"v": c.version, "k": c.jira_key, "s": c.summary}
             for c in datamart.release_changes
-        ], key=lambda x: (x["version"] or "", x["jira_key"] or ""))
+        ], key=lambda x: (x["v"] or "", x["k"] or ""))
 
         stable_facts = sorted(
             [f.model_dump(mode='json') for f in datamart.facts],
@@ -224,10 +174,6 @@ class MetadataSyncService:
         meta = {
             "datamart_name": datamart.name,
             "datamart_page_id": datamart.confluence_page_id,
-            "datamart_page_version": datamart.page_version,
-            "datamart_page_version_when": fmt_dt(datamart.page_version_when),
-            "datamart_page_last_modified": fmt_dt(datamart.page_last_modified),
-            "datamart_page_history_last_updated": fmt_dt(datamart.page_history_last_updated),
             "release_changes_hash": stable_hash(stable_release_changes),
             "stakeholders_hash": stable_hash(sorted([s.model_dump(mode='json') for s in datamart.stakeholders], key=lambda x: x.get("email") or "")),
             "facts_hash": stable_hash(stable_facts),
@@ -236,15 +182,7 @@ class MetadataSyncService:
         if resource:
             meta.update({
                 "attachment_id": resource.id,
-                "attachment_title": resource.title,
                 "attachment_version_number": resource.version,
-                "attachment_version_when": fmt_dt(resource.version_when),
-                "attachment_file_size": resource.file_size,
-                "download_url": resource.download_url or resource.url,
-                "media_type": resource.media_type,
-                "resource_type": resource.resource_type,
-                "resource_page_id": resource.page_id,
-                "resource_updated_at": fmt_dt(resource.updated_at),
                 "file_name": resource.file_name,
             })
         return meta

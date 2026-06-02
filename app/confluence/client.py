@@ -152,25 +152,16 @@ class ConfluenceClient:
         self._cache_get_page[page_id] = page
         return page
 
-    def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
-        limit = 50
-        start = 0
-        while True:
-            payload = self._get(
-                "/rest/api/content/search",
-                {
-                    "cql": cql,
-                    "expand": "body.storage,version,history.lastUpdated",
-                    "limit": limit,
-                    "start": start,
-                },
-            )
-            results = payload.get("results", [])
-            for item in results:
-                yield self._page_from_payload(item)
-            if len(results) < limit:
-                break
-            start += limit
+    def find_page_by_title(self, title: str) -> ConfluencePage | None:
+        """Finds a page exactly by its title using CQL."""
+        # Wrap title in double quotes to handle spaces correctly in CQL
+        cql = f'title = "{title}"'
+        try:
+            pages = list(self.search_pages(cql))
+            return pages[0] if pages else None
+        except Exception as exc:
+            logger.warning("Failed to find page by title '%s': %s", title, exc)
+            return None
 
     def get_children(self, page_id: str) -> list[ConfluencePage]:
         payload = self._get(

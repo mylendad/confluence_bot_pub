@@ -3466,7 +3466,7 @@
         "kind": 6,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.\n        # To avoid state collisions between datamarts sharing the same file,\n        # we prefix the resource key with the datamart's own page ID.",
+        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        if not self.resource:\n            return f\"{self.datamart.confluence_page_id}:no_s2t\"\n        base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3484,7 +3484,7 @@
         "kind": 5,
         "importPath": "app.sync.metadata_sync_service",
         "description": "app.sync.metadata_sync_service",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        # A datamart can link to an attachment on another page.",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        if not self.resource:",
         "detail": "app.sync.metadata_sync_service",
         "documentation": {}
     },

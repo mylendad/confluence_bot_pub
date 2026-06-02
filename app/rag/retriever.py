@@ -253,29 +253,38 @@ class RAGRetriever:
                 answer="Витрины не найдены. Сначала выполните `update-rag` или `parse-s2t`.",
                 sources=[],
             )
+
+        # Фильтруем мусор (ТЗ, Чек-листы, Спец. решения и т.д.)
+        junk_patterns = [
+            r"тз\s*-", r"тз\s*--", r"технические задания", r"чек-лист", 
+            r"препятствия", r"функциональное решение", r"страниц[аы] для 2лс",
+            r"копия", r"изменения в релизах"
+        ]
+        combined_junk = "|".join(junk_patterns)
         
-        # Группируем атрибуты по витринам, чтобы достать названия файлов S2T
-        all_attrs = self.metadata_repo.list_attributes()
-        dm_to_s2t = {}
-        for attr in all_attrs:
-            if attr.datamart_name and attr.s2t_file_name:
-                dm_to_s2t[attr.datamart_name] = attr.s2t_file_name
+        filtered_names = []
+        for dm in datamarts:
+            name = dm.get("name", "")
+            if not name: continue
+            
+            # Если это Inner Source - всегда оставляем
+            if "inner" in name.lower():
+                filtered_names.append(name)
+                continue
+                
+            # Иначе проверяем на мусорные слова
+            if re.search(combined_junk, name.lower()):
+                continue
+            
+            filtered_names.append(name)
 
         lines = ["Доступные витрины:"]
-        names = sorted({datamart["name"] for datamart in datamarts if datamart.get("name")})
-        for name in names:
-            s2t = dm_to_s2t.get(name, "нет s2t на конфлюенсе")
-            lines.append(f"- {name} (Источник: {s2t})")
+        for name in sorted(set(filtered_names)):
+            lines.append(f"- {name}")
 
         return RAGAnswer(
             answer="\n".join(lines),
-            sources=[
-                {
-                    "datamart": datamart.get("name"),
-                    "confluence_url": datamart.get("confluence_url"),
-                }
-                for datamart in datamarts[:10]
-            ],
+            sources=[], # Возвращаем пустой список, чтобы не было дублирования "Источников" в конце
         )
 
     def _datamart_fact(self, question: str) -> RAGAnswer:
