@@ -1,23 +1,16 @@
+import json
+from pathlib import Path
+from app.storage.sqlite import SQLite
+from app.storage.metadata_repository import MetadataRepository
 
-import sqlite3
+db = SQLite(Path("data/confluence.db"))
+repo = MetadataRepository(db)
 
-db_path = "data/confluence.db"
-conn = sqlite3.connect(db_path)
-conn.row_factory = sqlite3.Row
-cursor = conn.cursor()
-
-print("--- Table Info ---")
-for row in cursor.execute("PRAGMA table_info(s2t_state)"):
-    print(dict(row))
-
-print("\n--- Current Data (top 1) ---")
-row = cursor.execute("SELECT * FROM s2t_state LIMIT 1").fetchone()
-if row:
-    d = dict(row)
-    # Truncate long fields
-    if "metadata_json" in d: d["metadata_json"] = d["metadata_json"][:100] + "..."
-    print(d)
-else:
-    print("No data in s2t_state")
-
-conn.close()
+rows = repo.list_datamarts()
+print(f"Total datamarts in confluence.db: {len(rows)}")
+for row in rows:
+    print(f"- {row['name']}")
+    facts = json.loads(row['facts_json'])
+    for f in facts:
+        if f['key'] in ('data_location', 'data_category'):
+            print(f"  FOUND: {f['key']} = {f['value']}")

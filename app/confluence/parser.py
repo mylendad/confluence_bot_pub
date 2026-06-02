@@ -109,6 +109,7 @@ class ConfluenceParser:
             for cf in checklist_facts:
                 if cf.key not in existing_keys:
                     facts.append(cf)
+                    existing_keys.add(cf.key)
                 else:
                     # If key exists, maybe prefer checklist value or keep original?
                     # Usually datamart page is more "official", but checklist might be more "fresh".

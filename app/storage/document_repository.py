@@ -21,7 +21,15 @@ class DocumentRepository:
                 "delete from documents where json_extract(metadata_json, '$.datamart_name') = ?",
                 (datamart_name,),
             )
+            # Deduplicate documents in memory first to be safe
+            seen_ids = set()
+            unique_docs = []
             for doc in documents:
+                if doc.id not in seen_ids:
+                    unique_docs.append(doc)
+                    seen_ids.add(doc.id)
+            
+            for doc in unique_docs:
                 self._insert_document(conn, doc)
 
     def list_documents(self) -> list[RAGDocument]:
@@ -37,7 +45,7 @@ class DocumentRepository:
         payload = doc.metadata
         conn.execute(
             """
-            insert into documents(id, text, metadata_json, content_hash)
+            insert or replace into documents(id, text, metadata_json, content_hash)
             values (?, ?, ?, ?)
             """,
             (
