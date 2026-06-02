@@ -1181,6 +1181,14 @@
         "documentation": {}
     },
     {
+        "label": "get_settings",
+        "importPath": "app.config",
+        "description": "app.config",
+        "isExtraImport": true,
+        "detail": "app.config",
+        "documentation": {}
+    },
+    {
         "label": "Settings",
         "importPath": "app.config",
         "description": "app.config",
@@ -1659,6 +1667,14 @@
         "description": "bs4",
         "isExtraImport": true,
         "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "app.confluence.client",
+        "description": "app.confluence.client",
+        "isExtraImport": true,
+        "detail": "app.confluence.client",
         "documentation": {}
     },
     {
@@ -2740,6 +2756,24 @@
         "importPath": "inspect",
         "description": "inspect",
         "detail": "inspect",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -4747,6 +4781,33 @@
         "description": "parser_working",
         "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
         "detail": "parser_working",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "test_inner_source",
+        "description": "test_inner_source",
+        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nresults = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "detail": "test_inner_source",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "test_inner_source",
+        "description": "test_inner_source",
+        "peekOfCode": "client = ConfluenceClient(settings)\nresults = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "detail": "test_inner_source",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "test_inner_source",
+        "description": "test_inner_source",
+        "peekOfCode": "results = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "detail": "test_inner_source",
         "documentation": {}
     },
     {

@@ -1,4 +1,5 @@
 import logging
+import re
 from dataclasses import dataclass
 from datetime import UTC
 
@@ -45,6 +46,7 @@ class MetadataSyncService:
     def collect(self) -> list[S2TMetadataSnapshot]:
         snapshots: list[S2TMetadataSnapshot] = []
         pattern = normalize_text(self.parser.settings.datamart_page_pattern)
+        exclude_pattern = self.parser.settings.datamart_exclude_pattern
         
         # Pre-fetch top-level pages
         logger.info("Discovery: fetching top-level pages...")
@@ -55,6 +57,8 @@ class MetadataSyncService:
         if self.snapshot_repo:
             for page in top_level_pages:
                 if pattern not in normalize_text(page.title):
+                    continue
+                if exclude_pattern and re.search(exclude_pattern, page.title):
                     continue
                 snapshot = self.snapshot_repo.get(page.id)
                 if snapshot:
@@ -71,6 +75,9 @@ class MetadataSyncService:
 
         for page in top_level_pages:
             if pattern not in normalize_text(page.title):
+                continue
+            if exclude_pattern and re.search(exclude_pattern, page.title):
+                logger.info("Discovery: skipping excluded datamart page '%s'", page.title)
                 continue
                 
             logger.info("Discovery: processing datamart page '%s' (ID: %s)", page.title, page.id)

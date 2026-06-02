@@ -15,9 +15,11 @@ class BotService:
             return f"Ответ:\n{answer.answer}"
         source_lines = []
         for idx, source in enumerate(answer.sources, start=1):
+            s2t_file = source.get('s2t_file') or source.get('s2t_file_name')
+            s2t_display = s2t_file if s2t_file else "нет s2t на конфлюенсе"
             source_lines.append(
                 f"{idx}. Витрина: {source.get('datamart') or source.get('datamart_name') or '-'}\n"
-                f"   S2T: {source.get('s2t_file') or source.get('s2t_file_name') or '-'}\n"
+                f"   S2T: {s2t_display}\n"
                 f"   Дата S2T: {source.get('s2t_file_date') or '-'}\n"
                 f"   Confluence: {source.get('confluence_url') or source.get('source_url') or '-'}"
             )

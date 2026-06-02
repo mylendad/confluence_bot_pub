@@ -61,7 +61,7 @@ class IntentClassifier:
             if "витрин" in q:
                 return "datamart_fact"
             return "owner_lookup"
-        if "атрибутный состав" in q or "какие атрибут" in q:
+        if "атрибутный состав" in q or "какие атрибут" in q or "атрибуты" in q:
             return "attribute_composition"
         if ("в каких витринах" in q or "где есть" in q) and any(
             c in q for c in ["epk_id", "_id", "_dt", "_cd"]
@@ -182,7 +182,7 @@ class RAGRetriever:
             else self.metadata_repo.list_attributes()
         )
         if not attrs:
-            return RAGAnswer(answer="Данных по атрибутному составу нет.", sources=[])
+            return RAGAnswer(answer="нет s2t на конфлюенсе.", sources=[])
         fields = [attr.target_field for attr in attrs if attr.target_field]
         return RAGAnswer(
             answer="Атрибутный состав: " + ", ".join(sorted(set(fields))[:100]),
