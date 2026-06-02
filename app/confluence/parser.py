@@ -52,6 +52,8 @@ FACT_ALIASES = {
         "реестр зарегестрированных процессов",
     ],
     "release_changes": ["изменения в релизах"],
+    "data_location": ["расположение данных", "место публикации"],
+    "data_category": ["категория данных продукта", "категория данных"],
 }
 JIRA_KEY_RE = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
 PLACEHOLDER_TEXTS = {
@@ -98,14 +100,30 @@ class ConfluenceParser:
         html = page.body_html or ""
         stakeholders = self.extract_stakeholders(html)
         facts = self.extract_datamart_facts(html)
-        
-        release_changes = self.extract_release_changes(page, html, visited_versions=visited_versions)
+
+        # Parse checklist if exists
+        checklist_facts = self.extract_checklist_facts(page, visited_versions=visited_versions)
+        if checklist_facts:
+            # Merge facts, avoiding duplicates by key
+            existing_keys = {f.key for f in facts}
+            for cf in checklist_facts:
+                if cf.key not in existing_keys:
+                    facts.append(cf)
+                else:
+                    # If key exists, maybe prefer checklist value or keep original?
+                    # Usually datamart page is more "official", but checklist might be more "fresh".
+                    # Let's keep original for now if they clash.
+                    pass
+
+        release_changes = self.extract_release_changes(
+            page, html, visited_versions=visited_versions
+        )
         if self.jira_client and not skip_jira:
             self.enrich_release_changes(release_changes)
-        
+
         candidates = self.find_s2t_candidates(page, visited_versions=visited_versions)
         selected = self.choose_latest_s2t(candidates)
-        
+
         return Datamart(
             name=page.title,
             confluence_page_id=page.id,
@@ -120,6 +138,97 @@ class ConfluenceParser:
             s2t_resource=selected,
             visited_pages=visited_versions,
         )
+
+    def extract_checklist_facts(
+        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None
+    ) -> list[DatamartFact]:
+        checklist_page = self._find_checklist_page_recursive(
+            page, depth=0, visited=set(), visited_versions=visited_versions
+        )
+        if not checklist_page or not checklist_page.body_html:
+            return []
+
+        logger.info("Parsing checklist page: %s", checklist_page.title)
+        soup = BeautifulSoup(checklist_page.body_html, "html.parser")
+        facts: list[DatamartFact] = []
+        seen: set[tuple[str, str, str]] = set()
+
+        for row in soup.find_all("tr"):
+            cells = row.find_all(["th", "td"], recursive=False) or row.find_all(["th", "td"])
+            if len(cells) < 2:
+                continue
+            label = self._clean_text(cells[0].get_text(" ", strip=True))
+            value = self._clean_text(cells[1].get_text(" ", strip=True))
+            if not label or not value:
+                continue
+
+            key = self._fact_key(label)
+            if key == "unknown":
+                # For checklists, we include all rows, using normalized label as key if unknown
+                key = normalize_text(label).replace(" ", "_")
+
+            links = self._links_from_node(cells[1])
+            marker = (key, label.casefold(), value)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            facts.append(DatamartFact(key=key, label=label, value=value, links=links))
+
+        return facts
+
+    def _find_checklist_page_recursive(
+        self,
+        page: ConfluencePage,
+        depth: int,
+        visited: set[str],
+        visited_versions: dict[str, int] | None = None,
+    ) -> ConfluencePage | None:
+        if page.id in visited or depth > 3:
+            return None
+        visited.add(page.id)
+        if visited_versions is not None and page.version:
+            visited_versions[page.id] = page.version
+
+        kw_checklist = normalize_text("чек-лист")
+        kw_checklists = normalize_text("чек-листы")
+
+        # 1. Check if CURRENT page is a checklist (unlikely for recursive entry but good for completeness)
+        norm_title = normalize_text(page.title)
+        if kw_checklist in norm_title and kw_checklists not in norm_title:
+            return page
+
+        # 2. Look among children
+        try:
+            children = self.client.get_children(page.id)
+
+            # Sort children to prefer latest by date in title or just by title
+            children = sorted(children, key=lambda c: c.title, reverse=True)
+
+            # First pass: look for direct checklist
+            for child in children:
+                c_norm_title = normalize_text(child.title)
+                if kw_checklist in c_norm_title and kw_checklists not in c_norm_title:
+                    logger.info("Found checklist page: %s", child.title)
+                    full_page = self.client.get_page(child.id)
+                    if visited_versions is not None and full_page.version:
+                        visited_versions[full_page.id] = full_page.version
+                    return full_page
+
+            # Second pass: look for "Check-lists" folder and dive into it
+            for child in children:
+                c_norm_title = normalize_text(child.title)
+                if kw_checklists in c_norm_title:
+                    logger.info("Found checklists folder: %s", child.title)
+                    res = self._find_checklist_page_recursive(
+                        child, depth + 1, visited, visited_versions=visited_versions
+                    )
+                    if res:
+                        return res
+
+        except Exception as exc:
+            logger.warning("Error searching checklists for %s: %s", page.id, exc)
+
+        return None
 
     def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:
         if not self.jira_client:
@@ -150,8 +259,19 @@ class ConfluenceParser:
             # 1. Ищем дату завершения (поле Status или Решение)
             tag = (change.change_type or "").lower()
             done_statuses = {
-                "сделан", "сделано", "done", "resolved", "решено", "закрыт", "closed",
-                "выполнено", "выполнен", "завершено", "завершен", "готово", "готов"
+                "сделан",
+                "сделано",
+                "done",
+                "resolved",
+                "решено",
+                "закрыт",
+                "closed",
+                "выполнено",
+                "выполнен",
+                "завершено",
+                "завершен",
+                "готово",
+                "готов",
             }
 
             for history in histories:
@@ -160,15 +280,15 @@ class ConfluenceParser:
                 for item in history.get("items", []):
                     field_name = (item.get("field") or "").lower()
                     status_name = (item.get("toString") or "").lower()
-                    
+
                     # Проверяем системные поля (Status, Resolution/Решение) или поле-тег из Confluence
                     is_done_field = field_name in {"status", "resolution", "решение"}
                     is_tag_field = tag and field_name == tag
-                    
+
                     if (is_done_field or is_tag_field) and status_name in done_statuses:
                         found_done_in_this_history = True
                         break
-                    
+
                 if found_done_in_this_history and history_created:
                     try:
                         # Jira присылает дату типа 2025-10-15T14:04:57.000+0300
@@ -176,8 +296,10 @@ class ConfluenceParser:
                         change.jira_done_at = datetime.fromisoformat(clean_date)
                         break
                     except Exception as exc:
-                        logger.warning("Failed to parse Jira history date %s: %s", history_created, exc)
-            
+                        logger.warning(
+                            "Failed to parse Jira history date %s: %s", history_created, exc
+                        )
+
             # 2. Ищем значение для конкретного типа изменения (если есть)
             if tag:
                 tag_upper = tag.upper()
@@ -317,7 +439,7 @@ class ConfluenceParser:
 
         current_version = "Неизвестная версия"
         current_jira_keys = []
-        current_jira_titles = {} # Map key -> title
+        current_jira_titles = {}  # Map key -> title
         current_status = None
 
         # Перебираем ВСЕ элементы на странице последовательно
@@ -349,7 +471,7 @@ class ConfluenceParser:
                         title = self._jira_title_from_node(issue_node)
                         if title:
                             current_jira_titles[key] = title
-                
+
                 # Собираем статус, если он есть в узле
                 node_status = self._jira_status_from_node(node)
                 if node_status:
@@ -374,7 +496,7 @@ class ConfluenceParser:
 
                     change_type = self._release_change_type(item)
                     summary = self._release_summary(item, change_type)
-                    
+
                     # Статус в li имеет приоритет над статусом в p
                     item_status = self._jira_status_from_node(item) or current_status
 
@@ -400,7 +522,9 @@ class ConfluenceParser:
     def find_s2t_candidates(
         self, page: ConfluencePage, visited_versions: dict[str, int] | None = None
     ) -> list[S2TResource]:
-        return self._find_s2t_recursive(page, depth=0, visited=set(), visited_versions=visited_versions)
+        return self._find_s2t_recursive(
+            page, depth=0, visited=set(), visited_versions=visited_versions
+        )
 
     def _find_s2t_recursive(
         self,
@@ -456,7 +580,9 @@ class ConfluenceParser:
                 parent_text = link.parent.get_text(" ", strip=True) if link.parent else ""
 
                 if "/download/attachments/" in href and (
-                    self._looks_like_s2t_file(href, title) or self._looks_like_s2t(title) or self._looks_like_s2t(parent_text)
+                    self._looks_like_s2t_file(href, title)
+                    or self._looks_like_s2t(title)
+                    or self._looks_like_s2t(parent_text)
                 ):
                     file_name = self._file_name_from_url(href)
                     resource_title = file_name or title
@@ -485,7 +611,10 @@ class ConfluenceParser:
                             child_page = self.client.get_page(child_page_id)
                             if child_page:
                                 recursive_files = self._find_s2t_recursive(
-                                    child_page, depth + 1, visited, visited_versions=visited_versions
+                                    child_page,
+                                    depth + 1,
+                                    visited,
+                                    visited_versions=visited_versions,
                                 )
                                 self._append_new_resources(candidates, recursive_files)
                         except Exception as exc:
@@ -495,7 +624,7 @@ class ConfluenceParser:
 
             # Look for attachment references (ac:link / ri:attachment) anywhere in the body
             for attachment_name in self._attachment_references(soup):
-                 self._append_new_resources(
+                self._append_new_resources(
                     candidates,
                     [
                         self._enrich_resource(

@@ -3942,7 +3942,7 @@
         "kind": 6,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "class FakeClient:\n    def __init__(self, children=None, attachments_by_page=None, pages_by_id=None):\n        self.children = children or []\n        self.attachments_by_page = attachments_by_page or {}\n        self.pages_by_id = pages_by_id or {}\n    def iter_top_level_pages(self):\n        return []\n    def get_attachments(self, page_id: str):\n        return self.attachments_by_page.get(page_id, [])\n    def get_children(self, page_id: str):",
+        "peekOfCode": "class FakeClient:\n    def __init__(\n        self, children=None, attachments_by_page=None, pages_by_id=None, children_by_id=None\n    ):\n        self.children = children or []\n        self.attachments_by_page = attachments_by_page or {}\n        self.pages_by_id = pages_by_id or {}\n        self.children_by_id = children_by_id or {}\n    def iter_top_level_pages(self):\n        return []",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -4042,6 +4042,15 @@
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
         "peekOfCode": "def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    page = ConfluencePage(\n        id=\"491521\",\n        title=\"S2T\",\n        url=\"https://confluence.example.ru/spaces/TH/pages/491521/S2T\",\n        updated_at=datetime(2026, 5, 16),\n        body_html=\"\"\"\n        <table>\n          <tr><th>Дата</th><th>Файл</th></tr>",
+        "detail": "tests.test_confluence_parser",
+        "documentation": {}
+    },
+    {
+        "label": "test_extract_checklist_facts",
+        "kind": 2,
+        "importPath": "tests.test_confluence_parser",
+        "description": "tests.test_confluence_parser",
+        "peekOfCode": "def test_extract_checklist_facts() -> None:\n    # 1. Setup Pages\n    checklist_page = ConfluencePage(\n        id=\"102\",\n        title=\"Чек-лист - 2026-06-01 Витрина Маркеры\",\n        url=\"https://confluence.example.ru/pages/102\",\n        body_html=\"\"\"\n        <table>\n          <tr><td>Расположение данных</td><td>HDFS: /data/markers</td></tr>\n          <tr><td>Категория данных продукта</td><td>Публичные</td></tr>",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },

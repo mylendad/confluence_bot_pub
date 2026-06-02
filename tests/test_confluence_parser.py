@@ -6,10 +6,13 @@ from app.confluence.parser import ConfluenceParser
 
 
 class FakeClient:
-    def __init__(self, children=None, attachments_by_page=None, pages_by_id=None):
+    def __init__(
+        self, children=None, attachments_by_page=None, pages_by_id=None, children_by_id=None
+    ):
         self.children = children or []
         self.attachments_by_page = attachments_by_page or {}
         self.pages_by_id = pages_by_id or {}
+        self.children_by_id = children_by_id or {}
 
     def iter_top_level_pages(self):
         return []
@@ -18,7 +21,7 @@ class FakeClient:
         return self.attachments_by_page.get(page_id, [])
 
     def get_children(self, page_id: str):
-        return self.children
+        return self.children_by_id.get(page_id, self.children)
 
     def get_page(self, page_id: str):
         return self.pages_by_id[page_id]
@@ -343,3 +346,58 @@ def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:
     assert selected is not None
     assert selected.title == "current_s2t.xlsx"
     assert selected.file_date.isoformat() == "2026-05-16"
+
+def test_extract_checklist_facts() -> None:
+    # 1. Setup Pages
+    checklist_page = ConfluencePage(
+        id="102",
+        title="Чек-лист - 2026-06-01 Витрина Маркеры",
+        url="https://confluence.example.ru/pages/102",
+        body_html="""
+        <table>
+          <tr><td>Расположение данных</td><td>HDFS: /data/markers</td></tr>
+          <tr><td>Категория данных продукта</td><td>Публичные</td></tr>
+          <tr><td>Дополнительный атрибут</td><td>Значение</td></tr>
+        </table>
+        """,
+    )
+
+    checklists_folder = ConfluencePage(
+        id="101",
+        title="Чек-листы Витрина Маркеры",
+        url="https://confluence.example.ru/pages/101",
+    )
+
+    main_page = ConfluencePage(
+        id="100",
+        title="Витрина Маркеры",
+        url="https://confluence.example.ru/pages/100",
+        body_html="<p>Main page content</p>",
+    )
+
+    client = FakeClient(
+        children_by_id={
+            "100": [checklists_folder],
+            "101": [checklist_page],
+        },
+        pages_by_id={
+            "100": main_page,
+            "101": checklists_folder,
+            "102": checklist_page,
+        },
+    )
+
+    parser = ConfluenceParser(client, Settings())
+
+    # 2. Parse
+    datamart = parser.parse_datamart_page(main_page)
+
+    # 3. Assertions
+    facts_dict = {f.key: f.value for f in datamart.facts}
+
+    assert facts_dict.get("data_location") == "HDFS: /data/markers"
+    assert facts_dict.get("data_category") == "Публичные"
+    # Verify other rows are also present
+    assert any(
+        f.label == "Дополнительный атрибут" and f.value == "Значение" for f in datamart.facts
+    )
