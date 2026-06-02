@@ -152,9 +152,28 @@ class ConfluenceClient:
         self._cache_get_page[page_id] = page
         return page
 
+    def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
+        limit = 50
+        start = 0
+        while True:
+            payload = self._get(
+                "/rest/api/content/search",
+                {
+                    "cql": cql,
+                    "expand": "body.storage,version,history.lastUpdated",
+                    "limit": limit,
+                    "start": start,
+                },
+            )
+            results = payload.get("results", [])
+            for item in results:
+                yield self._page_from_payload(item)
+            if len(results) < limit:
+                break
+            start += limit
+
     def find_page_by_title(self, title: str) -> ConfluencePage | None:
         """Finds a page exactly by its title using CQL."""
-        # Wrap title in double quotes to handle spaces correctly in CQL
         cql = f'title = "{title}"'
         try:
             pages = list(self.search_pages(cql))
@@ -210,10 +229,7 @@ class ConfluenceClient:
 
     def download(self, url: str) -> bytes:
         logger.info("Downloading from URL: %s", url)
-        # Handle full URLs and relative paths
         if url.startswith("http"):
-            # Use a fresh client or stripped request for full URLs to avoid base_url conflicts
-            # though httpx usually handles absolute URLs by ignoring base_url
             response = self.http.get(url, follow_redirects=True)
         else:
             response = self._request("GET", url, follow_redirects=True)
@@ -240,12 +256,9 @@ class ConfluenceClient:
             def normalize_name(name):
                 if not name: return set()
                 u = urllib.parse.unquote(name).strip().lower()
-                # Try original, space-replaced, and underscore-replaced for maximum fuzzy matching
                 return {u, u.replace("+", " "), u.replace("+", "_"), u.replace(" ", "_")}
 
             if not attachment_id:
-                # SEARCH WIDER: if page_id is missing or direct lookup failed, 
-                # try to find it on the datamart page or its siblings
                 pages_to_check = []
                 if resource.page_id: pages_to_check.append(resource.page_id)
                 if datamart_page_id: pages_to_check.append(datamart_page_id)
@@ -292,15 +305,10 @@ class ConfluenceClient:
         if not page_ids:
             return {}
         
-        # Confluence doesn't have a direct bulk get by IDs in the V1 API that returns everything we need easily,
-        # but we can use CQL or multiple requests. For "fast update", we mostly need versions.
-        
         result = {}
-        # Chunk IDs to avoid too long CQL
         chunk_size = 20
         for i in range(0, len(page_ids), chunk_size):
             chunk = page_ids[i : i + chunk_size]
-            # Use 'id in (...)' CQL search
             cql = f"id in ({','.join(chunk)})"
             try:
                 pages = self.search_pages(cql)
@@ -308,7 +316,6 @@ class ConfluenceClient:
                     result[page.id] = page
             except Exception as exc:
                 logger.warning("Bulk metadata fetch failed for chunk %s: %s", chunk, exc)
-                # Fallback to individual requests for this chunk
                 for pid in chunk:
                     try:
                         result[pid] = self.get_page(pid)
@@ -327,8 +334,6 @@ class ConfluenceClient:
 
     def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
         if self.settings.confluence_root_page_id:
-            # Use CQL to find the root page and all its descendants recursively. 
-            # This is more robust than get_children which only finds direct children and lacks pagination.
             root_id = self.settings.confluence_root_page_id
             cql = f"(id = {root_id} or ancestor = {root_id}) and type = page"
         else:
