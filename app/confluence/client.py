@@ -336,9 +336,14 @@ class ConfluenceClient:
 
     def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
         if self.settings.confluence_root_page_id:
-            yield from self.get_children(self.settings.confluence_root_page_id)
-            return
-        cql = f'space="{self.settings.confluence_space_key}" and type=page'
+            # Use CQL to find the root page and all its descendants recursively. 
+            # This is more robust than get_children which only finds direct children and lacks pagination.
+            root_id = self.settings.confluence_root_page_id
+            cql = f"(id = {root_id} or ancestor = {root_id}) and type = page"
+        else:
+            cql = f'space="{self.settings.confluence_space_key}" and type=page'
+        
+        logger.info("Discovering pages using CQL: %s", cql)
         yield from self.search_pages(cql)
 
     def _page_from_payload(self, payload: dict) -> ConfluencePage:

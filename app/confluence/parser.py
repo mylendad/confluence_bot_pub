@@ -110,11 +110,16 @@ class ConfluenceParser:
                 if cf.key not in existing_keys:
                     facts.append(cf)
                     existing_keys.add(cf.key)
-                else:
-                    # If key exists, maybe prefer checklist value or keep original?
-                    # Usually datamart page is more "official", but checklist might be more "fresh".
-                    # Let's keep original for now if they clash.
-                    pass
+        
+        # FINAL DEDUPLICATION: just in case there are multiple facts with same key 
+        # from the same page or merged. We keep the FIRST occurrence.
+        unique_facts = []
+        seen_keys = set()
+        for f in facts:
+            if f.key not in seen_keys:
+                unique_facts.append(f)
+                seen_keys.add(f.key)
+        facts = unique_facts
 
         release_changes = self.extract_release_changes(
             page, html, visited_versions=visited_versions

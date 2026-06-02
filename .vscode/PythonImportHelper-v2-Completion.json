@@ -216,6 +216,14 @@
         "documentation": {}
     },
     {
+        "label": "RAGRetriever",
+        "importPath": "app.rag.retriever",
+        "description": "app.rag.retriever",
+        "isExtraImport": true,
+        "detail": "app.rag.retriever",
+        "documentation": {}
+    },
+    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -761,6 +769,14 @@
         "documentation": {}
     },
     {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
+        "documentation": {}
+    },
+    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
@@ -921,6 +937,22 @@
         "description": "collections.abc",
         "isExtraImport": true,
         "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -2063,6 +2095,14 @@
         "documentation": {}
     },
     {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
         "label": "ANSWER_SYSTEM_PROMPT",
         "importPath": "app.rag.prompts",
         "description": "app.rag.prompts",
@@ -2783,24 +2823,6 @@
         "documentation": {}
     },
     {
-        "label": "asyncio",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
-        "documentation": {}
-    },
-    {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
         "label": "CLIAdapter",
         "kind": 6,
         "importPath": "app.bot.cli_adapter",
@@ -3481,6 +3503,15 @@
         "importPath": "app.sync.state_comparator",
         "description": "app.sync.state_comparator",
         "peekOfCode": "class StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:\n            return MetadataDecision(changed=False, reasons=[\"metadata unchanged\"])\n        reasons = []\n        old_metadata = previous.metadata or {}",
+        "detail": "app.sync.state_comparator",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.sync.state_comparator",
+        "description": "app.sync.state_comparator",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass MetadataDecision:\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:",
         "detail": "app.sync.state_comparator",
         "documentation": {}
     },
@@ -4421,6 +4452,42 @@
         "documentation": {}
     },
     {
+        "label": "MockMetadataRepo",
+        "kind": 6,
+        "importPath": "debug_retriever",
+        "description": "debug_retriever",
+        "peekOfCode": "class MockMetadataRepo:\n    def list_datamarts(self):\n        return [\n            {\"name\": \"Витрина Дети и Родители\", \"facts_json\": json.dumps([\n                {\"key\": \"data_location\", \"label\": \"Расположение данных\", \"value\": \"HDFS /data/children\"},\n                {\"key\": \"data_category\", \"label\": \"Категория данных\", \"value\": \"Публичные\"}\n            ])},\n            {\"name\": \"Витрина Маркеры\", \"facts_json\": \"[]\"}\n        ]\n    def list_attributes(self, datamart_name=None): return []",
+        "detail": "debug_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "repo",
+        "kind": 5,
+        "importPath": "debug_retriever",
+        "description": "debug_retriever",
+        "peekOfCode": "repo = MockMetadataRepo()\nretriever = RAGRetriever(repo, None, None)\nquestions = [\n    \"расположение данных Витрина Дети и Родители\",\n    \"место публикации данных Витрина Дети и Родители\",\n    \"категория данных Витрина Дети и Родители\",\n    \"расположение данных Дети и Родители\"\n]\nfor q in questions:\n    print(f\"\\nQuestion: {q}\")",
+        "detail": "debug_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "retriever",
+        "kind": 5,
+        "importPath": "debug_retriever",
+        "description": "debug_retriever",
+        "peekOfCode": "retriever = RAGRetriever(repo, None, None)\nquestions = [\n    \"расположение данных Витрина Дети и Родители\",\n    \"место публикации данных Витрина Дети и Родители\",\n    \"категория данных Витрина Дети и Родители\",\n    \"расположение данных Дети и Родители\"\n]\nfor q in questions:\n    print(f\"\\nQuestion: {q}\")\n    intent = retriever.intent_classifier.classify(q)",
+        "detail": "debug_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "questions",
+        "kind": 5,
+        "importPath": "debug_retriever",
+        "description": "debug_retriever",
+        "peekOfCode": "questions = [\n    \"расположение данных Витрина Дети и Родители\",\n    \"место публикации данных Витрина Дети и Родители\",\n    \"категория данных Витрина Дети и Родители\",\n    \"расположение данных Дети и Родители\"\n]\nfor q in questions:\n    print(f\"\\nQuestion: {q}\")\n    intent = retriever.intent_classifier.classify(q)\n    print(f\"Intent: {intent}\")",
+        "detail": "debug_retriever",
+        "documentation": {}
+    },
+    {
         "label": "file_path",
         "kind": 5,
         "importPath": "fix_cli",
@@ -4803,7 +4870,7 @@
         "kind": 5,
         "importPath": "test_inner_source",
         "description": "test_inner_source",
-        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nresults = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "peekOfCode": "settings = get_settings()\nclient = ConfluenceClient(settings)\nquery = \"Inner Source\"\nprint(f\"Searching for '{query}'...\")\nfor page in client.search_pages(f'text ~ \"{query}\"'):\n    print(f\"Found page: '{page.title}' (ID: {page.id}, URL: {page.url})\")\n    # Try to find parent\n    try:\n        # The Confluence V1 API 'content' response often has a 'ancestors' field if expanded\n        # but our get_page doesn't expand ancestors.",
         "detail": "test_inner_source",
         "documentation": {}
     },
@@ -4812,16 +4879,16 @@
         "kind": 5,
         "importPath": "test_inner_source",
         "description": "test_inner_source",
-        "peekOfCode": "client = ConfluenceClient(settings)\nresults = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "peekOfCode": "client = ConfluenceClient(settings)\nquery = \"Inner Source\"\nprint(f\"Searching for '{query}'...\")\nfor page in client.search_pages(f'text ~ \"{query}\"'):\n    print(f\"Found page: '{page.title}' (ID: {page.id}, URL: {page.url})\")\n    # Try to find parent\n    try:\n        # The Confluence V1 API 'content' response often has a 'ancestors' field if expanded\n        # but our get_page doesn't expand ancestors.\n        # Let's just print the page for now.",
         "detail": "test_inner_source",
         "documentation": {}
     },
     {
-        "label": "results",
+        "label": "query",
         "kind": 5,
         "importPath": "test_inner_source",
         "description": "test_inner_source",
-        "peekOfCode": "results = client.search_pages('title ~ \"inner source\"')\nfor r in results:\n    print(f\"ID: {r.id}, Title: {r.title}\")",
+        "peekOfCode": "query = \"Inner Source\"\nprint(f\"Searching for '{query}'...\")\nfor page in client.search_pages(f'text ~ \"{query}\"'):\n    print(f\"Found page: '{page.title}' (ID: {page.id}, URL: {page.url})\")\n    # Try to find parent\n    try:\n        # The Confluence V1 API 'content' response often has a 'ancestors' field if expanded\n        # but our get_page doesn't expand ancestors.\n        # Let's just print the page for now.\n        pass",
         "detail": "test_inner_source",
         "documentation": {}
     },

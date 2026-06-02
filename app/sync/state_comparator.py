@@ -1,6 +1,9 @@
+import logging
 from dataclasses import dataclass
 
 from app.storage.s2t_state_repository import S2TState
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -23,16 +26,22 @@ class StateComparator:
         
         # Сначала проверяем на полное соответствие контента
         if old_metadata == metadata:
+            # Такое бывает если хэш-функция поменялась или в hash_metadata попали не все поля из metadata
             return MetadataDecision(changed=False, reasons=["metadata hash changed but content same"])
 
         # Если контент разный, собираем причины для отладки
         for key, value in metadata.items():
-            if old_metadata.get(key) != value:
-                reasons.append(f"{key}: {old_metadata.get(key)!r} -> {value!r}")
+            old_val = old_metadata.get(key)
+            if old_val != value:
+                reasons.append(f"{key}: {old_val!r} -> {value!r}")
+                logger.info("Metadata mismatch for '%s': key='%s' old=%r new=%r", 
+                            metadata.get('datamart_name'), key, old_val, value)
         
         # Проверяем, не удалены ли ключи
         for key in old_metadata:
             if key not in metadata:
                 reasons.append(f"removed key: {key}")
+                logger.info("Metadata key removed for '%s': key='%s'", 
+                            metadata.get('datamart_name'), key)
 
         return MetadataDecision(changed=True, reasons=reasons or ["metadata hash changed"])

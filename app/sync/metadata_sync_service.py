@@ -74,10 +74,17 @@ class MetadataSyncService:
                     self._prefetched_versions[pid] = meta_page.version
 
         for page in top_level_pages:
-            if pattern not in normalize_text(page.title):
+            # Replace non-breaking spaces and normalize
+            title_clean = page.title.replace('\u00a0', ' ')
+            norm_title = normalize_text(title_clean)
+            
+            if pattern and pattern not in norm_title:
+                logger.info("Discovery: skipping page '%s' (ID: %s) - title doesn't match pattern '%s'", 
+                            page.title, page.id, pattern)
                 continue
             if exclude_pattern and re.search(exclude_pattern, page.title, re.IGNORECASE):
-                logger.info("Discovery: skipping excluded datamart page '%s'", page.title)
+                logger.info("Discovery: skipping page '%s' (ID: %s) - excluded by pattern '%s'", 
+                            page.title, page.id, exclude_pattern)
                 continue
                 
             logger.info("Discovery: processing datamart page '%s' (ID: %s)", page.title, page.id)

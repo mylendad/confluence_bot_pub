@@ -44,6 +44,7 @@ class IntentClassifier:
                 "смд",
                 "кэ",
                 "имя витрины в бд",
+                "витрина в бд",
                 "периодичность",
                 "глубина",
                 "процесс из реестра",
@@ -267,18 +268,37 @@ class RAGRetriever:
     def _datamart_fact(self, question: str) -> RAGAnswer:
         fact_key = self._fact_key_from_question(question)
         datamarts = self._datamarts_from_question(question)
+        
+        if not datamarts:
+            requested_name = self._extract_datamart_name(question)
+            if requested_name:
+                return RAGAnswer(
+                    answer=f"Витрина `{requested_name}` найдена, но данных по запросу на её странице нет.",
+                    sources=[]
+                )
+            return RAGAnswer(
+                answer="Не удалось определить витрину. Пожалуйста, укажите точное название.",
+                sources=[]
+            )
+
         matching: list[tuple[dict, dict]] = []
         for datamart in datamarts:
-            for fact in json.loads(datamart.get("facts_json") or "[]"):
-                if fact_key and fact.get("key") != fact_key:
-                    continue
-                if not self._fact_matches_question(fact, question):
-                    continue
-                matching.append((datamart, fact))
+            facts = json.loads(datamart.get("facts_json") or "[]")
+            found = False
+            for fact in facts:
+                if fact_key and fact.get("key") == fact_key:
+                    matching.append((datamart, fact))
+                    found = True
+            
+            if not found:
+                for fact in facts:
+                    if self._fact_matches_question(fact, question):
+                        matching.append((datamart, fact))
 
         if not matching:
+            marts_str = ", ".join([d.get("name") for d in datamarts])
             return RAGAnswer(
-                answer="Данных по этому вопросу на главной странице витрины не найдено.",
+                answer=f"Для {marts_str} запрошенные данные не найдены на главной странице или в чек-листе.",
                 sources=[],
             )
 
@@ -301,6 +321,7 @@ class RAGRetriever:
                     "confluence_url": datamart.get("confluence_url"),
                     "fact_key": fact.get("key"),
                     "fact_label": fact.get("label"),
+                    "s2t_file": "-",
                 }
                 for datamart, fact in matching[:10]
             ],
@@ -452,18 +473,18 @@ class RAGRetriever:
         requested_datamart = self._extract_datamart_name(question)
         if not requested_datamart:
             q = normalize_text(question)
-            # If they mention specific keywords, it's a specific query. 
+            # If they mention specific keywords, it's a specific query.
             # If we didn't extract a name, don't dump everything.
             is_broad = any(w in q for w in ["все", "список", "какие", "каждый", "каждой"])
-            
+
             # If the query contains "витрина", it's almost certainly a specific query.
             if "витрин" in q and not is_broad:
-                # If they ask "какие витрины", it's broad. 
+                # If they ask "какие витрины", it's broad.
                 # But if they ask "Заинтересованные по витрине Карта Ветерана", it's specific.
                 if any(w in q for w in ["какие", "есть", "список"]):
                     return datamarts
                 return []
-            
+
             is_specific = any(
                 p in q
                 for p in [
@@ -473,14 +494,17 @@ class RAGRetriever:
                     "релиз",
                     "измен",
                     "атрибут",
+                    "расположение",
+                    "место публикации",
+                    "категория данных",
                 ]
             )
             if is_specific and not is_broad:
                 return []
-            
+
             if is_broad:
                 return datamarts
-            
+
             return []
         return [
             datamart
@@ -523,12 +547,33 @@ class RAGRetriever:
     def _fact_matches_question(fact: dict, question: str) -> bool:
         q = normalize_text(question)
         label = normalize_text(fact.get("label") or "")
-        if fact.get("key") != "meta_links":
+        key = fact.get("key")
+        
+        # Define aliases for all keys for fuzzy matching
+        aliases_map = {
+            "data_location": ["расположение данных", "место публикации", "где лежат", "где хранятся"],
+            "data_category": ["категория данных", "категория продукта", "какие данные"],
+            "business_stakeholders": ["заинтересованные", "бизнес лица", "стейкхолдеры"],
+            "db_name": ["имя в бд", "название в бд", "таблица в бд"],
+        }
+        
+        # 1. Match by label in question
+        if label and label in q:
             return True
-        requested = [item for item in ("мета", "ка фо", "карта данных", "смд") if item in q]
-        if not requested:
-            return True
-        return any(item in label for item in requested)
+            
+        # 2. Match by aliases in question
+        if key in aliases_map:
+            for alias in aliases_map[key]:
+                if alias in q:
+                    return True
+        
+        # 3. Special case for meta links
+        if key == "meta_links":
+            requested = [item for item in ("мета", "ка фо", "карта данных", "смд") if item in q]
+            if requested and any(item in label for item in requested):
+                return True
+                
+        return False
 
     @staticmethod
     def _extract_attribute_name(question: str) -> str | None:
