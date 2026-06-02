@@ -84,10 +84,14 @@ class IncrementalUpdater:
 
     def run(self, dry_run: bool = False) -> IncrementalUpdateResult:
         items: list[IncrementalUpdateItem] = []
+        active_names = []
+        
         for snapshot in self.metadata_sync.collect():
             try:
                 item = self._process_snapshot(snapshot, dry_run=dry_run)
                 items.append(item)
+                if not dry_run:
+                    active_names.append(snapshot.datamart.name)
             except Exception as exc:
                 logger.error(
                     "Failed to process datamart %s: %s", snapshot.datamart.name, exc, exc_info=True
@@ -104,6 +108,12 @@ class IncrementalUpdater:
                         will_reindex=False,
                     )
                 )
+        
+        if not dry_run and active_names:
+            deleted_count = self.metadata_repo.clear_stale_datamarts(active_names)
+            if deleted_count > 0:
+                logger.info("Sync: removed %d stale datamarts from database", deleted_count)
+                
         return IncrementalUpdateResult(items=items)
 
     def _process_snapshot(

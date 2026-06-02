@@ -3736,7 +3736,16 @@
         "kind": 6,
         "importPath": "app.logging_config",
         "description": "app.logging_config",
-        "peekOfCode": "class MemoryLogHandler(logging.Handler):\n    def __init__(self, maxlen: int = 1000) -> None:\n        super().__init__()\n        self.logs = deque(maxlen=maxlen)\n    def emit(self, record: logging.LogRecord) -> None:\n        msg = self.format(record)\n        self.logs.append(msg)\n    def get_logs(self) -> list[str]:\n        return list(self.logs)\nmemory_handler = MemoryLogHandler()",
+        "peekOfCode": "class MemoryLogHandler(logging.Handler):\n    def __init__(self, maxlen: int = 1000) -> None:\n        super().__init__()\n        self.logs = deque(maxlen=maxlen)\n    def emit(self, record: logging.LogRecord) -> None:\n        msg = self.format(record)\n        self.logs.append(msg)\n    def get_logs(self) -> list[str]:\n        return list(self.logs)\nclass ColoredFormatter(logging.Formatter):",
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "ColoredFormatter",
+        "kind": 6,
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "peekOfCode": "class ColoredFormatter(logging.Formatter):\n    \"\"\"Custom log formatter to add colors based on log level.\"\"\"\n    # ANSI escape codes\n    GREY = \"\\x1b[38;20m\"\n    YELLOW = \"\\x1b[33;20m\"\n    RED = \"\\x1b[31;20m\"\n    BOLD_RED = \"\\x1b[31;1m\"\n    CYAN = \"\\x1b[36;20m\"\n    RESET = \"\\x1b[0m\"\n    COLORS = {",
         "detail": "app.logging_config",
         "documentation": {}
     },
@@ -3745,7 +3754,7 @@
         "kind": 2,
         "importPath": "app.logging_config",
         "description": "app.logging_config",
-        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    handlers = [logging.StreamHandler(), memory_handler]\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n        handlers=handlers,\n    )",
+        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())\n    handlers = [console_handler, memory_handler]\n    # We use basicConfig but manage handlers explicitly to avoid duplicates\n    root = logging.getLogger()\n    root.setLevel(getattr(logging, level.upper(), logging.INFO))",
         "detail": "app.logging_config",
         "documentation": {}
     },
@@ -3754,7 +3763,7 @@
         "kind": 5,
         "importPath": "app.logging_config",
         "description": "app.logging_config",
-        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    handlers = [logging.StreamHandler(), memory_handler]\n    logging.basicConfig(\n        level=getattr(logging, level.upper(), logging.INFO),\n        format=\"%(asctime)s %(levelname)s [%(name)s] %(message)s\",\n        handlers=handlers,\n    )",
+        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())\n    handlers = [console_handler, memory_handler]\n    # We use basicConfig but manage handlers explicitly to avoid duplicates\n    root = logging.getLogger()",
         "detail": "app.logging_config",
         "documentation": {}
     },

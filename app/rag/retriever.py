@@ -253,9 +253,22 @@ class RAGRetriever:
                 answer="Витрины не найдены. Сначала выполните `update-rag` или `parse-s2t`.",
                 sources=[],
             )
+        
+        # Группируем атрибуты по витринам, чтобы достать названия файлов S2T
+        all_attrs = self.metadata_repo.list_attributes()
+        dm_to_s2t = {}
+        for attr in all_attrs:
+            if attr.datamart_name and attr.s2t_file_name:
+                dm_to_s2t[attr.datamart_name] = attr.s2t_file_name
+
+        lines = ["Доступные витрины:"]
         names = sorted({datamart["name"] for datamart in datamarts if datamart.get("name")})
+        for name in names:
+            s2t = dm_to_s2t.get(name, "нет s2t на конфлюенсе")
+            lines.append(f"- {name} (Источник: {s2t})")
+
         return RAGAnswer(
-            answer="Доступные витрины:\n" + "\n".join(f"- {name}" for name in names),
+            answer="\n".join(lines),
             sources=[
                 {
                     "datamart": datamart.get("name"),

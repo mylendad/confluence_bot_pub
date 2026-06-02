@@ -87,6 +87,28 @@ class MetadataRepository:
             ).fetchone()
         return dict(row) if row else None
 
+    def delete_datamart(self, name: str) -> None:
+        with self.db.connect() as conn:
+            conn.execute("delete from attributes where datamart_name = ?", (name,))
+            conn.execute("delete from datamarts where name = ?", (name,))
+
+    def clear_stale_datamarts(self, active_names: list[str]) -> int:
+        """Deletes all datamarts not in the active_names list. Returns count of deleted."""
+        if not active_names:
+            return 0
+        placeholders = ",".join("?" for _ in active_names)
+        with self.db.connect() as conn:
+            # Delete attributes first due to potential dependencies
+            conn.execute(
+                f"delete from attributes where datamart_name not in ({placeholders})", 
+                active_names
+            )
+            cursor = conn.execute(
+                f"delete from datamarts where name not in ({placeholders})", 
+                active_names
+            )
+            return cursor.rowcount
+
     def list_datamarts(self) -> list[dict]:
         with self.db.connect() as conn:
             rows = conn.execute("select * from datamarts").fetchall()

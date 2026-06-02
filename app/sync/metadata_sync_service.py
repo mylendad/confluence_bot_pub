@@ -49,9 +49,14 @@ class MetadataSyncService:
         exclude_pattern = self.parser.settings.datamart_exclude_pattern
         
         # Pre-fetch top-level pages
-        logger.info("Discovery: fetching top-level pages...")
+        logger.info("Discovery: fetching all accessible pages recursively...")
         top_level_pages = list(self.parser.client.iter_top_level_pages())
+        logger.info("Discovery: found %d pages total in Confluence", len(top_level_pages))
         
+        # Helper keywords for filtering
+        helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах", "страница для 2лс"]
+        norm_helpers = [normalize_text(kw) for kw in helper_keywords]
+
         # Gather all required page IDs for bulk version check
         all_required_page_ids = set()
         if self.snapshot_repo:
@@ -59,9 +64,8 @@ class MetadataSyncService:
                 title_clean = page.title.replace('\u00a0', ' ')
                 norm_title = normalize_text(title_clean)
                 
-                # Pre-filter to avoid unnecessary bulk fetching for obviously non-datamart pages
-                helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах"]
-                if any(kw in norm_title for kw in helper_keywords):
+                # Pre-filter helper pages
+                if any(kw in norm_title for kw in norm_helpers):
                     continue
 
                 if pattern and pattern not in norm_title:
@@ -81,20 +85,20 @@ class MetadataSyncService:
                 if meta_page.version is not None:
                     self._prefetched_versions[pid] = meta_page.version
 
+        # Regular crawl
         for page in top_level_pages:
             # Replace non-breaking spaces and normalize
             title_clean = page.title.replace('\u00a0', ' ')
             norm_title = normalize_text(title_clean)
             
             # 1. Skip helper pages from being primary datamarts
-            helper_keywords = ["чек-лист", "тз", "препятствия", "функциональное решение", "s2t", "изменения в релизах"]
-            if any(kw in norm_title for kw in helper_keywords):
+            if any(kw in norm_title for kw in norm_helpers):
                 logger.info("Discovery: skipping helper page '%s' (ID: %s)", page.title, page.id)
                 continue
 
             # 2. Check pattern
             if pattern and pattern not in norm_title:
-                logger.info("Discovery: skipping page '%s' (ID: %s) - title doesn't match pattern '%s'", 
+                logger.debug("Discovery: skipping page '%s' (ID: %s) - doesn't match pattern '%s'", 
                             page.title, page.id, pattern)
                 continue
             
@@ -110,29 +114,47 @@ class MetadataSyncService:
             if not datamart:
                 continue
                 
-            resource = datamart.s2t_resource
-            metadata = self._metadata(datamart, resource)
-            
-            # Для хэша используем только те поля, которые влияют на контент в RAG.
-            hash_metadata = {
-                "datamart_name": metadata["datamart_name"],
-                "datamart_page_id": metadata["datamart_page_id"],
-                "attachment_id": metadata.get("attachment_id"),
-                "attachment_version_number": metadata.get("attachment_version_number"),
-                "release_changes_hash": metadata["release_changes_hash"],
-                "stakeholders_hash": metadata["stakeholders_hash"],
-                "facts_hash": metadata["facts_hash"],
-            }
-            
-            snapshots.append(
-                S2TMetadataSnapshot(
-                    datamart=datamart,
-                    resource=resource,
-                    metadata=metadata,
-                    metadata_hash=self.hash_service.stable_metadata_hash(hash_metadata),
-                )
-            )
+            snapshots.append(self._to_snapshot(datamart))
+
+        # 4. MANUAL OVERRIDE: specifically try to find "Inner Source" if it's missing
+        discovered_names = {s.datamart.name.lower() for s in snapshots}
+        if not any("inner source" in name for name in discovered_names):
+            logger.info("Discovery: 'Inner Source' not found in regular crawl, attempting direct lookup...")
+            try:
+                # Try common variations
+                for name in ["Витрина Inner Source", "Inner Source", "Витрина InnerSource"]:
+                    page = self.parser.client.find_page_by_title(name)
+                    if page:
+                        logger.info("Discovery: found '%s' via direct title lookup (ID: %s)", name, page.id)
+                        datamart = self._get_datamart_with_cache(page)
+                        if datamart:
+                            snapshots.append(self._to_snapshot(datamart))
+                        break
+            except Exception as exc:
+                logger.warning("Discovery: manual direct lookup failed: %s", exc)
+
         return snapshots
+
+    def _to_snapshot(self, datamart: Datamart) -> S2TMetadataSnapshot:
+        resource = datamart.s2t_resource
+        metadata = self._metadata(datamart, resource)
+        
+        hash_metadata = {
+            "datamart_name": metadata["datamart_name"],
+            "datamart_page_id": metadata["datamart_page_id"],
+            "attachment_id": metadata.get("attachment_id"),
+            "attachment_version_number": metadata.get("attachment_version_number"),
+            "release_changes_hash": metadata["release_changes_hash"],
+            "stakeholders_hash": metadata["stakeholders_hash"],
+            "facts_hash": metadata["facts_hash"],
+        }
+        
+        return S2TMetadataSnapshot(
+            datamart=datamart,
+            resource=resource,
+            metadata=metadata,
+            metadata_hash=self.hash_service.stable_metadata_hash(hash_metadata),
+        )
 
     def _get_datamart_with_cache(self, page) -> Datamart | None:
         if not self.snapshot_repo:
@@ -182,7 +204,6 @@ class MetadataSyncService:
 
         # Для хэша изменений в релизах используем стабильные данные из Confluence,
         # включая те, что парсер смог достать из HTML (заголовок задачи, статус).
-        # СОРТИРУЕМ для стабильности хэша.
         stable_release_changes = sorted([
             {
                 "version": c.version,
@@ -195,7 +216,6 @@ class MetadataSyncService:
             for c in datamart.release_changes
         ], key=lambda x: (x["version"] or "", x["jira_key"] or ""))
 
-        # СОРТИРУЕМ факты для стабильности хэша.
         stable_facts = sorted(
             [f.model_dump(mode='json') for f in datamart.facts],
             key=lambda x: x["key"]
