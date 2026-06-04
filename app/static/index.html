@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confluence S2T RAG Bot</title>
+    <link rel="icon" type="image/x-icon" href="/ui/favicon.ico">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f0f2f5;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
         }
+        .error-message { color: red; }
         .app {
             width: 100%;
             max-width: 900px;
@@ -24,245 +24,325 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
+            margin: 5vh auto;
         }
+        .btn-danger { background: #ff3b30; color: white; }
+        .btn-danger:hover { background: #cc2f26; }
         .header {
-            padding: 16px 20px;
+            padding: 12px 20px;
             background: #1a1a2e;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        .header-left { display: flex; align-items: center; gap: 8px; }
+        .app-title { font-weight: bold; font-size: 16px; }
+        .header-right { display: flex; gap: 8px; }
+        .icon-btn {
+            background: none; border: none; color: white; font-size: 14px;
+            cursor: pointer; padding: 6px 12px; border-radius: 8px;
+            transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.2); }
         .status {
-            display: flex;
-            gap: 16px;
-            font-size: 12px;
+            display: flex; gap: 16px; font-size: 12px; justify-content: flex-end;
+            padding: 8px 20px; background: #f8f9fa; border-bottom: 1px solid #e9ecef;
         }
         .status-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
+            display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+            margin-right: 6px; transition: background 0.2s ease;
         }
         .status-dot.green { background: #4cd964; box-shadow: 0 0 4px #4cd964; }
         .status-dot.red { background: #ff3b30; }
-        .settings-panel {
+        .status-dot.pulse { animation: pulse-animation 0.8s infinite; }
+        @keyframes pulse-animation {
+            0% { opacity: 0.4; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(0.8); }
+        }
+        .panels-container {
             background: #f8f9fa;
-            padding: 16px 20px;
             border-bottom: 1px solid #e9ecef;
-            display: none;
+            overflow: hidden;
         }
-        .settings-panel.show { display: block; }
-        .setting-row {
-            margin-bottom: 12px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .setting-row label {
-            width: 140px;
-            font-weight: 500;
-            font-size: 13px;
-        }
-        .setting-row input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .settings-panel {
+            max-height: 0; opacity: 0; overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease;
             font-size: 14px;
-            min-width: 200px;
         }
-        .setting-row a {
-            font-size: 12px;
-            color: #007aff;
+        .settings-panel.show {
+            max-height: 700px; opacity: 1;
+            transition: max-height 0.4s ease-in, opacity 0.3s ease;
         }
+        .setting-row {
+            margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
+            flex-wrap: wrap; padding: 0 20px;
+        }
+        .setting-row label { width: 140px; font-weight: 500; font-size: 13px; }
+        .password-wrapper {
+            flex: 1; position: relative; display: flex; align-items: center;
+        }
+        .password-wrapper input {
+            width: 100%; padding: 8px 60px 8px 12px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 14px;
+        }
+        .field-icons {
+            position: absolute; right: 8px; display: flex; gap: 8px;
+            background: white; padding-left: 4px;
+        }
+        .field-icons span { cursor: pointer; font-size: 16px; user-select: none; opacity: 0.6; }
+        .field-icons span:hover { opacity: 1; }
+        .instruction {
+            margin: 8px 0; padding: 0 20px; color: #333; line-height: 1.4;
+        }
+        .instruction a { color: #007aff; text-decoration: none; }
+        .instruction a:hover { text-decoration: underline; }
         .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
+            padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;
+            font-size: 13px; font-weight: 500; transition: background 0.2s;
         }
-        .btn-primary {
-            background: #007aff;
-            color: white;
+        .btn-primary { background: #007aff; color: white; }
+        .btn-secondary { background: #e9ecef; color: #333; }
+        .command-row {
+            margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
+            flex-wrap: wrap; padding: 0 20px;
         }
-        .btn-secondary {
-            background: #e9ecef;
-            color: #333;
+        .last-run-date {
+            font-size: 12px; color: #2c3e50; display: flex; align-items: center; gap: 6px;
         }
-        .btn-danger {
-            background: #ff3b30;
-            color: white;
+        .refresh-date-btn {
+            background: none; border: none; font-size: 14px; cursor: pointer; padding: 2px;
+            opacity: 0.6;
         }
+        .refresh-date-btn:hover { opacity: 1; }
         .chat-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex: 1; overflow-y: auto; padding: 20px; display: flex;
+            flex-direction: column; gap: 12px;
         }
-        .message {
-            display: flex;
-            gap: 10px;
-            max-width: 80%;
-        }
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-        .message.bot {
-            align-self: flex-start;
-        }
+        .message { display: flex; gap: 10px; max-width: 80%; position: relative; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        .message.bot { align-self: flex-start; }
         .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
+            width: 36px; height: 36px; border-radius: 50%; background: #e9ecef;
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
         }
         .message.user .avatar { background: #007aff; color: white; }
         .bubble {
-            background: #e9ecef;
-            padding: 10px 14px;
-            border-radius: 18px;
-            max-width: 100%;
-            word-wrap: break-word;
+            background: #e9ecef; padding: 10px 14px; border-radius: 18px;
+            max-width: 100%; word-wrap: break-word;
         }
-        .message.user .bubble {
-            background: #007aff;
-            color: white;
-        }
+        .message.user .bubble { background: #007aff; color: white; }
         .bubble pre {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 8px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-size: 12px;
+            background: #2d2d2d; color: #f8f8f2; padding: 8px; border-radius: 6px;
+            overflow-x: auto; font-size: 12px;
         }
-        .copy-btn {
-            margin-left: 8px;
-            font-size: 11px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #666;
-        }
-        .input-area {
-            padding: 16px 20px;
-            border-top: 1px solid #e9ecef;
+        .inline-buttons {
             display: flex;
-            gap: 12px;
-            background: white;
-        }
-        .input-area textarea {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 24px;
-            resize: none;
-            font-family: inherit;
-            font-size: 14px;
-            max-height: 100px;
-        }
-        .input-area button {
-            padding: 0 20px;
-            background: #007aff;
-            color: white;
-            border: none;
-            border-radius: 24px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        .input-area button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .instruction-row {
-            margin-bottom: 16px;
-            padding-left: 152px;
-            font-size: 12px;
-            color: #666;
-        }
-        .instruction-row a {
-            color: #007aff;
-            text-decoration: none;
-        }
-        .instruction-row a:hover {
-            text-decoration: underline;
-        }
-        .instruction-row span {
-            color: #666;
-        }
-        .typing {
-            color: #666;
-            font-size: 13px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 6px;
-        }
-        .typing span {
-            animation: blink 1.4s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-        .action-buttons {
-            display: flex;
-            gap: 8px;
             margin-top: 8px;
         }
+        .inline-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: left;
+            width: fit-content;
+            transition: background 0.2s;
+        }
+        .inline-btn:hover {
+            background: #d0d4d8;
+        }
+        .input-area {
+            padding: 16px 20px; border-top: 1px solid #e9ecef; display: flex;
+            gap: 12px; background: white;
+        }
+        .input-area textarea {
+            flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 24px;
+            resize: none; font-family: inherit; font-size: 14px; max-height: 100px;
+        }
+        .input-area button {
+            padding: 0 20px; background: #007aff; color: white; border: none;
+            border-radius: 24px; cursor: pointer; font-weight: 500;
+        }
+        .input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .typing {
+            color: #666; font-size: 13px; padding: 8px 12px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .typing span { animation: blink 1.4s infinite; }
+        @keyframes blink { 0%,100%{opacity:0.2;} 50%{opacity:1;} }
+
+        /* Боковая панель логов - без скругления углов */
+        .logs-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100%;
+            background: #f8f9fa;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #ddd;
+            /* Нет border-radius */
+        }
+        .logs-sidebar.open { right: 0; }
+        .logs-header {
+            padding: 16px;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* Нет border-radius */
+        }
+        .logs-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .logs-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            margin: 0;
+            /* Нет border-radius */
+            user-select: text;  /* Разрешаем выделение текста */
+            -webkit-user-select: text;
+            cursor: text;
+        }
+        /* Убираем автоматическое снятие выделения */
+        .logs-area:focus {
+            outline: none;
+        }
+        .logs-controls {
+            padding: 12px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+        .overlay.show { display: block; }
     </style>
 </head>
 <body>
 <div class="app">
     <div class="header">
-        <strong>🤖 Confluence S2T RAG Bot</strong>
-        <div class="status">
-            <span><span class="status-dot" id="confluence-status"></span> Confluence</span>
-            <span><span class="status-dot" id="llm-status"></span> GigaChat</span>
+        <div class="header-left"><span class="app-title">Confluence Agent</span></div>
+        <div class="header-right">
+            <button class="icon-btn" id="toggleSettingsBtn">⚙️ Настройки</button>
+            <button class="icon-btn" id="toggleLogsBtn">📋 Лог</button>
         </div>
     </div>
 
-    <div class="settings-panel" id="settingsPanel">
-        <div class="setting-row">
-            <label>🔑 Confluence Token</label>
-            <input type="password" id="confluenceToken" placeholder="Введите токен">
-        </div>
-        <div class="instruction-row">
-            <a href="https://confluence.delta.sbrf.ru/plugins/personalaccesstokens/usertokens.action" target="_blank">Пройдите по ссылке</a>
-            <span> - нажмите "Создать маркер" - задайте любое имя и срок действия</span>
-        </div>
-
-        <div class="setting-row">
-            <label>🤖 GigaChat API Key</label>
-            <input type="password" id="gigachatToken" placeholder="Введите API-ключ">
-        </div>
-        <div class="instruction-row">
-            <a href="https://developers.sber.ru/studio/login" target="_blank"> Авторизуйтесь по ссылке </a>
-            <span> удобным способом - настройть API </span>
-        </div>
-        <div class="setting-row">
-            <button class="btn btn-primary" id="saveSettingsBtn">💾 Сохранить</button>
-            <button class="btn btn-secondary" id="clearSettingsBtn">🗑️ Сбросить</button>
-            <button class="btn btn-secondary" id="testConnectionBtn">🔌 Проверить</button>
+    <div class="panels-container">
+        <div class="settings-panel" id="settingsPanel">
+            <div class="status">
+                <span><span class="status-dot" id="confluence-status-dot"></span> Confluence</span>
+                <span><span class="status-dot" id="jira-status-dot"></span> Jira</span>
+                <span><span class="status-dot" id="llm-status-dot"></span> GigaChat</span>
+            </div>
+            <div class="instruction">
+                <span>1. Введите токен Confluence, получив его </span>
+                <a href="https://confluence.delta.sbrf.ru/plugins/personalaccesstokens/usertokens.action" target="_blank">по ссылке</a>
+                <span> - нажмите "Создать маркер".</span>
+            </div>
+            <div class="setting-row">
+                <label>🔑 Confluence Token</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confluenceToken" placeholder="Введите токен">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="confluenceToken">👁️</span>
+                        <span class="clear-field" data-target="confluenceToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>2. Введите токен Jira </span>
+                <a href="https://jira.delta.sbrf.ru/secure/ViewProfile.jspa?selectedTab=com.atlassian.pats.pats-plugin:jira-user-personal-access-tokens" target="_blank">по ссылке</a>
+                <span> - нажмите "Создать маркер".</span>
+            </div>
+            <div class="setting-row">
+                <label>🔑 Jira Token</label>
+                <div class="password-wrapper">
+                    <input type="password" id="jiraToken" placeholder="Введите токен">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="jiraToken">👁️</span>
+                        <span class="clear-field" data-target="jiraToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>3. Введите GigaChat API Key. Для этого </span>
+                <a href="https://developers.sber.ru/studio/login" target="_blank">авторизуйтесь по ссылке</a>
+                <span> - настройте API.</span>
+            </div>
+            <div class="setting-row">
+                <label>🤖 GigaChat API Key</label>
+                <div class="password-wrapper">
+                    <input type="password" id="gigachatToken" placeholder="Введите API-ключ">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="gigachatToken">👁️</span>
+                        <span class="clear-field" data-target="gigachatToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>4. Нажмите "Сохранить токены". Вы так же можете сбросить токены и проверить соединение в индикаторах выше.</span>
+            </div>
+            <div class="setting-row" style="margin-top:12px">
+                <button class="btn btn-primary" id="saveSettingsBtn">💾 Сохранить токены</button>
+                <button class="btn btn-secondary" id="clearSettingsBtn">🗑️ Сбросить токены</button>
+                <button class="btn btn-secondary" id="testConnectionBtn">🔌 Проверить подключение к сервисам</button>
+            </div>
+            <div class="instruction">
+                <span>5. Если ранее не было выполнено обновление RAG - выполните.</span>
+            </div>
+            <div class="command-row">
+                <button class="btn btn-secondary" id="updateRagBtn">Update RAG</button>
+                <div class="last-run-date">
+                    <span>📅 Последний апдейт RAG:</span>
+                    <span id="lastUpdateRagDate">—</span>
+                    <button class="refresh-date-btn" id="refreshUpdateRagDateBtn" title="Обновить">🔄</button>
+                </div>
+            </div>
+            <div class="setting-row" style="margin-top:12px">
+                <button class="btn btn-danger" id="shutdownBtn">⛔ Закрыть бота</button>
+                <button class="btn btn-secondary" id="clearHistoryBtn">🗑️ Очистить историю чата</button>
+            </div>
         </div>
     </div>
 
     <div class="chat-area" id="chatArea">
         <div class="message bot">
             <div class="avatar">🤖</div>
-            <div class="bubble">Введите токены Confluence и GigaChat в настройках (⚙️), затем задайте вопрос о витринах данных.</div>
+            <div class="bubble">Введите токены Confluence, Jira и GigaChat в настройках (⚙️), затем задайте вопрос о витринах данных.</div>
         </div>
     </div>
 
@@ -272,15 +352,33 @@
     </div>
 </div>
 
-<script>
-    // --- Конфигурация ---
-    const API_BASE = '';  // пусто = относительный путь к /ask
-    const CONFLUENCE_TOKEN_KEY = 'confluence_token';
-    const GIGACHAT_TOKEN_KEY = 'gigachat_token';
+<div class="overlay" id="overlay"></div>
+<div class="logs-sidebar" id="logsSidebar">
+    <div class="logs-header">
+        <strong>📋 Логи выполнения команд</strong>
+        <button id="closeLogsBtn">&times;</button>
+    </div>
+    <div class="logs-area" id="logsArea">Загрузка...</div>
+    <div class="logs-controls">
+        <button class="btn btn-secondary" id="refreshLogsBtn">🔄 Обновить</button>
+        <button class="btn btn-secondary" id="clearLogsDisplayBtn">🗑️ Очистить экран</button>
+        <button class="btn btn-secondary" id="downloadLogsBtn">💾 Скачать</button>
+    </div>
+</div>
 
-    // --- DOM элементы ---
+<script>
+    const API_BASE = '';
+    const STORED_SESSION_KEY = 'chat_session_id';
+    
+    // DOM элементы
     const settingsPanel = document.getElementById('settingsPanel');
+    const toggleSettingsBtn = document.getElementById('toggleSettingsBtn');
+    const toggleLogsBtn = document.getElementById('toggleLogsBtn');
+    const logsSidebar = document.getElementById('logsSidebar');
+    const overlay = document.getElementById('overlay');
+    const closeLogsBtn = document.getElementById('closeLogsBtn');
     const confluenceTokenInput = document.getElementById('confluenceToken');
+    const jiraTokenInput = document.getElementById('jiraToken');
     const gigachatTokenInput = document.getElementById('gigachatToken');
     const saveBtn = document.getElementById('saveSettingsBtn');
     const clearBtn = document.getElementById('clearSettingsBtn');
@@ -288,39 +386,281 @@
     const sendBtn = document.getElementById('sendBtn');
     const questionInput = document.getElementById('questionInput');
     const chatArea = document.getElementById('chatArea');
-    const confluenceStatusDot = document.getElementById('confluence-status');
-    const llmStatusDot = document.getElementById('llm-status');
+    const confluenceStatusDot = document.getElementById('confluence-status-dot');
+    const jiraStatusDot = document.getElementById('jira-status-dot');
+    const llmStatusDot = document.getElementById('llm-status-dot');
+    const updateRagBtn = document.getElementById('updateRagBtn');
+    const refreshLogsBtn = document.getElementById('refreshLogsBtn');
+    const clearLogsDisplayBtn = document.getElementById('clearLogsDisplayBtn');
+    const downloadLogsBtn = document.getElementById('downloadLogsBtn');
+    const logsArea = document.getElementById('logsArea');
+    const lastUpdateRagDateSpan = document.getElementById('lastUpdateRagDate');
+    const refreshUpdateRagDateBtn = document.getElementById('refreshUpdateRagDateBtn');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
-    // Состояние
     let isTyping = false;
-    let conversationHistory = [];
-    const SESSION_ID = 'session_' + Math.random().toString(36).substr(2, 9);
+    let currentSessionId = localStorage.getItem(STORED_SESSION_KEY);
+    if (!currentSessionId) {
+        currentSessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem(STORED_SESSION_KEY, currentSessionId);
+    }
+    let logsUpdateInterval = null;
+    let pendingCommand = null;
 
-    // --- Инициализация ---
-    function loadTokens() {
-        confluenceTokenInput.value = localStorage.getItem(CONFLUENCE_TOKEN_KEY) || '';
-        gigachatTokenInput.value = localStorage.getItem(GIGACHAT_TOKEN_KEY) || '';
+    // Хранение состояния для инлайн-кнопок
+    let selectedTemplate = null;  // { id, label, template }
+    let currentQuestion = null;    // сформированный вопрос для отправки
+
+    // --- Вспомогательные функции ---
+    async function sendQuestionToBot(question) {
+        if (!question || isTyping) return;
+        
+        // Добавляем сообщение пользователя в чат
+        addMessage('user', question);
+        
+        isTyping = true;
+        sendBtn.disabled = true;
+        
+        const typingDiv = addTypingIndicator();
+        
+        try {
+            const response = await fetch(`${API_BASE}/ask`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: question, session_id: currentSessionId })
+            });
+            
+            removeTypingIndicator(typingDiv);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                addMessage('bot', `❌ Ошибка ${response.status}: ${errorText}`);
+                return;
+            }
+            
+            const data = await response.json();
+            let answerText = data.answer || 'Ответ не получен';
+            if (data.sources && data.sources.length) {
+                answerText += '\n\n📎 Источники:\n' + data.sources.slice(0,3).map(s => `- ${s.datamart || s.datamart_name || '?'}`).join('\n');
+            }
+            addMessage('bot', answerText);
+        } catch (err) {
+            removeTypingIndicator(typingDiv);
+            addMessage('bot', `❌ Ошибка сети: ${err.message}`);
+        } finally {
+            isTyping = false;
+            sendBtn.disabled = false;
+            questionInput.focus();
+        }
     }
 
-    function saveTokens() {
-        localStorage.setItem(CONFLUENCE_TOKEN_KEY, confluenceTokenInput.value);
-        localStorage.setItem(GIGACHAT_TOKEN_KEY, gigachatTokenInput.value);
-        updateSendButtonState();
-        showStatusMessage('Настройки сохранены', 'info');
+    function addMessage(role, text, extraButtons = null) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}`;
+        const avatar = role === 'user' ? '👤' : '🤖';
+        const formattedText = text.replace(/\n/g, '<br>').replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        let buttonsHtml = '';
+        if (extraButtons && extraButtons.length) {
+            buttonsHtml = '<div class="inline-buttons">' + extraButtons.map(btn => 
+                `<button class="inline-btn" data-value="${btn.value}" data-type="${btn.type}" data-template-id="${btn.templateId || ''}" data-template="${btn.template || ''}">${btn.label}</button>`
+            ).join('') + '</div>';
+        }
+        messageDiv.innerHTML = `
+            <div class="avatar">${avatar}</div>
+            <div class="bubble">
+                ${formattedText}
+                ${buttonsHtml}
+            </div>
+        `;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        
+        // Привязываем обработчики к кнопкам после добавления в DOM
+        if (extraButtons && extraButtons.length) {
+            messageDiv.querySelectorAll('.inline-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const value = btn.getAttribute('data-value');
+                    const type = btn.getAttribute('data-type');
+                    const templateId = btn.getAttribute('data-template-id');
+                    const templateText = btn.getAttribute('data-template');
+                    
+                    if (type === 'template') {
+                        // Сохраняем выбранный шаблон
+                        selectedTemplate = {
+                            id: templateId,
+                            label: btn.innerText,
+                            template: templateText
+                        };
+                        // Показываем список витрин
+                        await showDatamartButtons();
+                    } else if (type === 'datamart') {
+                        // Формируем полный вопрос, подставляя витрину в шаблон
+                        if (selectedTemplate && selectedTemplate.template) {
+                            const fullQuestion = selectedTemplate.template.replace('{datamart}', value);
+                            // Отправляем вопрос боту
+                            await sendQuestionToBot(fullQuestion);
+                            // Сбрасываем выбранный шаблон
+                            selectedTemplate = null;
+                        } else {
+                            addMessage('bot', '❌ Ошибка: не выбран шаблон вопроса.');
+                        }
+                    }
+                });
+            });
+        }
     }
 
-    function clearTokens() {
-        localStorage.removeItem(CONFLUENCE_TOKEN_KEY);
-        localStorage.removeItem(GIGACHAT_TOKEN_KEY);
-        confluenceTokenInput.value = '';
-        gigachatTokenInput.value = '';
-        updateSendButtonState();
-        showStatusMessage('Настройки сброшены', 'info');
+    async function showDatamartButtons() {
+        if (!selectedTemplate) return;
+        
+        try {
+            const resp = await fetch(`${API_BASE}/api/datamarts/list`);
+            if (resp.ok) {
+                const datamarts = await resp.json();
+                if (datamarts.length === 0) {
+                    addMessage('bot', '❌ Нет доступных витрин. Сначала выполните Update RAG.');
+                    selectedTemplate = null;
+                    return;
+                }
+                const buttons = datamarts.map(dm => ({ 
+                    label: dm, 
+                    value: dm, 
+                    type: 'datamart',
+                    templateId: selectedTemplate.id,
+                    template: selectedTemplate.template
+                }));
+                addMessage('bot', `📌 Выберите витрину для вопроса: "${selectedTemplate.label}"`, buttons);
+            } else {
+                addMessage('bot', '❌ Не удалось получить список витрин.');
+                selectedTemplate = null;
+            }
+        } catch (err) {
+            addMessage('bot', `❌ Ошибка: ${err.message}`);
+            selectedTemplate = null;
+        }
     }
 
-    function updateSendButtonState() {
-        const hasTokens = localStorage.getItem(CONFLUENCE_TOKEN_KEY) && localStorage.getItem(GIGACHAT_TOKEN_KEY);
-        sendBtn.disabled = !hasTokens || isTyping;
+    async function loadQuestionTemplates() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/questions/templates`);
+            if (resp.ok) {
+                const templates = await resp.json();
+                const buttons = templates.map(t => ({ 
+                    label: t.label, 
+                    value: t.id, 
+                    type: 'template',
+                    templateId: t.id,
+                    template: t.template
+                }));
+                addMessage('bot', '📝 Напишите вопрос или выберите из списка:', buttons);
+            }
+        } catch (err) {
+            console.error('Failed to load templates', err);
+        }
+    }
+
+    // --- Управление боковой панелью логов ---
+    function openLogsSidebar() { logsSidebar.classList.add('open'); overlay.classList.add('show'); startLogsUpdates(); }
+    function closeLogsSidebar() { logsSidebar.classList.remove('open'); overlay.classList.remove('show'); stopLogsUpdates(); }
+    function startLogsUpdates() { if (logsUpdateInterval) clearInterval(logsUpdateInterval); fetchLogs(); logsUpdateInterval = setInterval(fetchLogs, 1000); }
+    function stopLogsUpdates() { if (logsUpdateInterval) clearInterval(logsUpdateInterval); logsUpdateInterval = null; }
+
+    // --- Загрузка истории чата ---
+    async function loadChatHistory() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/chat/history/${currentSessionId}`);
+            if (resp.ok) {
+                const history = await resp.json();
+                while (chatArea.children.length > 1) chatArea.removeChild(chatArea.lastChild);
+                for (const msg of history) {
+                    addMessage('user', msg.user);
+                    let botText = msg.bot;
+                    if (msg.sources && msg.sources.length) botText += '\n\n📎 Источники: ' + msg.sources.join(', ');
+                    addMessage('bot', botText);
+                }
+            }
+        } catch (err) { console.error('Failed to load chat history', err); }
+    }
+
+    // --- Загрузка даты последнего RAG ---
+    async function loadLastEvents() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/sync/last-events`);
+            if (resp.ok) {
+                const data = await resp.json();
+                lastUpdateRagDateSpan.innerText = data.last_rag_update ? new Date(data.last_rag_update).toLocaleString() : 'Не выполнялся';
+            } else throw new Error();
+        } catch (err) { lastUpdateRagDateSpan.innerText = 'Ошибка'; }
+    }
+
+    // --- Проверка статусов ---
+    async function updateStatusIndicators() {
+        const dots = [confluenceStatusDot, jiraStatusDot, llmStatusDot];
+        dots.forEach(dot => dot.classList.add('pulse'));
+        try {
+            const resp = await fetch(`${API_BASE}/api/health/external`);
+            if (resp.ok) {
+                const data = await resp.json();
+                confluenceStatusDot.className = data.confluence?.status === 'ok' ? 'status-dot green' : 'status-dot red';
+                jiraStatusDot.className = data.jira?.status === 'ok' ? 'status-dot green' : 'status-dot red';
+                llmStatusDot.className = data.gigachat?.status === 'ok' ? 'status-dot green' : 'status-dot red';
+                addMessage('bot', '✅ Проверка подключения завершена. Индикаторы обновлены.');
+            } else throw new Error();
+        } catch(e) {
+            confluenceStatusDot.className = 'status-dot red';
+            jiraStatusDot.className = 'status-dot red';
+            llmStatusDot.className = 'status-dot red';
+            addMessage('bot', '❌ Ошибка при проверке подключения.');
+        } finally {
+            dots.forEach(dot => dot.classList.remove('pulse'));
+        }
+    }
+
+    // --- Работа с токенами ---
+    async function saveTokens() {
+        const confluenceToken = confluenceTokenInput.value;
+        const jiraToken = jiraTokenInput.value;
+        const gigachatToken = gigachatTokenInput.value;
+        try {
+            const resp = await fetch(`${API_BASE}/api/save-tokens`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ confluence_token: confluenceToken, jira_token: jiraToken, gigachat_token: gigachatToken })
+            });
+            const data = await resp.json();
+            if (resp.ok) {
+                showStatusMessage(data.message || 'Настройки сохранены на сервере', 'info');
+                await updateStatusIndicators();
+                await checkTokensConfigured();
+                loadQuestionTemplates();
+            } else showStatusMessage(`Ошибка: ${data.detail || data.message}`, 'error');
+        } catch (err) { showStatusMessage(`Ошибка сети: ${err.message}`, 'error'); }
+    }
+
+    async function clearTokens() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/clear-tokens`, { method: 'POST' });
+            const data = await resp.json();
+            if (resp.ok) {
+                showStatusMessage(data.message || 'Токены удалены с сервера', 'info');
+                await updateStatusIndicators();
+                await checkTokensConfigured();
+            } else showStatusMessage(`Ошибка: ${data.detail || data.message}`, 'error');
+        } catch (err) { showStatusMessage(`Ошибка сети: ${err.message}`, 'error'); }
+    }
+
+    async function checkTokensConfigured() {
+        try {
+            const resp = await fetch(`${API_BASE}/api/tokens-status`);
+            if (resp.ok) {
+                const data = await resp.json();
+                sendBtn.disabled = !data.configured || isTyping;
+                if (!data.configured) settingsPanel.classList.add('show');
+                else if (data.configured && !window._templatesShown) {
+                    window._templatesShown = true;
+                    loadQuestionTemplates();
+                }
+            }
+        } catch (err) { console.error(err); }
     }
 
     function showStatusMessage(text, type) {
@@ -329,103 +669,61 @@
         msgDiv.innerHTML = `<div class="avatar">ℹ️</div><div class="bubble" style="background:#fff3cd">${text}</div>`;
         chatArea.appendChild(msgDiv);
         chatArea.scrollTop = chatArea.scrollHeight;
-        setTimeout(() => msgDiv.remove(), 3000);
+        setTimeout(() => msgDiv.remove(), 5000);
     }
 
-    function updateStatusIndicators(confluenceOk, llmOk) {
-        confluenceStatusDot.className = confluenceOk ? 'status-dot green' : 'status-dot red';
-        llmStatusDot.className = llmOk ? 'status-dot green' : 'status-dot red';
-    }
+    async function testConnection() { await updateStatusIndicators(); }
 
-    async function testConnection() {
+    // --- Логи ---
+    async function fetchLogs() {
         try {
-            const resp = await fetch(`${API_BASE}/api/health/external`);
+            const resp = await fetch(`${API_BASE}/api/logs`);
             if (resp.ok) {
-                const data = await resp.json();
-                updateStatusIndicators(data.confluence.status === 'ok', data.gigachat.status === 'ok');
-                showStatusMessage('Проверка завершена', 'info');
-            }
-        } catch(e) {
-            updateStatusIndicators(false, false);
+                const logs = await resp.json();
+                logsArea.innerText = logs.join('\n') || '(пусто)';
+                logsArea.scrollTop = logsArea.scrollHeight;
+                if (pendingCommand) {
+                    const logsText = logs.join('\n');
+                    const success = new RegExp(`✅ Команда ${pendingCommand} завершена`).test(logsText);
+                    const error = new RegExp(`❌ Команда ${pendingCommand} завершена с кодом`).test(logsText);
+                    if (success || error) {
+                        if (success) {
+                            addMessage('bot', `✅ ${pendingCommand === 'update-rag' ? 'Update RAG' : pendingCommand} завершён`);
+                            if (pendingCommand === 'update-rag') loadLastEvents();
+                        } else if (error) addMessage('bot', `❌ Ошибка при выполнении ${pendingCommand}`);
+                        pendingCommand = null;
+                    }
+                }
+            } else logsArea.innerText = 'Не удалось загрузить логи';
+        } catch (err) { logsArea.innerText = `Ошибка: ${err.message}`; }
+    }
+    function clearLogsDisplay() { logsArea.innerText = '(очищено локально)'; }
+    function downloadLogs() { window.location.href = `${API_BASE}/api/logs/download`; }
+
+    // --- Запуск команд ---
+    async function runCommand(endpoint, commandName, displayName) {
+        if (pendingCommand) { showStatusMessage(`Предыдущая команда ${pendingCommand} ещё выполняется`, 'error'); return; }
+        pendingCommand = commandName;
+        addMessage('bot', `🔄 ${displayName} запущен... (следите за логами)`);
+        try {
+            const resp = await fetch(`${API_BASE}${endpoint}`, { method: 'POST' });
+            const data = await resp.json();
+            if (!resp.ok) throw new Error(data.detail || data.message || 'Ошибка');
+            showStatusMessage(data.message || 'Команда запущена', 'info');
+        } catch (err) {
+            addMessage('bot', `❌ Ошибка при запуске ${displayName}: ${err.message}`);
+            pendingCommand = null;
         }
     }
 
-    // --- Отправка сообщения ---
+    // --- Отправка сообщения из текстового поля ---
     async function sendMessage() {
         const question = questionInput.value.trim();
-        if (!question) return;
-        if (isTyping) return;
-
-        const confluenceToken = localStorage.getItem(CONFLUENCE_TOKEN_KEY);
-        const gigachatToken = localStorage.getItem(GIGACHAT_TOKEN_KEY);
-        if (!confluenceToken || !gigachatToken) {
-            showStatusMessage('Сначала сохраните токены в настройках (⚙️)', 'error');
-            return;
-        }
-
-        addMessage('user', question);
+        if (!question || isTyping) return;
+        
+        await sendQuestionToBot(question);
         questionInput.value = '';
         questionInput.style.height = 'auto';
-
-        isTyping = true;
-        updateSendButtonState();
-        const typingDiv = addTypingIndicator();
-
-        try {
-            const response = await fetch(`${API_BASE}/ask`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    question: question,
-                    session_id: SESSION_ID,
-                    confluence_token: confluenceToken,
-                    gigachat_token: gigachatToken
-                })
-            });
-
-            removeTypingIndicator(typingDiv);
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                addMessage('bot', `❌ Ошибка ${response.status}: ${errorText}`);
-                updateStatusIndicators(false, false);
-                return;
-            }
-
-            const data = await response.json();
-            let answerText = data.answer || 'Ответ не получен';
-            if (data.sources && data.sources.length) {
-                answerText += '\n\n📎 Источники:\n' + data.sources.slice(0,3).map(s => 
-                    `- ${s.datamart || s.datamart_name || '?'}`
-                ).join('\n');
-            }
-            addMessage('bot', answerText);
-            updateStatusIndicators(true, true);
-        } catch (err) {
-            removeTypingIndicator(typingDiv);
-            addMessage('bot', `❌ Ошибка сети: ${err.message}`);
-            updateStatusIndicators(false, false);
-        } finally {
-            isTyping = false;
-            updateSendButtonState();
-            questionInput.focus();
-        }
-    }
-
-    function addMessage(role, text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${role}`;
-        const avatar = role === 'user' ? '👤' : '🤖';
-        const formattedText = text.replace(/\n/g, '<br>').replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        messageDiv.innerHTML = `
-            <div class="avatar">${avatar}</div>
-            <div class="bubble">
-                ${formattedText}
-                ${role === 'bot' ? '<button class="copy-btn" onclick="copyToClipboard(this)">📋 Копировать</button>' : ''}
-            </div>
-        `;
-        chatArea.appendChild(messageDiv);
-        chatArea.scrollTop = chatArea.scrollHeight;
     }
 
     function addTypingIndicator() {
@@ -436,53 +734,66 @@
         chatArea.scrollTop = chatArea.scrollHeight;
         return div;
     }
+    function removeTypingIndicator(element) { if (element && element.remove) element.remove(); }
 
-    function removeTypingIndicator(element) {
-        if (element && element.remove) element.remove();
+    // Инициализация
+    async function init() {
+        loadChatHistory();
+        await loadLastEvents();
+        await updateStatusIndicators();
+        await checkTokensConfigured();
+    }
+    function initFieldIcons() {
+        document.querySelectorAll('.toggle-visibility').forEach(icon => {
+            icon.addEventListener('click', () => {
+                const targetId = icon.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input.type === 'password') { input.type = 'text'; icon.textContent = '🙈'; }
+                else { input.type = 'password'; icon.textContent = '👁️'; }
+            });
+        });
+        document.querySelectorAll('.clear-field').forEach(icon => {
+            icon.addEventListener('click', () => {
+                const targetId = icon.getAttribute('data-target');
+                document.getElementById(targetId).value = '';
+            });
+        });
     }
 
-    window.copyToClipboard = function(btn) {
-        const bubble = btn.closest('.bubble');
-        const text = bubble.innerText.replace('📋 Копировать', '').trim();
-        navigator.clipboard.writeText(text);
-        btn.textContent = '✅';
-        setTimeout(() => btn.textContent = '📋 Копировать', 1500);
-    };
-
-    function toggleSettings() {
-        settingsPanel.classList.toggle('show');
-    }
-
-    questionInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-    });
-    questionInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
+    // Обработчики событий
+    questionInput.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
+    questionInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
     saveBtn.onclick = saveTokens;
     clearBtn.onclick = clearTokens;
     testBtn.onclick = testConnection;
     sendBtn.onclick = sendMessage;
+    toggleSettingsBtn.onclick = () => settingsPanel.classList.toggle('show');
+    toggleLogsBtn.onclick = openLogsSidebar;
+    closeLogsBtn.onclick = closeLogsSidebar;
+    overlay.onclick = closeLogsSidebar;
+    updateRagBtn.onclick = () => runCommand('/api/update-rag', 'update-rag', 'Update RAG');
+    refreshLogsBtn.onclick = () => { fetchLogs(); startLogsUpdates(); };
+    clearLogsDisplayBtn.onclick = clearLogsDisplay;
+    downloadLogsBtn.onclick = downloadLogs;
+    refreshUpdateRagDateBtn.onclick = loadLastEvents;
+    clearHistoryBtn.onclick = async () => {
+        if (confirm('Удалить историю чата?')) {
+            await fetch(`${API_BASE}/api/clear-chat-history`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: currentSessionId }) });
+            while (chatArea.children.length > 1) chatArea.removeChild(chatArea.lastChild);
+            showStatusMessage('История чата очищена', 'info');
+        }
+    };
+    const shutdownBtn = document.getElementById('shutdownBtn');
+    shutdownBtn.onclick = async () => {
+        if (confirm('Остановить сервер бота?')) {
+            await fetch(`${API_BASE}/api/shutdown`, { method: 'POST' });
+            showStatusMessage('Сервер останавливается...', 'info');
+            setTimeout(() => { document.body.innerHTML = '<h2>Бот остановлен</h2>'; }, 1000);
+        }
+    };
 
-    const header = document.querySelector('.header');
-    const settingsBtn = document.createElement('button');
-    settingsBtn.textContent = '⚙️';
-    settingsBtn.style.background = 'none';
-    settingsBtn.style.border = 'none';
-    settingsBtn.style.color = 'white';
-    settingsBtn.style.fontSize = '20px';
-    settingsBtn.style.cursor = 'pointer';
-    settingsBtn.onclick = toggleSettings;
-    header.appendChild(settingsBtn);
-
-    loadTokens();
-    updateSendButtonState();
-    testConnection(); // Начальная проверка
+    init();
+    initFieldIcons();
 </script>
 </body>
 </html>

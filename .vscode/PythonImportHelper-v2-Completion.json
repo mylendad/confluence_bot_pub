@@ -104,6 +104,14 @@
         "documentation": {}
     },
     {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "Protocol",
         "importPath": "typing",
         "description": "typing",
@@ -670,6 +678,14 @@
         "description": "app.utils.hashing",
         "isExtraImport": true,
         "detail": "app.utils.hashing",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "app.storage.sqlite",
+        "description": "app.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "app.storage.sqlite",
         "documentation": {}
     },
     {
@@ -2103,6 +2119,14 @@
         "documentation": {}
     },
     {
+        "label": "MetadataRepository",
+        "importPath": "app.storage.metadata_repository",
+        "description": "app.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "app.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
         "label": "ANSWER_SYSTEM_PROMPT",
         "importPath": "app.rag.prompts",
         "description": "app.rag.prompts",
@@ -2644,6 +2668,14 @@
         "documentation": {}
     },
     {
+        "label": "build_metadata_repository",
+        "importPath": "app.factory",
+        "description": "app.factory",
+        "isExtraImport": true,
+        "detail": "app.factory",
+        "documentation": {}
+    },
+    {
         "label": "build_retriever",
         "importPath": "app.factory",
         "description": "app.factory",
@@ -2669,6 +2701,14 @@
     },
     {
         "label": "memory_handler",
+        "importPath": "app.logging_config",
+        "description": "app.logging_config",
+        "isExtraImport": true,
+        "detail": "app.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "configure_logging",
         "importPath": "app.logging_config",
         "description": "app.logging_config",
         "isExtraImport": true,
@@ -2732,12 +2772,48 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "copy",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "copy",
         "description": "copy",
         "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
         "documentation": {}
     },
     {
@@ -2757,7 +2833,23 @@
         "documentation": {}
     },
     {
+        "label": "BackgroundTasks",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "RedirectResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
         "isExtraImport": true,
@@ -3768,6 +3860,24 @@
         "documentation": {}
     },
     {
+        "label": "TokensSaveRequest",
+        "kind": 6,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "class TokensSaveRequest(BaseModel):\n    confluence_token: str | None = None\n    jira_token: str | None = None\n    gigachat_token: str | None = None\nclass TokensStatusResponse(BaseModel):\n    configured: bool\n    confluence: bool\n    jira: bool\n    gigachat: bool\napp = FastAPI(title=\"Confluence S2T RAG Bot\")",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "TokensStatusResponse",
+        "kind": 6,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "class TokensStatusResponse(BaseModel):\n    configured: bool\n    confluence: bool\n    jira: bool\n    gigachat: bool\napp = FastAPI(title=\"Confluence S2T RAG Bot\")\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
         "label": "ask",
         "kind": 2,
         "importPath": "app.main",
@@ -3781,16 +3891,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\ndef health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from app.factory import build_jira_client\n    jira_client = build_jira_client()\n    return {\n        \"confluence\": conf_client.check_health(),",
-        "detail": "app.main",
-        "documentation": {}
-    },
-    {
-        "label": "health_external",
-        "kind": 2,
-        "importPath": "app.main",
-        "description": "app.main",
-        "peekOfCode": "def health_external() -> dict:\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from app.factory import build_jira_client\n    jira_client = build_jira_client()\n    return {\n        \"confluence\": conf_client.check_health(),\n        \"gigachat\": llm_gen.check_health(),\n        \"jira\": jira_client.check_health()\n    }",
+        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\nasync def health_external():\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from app.factory import build_jira_client\n    jira_client = build_jira_client()\n    conf_status = conf_client.check_health()\n    jira_status = jira_client.check_health()",
         "detail": "app.main",
         "documentation": {}
     },
@@ -3817,7 +3918,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def get_sync_last_events() -> dict:\n    state_repo = build_state_repository()\n    states = state_repo.list_all()\n    # Последний парсинг (синхронизация файлов)\n    last_parsing = None\n    if states:\n        last_parsing = max(s.last_synced_at for s in states if s.last_synced_at) if any(s.last_synced_at for s in states) else None\n    # Последнее обновление метаданных (витрин)\n    meta_repo = build_metadata_repository()\n    datamarts = meta_repo.list_datamarts()",
+        "peekOfCode": "def get_sync_last_events() -> dict:\n    state_repo = build_state_repository()\n    states = state_repo.list_all()\n    last_parsing = None\n    if states:\n        valid = [s.last_synced_at for s in states if s.last_synced_at]\n        if valid:\n            last_parsing = max(valid)\n    meta_repo = build_metadata_repository()\n    datamarts = meta_repo.list_datamarts()",
         "detail": "app.main",
         "documentation": {}
     },
@@ -3826,7 +3927,7 @@
         "kind": 2,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "def get_sync_status() -> dict:\n    repo = build_state_repository()\n    states = repo.list_all()\n    if not states:\n        return {\"last_sync\": None, \"total_datamarts\": 0, \"status\": \"no_data\"}\n    last_sync = (\n        max(s.last_synced_at for s in states if s.last_synced_at)\n        if any(s.last_synced_at for s in states)\n        else None\n    )",
+        "peekOfCode": "def get_sync_status() -> dict:\n    repo = build_state_repository()\n    states = repo.list_all()\n    if not states:\n        return {\"last_sync\": None, \"total_datamarts\": 0, \"status\": \"no_data\"}\n    last_sync = None\n    if any(s.last_synced_at for s in states):\n        last_sync = max(s.last_synced_at for s in states if s.last_synced_at)\n    return {\n        \"last_sync\": last_sync.isoformat() if last_sync else None,",
         "detail": "app.main",
         "documentation": {}
     },
@@ -3840,11 +3941,47 @@
         "documentation": {}
     },
     {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent\nENV_PATH = BASE_DIR / \".env\"\n# Базовые константы, которые всегда должны быть в .env\nDEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "ENV_PATH",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "ENV_PATH = BASE_DIR / \".env\"\n# Базовые константы, которые всегда должны быть в .env\nDEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",\n    \"CONFLUENCE_ROOT_PAGE_ID\": \"14561190342\",",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ENV_VARS",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "DEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",\n    \"CONFLUENCE_ROOT_PAGE_ID\": \"14561190342\",\n    \"SQLITE_DB_PATH\": \"./data/app.db\",\n    \"VECTOR_STORE_DIR\": \"./data/vector_store\",",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
         "label": "app",
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\n@app.post(\"/ask\", response_model=AskResponse)\ndef ask(request: AskRequest) -> AskResponse:\n    # Используем настройки из .env как базу, но позволяем переопределить токены из UI\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n        settings.confluence_api_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token",
+        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")\nasync def save_tokens(request: TokensSaveRequest):\n    \"\"\"Сохраняет переданные токены в .env.\"\"\"\n    updates = {}\n    if request.confluence_token is not None:\n        updates[\"CONFLUENCE_TOKEN\"] = request.confluence_token",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")\nasync def save_tokens(request: TokensSaveRequest):\n    \"\"\"Сохраняет переданные токены в .env.\"\"\"\n    updates = {}\n    if request.confluence_token is not None:\n        updates[\"CONFLUENCE_TOKEN\"] = request.confluence_token\n    if request.jira_token is not None:\n        updates[\"JIRA_TOKEN\"] = request.jira_token",
         "detail": "app.main",
         "documentation": {}
     },
@@ -3853,7 +3990,7 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "static_path = Path(__file__).parent / \"static\"\nif not static_path.exists():\n    static_path.mkdir(parents=True, exist_ok=True)\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")",
+        "peekOfCode": "static_path = Path(__file__).parent / \"static\"\nif not static_path.exists():\n    static_path.mkdir(parents=True, exist_ok=True)\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\")\nasync def root():\n    return RedirectResponse(url=\"/ui/\")",
         "detail": "app.main",
         "documentation": {}
     },

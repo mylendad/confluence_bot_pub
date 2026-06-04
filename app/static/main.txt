@@ -19,7 +19,6 @@ from app.factory import (
     build_chat_history_repository,
     build_confluence_client,
     build_llm_generator,
-    build_metadata_repository,
     build_retriever,
     build_state_repository,
 )
@@ -51,23 +50,22 @@ DEFAULT_ENV_VARS = {
     "GIGACHAT_SCOPE": "GIGACHAT_API_PERS",
     "GIGACHAT_MODEL": "GigaChat",
     "JIRA_BASE_URL": "https://jira.delta.sbrf.ru",
-    "JIRA_VERIFY_SSL": "false",
+    "JIRA_VERIFY_SSL": "false"
 }
-
 
 def _update_env_file(updates: dict):
     """Обновляет или добавляет переменные в .env, сохраняя остальные."""
     lines = []
     if ENV_PATH.exists():
         lines = ENV_PATH.read_text(encoding="utf-8").splitlines()
-
+    
     updated_keys = set()
     new_lines = []
-
+    
     # Обновляем существующие строки
     for line in lines:
-        if "=" in line and not line.strip().startswith("#"):
-            key = line.split("=", 1)[0].strip()
+        if '=' in line and not line.strip().startswith('#'):
+            key = line.split('=', 1)[0].strip()
             if key in updates:
                 new_lines.append(f"{key}={updates[key]}")
                 updated_keys.add(key)
@@ -75,23 +73,22 @@ def _update_env_file(updates: dict):
                 new_lines.append(line)
         else:
             new_lines.append(line)
-
+    
     # Добавляем новые переменные, которых не было
     for key, value in updates.items():
         if key not in updated_keys:
             new_lines.append(f"{key}={value}")
-
+    
     ENV_PATH.write_text("\n".join(new_lines), encoding="utf-8")
-
+    
     # Сбрасываем кэш настроек после изменения .env
+    from app.config import get_settings
     get_settings.cache_clear()
-
 
 class TokensSaveRequest(BaseModel):
     confluence_token: str | None = None
     jira_token: str | None = None
     gigachat_token: str | None = None
-
 
 class TokensStatusResponse(BaseModel):
     configured: bool
@@ -99,11 +96,9 @@ class TokensStatusResponse(BaseModel):
     jira: bool
     gigachat: bool
 
-
 app = FastAPI(title="Confluence S2T RAG Bot")
 configure_logging()
 logger = logging.getLogger(__name__)
-
 
 # --- Эндпоинты для управления токенами ---
 @app.post("/api/save-tokens")
@@ -122,7 +117,6 @@ async def save_tokens(request: TokensSaveRequest):
         _update_env_file(updates)
     return {"message": "Токены сохранены"}
 
-
 @app.post("/api/clear-tokens")
 async def clear_tokens():
     """Очищает токены в .env (устанавливает пустые значения)."""
@@ -131,11 +125,10 @@ async def clear_tokens():
         "JIRA_TOKEN": "",
         "JIRA_API_TOKEN": "",
         "GIGACHAT_CREDENTIALS": "",
-        "GIGACHAT_API_PERS": "",
+        "GIGACHAT_API_PERS": ""
     }
     _update_env_file(updates)
     return {"message": "Токены удалены"}
-
 
 @app.get("/api/tokens-status")
 async def tokens_status():
@@ -146,9 +139,11 @@ async def tokens_status():
     gigachat_ok = bool(settings.gigachat_credentials)
     configured = confluence_ok and jira_ok and gigachat_ok
     return TokensStatusResponse(
-        configured=configured, confluence=confluence_ok, jira=jira_ok, gigachat=gigachat_ok
+        configured=configured,
+        confluence=confluence_ok,
+        jira=jira_ok,
+        gigachat=gigachat_ok
     )
-
 
 # --- Фоновые команды с реальным временем логов ---
 async def _run_cli_command_streaming(args: list[str], command_name: str):
@@ -156,28 +151,26 @@ async def _run_cli_command_streaming(args: list[str], command_name: str):
     try:
         logger.info("Запуск команды %s: python -m app.cli %s", command_name, " ".join(args))
         process = await asyncio.create_subprocess_exec(
-            sys.executable,
-            "-m",
-            "app.cli",
-            *args,
+            sys.executable, "-m", "app.cli", *args,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
-            env={**os.environ, "PYTHONUNBUFFERED": "1"},
+            env={**os.environ, "PYTHONUNBUFFERED": "1"}
         )
-
+        
         async def read_stream(stream, log_func):
             while True:
                 line = await stream.readline()
                 if not line:
                     break
-                text = line.decode("utf-8", errors="replace").rstrip()
+                text = line.decode('utf-8', errors='replace').rstrip()
                 if text:
                     log_func("[CLI] %s", text)
                     for handler in logging.getLogger().handlers:
                         handler.flush()
-
+        
         await asyncio.gather(
-            read_stream(process.stdout, logger.info), read_stream(process.stderr, logger.error)
+            read_stream(process.stdout, logger.info),
+            read_stream(process.stderr, logger.error)
         )
         return_code = await process.wait()
         if return_code == 0:
@@ -187,26 +180,22 @@ async def _run_cli_command_streaming(args: list[str], command_name: str):
     except Exception as e:
         logger.exception("Ошибка при выполнении команды %s: %s", command_name, e)
 
-
 @app.post("/api/update-rag")
 async def update_rag(background_tasks: BackgroundTasks):
     """Запускает инкрементальное обновление RAG в фоне с потоковым логированием."""
     background_tasks.add_task(_run_cli_command_streaming, ["update-rag"], "update-rag")
     return {"message": "Команда update-rag запущена в фоне. Смотрите логи."}
 
-
 @app.post("/api/shutdown")
-async def shutdown(background_tasks: BackgroundTasks):
+async def shutdown():
     """Останавливает сервер."""
-
     async def _shutdown():
         await asyncio.sleep(0.5)
         logger.info("Shutting down server...")
         sys.exit(0)
-
+    background_tasks = BackgroundTasks()
     background_tasks.add_task(_shutdown)
     return {"message": "Сервер останавливается..."}
-
 
 @app.post("/api/clear-chat-history")
 async def clear_chat_history(request: dict):
@@ -218,37 +207,26 @@ async def clear_chat_history(request: dict):
         conn.execute("delete from chat_history where session_id = ?", (session_id,))
     return {"message": "История очищена"}
 
-
 @app.get("/api/logs/download")
 async def download_logs():
     """Скачать текущие логи в файл."""
     logs = memory_handler.get_logs()
     content = "\n".join(logs)
-    return Response(
-        content=content,
-        media_type="text/plain",
-        headers={"Content-Disposition": "attachment; filename=logs.txt"},
-    )
-
+    return Response(content=content, media_type="text/plain", headers={"Content-Disposition": "attachment; filename=logs.txt"})
 
 # --- Список витрин для инлайн-кнопок ---
 def _clean_datamart_list():
     """Возвращает отфильтрованный список витрин (как в RAGRetriever._datamart_list)."""
     import re
     from app.utils.text_utils import normalize_text
-
-    meta_repo = build_metadata_repository()
+    settings = get_settings()
+    db = SQLite(settings.sqlite_db_path)
+    meta_repo = MetadataRepository(db)
     datamarts = meta_repo.list_datamarts()
     junk_patterns = [
-        r"\bтз\b",
-        r"техническ[ои][еи] задани[ея]",
-        r"чек лист",
-        r"препятствия",
-        r"функциональное решение",
-        r"функцональное решение",
-        r"страниц[аы] для 2лс",
-        r"копия",
-        r"изменения в релизах",
+        r"\bтз\b", r"техническ[ои][еи] задани[ея]", r"чек лист", 
+        r"препятствия", r"функциональное решение", r"функцональное решение",
+        r"страниц[аы] для 2лс", r"копия", r"изменения в релизах"
     ]
     combined_junk = "|".join(junk_patterns)
     filtered = []
@@ -267,24 +245,14 @@ def _clean_datamart_list():
         filtered.append(name)
     return sorted(set(filtered))
 
-
 @app.get("/api/datamarts/list")
 async def list_datamarts():
     return _clean_datamart_list()
 
-
 # --- Остальные эндпоинты ---
 @app.post("/ask", response_model=AskResponse)
 def ask(request: AskRequest) -> AskResponse:
-    # Используем настройки из .env как базу, но позволяем переопределить токены из UI
-    settings = copy.deepcopy(get_settings())
-    if request.confluence_token:
-        settings.confluence_token = request.confluence_token
-        settings.confluence_api_token = request.confluence_token
-    if request.gigachat_token:
-        settings.gigachat_credentials = request.gigachat_token
-        settings.gigachat_api_key = request.gigachat_token
-
+    settings = get_settings()
     try:
         service = BotService(build_retriever(settings))
         answer = service.ask(request.question)
@@ -303,62 +271,39 @@ def ask(request: AskRequest) -> AskResponse:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
-
 
 @app.get("/api/health/external")
 async def health_external():
     conf_client = build_confluence_client()
     llm_gen = build_llm_generator()
     from app.factory import build_jira_client
-
     jira_client = build_jira_client()
     conf_status = conf_client.check_health()
     jira_status = jira_client.check_health()
     llm_status = llm_gen.check_health()
-    logger.info(
-        "Health check: Confluence=%s, Jira=%s, GigaChat=%s (details: %s)",
-        conf_status.get("status"),
-        jira_status.get("status"),
-        llm_status.get("status"),
-        llm_status,
-    )
-    return {"confluence": conf_status, "gigachat": llm_status, "jira": jira_status}
-
+    logger.info("Health check: Confluence=%s, Jira=%s, GigaChat=%s (details: %s)",
+                conf_status.get("status"), jira_status.get("status"), llm_status.get("status"), llm_status)
+    return {
+        "confluence": conf_status,
+        "gigachat": llm_status,
+        "jira": jira_status
+    }
 
 @app.get("/api/logs")
 def get_logs() -> list[str]:
     return memory_handler.get_logs()
 
-
 @app.get("/api/questions/templates")
 def get_question_templates() -> list[dict]:
     return [
-        {
-            "id": "owner",
-            "label": "Владелец витрины",
-            "template": "Кто владелец витрины {datamart}?",
-        },
-        {
-            "id": "attributes",
-            "label": "Состав атрибутов",
-            "template": "Какие атрибуты входят в витрину {datamart}?",
-        },
-        {
-            "id": "logic",
-            "label": "Логика расчета",
-            "template": "Какая логика расчета у атрибута {attribute} в витрине {datamart}?",
-        },
-        {
-            "id": "history",
-            "label": "История изменений",
-            "template": "Какие последние изменения были в витрине {datamart}?",
-        },
+        {"id": "owner", "label": "Владелец витрины", "template": "Кто владелец витрины {datamart}?"},
+        {"id": "attributes", "label": "Состав атрибутов", "template": "Какие атрибуты входят в витрину {datamart}?"},
+        {"id": "logic", "label": "Логика расчета", "template": "Какая логика расчета у атрибута {attribute} в витрине {datamart}?"},
+        {"id": "history", "label": "История изменений", "template": "Какие последние изменения были в витрине {datamart}?"},
     ]
-
 
 @app.get("/api/sync/last-events")
 def get_sync_last_events() -> dict:
@@ -369,8 +314,9 @@ def get_sync_last_events() -> dict:
         valid = [s.last_synced_at for s in states if s.last_synced_at]
         if valid:
             last_parsing = max(valid)
-
-    meta_repo = build_metadata_repository()
+    settings = get_settings()
+    db = SQLite(settings.sqlite_db_path)
+    meta_repo = MetadataRepository(db)
     datamarts = meta_repo.list_datamarts()
     last_meta_update = None
     if datamarts:
@@ -380,9 +326,8 @@ def get_sync_last_events() -> dict:
     return {
         "last_parsing": last_parsing.isoformat() if last_parsing else None,
         "last_rag_update": last_meta_update,
-        "status": "ok",
+        "status": "ok"
     }
-
 
 @app.get("/api/sync/status")
 def get_sync_status() -> dict:
@@ -407,7 +352,6 @@ def get_sync_status() -> dict:
         ],
     }
 
-
 @app.get("/api/chat/history/{session_id}")
 def get_chat_history(session_id: str) -> list[dict]:
     repo = build_chat_history_repository()
@@ -422,14 +366,12 @@ def get_chat_history(session_id: str) -> list[dict]:
         for m in messages
     ]
 
-
 # --- Монтирование статики и редирект ---
 static_path = Path(__file__).parent / "static"
 if not static_path.exists():
     static_path.mkdir(parents=True, exist_ok=True)
 
 app.mount("/ui", StaticFiles(directory=str(static_path), html=True), name="ui")
-
 
 @app.get("/")
 async def root():
