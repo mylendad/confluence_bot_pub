@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluence S2T RAG Bot</title>
+    <link rel="icon" type="image/x-icon" href="/ui/static/favicon.ico">
+    <link rel="stylesheet" href="/ui/css/styles.css">
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <div class="header-left"><span class="app-title">Confluence Agent</span></div>
+        <div class="header-right">
+            <button class="icon-btn" id="toggleSettingsBtn">⚙️ Настройки</button>
+            <button class="icon-btn" id="toggleLogsBtn">📋 Лог</button>
+        </div>
+    </div>
+
+    <div class="panels-container">
+        <div class="settings-panel" id="settingsPanel">
+            <div class="status">
+                <span><span class="status-dot" id="confluence-status-dot"></span> Confluence</span>
+                <span><span class="status-dot" id="jira-status-dot"></span> Jira</span>
+                <span><span class="status-dot" id="llm-status-dot"></span> GigaChat</span>
+            </div>
+            <div class="instruction">
+                <span>1. Введите токен Confluence, получив его </span>
+                <a href="https://confluence.delta.sbrf.ru/plugins/personalaccesstokens/usertokens.action" target="_blank">по ссылке</a>
+                <span> - нажмите "Создать маркер".</span>
+            </div>
+            <div class="setting-row">
+                <label>🔑 Confluence Token</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confluenceToken" placeholder="Введите токен">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="confluenceToken">👁️</span>
+                        <span class="clear-field" data-target="confluenceToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>2. Введите токен Jira </span>
+                <a href="https://jira.delta.sbrf.ru/secure/ViewProfile.jspa?selectedTab=com.atlassian.pats.pats-plugin:jira-user-personal-access-tokens" target="_blank">по ссылке</a>
+                <span> - нажмите "Создать маркер".</span>
+            </div>
+            <div class="setting-row">
+                <label>🔑 Jira Token</label>
+                <div class="password-wrapper">
+                    <input type="password" id="jiraToken" placeholder="Введите токен">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="jiraToken">👁️</span>
+                        <span class="clear-field" data-target="jiraToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>3. Введите GigaChat API Key. Для этого </span>
+                <a href="https://developers.sber.ru/studio/login" target="_blank">авторизуйтесь по ссылке</a>
+                <span> - настройте API.</span>
+            </div>
+            <div class="setting-row">
+                <label>🤖 GigaChat API Key</label>
+                <div class="password-wrapper">
+                    <input type="password" id="gigachatToken" placeholder="Введите API-ключ">
+                    <div class="field-icons">
+                        <span class="toggle-visibility" data-target="gigachatToken">👁️</span>
+                        <span class="clear-field" data-target="gigachatToken">❌</span>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction">
+                <span>4. Нажмите "Сохранить токены". Вы так же можете сбросить токены и проверить соединение в индикаторах выше.</span>
+            </div>
+            <div class="setting-row" style="margin-top:12px">
+                <button class="btn btn-primary" id="saveSettingsBtn">💾 Сохранить токены</button>
+                <button class="btn btn-secondary" id="clearSettingsBtn">🗑️ Сбросить токены</button>
+                <button class="btn btn-secondary" id="testConnectionBtn">🔌 Проверить подключение к сервисам</button>
+            </div>
+            <div class="instruction">
+                <span>5. Если ранее не было выполнено обновление RAG - выполните.</span>
+            </div>
+            <div class="command-row">
+                <button class="btn btn-secondary" id="updateRagBtn">Update RAG</button>
+                <div class="last-run-date">
+                    <span>📅 Последний апдейт RAG:</span>
+                    <span id="lastUpdateRagDate">—</span>
+                    <button class="refresh-date-btn" id="refreshUpdateRagDateBtn" title="Обновить">🔄</button>
+                </div>
+            </div>
+            <div class="setting-row" style="margin-top:12px">
+                <button class="btn btn-danger" id="shutdownBtn">⛔ Закрыть бота</button>
+                <button class="btn btn-secondary" id="clearHistoryBtn">🗑️ Очистить историю чата</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+        <div class="message bot">
+            <div class="avatar">🤖</div>
+            <div class="bubble">Введите токены Confluence, Jira и GigaChat в настройках (⚙️), затем задайте вопрос о витринах данных.</div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <textarea id="questionInput" rows="1" placeholder="Введите вопрос... (Enter для отправки)"></textarea>
+        <button id="sendBtn" disabled>📤</button>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="logs-sidebar" id="logsSidebar">
+    <div class="logs-header">
+        <strong>📋 Логи выполнения команд</strong>
+        <button id="closeLogsBtn">&times;</button>
+    </div>
+    <div class="logs-area" id="logsArea">Загрузка...</div>
+    <div class="logs-controls">
+        <button class="btn btn-secondary" id="refreshLogsBtn">🔄 Обновить</button>
+        <button class="btn btn-secondary" id="clearLogsDisplayBtn">🗑️ Очистить экран</button>
+        <button class="btn btn-secondary" id="downloadLogsBtn">💾 Скачать</button>
+    </div>
+</div>
+
+<script src="/ui/js/app.js"></script>
+</body>
+</html>

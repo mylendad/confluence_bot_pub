@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from app.changes.history_repository import HistoryRepository
-from app.changes.models import ChangeLogEntry
-from app.confluence.models import Datamart, DatamartFact, ReleaseChange
-from app.rag.llm import AnswerGenerator
-from app.rag.retriever import RAGRetriever
-from app.rag.vector_store import JsonVectorStore
-from app.s2t.models import S2TAttribute
-from app.storage.metadata_repository import MetadataRepository
-from app.storage.sqlite import SQLite
+from services.ingestion.changes.history_repository import HistoryRepository
+from services.ingestion.changes.models import ChangeLogEntry
+from services.ingestion.confluence.models import Datamart, DatamartFact, ReleaseChange
+from services.rag.llm import AnswerGenerator
+from services.rag.retriever import RAGRetriever
+from services.rag.vector_store import JsonVectorStore
+from services.ingestion.s2t.models import S2TAttribute
+from shared.storage.metadata_repository import MetadataRepository
+from shared.storage.sqlite import SQLite
 
 
 class FailingAnswerGenerator(AnswerGenerator):
@@ -278,8 +278,8 @@ def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:
         ]
     )
     vector_store = JsonVectorStore(tmp_path / "vs")
-    from app.rag.indexer import RAGIndexer
-    from app.storage.document_repository import DocumentRepository
+    from services.rag.indexer import RAGIndexer
+    from shared.storage.document_repository import DocumentRepository
 
     RAGIndexer(metadata_repo, DocumentRepository(db), vector_store).rebuild_from_storage()
     retriever = RAGRetriever(

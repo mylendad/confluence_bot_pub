@@ -1,5 +1,5 @@
-from app.changes.diff_service import DiffService
-from app.s2t.models import S2TAttribute
+from services.ingestion.changes.diff_service import DiffService
+from services.ingestion.s2t.models import S2TAttribute
 
 
 def test_diff_detects_modified_attribute_logic() -> None:

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from app.s2t.parser import S2TParser
+from services.ingestion.s2t.parser import S2TParser
 
 
 def test_parse_csv_s2t(tmp_path: Path) -> None:

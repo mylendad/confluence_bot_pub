@@ -1,9 +1,9 @@
 import httpx
 import pytest
 
-from app.config import Settings
-from app.confluence.client import ConfluenceClient
-from app.confluence.exceptions import ConfluenceAuthError
+from shared.config.config import Settings
+from services.ingestion.confluence.client import ConfluenceClient
+from services.ingestion.confluence.exceptions import ConfluenceAuthError
 
 
 def test_attachment_download_url_keeps_cloud_context_path() -> None:
@@ -175,7 +175,7 @@ def test_attachment_download_resource_falls_back_to_rest_endpoint() -> None:
 
 
 def attachments_resource(page_id: str, attachment_id: str, url: str):
-    from app.confluence.models import S2TResource
+    from services.ingestion.confluence.models import S2TResource
 
     return S2TResource(
         id=attachment_id,

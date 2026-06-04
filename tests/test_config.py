@@ -1,4 +1,4 @@
-from app.config import Settings
+from shared.config.config import Settings
 
 
 def test_gigachat_auth_key_prefers_credentials() -> None:

@@ -3,11 +3,11 @@ from pathlib import Path
 import httpx
 import pytest
 
-from app.changes.history_repository import HistoryRepository
-from app.cli import _raise_confluence_cli_error, parse_s2t
-from app.config import get_settings
-from app.storage.metadata_repository import MetadataRepository
-from app.storage.sqlite import SQLite
+from services.ingestion.changes.history_repository import HistoryRepository
+from services.bot.cli import _raise_confluence_cli_error, parse_s2t
+from shared.config.config import get_settings
+from shared.storage.metadata_repository import MetadataRepository
+from shared.storage.sqlite import SQLite
 
 
 def _write_s2t(path: Path, target_fields: list[str]) -> None:

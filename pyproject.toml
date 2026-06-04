@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 [project.scripts]
-"app.cli" = "app.cli:app"
-confluence-bot = "app.cli:app"
+"services.bot.cli" = "services.bot.cli:app"
+confluence-bot = "services.bot.cli:app"
 
 [project.optional-dependencies]
 rag = [
@@ -47,4 +47,4 @@ testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.setuptools]
-packages = ["app"]
+packages = ["services", "shared"]
