@@ -1,229 +1,5 @@
 [
     {
-        "label": "BotInterface",
-        "importPath": "services.bot.ports",
-        "description": "services.bot.ports",
-        "isExtraImport": true,
-        "detail": "services.bot.ports",
-        "documentation": {}
-    },
-    {
-        "label": "BotInterface",
-        "importPath": "services.bot.ports",
-        "description": "services.bot.ports",
-        "isExtraImport": true,
-        "detail": "services.bot.ports",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "model_validator",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "RAGAnswer",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RAGDocument",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RAGAnswer",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RAGDocument",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RetrievedDocument",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RAGDocument",
-        "importPath": "services.rag.models",
-        "description": "services.rag.models",
-        "isExtraImport": true,
-        "detail": "services.rag.models",
-        "documentation": {}
-    },
-    {
-        "label": "RAGRetriever",
-        "importPath": "services.rag.retriever",
-        "description": "services.rag.retriever",
-        "isExtraImport": true,
-        "detail": "services.rag.retriever",
-        "documentation": {}
-    },
-    {
-        "label": "RAGRetriever",
-        "importPath": "services.rag.retriever",
-        "description": "services.rag.retriever",
-        "isExtraImport": true,
-        "detail": "services.rag.retriever",
-        "documentation": {}
-    },
-    {
-        "label": "RAGRetriever",
-        "importPath": "services.rag.retriever",
-        "description": "services.rag.retriever",
-        "isExtraImport": true,
-        "detail": "services.rag.retriever",
-        "documentation": {}
-    },
-    {
-        "label": "RAGRetriever",
-        "importPath": "services.rag.retriever",
-        "description": "services.rag.retriever",
-        "isExtraImport": true,
-        "detail": "services.rag.retriever",
-        "documentation": {}
-    },
-    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -1595,6 +1371,214 @@
         "documentation": {}
     },
     {
+        "label": "BotInterface",
+        "importPath": "services.bot.ports",
+        "description": "services.bot.ports",
+        "isExtraImport": true,
+        "detail": "services.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "BotInterface",
+        "importPath": "services.bot.ports",
+        "description": "services.bot.ports",
+        "isExtraImport": true,
+        "detail": "services.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "ConfigDict",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "model_validator",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Annotated",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -1673,6 +1657,30 @@
         "documentation": {}
     },
     {
+        "label": "status",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Body",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "RedirectResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
@@ -1713,6 +1721,70 @@
         "documentation": {}
     },
     {
+        "label": "TokensSaveRequest",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "TokensStatusResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "ExternalHealthResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "QuestionTemplate",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncLastEventsResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncStatusResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "ChatHistoryMessage",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
         "label": "ChatMessage",
         "importPath": "shared.storage.chat_history_repository",
         "description": "shared.storage.chat_history_repository",
@@ -1726,6 +1798,86 @@
         "description": "shared.storage.chat_history_repository",
         "isExtraImport": true,
         "detail": "shared.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RetrievedDocument",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGDocument",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "isExtraImport": true,
+        "detail": "services.rag.models",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "isExtraImport": true,
+        "detail": "services.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "isExtraImport": true,
+        "detail": "services.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "isExtraImport": true,
+        "detail": "services.rag.retriever",
+        "documentation": {}
+    },
+    {
+        "label": "RAGRetriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "isExtraImport": true,
+        "detail": "services.rag.retriever",
         "documentation": {}
     },
     {
@@ -2411,65 +2563,11 @@
         "documentation": {}
     },
     {
-        "label": "CLIAdapter",
-        "kind": 6,
-        "importPath": "services.bot.bot.cli_adapter",
-        "description": "services.bot.bot.cli_adapter",
-        "peekOfCode": "class CLIAdapter(BotInterface):\n    def send_message(self, text: str) -> None:\n        print(text)\n    def receive_message(self) -> str:\n        return input(\"> \")",
-        "detail": "services.bot.bot.cli_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "AskRequest",
-        "kind": 6,
-        "importPath": "services.bot.bot.http_adapter",
-        "description": "services.bot.bot.http_adapter",
-        "peekOfCode": "class AskRequest(BaseModel):\n    question: str\n    session_id: str | None = None\n    confluence_token: str | None = None\n    gigachat_token: str | None = None\nclass AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
-        "detail": "services.bot.bot.http_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "AskResponse",
-        "kind": 6,
-        "importPath": "services.bot.bot.http_adapter",
-        "description": "services.bot.bot.http_adapter",
-        "peekOfCode": "class AskResponse(BaseModel):\n    answer: str\n    sources: list[dict]",
-        "detail": "services.bot.bot.http_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "BotInterface",
-        "kind": 6,
-        "importPath": "services.bot.bot.ports",
-        "description": "services.bot.bot.ports",
-        "peekOfCode": "class BotInterface(Protocol):\n    def send_message(self, text: str) -> None: ...\n    def receive_message(self) -> str: ...",
-        "detail": "services.bot.bot.ports",
-        "documentation": {}
-    },
-    {
-        "label": "SberChatAdapter",
-        "kind": 6,
-        "importPath": "services.bot.bot.sberchat_adapter",
-        "description": "services.bot.bot.sberchat_adapter",
-        "peekOfCode": "class SberChatAdapter(BotInterface):\n    def send_message(self, text: str) -> None:\n        raise NotImplementedError(\n            \"TODO: implement SberChat send_message when API documentation is available\"\n        )\n    def receive_message(self) -> str:\n        raise NotImplementedError(\n            \"TODO: implement SberChat receive_message when API documentation is available\"\n        )",
-        "detail": "services.bot.bot.sberchat_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "BotService",
-        "kind": 6,
-        "importPath": "services.bot.bot.service",
-        "description": "services.bot.bot.service",
-        "peekOfCode": "class BotService:\n    def __init__(self, retriever: RAGRetriever) -> None:\n        self.retriever = retriever\n    def ask(self, question: str) -> RAGAnswer:\n        return self.retriever.answer(question)\n    @staticmethod\n    def format_answer(answer: RAGAnswer) -> str:\n        if not answer.sources:\n            return f\"Ответ:\\n{answer.answer}\"\n        source_lines = []",
-        "detail": "services.bot.bot.service",
-        "documentation": {}
-    },
-    {
         "label": "parse_confluence",
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):\n        import logging\n        logging.getLogger(__name__).info(\"Initializing JiraClient...\")\n        jira_client = JiraClient(settings)\n    else:",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    \"\"\"\n    Парсит страницы Confluence для поиска витрин данных и вложений S2T.\n    :param dry_run: Если True, изменения не будут сохранены в базу данных.\n    \"\"\"\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2478,7 +2576,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def parse_s2t(\n    path: Path,\n    datamart: str = typer.Option(..., \"--datamart\"),\n) -> None:\n    if not path.exists():\n        raise typer.BadParameter(f\"S2T file not found: {path}\", param_hint=\"path\")\n    if not path.is_file():\n        raise typer.BadParameter(f\"S2T path is not a file: {path}\", param_hint=\"path\")\n    _, metadata_repo, history_repo, _ = _repos()\n    try:",
+        "peekOfCode": "def parse_s2t(\n    path: Path,\n    datamart: str = typer.Option(..., \"--datamart\"),\n) -> None:\n    \"\"\"\n    Парсит локальный файл S2T (Excel или CSV) и сохраняет атрибуты в БД.\n    :param path: Путь к файлу S2T.\n    :param datamart: Название витрины данных.\n    \"\"\"\n    if not path.exists():",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2487,7 +2585,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def build_rag(full: bool = typer.Option(False, \"--full\")) -> None:\n    _, _, _, indexer = _repos()\n    docs = indexer.rebuild_from_storage()\n    typer.echo(f\"Indexed documents: {len(docs)}\")\n    if full:\n        typer.echo(\"Full rebuild completed\")\n@app.command(\"update-rag\")\ndef update_rag(\n    since: str | None = typer.Option(None, \"--since\"),\n    dry_run: bool = typer.Option(False, \"--dry-run\"),",
+        "peekOfCode": "def build_rag(full: bool = typer.Option(False, \"--full\")) -> None:\n    \"\"\"\n    Перестраивает RAG-индекс на основе данных, уже находящихся в SQLite.\n    :param full: Флаг полной пересборки.\n    \"\"\"\n    _, _, _, indexer = _repos()\n    docs = indexer.rebuild_from_storage()\n    typer.echo(f\"Indexed documents: {len(docs)}\")\n    if full:\n        typer.echo(\"Full rebuild completed\")",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2496,7 +2594,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def update_rag(\n    since: str | None = typer.Option(None, \"--since\"),\n    dry_run: bool = typer.Option(False, \"--dry-run\"),\n) -> None:\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    document_repo = DocumentRepository(db)",
+        "peekOfCode": "def update_rag(\n    since: str | None = typer.Option(None, \"--since\"),\n    dry_run: bool = typer.Option(False, \"--dry-run\"),\n) -> None:\n    \"\"\"\n    Выполняет инкрементальное обновление: парсинг Confluence -> скачивание S2T -> diff -> реиндексация RAG.\n    :param since: Опциональный фильтр даты.\n    :param dry_run: Если True, скачивание и обновление не будут выполнены физически.\n    \"\"\"\n    settings = get_settings()",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2505,7 +2603,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def ask(question: str) -> None:\n    service = BotService(build_retriever())\n    typer.echo(service.format_answer(service.ask(question)))\n@app.command(\"chat\")\ndef chat() -> None:\n    service = BotService(build_retriever())\n    adapter = CLIAdapter()\n    adapter.send_message(\"Введите вопрос. Для выхода: exit\")\n    while True:\n        question = adapter.receive_message().strip()",
+        "peekOfCode": "def ask(question: str) -> None:\n    \"\"\"\n    Задает разовый вопрос RAG-боту.\n    :param question: Текст вопроса.\n    \"\"\"\n    service = BotService(build_retriever())\n    typer.echo(service.format_answer(service.ask(question)))\n@app.command(\"chat\")\ndef chat() -> None:\n    \"\"\"",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2514,7 +2612,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def chat() -> None:\n    service = BotService(build_retriever())\n    adapter = CLIAdapter()\n    adapter.send_message(\"Введите вопрос. Для выхода: exit\")\n    while True:\n        question = adapter.receive_message().strip()\n        if not question:\n            continue\n        if question.lower() in {\"exit\", \"quit\", \"q\"}:\n            break",
+        "peekOfCode": "def chat() -> None:\n    \"\"\"\n    Запускает интерактивный чат с ботом в консоли.\n    \"\"\"\n    service = BotService(build_retriever())\n    adapter = CLIAdapter()\n    adapter.send_message(\"Введите вопрос. Для выхода: exit\")\n    while True:\n        question = adapter.receive_message().strip()\n        if not question:",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2523,7 +2621,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def changes(\n    datamart: str | None = typer.Option(None, \"--datamart\"),\n    last_year: bool = typer.Option(False, \"--last-year\"),\n) -> None:\n    _, _, history_repo, _ = _repos()\n    since = datetime.utcnow() - timedelta(days=365) if last_year else None\n    entries = history_repo.list_changes(since=since, datamart_name=datamart)\n    for entry in entries:\n        date = entry.change_date.date()\n        typer.echo(f\"{date} {entry.datamart_name} {entry.entity_name} {entry.change_type}\")",
+        "peekOfCode": "def changes(\n    datamart: str | None = typer.Option(None, \"--datamart\"),\n    last_year: bool = typer.Option(False, \"--last-year\"),\n) -> None:\n    \"\"\"\n    Выводит историю изменений из локальной базы данных.\n    :param datamart: Фильтр по названию витрины.\n    :param last_year: Если True, показывать изменения только за последний год.\n    \"\"\"\n    _, _, history_repo, _ = _repos()",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2532,7 +2630,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def find_attribute(attribute: str) -> None:\n    _, metadata_repo, _, _ = _repos()\n    attrs = metadata_repo.find_attribute_usage(attribute)\n    for attr in attrs:\n        target = f\"{attr.target_table}.{attr.target_field}\"\n        source = f\"{attr.source_table}.{attr.source_field}\"\n        typer.echo(f\"{attr.datamart_name}: {target} <- {source}\")\nif __name__ == \"__main__\":\n    app()",
+        "peekOfCode": "def find_attribute(attribute: str) -> None:\n    \"\"\"\n    Ищет использование атрибута во всех известных витринах данных.\n    :param attribute: Имя атрибута (целевое или исходное).\n    \"\"\"\n    _, metadata_repo, _, _ = _repos()\n    attrs = metadata_repo.find_attribute_usage(attribute)\n    for attr in attrs:\n        target = f\"{attr.target_table}.{attr.target_field}\"\n        source = f\"{attr.source_table}.{attr.source_field}\"",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2541,89 +2639,125 @@
         "kind": 5,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "app = typer.Typer(no_args_is_help=True)\ndef _repos():\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    document_repo = DocumentRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    indexer = RAGIndexer(metadata_repo, document_repo, vector_store)",
+        "peekOfCode": "app = typer.Typer(no_args_is_help=True)\ndef _repos():\n    \"\"\"\n    Инициализирует и возвращает основные репозитории и настройки.\n    :return: Кортеж (settings, metadata_repo, history_repo, indexer).\n    \"\"\"\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)",
         "detail": "services.bot.cli",
+        "documentation": {}
+    },
+    {
+        "label": "CLIAdapter",
+        "kind": 6,
+        "importPath": "services.bot.cli_adapter",
+        "description": "services.bot.cli_adapter",
+        "peekOfCode": "class CLIAdapter(BotInterface):\n    \"\"\"\n    Адаптер для взаимодействия с ботом через командную строку (CLI).\n    \"\"\"\n    def send_message(self, text: str) -> None:\n        \"\"\"\n        Выводит текстовое сообщение в консоль.\n        :param text: Текст сообщения.\n        \"\"\"\n        print(text)",
+        "detail": "services.bot.cli_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskRequest",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class AskRequest(BaseModel):\n    \"\"\"\n    Запрос на получение ответа от бота.\n    \"\"\"\n    model_config = ConfigDict(\n        json_schema_extra={\n            \"example\": {\n                \"question\": \"Кто владелец витрины клиентских операций?\",\n                \"session_id\": \"session_123\"\n            }",
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskResponse",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class AskResponse(BaseModel):\n    \"\"\"\n    Ответ бота с текстом и источниками.\n    \"\"\"\n    answer: str = Field(..., description=\"Текстовый ответ бота\")\n    sources: List[Dict[str, Any]] = Field(default_factory=list, description=\"Список источников информации\")\nclass TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
         "label": "TokensSaveRequest",
         "kind": 6,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "class TokensSaveRequest(BaseModel):\n    confluence_token: str | None = None\n    jira_token: str | None = None\n    gigachat_token: str | None = None\nclass TokensStatusResponse(BaseModel):\n    configured: bool\n    confluence: bool\n    jira: bool\n    gigachat: bool\napp = FastAPI(title=\"Confluence S2T RAG Bot\")",
-        "detail": "services.bot.main",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"\n    confluence_token: Optional[str] = Field(None, description=\"Токен для Confluence\")\n    jira_token: Optional[str] = Field(None, description=\"Токен для Jira\")\n    gigachat_token: Optional[str] = Field(None, description=\"Токен для GigaChat\")\nclass TokensStatusResponse(BaseModel):\n    \"\"\"\n    Статус настройки токенов в системе.",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
         "label": "TokensStatusResponse",
         "kind": 6,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "class TokensStatusResponse(BaseModel):\n    configured: bool\n    confluence: bool\n    jira: bool\n    gigachat: bool\napp = FastAPI(title=\"Confluence S2T RAG Bot\")\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")",
-        "detail": "services.bot.main",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class TokensStatusResponse(BaseModel):\n    \"\"\"\n    Статус настройки токенов в системе.\n    \"\"\"\n    configured: bool = Field(..., description=\"Все ли токены настроены\")\n    confluence: bool = Field(..., description=\"Настроен ли токен Confluence\")\n    jira: bool = Field(..., description=\"Настроен ли токен Jira\")\n    gigachat: bool = Field(..., description=\"Настроен ли токен GigaChat\")\nclass HealthStatus(BaseModel):\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "ask",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def ask(request: AskRequest) -> AskResponse:\n    # Используем настройки из .env как базу, но позволяем переопределить токены из UI\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n        settings.confluence_api_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token\n        settings.gigachat_api_key = request.gigachat_token\n    try:",
-        "detail": "services.bot.main",
+        "label": "HealthStatus",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class HealthStatus(BaseModel):\n    \"\"\"\n    Статус работоспособности сервиса.\n    \"\"\"\n    status: str = Field(..., description=\"Статус сервиса (ok/error)\")\n    details: Optional[Dict[str, Any]] = Field(None, description=\"Дополнительные детали статуса\")\nclass ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "health",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def health() -> dict[str, str]:\n    return {\"status\": \"ok\"}\n@app.get(\"/api/health/external\")\nasync def health_external():\n    conf_client = build_confluence_client()\n    llm_gen = build_llm_generator()\n    from shared.factory import build_jira_client\n    jira_client = build_jira_client()\n    conf_status = conf_client.check_health()\n    jira_status = jira_client.check_health()",
-        "detail": "services.bot.main",
+        "label": "ExternalHealthResponse",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"\n    confluence: Dict[str, Any] = Field(..., description=\"Статус подключения к Confluence\")\n    gigachat: Dict[str, Any] = Field(..., description=\"Статус подключения к GigaChat\")\n    jira: Dict[str, Any] = Field(..., description=\"Статус подключения к Jira\")\nclass SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "get_logs",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def get_logs() -> list[str]:\n    return memory_handler.get_logs()\n@app.get(\"/api/questions/templates\")\ndef get_question_templates() -> list[dict]:\n    return [\n        {\n            \"id\": \"owner\",\n            \"label\": \"Владелец витрины\",\n            \"template\": \"Кто владелец витрины {datamart}?\",\n        },",
-        "detail": "services.bot.main",
+        "label": "SyncStatusResource",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).\n    \"\"\"\n    datamart: str = Field(..., description=\"Название витрины\")\n    file: str = Field(..., description=\"Имя файла S2T\")\n    last_synced: Optional[str] = Field(None, description=\"Время последней синхронизации (ISO)\")\n    status: str = Field(..., description=\"Текущий статус ресурса\")\nclass SyncStatusResponse(BaseModel):\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "get_question_templates",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def get_question_templates() -> list[dict]:\n    return [\n        {\n            \"id\": \"owner\",\n            \"label\": \"Владелец витрины\",\n            \"template\": \"Кто владелец витрины {datamart}?\",\n        },\n        {\n            \"id\": \"attributes\",\n            \"label\": \"Состав атрибутов\",",
-        "detail": "services.bot.main",
+        "label": "SyncStatusResponse",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class SyncStatusResponse(BaseModel):\n    \"\"\"\n    Общий статус синхронизации всех витрин.\n    \"\"\"\n    last_sync: Optional[str] = Field(None, description=\"Время самой свежей синхронизации\")\n    total_datamarts: int = Field(..., description=\"Общее количество витрин в базе\")\n    status: str = Field(..., description=\"Общий статус синхронизации\")\n    resources: List[SyncStatusResource] = Field(default_factory=list, description=\"Детальный список ресурсов\")\nclass SyncLastEventsResponse(BaseModel):\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "get_sync_last_events",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def get_sync_last_events() -> dict:\n    state_repo = build_state_repository()\n    states = state_repo.list_all()\n    last_parsing = None\n    if states:\n        valid = [s.last_synced_at for s in states if s.last_synced_at]\n        if valid:\n            last_parsing = max(valid)\n    meta_repo = build_metadata_repository()\n    datamarts = meta_repo.list_datamarts()",
-        "detail": "services.bot.main",
+        "label": "SyncLastEventsResponse",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class SyncLastEventsResponse(BaseModel):\n    \"\"\"\n    Информация о последних событиях синхронизации.\n    \"\"\"\n    last_parsing: Optional[str] = Field(None, description=\"Время последнего парсинга файлов\")\n    last_rag_update: Optional[str] = Field(None, description=\"Время последнего обновления RAG-индекса\")\n    status: str = Field(..., description=\"Статус\")\nclass ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "get_sync_status",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def get_sync_status() -> dict:\n    repo = build_state_repository()\n    states = repo.list_all()\n    if not states:\n        return {\"last_sync\": None, \"total_datamarts\": 0, \"status\": \"no_data\"}\n    last_sync = None\n    if any(s.last_synced_at for s in states):\n        last_sync = max(s.last_synced_at for s in states if s.last_synced_at)\n    return {\n        \"last_sync\": last_sync.isoformat() if last_sync else None,",
-        "detail": "services.bot.main",
+        "label": "ChatHistoryMessage",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.\n    \"\"\"\n    user: str = Field(..., description=\"Сообщение пользователя\")\n    bot: str = Field(..., description=\"Ответ бота\")\n    sources: List[str] = Field(default_factory=list, description=\"Список ссылок на источники\")\n    timestamp: str = Field(..., description=\"Время сообщения (ISO)\")\nclass QuestionTemplate(BaseModel):\n    \"\"\"",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
-        "label": "get_chat_history",
-        "kind": 2,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "def get_chat_history(session_id: str) -> list[dict]:\n    repo = build_chat_history_repository()\n    messages = repo.list_by_session(session_id)\n    return [\n        {\n            \"user\": m.user_message,\n            \"bot\": m.bot_response,\n            \"sources\": m.sources,\n            \"timestamp\": m.created_at.isoformat(),\n        }",
-        "detail": "services.bot.main",
+        "label": "QuestionTemplate",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class QuestionTemplate(BaseModel):\n    \"\"\"\n    Шаблон вопроса для UI.\n    \"\"\"\n    id: str = Field(..., description=\"Уникальный ID шаблона\")\n    label: str = Field(..., description=\"Человекочитаемое название\")\n    template: str = Field(..., description=\"Текст шаблона с плейсхолдерами\")\nclass MessageResponse(BaseModel):\n    \"\"\"\n    Простой информационный ответ от сервера.",
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "kind": 6,
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "peekOfCode": "class MessageResponse(BaseModel):\n    \"\"\"\n    Простой информационный ответ от сервера.\n    \"\"\"\n    message: str = Field(..., description=\"Информационное сообщение от сервера\")",
+        "detail": "services.bot.http_adapter",
         "documentation": {}
     },
     {
@@ -2631,7 +2765,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent.parent\nENV_PATH = BASE_DIR / \".env\"\n# Базовые константы, которые всегда должны быть в .env\nDEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",",
+        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent.parent\nENV_PATH = BASE_DIR / \".env\"\napp = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2640,16 +2774,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "ENV_PATH = BASE_DIR / \".env\"\n# Базовые константы, которые всегда должны быть в .env\nDEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",\n    \"CONFLUENCE_ROOT_PAGE_ID\": \"14561190342\",",
-        "detail": "services.bot.main",
-        "documentation": {}
-    },
-    {
-        "label": "DEFAULT_ENV_VARS",
-        "kind": 5,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "DEFAULT_ENV_VARS = {\n    \"DATAMART_PAGE_PATTERN\": \"Витрина\",\n    \"CONFLUENCE_BASE_URL\": \"https://confluence.delta.sbrf.ru\",\n    \"CONFLUENCE_SPACE_KEY\": \"TEAM\",\n    \"CONFLUENCE_AUTH_TYPE\": \"bearer\",\n    \"CONFLUENCE_VERIFY_SSL\": \"false\",\n    \"DATA_DIR\": \"./data\",\n    \"CONFLUENCE_ROOT_PAGE_ID\": \"14561190342\",\n    \"SQLITE_DB_PATH\": \"./data/app.db\",\n    \"VECTOR_STORE_DIR\": \"./data/vector_store\",",
+        "peekOfCode": "ENV_PATH = BASE_DIR / \".env\"\napp = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2658,7 +2783,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "app = FastAPI(title=\"Confluence S2T RAG Bot\")\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")\nasync def save_tokens(request: TokensSaveRequest):\n    \"\"\"Сохраняет переданные токены в .env.\"\"\"\n    updates = {}\n    if request.confluence_token is not None:\n        updates[\"CONFLUENCE_TOKEN\"] = request.confluence_token",
+        "peekOfCode": "app = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)\ndef _update_env_file(updates: dict[str, str]):",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2667,7 +2792,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n# --- Эндпоинты для управления токенами ---\n@app.post(\"/api/save-tokens\")\nasync def save_tokens(request: TokensSaveRequest):\n    \"\"\"Сохраняет переданные токены в .env.\"\"\"\n    updates = {}\n    if request.confluence_token is not None:\n        updates[\"CONFLUENCE_TOKEN\"] = request.confluence_token\n    if request.jira_token is not None:\n        updates[\"JIRA_TOKEN\"] = request.jira_token",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef _update_env_file(updates: dict[str, str]):\n    \"\"\"Обновляет или добавляет переменные в .env, сохраняя остальные.\"\"\"\n    lines = []\n    if ENV_PATH.exists():\n        lines = ENV_PATH.read_text(encoding=\"utf-8\").splitlines()\n    updated_keys = set()\n    new_lines = []\n    # Обновляем существующие строки\n    for line in lines:",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2676,8 +2801,35 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "static_path = BASE_DIR / \"web\"\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\")\nasync def root():\n    return RedirectResponse(url=\"/ui/\")",
+        "peekOfCode": "static_path = BASE_DIR / \"web\"\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\", include_in_schema=False)\nasync def root(): return RedirectResponse(url=\"/ui/\")",
         "detail": "services.bot.main",
+        "documentation": {}
+    },
+    {
+        "label": "BotInterface",
+        "kind": 6,
+        "importPath": "services.bot.ports",
+        "description": "services.bot.ports",
+        "peekOfCode": "class BotInterface(Protocol):\n    \"\"\"\n    Интерфейс для взаимодействия с ботом.\n    Определяет методы для отправки и получения сообщений.\n    \"\"\"\n    def send_message(self, text: str) -> None:\n        \"\"\"\n        Отправляет текстовое сообщение пользователю.\n        :param text: Текст сообщения.\n        \"\"\"",
+        "detail": "services.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "SberChatAdapter",
+        "kind": 6,
+        "importPath": "services.bot.sberchat_adapter",
+        "description": "services.bot.sberchat_adapter",
+        "peekOfCode": "class SberChatAdapter(BotInterface):\n    \"\"\"\n    Адаптер для взаимодействия с ботом через SberChat.\n    \"\"\"\n    def send_message(self, text: str) -> None:\n        \"\"\"\n        Отправляет сообщение в SberChat (не реализовано).\n        :param text: Текст сообщения.\n        \"\"\"\n        raise NotImplementedError(",
+        "detail": "services.bot.sberchat_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "kind": 6,
+        "importPath": "services.bot.service",
+        "description": "services.bot.service",
+        "peekOfCode": "class BotService:\n    \"\"\"\n    Бизнес-логика бота для взаимодействия с RAG-системой.\n    \"\"\"\n    def __init__(self, retriever: RAGRetriever) -> None:\n        \"\"\"\n        Инициализирует BotService.\n        :param retriever: Объект ретривера для поиска ответов.\n        \"\"\"\n        self.retriever = retriever",
+        "detail": "services.bot.service",
         "documentation": {}
     },
     {
@@ -2685,7 +2837,7 @@
         "kind": 6,
         "importPath": "services.ingestion.changes.diff_service",
         "description": "services.ingestion.changes.diff_service",
-        "peekOfCode": "class DiffService:\n    def diff_attributes(\n        self,\n        old: list[S2TAttribute],\n        new: list[S2TAttribute],\n        source_url: str | None = None,\n    ) -> list[ChangeLogEntry]:\n        old_by_key = {item.attribute_key: item for item in old}\n        new_by_key = {item.attribute_key: item for item in new}\n        changes: list[ChangeLogEntry] = []",
+        "peekOfCode": "class DiffService:\n    \"\"\"\n    Сервис для вычисления разницы (diff) между старым и новым набором атрибутов S2T.\n    Генерирует записи ChangeLogEntry для добавленных, удаленных и измененных атрибутов.\n    \"\"\"\n    def diff_attributes(\n        self,\n        old: list[S2TAttribute],\n        new: list[S2TAttribute],\n        source_url: str | None = None,",
         "detail": "services.ingestion.changes.diff_service",
         "documentation": {}
     },
@@ -2703,7 +2855,7 @@
         "kind": 6,
         "importPath": "services.ingestion.changes.history_repository",
         "description": "services.ingestion.changes.history_repository",
-        "peekOfCode": "class HistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add_many(self, entries: list[ChangeLogEntry]) -> None:\n        with self.db.connect() as conn:\n            for entry in entries:\n                conn.execute(\n                    \"\"\"\n                    insert or ignore into change_log(\n                        id, datamart_name, datamart_code, entity_type, entity_name, change_type,",
+        "peekOfCode": "class HistoryRepository:\n    \"\"\"\n    Репозиторий для хранения и получения истории изменений (change_log) в SQLite.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует репозиторий истории.\n        :param db: Экземпляр SQLite для доступа к базе данных.\n        \"\"\"\n        self.db = db",
         "detail": "services.ingestion.changes.history_repository",
         "documentation": {}
     },
@@ -2712,7 +2864,7 @@
         "kind": 6,
         "importPath": "services.ingestion.changes.models",
         "description": "services.ingestion.changes.models",
-        "peekOfCode": "class ChangeLogEntry(BaseModel):\n    id: str\n    datamart_name: str\n    datamart_code: str | None = None\n    entity_type: str\n    entity_name: str\n    change_type: str\n    old_value: str | None = None\n    new_value: str | None = None\n    change_date: datetime = Field(default_factory=datetime.utcnow)",
+        "peekOfCode": "class ChangeLogEntry(BaseModel):\n    \"\"\"\n    Модель записи в журнале изменений (аудит изменений в атрибутах или метаданных).\n    \"\"\"\n    id: str\n    datamart_name: str\n    datamart_code: str | None = None\n    entity_type: str\n    entity_name: str\n    change_type: str",
         "detail": "services.ingestion.changes.models",
         "documentation": {}
     },
@@ -2721,7 +2873,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.client",
         "description": "services.ingestion.confluence.client",
-        "peekOfCode": "class ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_file:\n            try:\n                cookie_path = Path(settings.confluence_cookie_file)",
+        "peekOfCode": "class ConfluenceClient:\n    \"\"\"\n    Клиент для взаимодействия с API Confluence.\n    Обеспечивает получение страниц, вложений и выполнение поисковых запросов.\n    \"\"\"\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        \"\"\"\n        Инициализирует клиент Confluence.\n        :param settings: Объект настроек приложения Settings.\n        :param client: Внешний экземпляр httpx.Client (опционально).",
         "detail": "services.ingestion.confluence.client",
         "documentation": {}
     },
@@ -2730,7 +2882,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.client",
         "description": "services.ingestion.confluence.client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        self.settings = settings\n        auth, headers = self._auth_config(settings)\n        headers = headers or {}\n        if settings.confluence_user_agent:\n            headers[\"User-Agent\"] = settings.confluence_user_agent\n        if settings.confluence_cookie_file:\n            try:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceClient:\n    \"\"\"\n    Клиент для взаимодействия с API Confluence.\n    Обеспечивает получение страниц, вложений и выполнение поисковых запросов.\n    \"\"\"\n    def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:\n        \"\"\"\n        Инициализирует клиент Confluence.\n        :param settings: Объект настроек приложения Settings.",
         "detail": "services.ingestion.confluence.client",
         "documentation": {}
     },
@@ -2739,7 +2891,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.exceptions",
         "description": "services.ingestion.confluence.exceptions",
-        "peekOfCode": "class ConfluenceError(RuntimeError):\n    \"\"\"Base Confluence integration error.\"\"\"\nclass ConfluenceAuthError(ConfluenceError):\n    \"\"\"Raised when Confluence authentication fails.\"\"\"",
+        "peekOfCode": "class ConfluenceError(RuntimeError):\n    \"\"\"\n    Базовый класс для всех ошибок интеграции с Confluence.\n    \"\"\"\nclass ConfluenceAuthError(ConfluenceError):\n    \"\"\"\n    Исключение, возникающее при ошибках аутентификации в Confluence.\n    \"\"\"",
         "detail": "services.ingestion.confluence.exceptions",
         "documentation": {}
     },
@@ -2748,7 +2900,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.exceptions",
         "description": "services.ingestion.confluence.exceptions",
-        "peekOfCode": "class ConfluenceAuthError(ConfluenceError):\n    \"\"\"Raised when Confluence authentication fails.\"\"\"",
+        "peekOfCode": "class ConfluenceAuthError(ConfluenceError):\n    \"\"\"\n    Исключение, возникающее при ошибках аутентификации в Confluence.\n    \"\"\"",
         "detail": "services.ingestion.confluence.exceptions",
         "documentation": {}
     },
@@ -2757,7 +2909,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.jira_client",
         "description": "services.ingestion.confluence.jira_client",
-        "peekOfCode": "class JiraClient:\n    def __init__(self, settings: Settings) -> None:\n        self.settings = settings\n        self.base_url = settings.jira_base_url.rstrip(\"/\")\n        self.client = httpx.Client(\n            verify=settings.jira_verify_ssl,\n            timeout=30.0,\n        )\n        self._setup_auth()\n    def _setup_auth(self) -> None:",
+        "peekOfCode": "class JiraClient:\n    \"\"\"\n    Клиент для взаимодействия с API Jira.\n    Позволяет получать информацию о задачах и метаданные полей.\n    \"\"\"\n    def __init__(self, settings: Settings) -> None:\n        \"\"\"\n        Инициализирует JiraClient.\n        :param settings: Объект настроек приложения.\n        \"\"\"",
         "detail": "services.ingestion.confluence.jira_client",
         "documentation": {}
     },
@@ -2766,7 +2918,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.jira_client",
         "description": "services.ingestion.confluence.jira_client",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass JiraClient:\n    def __init__(self, settings: Settings) -> None:\n        self.settings = settings\n        self.base_url = settings.jira_base_url.rstrip(\"/\")\n        self.client = httpx.Client(\n            verify=settings.jira_verify_ssl,\n            timeout=30.0,\n        )\n        self._setup_auth()",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass JiraClient:\n    \"\"\"\n    Клиент для взаимодействия с API Jira.\n    Позволяет получать информацию о задачах и метаданные полей.\n    \"\"\"\n    def __init__(self, settings: Settings) -> None:\n        \"\"\"\n        Инициализирует JiraClient.\n        :param settings: Объект настроек приложения.",
         "detail": "services.ingestion.confluence.jira_client",
         "documentation": {}
     },
@@ -2775,7 +2927,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class Stakeholder(BaseModel):\n    name: str | None = None\n    email: str | None = None\n    role: str | None = None\n    department: str | None = None\n    profile_url: str | None = None\nclass DatamartFact(BaseModel):\n    key: str\n    label: str\n    value: str",
+        "peekOfCode": "class Stakeholder(BaseModel):\n    \"\"\"\n    Модель данных стейкхолдера (заинтересованного лица).\n    \"\"\"\n    name: str | None = None\n    email: str | None = None\n    role: str | None = None\n    department: str | None = None\n    profile_url: str | None = None\nclass DatamartFact(BaseModel):",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2784,7 +2936,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class DatamartFact(BaseModel):\n    key: str\n    label: str\n    value: str\n    links: list[dict[str, str]] = Field(default_factory=list)\nclass ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None",
+        "peekOfCode": "class DatamartFact(BaseModel):\n    \"\"\"\n    Модель атрибута (факта) витрины данных.\n    \"\"\"\n    key: str\n    label: str\n    value: str\n    links: list[dict[str, str]] = Field(default_factory=list)\nclass ReleaseChange(BaseModel):\n    \"\"\"",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2793,7 +2945,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class ReleaseChange(BaseModel):\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None\n    summary: str | None = None\n    status: str | None = None\n    source_url: str | None = None\n    jira_created_at: datetime | None = None\n    jira_done_at: datetime | None = None",
+        "peekOfCode": "class ReleaseChange(BaseModel):\n    \"\"\"\n    Модель изменения в релизе (задачи из журнала изменений).\n    \"\"\"\n    version: str | None = None\n    jira_key: str | None = None\n    jira_title: str | None = None\n    change_type: str | None = None\n    summary: str | None = None\n    status: str | None = None",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2802,7 +2954,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class ConfluencePage(BaseModel):\n    id: str\n    title: str\n    url: str\n    body_html: str | None = None\n    updated_at: datetime | None = None\n    version: int | None = None\n    version_when: datetime | None = None\n    last_modified: datetime | None = None\n    history_last_updated: datetime | None = None",
+        "peekOfCode": "class ConfluencePage(BaseModel):\n    \"\"\"\n    Модель страницы Confluence с метаданными и содержимым.\n    \"\"\"\n    id: str\n    title: str\n    url: str\n    body_html: str | None = None\n    updated_at: datetime | None = None\n    version: int | None = None",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2811,7 +2963,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class S2TResource(BaseModel):\n    id: str | None = None\n    title: str\n    url: str | None = None\n    resource_type: str = \"unknown\"\n    file_name: str | None = None\n    file_date: date | None = None\n    updated_at: datetime | None = None\n    version: int | None = None\n    version_when: datetime | None = None",
+        "peekOfCode": "class S2TResource(BaseModel):\n    \"\"\"\n    Модель ресурса S2T (вложение или ссылка на файл).\n    \"\"\"\n    id: str | None = None\n    title: str\n    url: str | None = None\n    resource_type: str = \"unknown\"\n    file_name: str | None = None\n    file_date: date | None = None",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2820,7 +2972,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class Datamart(BaseModel):\n    name: str\n    confluence_page_id: str\n    confluence_url: str\n    code: str | None = None\n    page_version: int | None = None\n    page_version_when: datetime | None = None\n    page_last_modified: datetime | None = None\n    page_history_last_updated: datetime | None = None\n    stakeholders: list[Stakeholder] = Field(default_factory=list)",
+        "peekOfCode": "class Datamart(BaseModel):\n    \"\"\"\n    Модель витрины данных со всей собранной информацией.\n    \"\"\"\n    name: str\n    confluence_page_id: str\n    confluence_url: str\n    code: str | None = None\n    page_version: int | None = None\n    page_version_when: datetime | None = None",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2829,7 +2981,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
-        "peekOfCode": "class ParseResult(BaseModel):\n    datamarts: list[Datamart] = Field(default_factory=list)\n    warnings: list[str] = Field(default_factory=list)",
+        "peekOfCode": "class ParseResult(BaseModel):\n    \"\"\"\n    Результат парсинга набора страниц Confluence.\n    \"\"\"\n    datamarts: list[Datamart] = Field(default_factory=list)\n    warnings: list[str] = Field(default_factory=list)",
         "detail": "services.ingestion.confluence.models",
         "documentation": {}
     },
@@ -2838,7 +2990,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "class ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,\n    ) -> None:\n        self.client = client\n        self.settings = settings\n        self.jira_client = jira_client",
+        "peekOfCode": "class ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -2901,7 +3053,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,",
+        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных да\n    нных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -2910,7 +3062,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
+        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных да\n    нных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -2919,7 +3071,7 @@
         "kind": 2,
         "importPath": "services.ingestion.confluence.urls",
         "description": "services.ingestion.confluence.urls",
-        "peekOfCode": "def confluence_urljoin(base_url: str, link: str | None) -> str:\n    if not link:\n        return base_url\n    if urlparse(link).scheme:\n        return link\n    base = urlparse(base_url)\n    base_path = _context_path(base.path)\n    if link.startswith(\"/\") and base_path and not link.startswith(f\"{base_path}/\"):\n        link = f\"{base_path}{link}\"\n        base_url = f\"{base.scheme}://{base.netloc}\"",
+        "peekOfCode": "def confluence_urljoin(base_url: str, link: str | None) -> str:\n    \"\"\"\n    Безопасно объединяет базовый URL Confluence с относительной или абсолютной ссылкой.\n    Корректно обрабатывает пути контекста Confluence.\n    :param base_url: Базовый URL Confluence.\n    :param link: Ссылка для объединения.\n    :return: Полный URL.\n    \"\"\"\n    if not link:\n        return base_url",
         "detail": "services.ingestion.confluence.urls",
         "documentation": {}
     },
@@ -2928,7 +3080,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.csv_parser",
         "description": "services.ingestion.s2t.csv_parser",
-        "peekOfCode": "class CsvS2TParser:\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        df = pd.read_csv(path, dtype=str)\n        helper = ExcelS2TParser()\n        mapping = helper._build_column_mapping(df.columns)\n        result = S2TParseResult(processed_sheets=[path.name])\n        for idx, row in df.iterrows():\n            try:",
+        "peekOfCode": "class CsvS2TParser:\n    \"\"\"Парсер S2T-файлов в формате CSV.\"\"\"\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        \"\"\"\n        Парсит CSV-файл и извлекает атрибуты S2T.\n        :param path: Путь к CSV-файлу.\n        :param datamart_name: Название витрины данных.\n        :param s2t_file_date: Дата файла (опционально).",
         "detail": "services.ingestion.s2t.csv_parser",
         "documentation": {}
     },
@@ -2937,7 +3089,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.excel_parser",
         "description": "services.ingestion.s2t.excel_parser",
-        "peekOfCode": "class ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)\n        sheet_names = set(workbook.sheet_names)",
+        "peekOfCode": "class ExcelS2TParser:\n    \"\"\"\n    Парсер S2T-файлов в формате Excel (.xlsx, .xls).\n    Поддерживает стандартные шаблоны и произвольные таблицы с маппингом колонок.\n    \"\"\"\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,",
         "detail": "services.ingestion.s2t.excel_parser",
         "documentation": {}
     },
@@ -2964,7 +3116,7 @@
         "kind": 5,
         "importPath": "services.ingestion.s2t.excel_parser",
         "description": "services.ingestion.s2t.excel_parser",
-        "peekOfCode": "TEMPLATE_SHEETS = {\"Target columns\", \"Source columns\", \"Datamart info\", \"S2T\"}\nclass ExcelS2TParser:\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,\n        s2t_file_date: date | None = None,\n    ) -> S2TParseResult:\n        result = S2TParseResult()\n        workbook = pd.ExcelFile(path)",
+        "peekOfCode": "TEMPLATE_SHEETS = {\"Target columns\", \"Source columns\", \"Datamart info\", \"S2T\"}\nclass ExcelS2TParser:\n    \"\"\"\n    Парсер S2T-файлов в формате Excel (.xlsx, .xls).\n    Поддерживает стандартные шаблоны и произвольные таблицы с маппингом колонок.\n    \"\"\"\n    def parse(\n        self,\n        path: Path,\n        datamart_name: str,",
         "detail": "services.ingestion.s2t.excel_parser",
         "documentation": {}
     },
@@ -2973,7 +3125,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.exceptions",
         "description": "services.ingestion.s2t.exceptions",
-        "peekOfCode": "class S2TParseError(RuntimeError):\n    \"\"\"Raised when an S2T document cannot be parsed.\"\"\"",
+        "peekOfCode": "class S2TParseError(RuntimeError):\n    \"\"\"\n    Исключение, возникающее при невозможности распарсить S2T-документ.\n    \"\"\"",
         "detail": "services.ingestion.s2t.exceptions",
         "documentation": {}
     },
@@ -2982,7 +3134,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.models",
         "description": "services.ingestion.s2t.models",
-        "peekOfCode": "class S2TAttribute(BaseModel):\n    datamart_name: str\n    datamart_code: str | None = None\n    owner: str | None = None\n    target_platform: str | None = None\n    target_instance: str | None = None\n    target_schema: str | None = None\n    target_table: str | None = None\n    target_field: str | None = None\n    target_table_description: str | None = None",
+        "peekOfCode": "class S2TAttribute(BaseModel):\n    \"\"\"\n    Модель атрибута из S2T-файла.\n    Описывает маппинг поля из источника в целевую таблицу.\n    \"\"\"\n    datamart_name: str\n    datamart_code: str | None = None\n    owner: str | None = None\n    target_platform: str | None = None\n    target_instance: str | None = None",
         "detail": "services.ingestion.s2t.models",
         "documentation": {}
     },
@@ -2991,7 +3143,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.models",
         "description": "services.ingestion.s2t.models",
-        "peekOfCode": "class S2TParseIssue(BaseModel):\n    sheet: str | None = None\n    row_number: int | None = None\n    message: str\nclass S2TParseResult(BaseModel):\n    attributes: list[S2TAttribute] = Field(default_factory=list)\n    processed_sheets: list[str] = Field(default_factory=list)\n    issues: list[S2TParseIssue] = Field(default_factory=list)",
+        "peekOfCode": "class S2TParseIssue(BaseModel):\n    \"\"\"\n    Модель ошибки или замечания при парсинге S2T-файла.\n    \"\"\"\n    sheet: str | None = None\n    row_number: int | None = None\n    message: str\nclass S2TParseResult(BaseModel):\n    \"\"\"\n    Результат парсинга S2T-файла.",
         "detail": "services.ingestion.s2t.models",
         "documentation": {}
     },
@@ -3000,7 +3152,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.models",
         "description": "services.ingestion.s2t.models",
-        "peekOfCode": "class S2TParseResult(BaseModel):\n    attributes: list[S2TAttribute] = Field(default_factory=list)\n    processed_sheets: list[str] = Field(default_factory=list)\n    issues: list[S2TParseIssue] = Field(default_factory=list)",
+        "peekOfCode": "class S2TParseResult(BaseModel):\n    \"\"\"\n    Результат парсинга S2T-файла.\n    \"\"\"\n    attributes: list[S2TAttribute] = Field(default_factory=list)\n    processed_sheets: list[str] = Field(default_factory=list)\n    issues: list[S2TParseIssue] = Field(default_factory=list)",
         "detail": "services.ingestion.s2t.models",
         "documentation": {}
     },
@@ -3009,7 +3161,7 @@
         "kind": 6,
         "importPath": "services.ingestion.s2t.parser",
         "description": "services.ingestion.s2t.parser",
-        "peekOfCode": "class S2TParser:\n    def __init__(self) -> None:\n        self.excel = ExcelS2TParser()\n        self.csv = CsvS2TParser()\n    def parse(\n        self, path: Path, datamart_name: str, s2t_file_date: date | None = None\n    ) -> S2TParseResult:\n        suffix = path.suffix.lower()\n        if suffix in {\".xlsx\", \".xls\"}:\n            return self.excel.parse(path, datamart_name, s2t_file_date)",
+        "peekOfCode": "class S2TParser:\n    \"\"\"\n    Универсальный парсер S2T-файлов.\n    Автоматически выбирает нужный парсер (Excel или CSV) на основе расширения файла.\n    \"\"\"\n    def __init__(self) -> None:\n        \"\"\"Инициализирует S2TParser, создавая экземпляры специализированных парсеров.\"\"\"\n        self.excel = ExcelS2TParser()\n        self.csv = CsvS2TParser()\n    def parse(",
         "detail": "services.ingestion.s2t.parser",
         "documentation": {}
     },
@@ -3018,7 +3170,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.hash_service",
         "description": "services.ingestion.sync.hash_service",
-        "peekOfCode": "class HashService:\n    @staticmethod\n    def sha256_bytes(content: bytes) -> str:\n        return hashlib.sha256(content).hexdigest()\n    @staticmethod\n    def stable_metadata_hash(metadata: dict) -> str:\n        payload = json.dumps(metadata, ensure_ascii=False, sort_keys=True, default=str)\n        return hashlib.sha256(payload.encode(\"utf-8\")).hexdigest()",
+        "peekOfCode": "class HashService:\n    \"\"\"\n    Сервис для вычисления хэш-сумм данных и метаданных.\n    Используется для определения изменений в контенте и метаданных.\n    \"\"\"\n    @staticmethod\n    def sha256_bytes(content: bytes) -> str:\n        \"\"\"\n        Вычисляет SHA256 хэш для бинарного содержимого.\n        :param content: Бинарные данные.",
         "detail": "services.ingestion.sync.hash_service",
         "documentation": {}
     },
@@ -3027,7 +3179,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.incremental_updater",
         "description": "services.ingestion.sync.incremental_updater",
-        "peekOfCode": "class IncrementalUpdateItem:\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool\n    reasons: list[str]\n    will_download: bool\n    will_parse: bool\n    will_reindex: bool\n    content_changed: bool | None = None",
+        "peekOfCode": "class IncrementalUpdateItem:\n    \"\"\"\n    Элемент результата инкрементального обновления для одной витрины/ресурса.\n    \"\"\"\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool\n    reasons: list[str]\n    will_download: bool",
         "detail": "services.ingestion.sync.incremental_updater",
         "documentation": {}
     },
@@ -3036,7 +3188,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.incremental_updater",
         "description": "services.ingestion.sync.incremental_updater",
-        "peekOfCode": "class IncrementalUpdateResult:\n    items: list[IncrementalUpdateItem] = field(default_factory=list)\n    @property\n    def downloaded_count(self) -> int:\n        return sum(1 for item in self.items if item.will_download)\n    @property\n    def parsed_count(self) -> int:\n        return sum(1 for item in self.items if item.will_parse)\n    @property\n    def reindexed_count(self) -> int:",
+        "peekOfCode": "class IncrementalUpdateResult:\n    \"\"\"\n    Результат выполнения инкрементального обновления для всех витрин.\n    \"\"\"\n    items: list[IncrementalUpdateItem] = field(default_factory=list)\n    @property\n    def downloaded_count(self) -> int:\n        \"\"\"Количество скачанных файлов.\"\"\"\n        return sum(1 for item in self.items if item.will_download)\n    @property",
         "detail": "services.ingestion.sync.incremental_updater",
         "documentation": {}
     },
@@ -3045,7 +3197,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.incremental_updater",
         "description": "services.ingestion.sync.incremental_updater",
-        "peekOfCode": "class IncrementalUpdater:\n    def __init__(\n        self,\n        *,\n        metadata_sync: MetadataSyncService,\n        confluence_client: ConfluenceClient,\n        state_repo: S2TStateRepository,\n        metadata_repo: MetadataRepository,\n        history_repo: HistoryRepository,\n        indexer: RAGIndexer,",
+        "peekOfCode": "class IncrementalUpdater:\n    \"\"\"\n    Оркестратор инкрементального обновления данных.\n    Координирует работу парсеров, клиентов и репозиториев для синхронизации состояния.\n    \"\"\"\n    def __init__(\n        self,\n        *,\n        metadata_sync: MetadataSyncService,\n        confluence_client: ConfluenceClient,",
         "detail": "services.ingestion.sync.incremental_updater",
         "documentation": {}
     },
@@ -3054,7 +3206,7 @@
         "kind": 5,
         "importPath": "services.ingestion.sync.incremental_updater",
         "description": "services.ingestion.sync.incremental_updater",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass IncrementalUpdateItem:\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool\n    reasons: list[str]\n    will_download: bool\n    will_parse: bool",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass IncrementalUpdateItem:\n    \"\"\"\n    Элемент результата инкрементального обновления для одной витрины/ресурса.\n    \"\"\"\n    datamart_name: str\n    resource_key: str\n    file_name: str | None\n    metadata_changed: bool",
         "detail": "services.ingestion.sync.incremental_updater",
         "documentation": {}
     },
@@ -3063,7 +3215,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
-        "peekOfCode": "class S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        if not self.resource:\n            return f\"{self.datamart.confluence_page_id}:no_s2t\"\n        base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name",
+        "peekOfCode": "class S2TMetadataSnapshot:\n    \"\"\"\n    Снимок метаданных ресурса S2T, используемый для отслеживания изменений.\n    \"\"\"\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:",
         "detail": "services.ingestion.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3072,7 +3224,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
-        "peekOfCode": "class MetadataSyncService:\n    def __init__(\n        self, \n        parser: ConfluenceParser, \n        hash_service: HashService | None = None,\n        snapshot_repo: PageSnapshotRepository | None = None\n    ) -> None:\n        self.parser = parser\n        self.hash_service = hash_service or HashService()\n        self.snapshot_repo = snapshot_repo",
+        "peekOfCode": "class MetadataSyncService:\n    \"\"\"\n    Сервис для синхронизации метаданных витрин данных из Confluence.\n    Обеспечивает поиск страниц, извлечение фактов и формирование снимков состояния.\n    \"\"\"\n    def __init__(\n        self, \n        parser: ConfluenceParser, \n        hash_service: HashService | None = None,\n        snapshot_repo: PageSnapshotRepository | None = None",
         "detail": "services.ingestion.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3081,7 +3233,7 @@
         "kind": 5,
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str\n    @property\n    def unique_key(self) -> str:\n        if not self.resource:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass S2TMetadataSnapshot:\n    \"\"\"\n    Снимок метаданных ресурса S2T, используемый для отслеживания изменений.\n    \"\"\"\n    datamart: Datamart\n    resource: S2TResource | None\n    metadata: dict\n    metadata_hash: str",
         "detail": "services.ingestion.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3090,7 +3242,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.state_comparator",
         "description": "services.ingestion.sync.state_comparator",
-        "peekOfCode": "class MetadataDecision:\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:",
+        "peekOfCode": "class MetadataDecision:\n    \"\"\"Результат сравнения метаданных: флаг изменения и список причин.\"\"\"\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    \"\"\"Сервис для сравнения текущих метаданных с сохраненным состоянием.\"\"\"\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        \"\"\"",
         "detail": "services.ingestion.sync.state_comparator",
         "documentation": {}
     },
@@ -3099,7 +3251,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.state_comparator",
         "description": "services.ingestion.sync.state_comparator",
-        "peekOfCode": "class StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:\n            return MetadataDecision(changed=True, reasons=[\"new resource\"])\n        if previous.metadata_hash == metadata_hash:\n            return MetadataDecision(changed=False, reasons=[\"metadata unchanged\"])\n        reasons = []\n        old_metadata = previous.metadata or {}",
+        "peekOfCode": "class StateComparator:\n    \"\"\"Сервис для сравнения текущих метаданных с сохраненным состоянием.\"\"\"\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        \"\"\"\n        Сравнивает текущие метаданные с предыдущим состоянием.\n        :param previous: Предыдущее состояние из базы данных.\n        :param metadata_hash: Хэш текущих метаданных.\n        :param metadata: Словарь текущих метаданных.",
         "detail": "services.ingestion.sync.state_comparator",
         "documentation": {}
     },
@@ -3108,134 +3260,134 @@
         "kind": 5,
         "importPath": "services.ingestion.sync.state_comparator",
         "description": "services.ingestion.sync.state_comparator",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass MetadataDecision:\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict\n    ) -> MetadataDecision:\n        if previous is None:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n@dataclass(frozen=True)\nclass MetadataDecision:\n    \"\"\"Результат сравнения метаданных: флаг изменения и список причин.\"\"\"\n    changed: bool\n    reasons: list[str]\nclass StateComparator:\n    \"\"\"Сервис для сравнения текущих метаданных с сохраненным состоянием.\"\"\"\n    def compare(\n        self, previous: S2TState | None, metadata_hash: str, metadata: dict",
         "detail": "services.ingestion.sync.state_comparator",
         "documentation": {}
     },
     {
         "label": "LocalTextEmbedder",
         "kind": 6,
-        "importPath": "services.rag.rag.embeddings",
-        "description": "services.rag.rag.embeddings",
-        "peekOfCode": "class LocalTextEmbedder:\n    \"\"\"Small dependency-free embedding fallback based on token frequencies.\"\"\"\n    def embed(self, text: str) -> Counter[str]:\n        return Counter(re.findall(r\"[\\wА-Яа-яЁё]+\", normalize_text(text)))\n    def similarity(self, left: str, right: str) -> float:\n        a = self.embed(left)\n        b = self.embed(right)\n        if not a or not b:\n            return 0.0\n        dot = sum(a[token] * b[token] for token in a.keys() & b.keys())",
-        "detail": "services.rag.rag.embeddings",
+        "importPath": "services.rag.embeddings",
+        "description": "services.rag.embeddings",
+        "peekOfCode": "class LocalTextEmbedder:\n    \"\"\"\n    Легковесный эмбеддер текстов без внешних зависимостей.\n    Основан на частоте токенов и косинусном сходстве.\n    \"\"\"\n    def embed(self, text: str) -> Counter[str]:\n        \"\"\"\n        Преобразует текст в вектор частот токенов.\n        :param text: Входной текст для эмбеддинга.\n        :return: Counter с частотами токенов.",
+        "detail": "services.rag.embeddings",
         "documentation": {}
     },
     {
         "label": "RAGIndexer",
         "kind": 6,
-        "importPath": "services.rag.rag.indexer",
-        "description": "services.rag.rag.indexer",
-        "peekOfCode": "class RAGIndexer:\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        document_repo: DocumentRepository,\n        vector_store: JsonVectorStore,\n    ) -> None:\n        self.metadata_repo = metadata_repo\n        self.document_repo = document_repo\n        self.vector_store = vector_store",
-        "detail": "services.rag.rag.indexer",
+        "importPath": "services.rag.indexer",
+        "description": "services.rag.indexer",
+        "peekOfCode": "class RAGIndexer:\n    \"\"\"\n    Класс для индексации данных о витринах и атрибутах в RAG-систему.\n    Отвечает за преобразование объектов Datamart и S2TAttribute в RAGDocument.\n    \"\"\"\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        document_repo: DocumentRepository,\n        vector_store: JsonVectorStore,",
+        "detail": "services.rag.indexer",
         "documentation": {}
     },
     {
         "label": "AnswerGenerator",
         "kind": 6,
-        "importPath": "services.rag.rag.llm",
-        "description": "services.rag.rag.llm",
-        "peekOfCode": "class AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\n    def check_health(self) -> dict:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:\n        return {\"status\": \"ok\", \"provider\": \"stub\"}",
-        "detail": "services.rag.rag.llm",
+        "importPath": "services.rag.llm",
+        "description": "services.rag.llm",
+        "peekOfCode": "class AnswerGenerator(Protocol):\n    \"\"\"Интерфейс для генератора ответов на основе LLM.\"\"\"\n    def generate(self, question: str, context: str) -> str:\n        \"\"\"\n        Генерирует текстовый ответ на основе вопроса и контекста.\n        :param question: Текст вопроса.\n        :param context: Текстовый контекст для генерации ответа.\n        \"\"\"\n        ...\n    def check_health(self) -> dict:",
+        "detail": "services.rag.llm",
         "documentation": {}
     },
     {
         "label": "StubAnswerGenerator",
         "kind": 6,
-        "importPath": "services.rag.rag.llm",
-        "description": "services.rag.rag.llm",
-        "peekOfCode": "class StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:\n        return {\"status\": \"ok\", \"provider\": \"stub\"}\nclass GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"",
-        "detail": "services.rag.rag.llm",
+        "importPath": "services.rag.llm",
+        "description": "services.rag.llm",
+        "peekOfCode": "class StubAnswerGenerator:\n    \"\"\"Заглушка генератора ответов, возвращающая только контекст.\"\"\"\n    def generate(self, question: str, context: str) -> str:\n        \"\"\"Возвращает найденный контекст в качестве ответа.\"\"\"\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:\n        \"\"\"Всегда возвращает статус ok.\"\"\"\n        return {\"status\": \"ok\", \"provider\": \"stub\"}\nclass GigaChatAnswerGenerator:\n    \"\"\"Генератор ответов на базе GigaChat LLM.\"\"\"",
+        "detail": "services.rag.llm",
         "documentation": {}
     },
     {
         "label": "GigaChatAnswerGenerator",
         "kind": 6,
-        "importPath": "services.rag.rag.llm",
-        "description": "services.rag.rag.llm",
-        "peekOfCode": "class GigaChatAnswerGenerator:\n    def __init__(self, settings: Settings) -> None:\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"\n            )\n        self.settings = settings\n        self.llm = None\n    def _get_llm(self):\n        if self.llm is not None:",
-        "detail": "services.rag.rag.llm",
+        "importPath": "services.rag.llm",
+        "description": "services.rag.llm",
+        "peekOfCode": "class GigaChatAnswerGenerator:\n    \"\"\"Генератор ответов на базе GigaChat LLM.\"\"\"\n    def __init__(self, settings: Settings) -> None:\n        \"\"\"\n        Инициализирует GigaChatAnswerGenerator.\n        :param settings: Объект настроек приложения.\n        \"\"\"\n        if not settings.gigachat_auth_key:\n            raise RuntimeError(\n                \"GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env.\"",
+        "detail": "services.rag.llm",
         "documentation": {}
     },
     {
         "label": "build_answer_generator",
         "kind": 2,
-        "importPath": "services.rag.rag.llm",
-        "description": "services.rag.rag.llm",
-        "peekOfCode": "def build_answer_generator(settings: Settings) -> AnswerGenerator:\n    if settings.llm_provider.lower() == \"gigachat\":\n        logger.info(\"Building GigaChat answer generator\")\n        return GigaChatAnswerGenerator(settings)\n    logger.info(\"Building stub answer generator\")\n    return StubAnswerGenerator()",
-        "detail": "services.rag.rag.llm",
+        "importPath": "services.rag.llm",
+        "description": "services.rag.llm",
+        "peekOfCode": "def build_answer_generator(settings: Settings) -> AnswerGenerator:\n    \"\"\"\n    Фабричный метод для создания генератора ответов.\n    :param settings: Объект настроек.\n    \"\"\"\n    if settings.llm_provider.lower() == \"gigachat\":\n        logger.info(\"Building GigaChat answer generator\")\n        return GigaChatAnswerGenerator(settings)\n    logger.info(\"Building stub answer generator\")\n    return StubAnswerGenerator()",
+        "detail": "services.rag.llm",
         "documentation": {}
     },
     {
         "label": "logger",
         "kind": 5,
-        "importPath": "services.rag.rag.llm",
-        "description": "services.rag.rag.llm",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass AnswerGenerator(Protocol):\n    def generate(self, question: str, context: str) -> str:\n        ...\n    def check_health(self) -> dict:\n        ...\nclass StubAnswerGenerator:\n    def generate(self, question: str, context: str) -> str:\n        return f\"Нашел релевантные фрагменты:\\n{context}\"\n    def check_health(self) -> dict:",
-        "detail": "services.rag.rag.llm",
+        "importPath": "services.rag.llm",
+        "description": "services.rag.llm",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass AnswerGenerator(Protocol):\n    \"\"\"Интерфейс для генератора ответов на основе LLM.\"\"\"\n    def generate(self, question: str, context: str) -> str:\n        \"\"\"\n        Генерирует текстовый ответ на основе вопроса и контекста.\n        :param question: Текст вопроса.\n        :param context: Текстовый контекст для генерации ответа.\n        \"\"\"\n        ...",
+        "detail": "services.rag.llm",
         "documentation": {}
     },
     {
         "label": "RAGDocument",
         "kind": 6,
-        "importPath": "services.rag.rag.models",
-        "description": "services.rag.rag.models",
-        "peekOfCode": "class RAGDocument(BaseModel):\n    id: str\n    text: str\n    metadata: dict = Field(default_factory=dict)\nclass RetrievedDocument(BaseModel):\n    document: RAGDocument\n    score: float\nclass RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
-        "detail": "services.rag.rag.models",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "peekOfCode": "class RAGDocument(BaseModel):\n    \"\"\"\n    Модель документа для RAG-системы.\n    \"\"\"\n    id: str\n    text: str\n    metadata: dict = Field(default_factory=dict)\nclass RetrievedDocument(BaseModel):\n    \"\"\"\n    Модель извлеченного документа с оценкой релевантности.",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
         "label": "RetrievedDocument",
         "kind": 6,
-        "importPath": "services.rag.rag.models",
-        "description": "services.rag.rag.models",
-        "peekOfCode": "class RetrievedDocument(BaseModel):\n    document: RAGDocument\n    score: float\nclass RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
-        "detail": "services.rag.rag.models",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "peekOfCode": "class RetrievedDocument(BaseModel):\n    \"\"\"\n    Модель извлеченного документа с оценкой релевантности.\n    \"\"\"\n    document: RAGDocument\n    score: float\nclass RAGAnswer(BaseModel):\n    \"\"\"\n    Модель ответа RAG-системы, содержащая текст ответа и источники.\n    \"\"\"",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
         "label": "RAGAnswer",
         "kind": 6,
-        "importPath": "services.rag.rag.models",
-        "description": "services.rag.rag.models",
-        "peekOfCode": "class RAGAnswer(BaseModel):\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
-        "detail": "services.rag.rag.models",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
+        "peekOfCode": "class RAGAnswer(BaseModel):\n    \"\"\"\n    Модель ответа RAG-системы, содержащая текст ответа и источники.\n    \"\"\"\n    answer: str\n    sources: list[dict] = Field(default_factory=list)",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
         "label": "ANSWER_SYSTEM_PROMPT",
         "kind": 5,
-        "importPath": "services.rag.rag.prompts",
-        "description": "services.rag.rag.prompts",
+        "importPath": "services.rag.prompts",
+        "description": "services.rag.prompts",
         "peekOfCode": "ANSWER_SYSTEM_PROMPT = \"\"\"\nТы отвечаешь по документации Confluence и S2T. Используй только найденный контекст.\nЕсли данных нет, честно скажи, что данных нет.\nЕсли в контексте сказано \"нет s2t на конфлюенсе\", обязательно используй эту фразу в ответе.\nВ ответе указывай источники и дату актуальности, если они есть в метаданных.\nНе выдумывай дату актуальности, версию документации, владельцев, атрибуты, источники и выводы.\nЕсли дата или версия отсутствует в контексте, прямо скажи, что дата актуальности не указана.\n\"\"\".strip()",
-        "detail": "services.rag.rag.prompts",
+        "detail": "services.rag.prompts",
         "documentation": {}
     },
     {
         "label": "IntentClassifier",
         "kind": 6,
-        "importPath": "services.rag.rag.retriever",
-        "description": "services.rag.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        # \"Изменения за период/даты\" -> структурированная история (из БД)\n        if \"измен\" in q and any(\n            word in q for word in [\"период\", \"дата\", \"датам\", \"история\", \"текущ\"]\n        ):\n            # Но если прямо упомянут \"релиз\", то все же Confluence\n            if \"релиз\" not in q:\n                return \"last_year_changes\"",
-        "detail": "services.rag.rag.retriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "peekOfCode": "class IntentClassifier:\n    \"\"\"\n    Классификатор намерений пользователя на основе текста вопроса.\n    \"\"\"\n    def classify(self, question: str) -> str:\n        \"\"\"\n        Классифицирует вопрос пользователя для определения стратегии поиска ответа.\n        :param question: Текст вопроса пользователя.\n        \"\"\"\n        q = normalize_text(question)",
+        "detail": "services.rag.retriever",
         "documentation": {}
     },
     {
         "label": "RAGRetriever",
         "kind": 6,
-        "importPath": "services.rag.rag.retriever",
-        "description": "services.rag.rag.retriever",
-        "peekOfCode": "class RAGRetriever:\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        vector_store: JsonVectorStore,\n        history_repo: HistoryRepository,\n        answer_generator: AnswerGenerator | None = None,\n    ) -> None:\n        self.metadata_repo = metadata_repo\n        self.vector_store = vector_store",
-        "detail": "services.rag.rag.retriever",
+        "importPath": "services.rag.retriever",
+        "description": "services.rag.retriever",
+        "peekOfCode": "class RAGRetriever:\n    \"\"\"\n    Основной класс для поиска информации и формирования ответов (RAG).\n    Использует метаданные из БД, векторное хранилище и LLM.\n    \"\"\"\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        vector_store: JsonVectorStore,\n        history_repo: HistoryRepository,",
+        "detail": "services.rag.retriever",
         "documentation": {}
     },
     {
         "label": "JsonVectorStore",
         "kind": 6,
-        "importPath": "services.rag.rag.vector_store",
-        "description": "services.rag.rag.vector_store",
-        "peekOfCode": "class JsonVectorStore:\n    def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:\n        self.directory = directory\n        self.directory.mkdir(parents=True, exist_ok=True)\n        self.path = self.directory / \"documents.jsonl\"\n        self.embedder = embedder or LocalTextEmbedder()\n    def replace_all(self, documents: list[RAGDocument]) -> None:\n        with self.path.open(\"w\", encoding=\"utf-8\") as file:\n            for document in documents:\n                file.write(document.model_dump_json() + \"\\n\")",
-        "detail": "services.rag.rag.vector_store",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "peekOfCode": "class JsonVectorStore:\n    \"\"\"\n    Локальное векторное хранилище на базе JSONL-файла.\n    Обеспечивает сохранение документов и поиск по сходству через эмбеддинги.\n    \"\"\"\n    def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:\n        \"\"\"\n        Инициализирует JsonVectorStore.\n        :param directory: Директория для хранения файла индекса.\n        :param embedder: Объект для вычисления эмбеддингов текстов.",
+        "detail": "services.rag.vector_store",
         "documentation": {}
     },
     {
@@ -3243,7 +3395,7 @@
         "kind": 6,
         "importPath": "shared.config.config",
         "description": "shared.config.config",
-        "peekOfCode": "class Settings(BaseSettings):\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_page_url: str | None = None\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None\n    confluence_auth_type: str = \"auto\"\n    confluence_username: str | None = None\n    confluence_token: str | None = None\n    confluence_api_token: str | None = None",
+        "peekOfCode": "class Settings(BaseSettings):\n    \"\"\"\n    Класс для управления настройками приложения, использующий pydantic-settings.\n    Загружает конфигурацию из переменных окружения и .env файла.\n    \"\"\"\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\", extra=\"ignore\")\n    confluence_base_url: str = \"https://confluence.example.ru\"\n    confluence_page_url: str | None = None\n    confluence_space_key: str = \"TEAM\"\n    confluence_root_page_id: str | None = None",
         "detail": "shared.config.config",
         "documentation": {}
     },
@@ -3252,7 +3404,7 @@
         "kind": 2,
         "importPath": "shared.config.config",
         "description": "shared.config.config",
-        "peekOfCode": "def get_settings() -> Settings:\n    return Settings()",
+        "peekOfCode": "def get_settings() -> Settings:\n    \"\"\"\n    Возвращает закешированный экземпляр настроек.\n    :return: Объект Settings.\n    \"\"\"\n    return Settings()",
         "detail": "shared.config.config",
         "documentation": {}
     },
@@ -3261,7 +3413,7 @@
         "kind": 6,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "class MemoryLogHandler(logging.Handler):\n    def __init__(self, maxlen: int = 1000) -> None:\n        super().__init__()\n        self.logs = deque(maxlen=maxlen)\n    def emit(self, record: logging.LogRecord) -> None:\n        msg = self.format(record)\n        self.logs.append(msg)\n    def get_logs(self) -> list[str]:\n        return list(self.logs)\nclass ColoredFormatter(logging.Formatter):",
+        "peekOfCode": "class MemoryLogHandler(logging.Handler):\n    \"\"\"\n    Обработчик логов, сохраняющий последние записи в оперативной памяти (в очереди с ограниченным размером).\n    \"\"\"\n    def __init__(self, maxlen: int = 1000) -> None:\n        \"\"\"\n        Инициализирует MemoryLogHandler.\n        :param maxlen: Максимальное количество сохраняемых записей логов.\n        \"\"\"\n        super().__init__()",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3270,7 +3422,7 @@
         "kind": 6,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "class ColoredFormatter(logging.Formatter):\n    \"\"\"Custom log formatter to add colors based on log level.\"\"\"\n    # ANSI escape codes\n    GREY = \"\\x1b[38;20m\"\n    YELLOW = \"\\x1b[33;20m\"\n    RED = \"\\x1b[31;20m\"\n    BOLD_RED = \"\\x1b[31;1m\"\n    CYAN = \"\\x1b[36;20m\"\n    RESET = \"\\x1b[0m\"\n    COLORS = {",
+        "peekOfCode": "class ColoredFormatter(logging.Formatter):\n    \"\"\"\n    Пользовательский форматтер логов, добавляющий цвета в зависимости от уровня важности.\n    \"\"\"\n    # ANSI escape codes\n    GREY = \"\\x1b[38;20m\"\n    YELLOW = \"\\x1b[33;20m\"\n    RED = \"\\x1b[31;20m\"\n    BOLD_RED = \"\\x1b[31;1m\"\n    CYAN = \"\\x1b[36;20m\"",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3279,7 +3431,7 @@
         "kind": 2,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())\n    handlers = [console_handler, memory_handler]\n    # We use basicConfig but manage handlers explicitly to avoid duplicates\n    root = logging.getLogger()\n    root.setLevel(getattr(logging, level.upper(), logging.INFO))",
+        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3288,7 +3440,7 @@
         "kind": 5,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())\n    handlers = [console_handler, memory_handler]\n    # We use basicConfig but manage handlers explicitly to avoid duplicates\n    root = logging.getLogger()",
+        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3297,7 +3449,7 @@
         "kind": 6,
         "importPath": "shared.storage.chat_history_repository",
         "description": "shared.storage.chat_history_repository",
-        "peekOfCode": "class ChatMessage:\n    session_id: str\n    user_message: str\n    bot_response: str\n    sources: list[str]\n    created_at: datetime\nclass ChatHistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add(self, message: ChatMessage) -> None:",
+        "peekOfCode": "class ChatMessage:\n    \"\"\"\n    Представляет сообщение в истории чата.\n    \"\"\"\n    session_id: str\n    user_message: str\n    bot_response: str\n    sources: list[str]\n    created_at: datetime\nclass ChatHistoryRepository:",
         "detail": "shared.storage.chat_history_repository",
         "documentation": {}
     },
@@ -3306,7 +3458,7 @@
         "kind": 6,
         "importPath": "shared.storage.chat_history_repository",
         "description": "shared.storage.chat_history_repository",
-        "peekOfCode": "class ChatHistoryRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def add(self, message: ChatMessage) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into chat_history(\n                    session_id, user_message, bot_response, sources_json, created_at\n                )",
+        "peekOfCode": "class ChatHistoryRepository:\n    \"\"\"\n    Репозиторий для хранения и извлечения истории чата из SQLite.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует ChatHistoryRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"\n        self.db = db",
         "detail": "shared.storage.chat_history_repository",
         "documentation": {}
     },
@@ -3315,7 +3467,7 @@
         "kind": 6,
         "importPath": "shared.storage.document_repository",
         "description": "shared.storage.document_repository",
-        "peekOfCode": "class DocumentRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def replace_all(self, documents: list[RAGDocument]) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\"delete from documents\")\n            for doc in documents:\n                self._insert_document(conn, doc)\n    def replace_for_datamart(self, datamart_name: str, documents: list[RAGDocument]) -> None:\n        with self.db.connect() as conn:",
+        "peekOfCode": "class DocumentRepository:\n    \"\"\"\n    Репозиторий для управления документами RAG в базе данных SQLite.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует DocumentRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"\n        self.db = db",
         "detail": "shared.storage.document_repository",
         "documentation": {}
     },
@@ -3324,7 +3476,7 @@
         "kind": 6,
         "importPath": "shared.storage.metadata_repository",
         "description": "shared.storage.metadata_repository",
-        "peekOfCode": "class MetadataRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def upsert_datamart(self, datamart: Datamart) -> None:\n        with self.db.connect() as conn:\n            conn.execute(\n                \"\"\"\n                insert into datamarts(\n                    name, code, confluence_page_id, confluence_url, stakeholders_json,\n                    facts_json, release_changes_json, updated_at",
+        "peekOfCode": "class MetadataRepository:\n    \"\"\"\n    Репозиторий для управления метаданными витрин данных и их атрибутов в SQLite.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует MetadataRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"\n        self.db = db",
         "detail": "shared.storage.metadata_repository",
         "documentation": {}
     },
@@ -3333,7 +3485,7 @@
         "kind": 6,
         "importPath": "shared.storage.page_snapshot_repository",
         "description": "shared.storage.page_snapshot_repository",
-        "peekOfCode": "class PageSnapshotRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, datamart_page_id: str) -> tuple[dict[str, int], Datamart] | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select version_map_json, extracted_data_json from page_snapshots where datamart_page_id = ?\",\n                (datamart_page_id,),\n            ).fetchone()\n            if not row:",
+        "peekOfCode": "class PageSnapshotRepository:\n    \"\"\"\n    Репозиторий для хранения снимков (снапшотов) страниц Confluence.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует PageSnapshotRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"\n        self.db = db",
         "detail": "shared.storage.page_snapshot_repository",
         "documentation": {}
     },
@@ -3342,7 +3494,7 @@
         "kind": 5,
         "importPath": "shared.storage.page_snapshot_repository",
         "description": "shared.storage.page_snapshot_repository",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass PageSnapshotRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, datamart_page_id: str) -> tuple[dict[str, int], Datamart] | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select version_map_json, extracted_data_json from page_snapshots where datamart_page_id = ?\",\n                (datamart_page_id,),\n            ).fetchone()",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass PageSnapshotRepository:\n    \"\"\"\n    Репозиторий для хранения снимков (снапшотов) страниц Confluence.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует PageSnapshotRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"",
         "detail": "shared.storage.page_snapshot_repository",
         "documentation": {}
     },
@@ -3351,7 +3503,7 @@
         "kind": 6,
         "importPath": "shared.storage.s2t_state_repository",
         "description": "shared.storage.s2t_state_repository",
-        "peekOfCode": "class S2TState:\n    resource_key: str\n    datamart_name: str\n    page_id: str | None\n    resource_type: str | None\n    title: str | None\n    file_name: str | None\n    url: str | None\n    metadata: dict\n    metadata_hash: str",
+        "peekOfCode": "class S2TState:\n    \"\"\"\n    Представляет состояние ресурса S2T (файла или страницы) для инкрементальной синхронизации.\n    \"\"\"\n    resource_key: str\n    datamart_name: str\n    page_id: str | None\n    resource_type: str | None\n    title: str | None\n    file_name: str | None",
         "detail": "shared.storage.s2t_state_repository",
         "documentation": {}
     },
@@ -3360,7 +3512,7 @@
         "kind": 6,
         "importPath": "shared.storage.s2t_state_repository",
         "description": "shared.storage.s2t_state_repository",
-        "peekOfCode": "class S2TStateRepository:\n    def __init__(self, db: SQLite) -> None:\n        self.db = db\n    def get(self, resource_key: str) -> S2TState | None:\n        with self.db.connect() as conn:\n            row = conn.execute(\n                \"select * from s2t_state where resource_key = ?\", (resource_key,)\n            ).fetchone()\n        return self._row_to_state(row) if row else None\n    def upsert(",
+        "peekOfCode": "class S2TStateRepository:\n    \"\"\"\n    Репозиторий для управления состоянием ресурсов S2T в SQLite.\n    \"\"\"\n    def __init__(self, db: SQLite) -> None:\n        \"\"\"\n        Инициализирует S2TStateRepository.\n        :param db: Объект SQLite для взаимодействия с базой данных.\n        \"\"\"\n        self.db = db",
         "detail": "shared.storage.s2t_state_repository",
         "documentation": {}
     },
@@ -3369,7 +3521,7 @@
         "kind": 6,
         "importPath": "shared.storage.sqlite",
         "description": "shared.storage.sqlite",
-        "peekOfCode": "class SQLite:\n    def __init__(self, path: Path) -> None:\n        self.path = path\n        self.path.parent.mkdir(parents=True, exist_ok=True)\n        self.init_schema()\n    @contextmanager\n    def connect(self) -> Iterator[sqlite3.Connection]:\n        conn = sqlite3.connect(self.path)\n        conn.row_factory = sqlite3.Row\n        try:",
+        "peekOfCode": "class SQLite:\n    \"\"\"\n    Класс для управления базой данных SQLite, включая инициализацию схемы и управление соединениями.\n    \"\"\"\n    def __init__(self, path: Path) -> None:\n        \"\"\"\n        Инициализирует объект SQLite и создает базу данных, если она не существует.\n        :param path: Путь к файлу базы данных SQLite.\n        \"\"\"\n        self.path = path",
         "detail": "shared.storage.sqlite",
         "documentation": {}
     },
@@ -3378,7 +3530,7 @@
         "kind": 2,
         "importPath": "shared.utils.date_utils",
         "description": "shared.utils.date_utils",
-        "peekOfCode": "def parse_date_from_text(text: str) -> date | None:\n    for pattern, fmt in DATE_PATTERNS:\n        match = pattern.search(text)\n        if match:\n            try:\n                return datetime.strptime(match.group(0), fmt).date()\n            except ValueError:\n                continue\n    return None\ndef utc_now() -> datetime:",
+        "peekOfCode": "def parse_date_from_text(text: str) -> date | None:\n    \"\"\"\n    Пытается извлечь дату из текста, используя предопределенные шаблоны.\n    :param text: Текст, содержащий дату.\n    :return: Объект date или None, если дата не найдена.\n    \"\"\"\n    for pattern, fmt in DATE_PATTERNS:\n        match = pattern.search(text)\n        if match:\n            try:",
         "detail": "shared.utils.date_utils",
         "documentation": {}
     },
@@ -3387,7 +3539,7 @@
         "kind": 2,
         "importPath": "shared.utils.date_utils",
         "description": "shared.utils.date_utils",
-        "peekOfCode": "def utc_now() -> datetime:\n    return datetime.utcnow()",
+        "peekOfCode": "def utc_now() -> datetime:\n    \"\"\"\n    Возвращает текущую дату и время в формате UTC.\n    :return: Текущий объект datetime в UTC.\n    \"\"\"\n    return datetime.utcnow()",
         "detail": "shared.utils.date_utils",
         "documentation": {}
     },
@@ -3396,7 +3548,7 @@
         "kind": 5,
         "importPath": "shared.utils.date_utils",
         "description": "shared.utils.date_utils",
-        "peekOfCode": "DATE_PATTERNS = [\n    (re.compile(r\"(?P<y>\\d{4})-(?P<m>\\d{2})-(?P<d>\\d{2})\"), \"%Y-%m-%d\"),\n    (re.compile(r\"(?P<d>\\d{2})\\.(?P<m>\\d{2})\\.(?P<y>\\d{4})\"), \"%d.%m.%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})(?P<m>\\d{2})(?P<d>\\d{2})\"), \"%Y%m%d\"),\n    (re.compile(r\"(?P<d>\\d{2})-(?P<m>\\d{2})-(?P<y>\\d{4})\"), \"%d-%m-%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})_(?P<m>\\d{2})_(?P<d>\\d{2})\"), \"%Y_%m_%d\"),\n]\ndef parse_date_from_text(text: str) -> date | None:\n    for pattern, fmt in DATE_PATTERNS:\n        match = pattern.search(text)",
+        "peekOfCode": "DATE_PATTERNS = [\n    (re.compile(r\"(?P<y>\\d{4})-(?P<m>\\d{2})-(?P<d>\\d{2})\"), \"%Y-%m-%d\"),\n    (re.compile(r\"(?P<d>\\d{2})\\.(?P<m>\\d{2})\\.(?P<y>\\d{4})\"), \"%d.%m.%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})(?P<m>\\d{2})(?P<d>\\d{2})\"), \"%Y%m%d\"),\n    (re.compile(r\"(?P<d>\\d{2})-(?P<m>\\d{2})-(?P<y>\\d{4})\"), \"%d-%m-%Y\"),\n    (re.compile(r\"(?P<y>\\d{4})_(?P<m>\\d{2})_(?P<d>\\d{2})\"), \"%Y_%m_%d\"),\n]\ndef parse_date_from_text(text: str) -> date | None:\n    \"\"\"\n    Пытается извлечь дату из текста, используя предопределенные шаблоны.",
         "detail": "shared.utils.date_utils",
         "documentation": {}
     },
@@ -3405,7 +3557,7 @@
         "kind": 2,
         "importPath": "shared.utils.hashing",
         "description": "shared.utils.hashing",
-        "peekOfCode": "def stable_hash(value: Any) -> str:\n    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)\n    return hashlib.sha256(payload.encode(\"utf-8\")).hexdigest()",
+        "peekOfCode": "def stable_hash(value: Any) -> str:\n    \"\"\"\n    Вычисляет стабильный SHA-256 хеш для любого объекта, преобразуемого в JSON.\n    :param value: Объект для хеширования.\n    :return: Строка с шестнадцатеричным представлением хеша.\n    \"\"\"\n    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)\n    return hashlib.sha256(payload.encode(\"utf-8\")).hexdigest()",
         "detail": "shared.utils.hashing",
         "documentation": {}
     },
@@ -3414,7 +3566,7 @@
         "kind": 2,
         "importPath": "shared.utils.text_utils",
         "description": "shared.utils.text_utils",
-        "peekOfCode": "def normalize_text(value: str | None) -> str:\n    if not value:\n        return \"\"\n    # Remove punctuation and special characters, collapse spaces, lowercase\n    cleaned = re.sub(r\"[^\\w\\s]\", \" \", value)\n    return re.sub(r\"\\s+\", \" \", cleaned.strip().lower())\ndef fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True",
+        "peekOfCode": "def normalize_text(value: str | None) -> str:\n    \"\"\"\n    Нормализует текст: удаляет пунктуацию, спецсимволы, лишние пробелы и приводит к нижнему регистру.\n    :param value: Входная строка для нормализации.\n    :return: Нормализованная строка.\n    \"\"\"\n    if not value:\n        return \"\"\n    # Remove punctuation and special characters, collapse spaces, lowercase\n    cleaned = re.sub(r\"[^\\w\\s]\", \" \", value)",
         "detail": "shared.utils.text_utils",
         "documentation": {}
     },
@@ -3423,7 +3575,7 @@
         "kind": 2,
         "importPath": "shared.utils.text_utils",
         "description": "shared.utils.text_utils",
-        "peekOfCode": "def fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):\n        return True\n    words = normalized.split()\n    for candidate in candidates:\n        target = normalize_text(candidate)\n        for size in range(1, min(4, len(words)) + 1):\n            for i in range(0, len(words) - size + 1):\n                window = \" \".join(words[i : i + size])",
+        "peekOfCode": "def fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:\n    \"\"\"\n    Проверяет, содержит ли текст хотя бы одного из кандидатов с использованием нечеткого поиска.\n    :param text: Текст для поиска.\n    :param candidates: Список строк-кандидатов.\n    :param threshold: Порог схожести для SequenceMatcher (по умолчанию 0.78).\n    :return: True, если найдено совпадение, иначе False.\n    \"\"\"\n    normalized = normalize_text(text)\n    if any(normalize_text(candidate) in normalized for candidate in candidates):",
         "detail": "shared.utils.text_utils",
         "documentation": {}
     },
@@ -3432,7 +3584,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_retriever(settings: Settings | None = None) -> RAGRetriever:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    vector_store = JsonVectorStore(settings.vector_store_dir)\n    answer_generator = build_answer_generator(settings)\n    return RAGRetriever(metadata_repo, vector_store, history_repo, answer_generator)\ndef build_state_repository(settings: Settings | None = None) -> S2TStateRepository:\n    settings = settings or get_settings()",
+        "peekOfCode": "def build_retriever(settings: Settings | None = None) -> RAGRetriever:\n    \"\"\"\n    Создает и настраивает экземпляр RAGRetriever.\n    :param settings: Объект настроек приложения. Если не передан, загружаются настройки по умолчанию.\n    :return: Экземпляр RAGRetriever.\n    \"\"\"\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3441,7 +3593,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_state_repository(settings: Settings | None = None) -> S2TStateRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return S2TStateRepository(db)\ndef build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return MetadataRepository(db)\ndef build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()",
+        "peekOfCode": "def build_state_repository(settings: Settings | None = None) -> S2TStateRepository:\n    \"\"\"\n    Создает и возвращает экземпляр S2TStateRepository.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр S2TStateRepository.\n    \"\"\"\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return S2TStateRepository(db)\ndef build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3450,7 +3602,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return MetadataRepository(db)\ndef build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return ChatHistoryRepository(db)\ndef build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()",
+        "peekOfCode": "def build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:\n    \"\"\"\n    Создает и возвращает экземпляр MetadataRepository.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр MetadataRepository.\n    \"\"\"\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return MetadataRepository(db)\ndef build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3459,7 +3611,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return ChatHistoryRepository(db)\ndef build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)",
+        "peekOfCode": "def build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:\n    \"\"\"\n    Создает и возвращает экземпляр ChatHistoryRepository.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр ChatHistoryRepository.\n    \"\"\"\n    settings = settings or get_settings()\n    db = SQLite(settings.sqlite_db_path)\n    return ChatHistoryRepository(db)\ndef build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3468,7 +3620,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)\ndef build_jira_client(settings: Settings | None = None):\n    from services.ingestion.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
+        "peekOfCode": "def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:\n    \"\"\"\n    Создает и возвращает экземпляр ConfluenceClient.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр ConfluenceClient.\n    \"\"\"\n    settings = settings or get_settings()\n    return ConfluenceClient(settings)\ndef build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    \"\"\"",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3477,7 +3629,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    settings = settings or get_settings()\n    return build_answer_generator(settings)\ndef build_jira_client(settings: Settings | None = None):\n    from services.ingestion.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
+        "peekOfCode": "def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:\n    \"\"\"\n    Создает и возвращает генератор ответов на базе LLM.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр AnswerGenerator.\n    \"\"\"\n    settings = settings or get_settings()\n    return build_answer_generator(settings)\ndef build_jira_client(settings: Settings | None = None):\n    \"\"\"",
         "detail": "shared.factory",
         "documentation": {}
     },
@@ -3486,7 +3638,7 @@
         "kind": 2,
         "importPath": "shared.factory",
         "description": "shared.factory",
-        "peekOfCode": "def build_jira_client(settings: Settings | None = None):\n    from services.ingestion.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
+        "peekOfCode": "def build_jira_client(settings: Settings | None = None):\n    \"\"\"\n    Создает и возвращает экземпляр JiraClient.\n    :param settings: Объект настроек приложения.\n    :return: Экземпляр JiraClient.\n    \"\"\"\n    from services.ingestion.confluence.jira_client import JiraClient\n    settings = settings or get_settings()\n    return JiraClient(settings)",
         "detail": "shared.factory",
         "documentation": {}
     },

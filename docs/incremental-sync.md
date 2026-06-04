@@ -53,10 +53,10 @@
 
 Запуск инкрементального обновления:
 ```bash
-python -m app.cli update-rag
+python -m services.bot.cli update-rag
 ```
 
 Режим предпросмотра (без внесения изменений):
 ```bash
-python -m app.cli update-rag --dry-run
+python -m services.bot.cli update-rag --dry-run
 ```

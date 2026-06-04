@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class S2TMetadataSnapshot:
+    """
+    Снимок метаданных ресурса S2T, используемый для отслеживания изменений.
+    """
     datamart: Datamart
     resource: S2TResource | None
     metadata: dict
@@ -22,6 +25,10 @@ class S2TMetadataSnapshot:
     
     @property
     def unique_key(self) -> str:
+        """
+        Генерирует уникальный ключ для ресурса S2T.
+        :return: Строковый уникальный ключ.
+        """
         if not self.resource:
             return f"{self.datamart.confluence_page_id}:no_s2t"
         base_key = self.resource.id or self.resource.download_url or self.resource.url or self.resource.file_name
@@ -29,18 +36,32 @@ class S2TMetadataSnapshot:
 
 
 class MetadataSyncService:
+    """
+    Сервис для синхронизации метаданных витрин данных из Confluence.
+    Обеспечивает поиск страниц, извлечение фактов и формирование снимков состояния.
+    """
     def __init__(
         self, 
         parser: ConfluenceParser, 
         hash_service: HashService | None = None,
         snapshot_repo: PageSnapshotRepository | None = None
     ) -> None:
+        """
+        Инициализирует MetadataSyncService.
+        :param parser: Парсер Confluence.
+        :param hash_service: Сервис для вычисления хэшей.
+        :param snapshot_repo: Репозиторий для кэширования снимков страниц.
+        """
         self.parser = parser
         self.hash_service = hash_service or HashService()
         self.snapshot_repo = snapshot_repo
         self._prefetched_versions: dict[str, int] = {}
 
     def collect(self) -> list[S2TMetadataSnapshot]:
+        """
+        Собирает снимки метаданных для всех найденных витрин данных.
+        :return: Список объектов S2TMetadataSnapshot.
+        """
         snapshots: list[S2TMetadataSnapshot] = []
         pattern = normalize_text(self.parser.settings.datamart_page_pattern)
         exclude_pattern = self.parser.settings.datamart_exclude_pattern
@@ -108,6 +129,11 @@ class MetadataSyncService:
         return snapshots
 
     def _to_snapshot(self, datamart: Datamart) -> S2TMetadataSnapshot:
+        """
+        Преобразует объект Datamart в снимок метаданных S2TMetadataSnapshot.
+        :param datamart: Объект витрины данных.
+        :return: Снимок метаданных.
+        """
         resource = datamart.s2t_resource
         metadata = self._metadata(datamart, resource)
         
@@ -129,6 +155,11 @@ class MetadataSyncService:
         )
 
     def _get_datamart_with_cache(self, page) -> Datamart | None:
+        """
+        Получает данные витрины, используя кэш снимков страниц, если он доступен.
+        :param page: Страница Confluence.
+        :return: Объект Datamart или None.
+        """
         if not self.snapshot_repo:
             return self.parser.parse_datamart_page(page, skip_jira=False)
             
@@ -144,6 +175,11 @@ class MetadataSyncService:
         return datamart
 
     def _verify_versions(self, version_map: dict[str, int]) -> bool:
+        """
+        Проверяет, что версии страниц в Confluence совпадают с ожидаемыми.
+        :param version_map: Словарь {page_id: version}.
+        :return: True, если все версии совпадают.
+        """
         for page_id, expected_version in version_map.items():
             if hasattr(self, "_prefetched_versions") and page_id in self._prefetched_versions:
                 if self._prefetched_versions[page_id] != expected_version: return False
@@ -156,6 +192,12 @@ class MetadataSyncService:
 
     @staticmethod
     def _metadata(datamart: Datamart, resource: S2TResource | None) -> dict:
+        """
+        Формирует словарь метаданных для витрины и ее ресурса S2T.
+        :param datamart: Объект витрины данных.
+        :param resource: Ресурс S2T (может быть None).
+        :return: Словарь метаданных.
+        """
         def fmt_dt(dt) -> str | None:
             if not dt: return None
             if dt.tzinfo: dt = dt.astimezone(UTC)

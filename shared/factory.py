@@ -11,6 +11,11 @@ from shared.storage.sqlite import SQLite
 
 
 def build_retriever(settings: Settings | None = None) -> RAGRetriever:
+    """
+    Создает и настраивает экземпляр RAGRetriever.
+    :param settings: Объект настроек приложения. Если не передан, загружаются настройки по умолчанию.
+    :return: Экземпляр RAGRetriever.
+    """
     settings = settings or get_settings()
     db = SQLite(settings.sqlite_db_path)
     metadata_repo = MetadataRepository(db)
@@ -21,34 +26,64 @@ def build_retriever(settings: Settings | None = None) -> RAGRetriever:
 
 
 def build_state_repository(settings: Settings | None = None) -> S2TStateRepository:
+    """
+    Создает и возвращает экземпляр S2TStateRepository.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр S2TStateRepository.
+    """
     settings = settings or get_settings()
     db = SQLite(settings.sqlite_db_path)
     return S2TStateRepository(db)
 
 
 def build_metadata_repository(settings: Settings | None = None) -> MetadataRepository:
+    """
+    Создает и возвращает экземпляр MetadataRepository.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр MetadataRepository.
+    """
     settings = settings or get_settings()
     db = SQLite(settings.sqlite_db_path)
     return MetadataRepository(db)
 
 
 def build_chat_history_repository(settings: Settings | None = None) -> ChatHistoryRepository:
+    """
+    Создает и возвращает экземпляр ChatHistoryRepository.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр ChatHistoryRepository.
+    """
     settings = settings or get_settings()
     db = SQLite(settings.sqlite_db_path)
     return ChatHistoryRepository(db)
 
 
 def build_confluence_client(settings: Settings | None = None) -> ConfluenceClient:
+    """
+    Создает и возвращает экземпляр ConfluenceClient.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр ConfluenceClient.
+    """
     settings = settings or get_settings()
     return ConfluenceClient(settings)
 
 
 def build_llm_generator(settings: Settings | None = None) -> AnswerGenerator:
+    """
+    Создает и возвращает генератор ответов на базе LLM.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр AnswerGenerator.
+    """
     settings = settings or get_settings()
     return build_answer_generator(settings)
 
 
 def build_jira_client(settings: Settings | None = None):
+    """
+    Создает и возвращает экземпляр JiraClient.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр JiraClient.
+    """
     from services.ingestion.confluence.jira_client import JiraClient
     settings = settings or get_settings()
     return JiraClient(settings)

@@ -4,6 +4,9 @@ from pydantic import BaseModel, Field
 
 
 class Stakeholder(BaseModel):
+    """
+    Модель данных стейкхолдера (заинтересованного лица).
+    """
     name: str | None = None
     email: str | None = None
     role: str | None = None
@@ -12,6 +15,9 @@ class Stakeholder(BaseModel):
 
 
 class DatamartFact(BaseModel):
+    """
+    Модель атрибута (факта) витрины данных.
+    """
     key: str
     label: str
     value: str
@@ -19,6 +25,9 @@ class DatamartFact(BaseModel):
 
 
 class ReleaseChange(BaseModel):
+    """
+    Модель изменения в релизе (задачи из журнала изменений).
+    """
     version: str | None = None
     jira_key: str | None = None
     jira_title: str | None = None
@@ -32,6 +41,9 @@ class ReleaseChange(BaseModel):
 
 
 class ConfluencePage(BaseModel):
+    """
+    Модель страницы Confluence с метаданными и содержимым.
+    """
     id: str
     title: str
     url: str
@@ -44,6 +56,9 @@ class ConfluencePage(BaseModel):
 
 
 class S2TResource(BaseModel):
+    """
+    Модель ресурса S2T (вложение или ссылка на файл).
+    """
     id: str | None = None
     title: str
     url: str | None = None
@@ -57,15 +72,21 @@ class S2TResource(BaseModel):
     download_url: str | None = None
     media_type: str | None = None
     page_id: str | None = None
-    # We will compute a unique key dynamically in the sync service or during processing
-    # but as a fallback property we can use the ID and page ID of the resource itself.
+
     @property
     def resource_key(self) -> str:
+        """
+        Генерирует уникальный ключ ресурса.
+        :return: Строковый ключ.
+        """
         base_key = self.id or self.download_url or self.url or self.file_name
         return f"{self.page_id}:{base_key}" if self.page_id else base_key
 
 
 class Datamart(BaseModel):
+    """
+    Модель витрины данных со всей собранной информацией.
+    """
     name: str
     confluence_page_id: str
     confluence_url: str
@@ -78,10 +99,12 @@ class Datamart(BaseModel):
     facts: list[DatamartFact] = Field(default_factory=list)
     release_changes: list[ReleaseChange] = Field(default_factory=list)
     s2t_resource: S2TResource | None = None
-    # Map of page_id -> version_number for all pages visited during parsing
     visited_pages: dict[str, int] = Field(default_factory=dict)
 
 
 class ParseResult(BaseModel):
+    """
+    Результат парсинга набора страниц Confluence.
+    """
     datamarts: list[Datamart] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)

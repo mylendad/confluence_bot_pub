@@ -62,23 +62,43 @@ FACT_ALIASES = {
 }
 JIRA_KEY_RE = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
 PLACEHOLDER_TEXTS = {
-    "получение подробных данных проблемы",
+    "получение подробных да
+    нных проблемы",
     "статус",
 }
 
 
 class ConfluenceParser:
+    """
+    Парсер страниц Confluence для извлечения информации о витринах данных.
+    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.
+    """
+
     def __init__(
         self,
         client: ConfluenceClient,
         settings: Settings,
         jira_client: JiraClient | None = None,
     ) -> None:
+        """
+        Инициализирует парсер Confluence.
+
+        :param client: Клиент Confluence для взаимодействия с API.
+        :param settings: Объект настроек приложения.
+        :param jira_client: Клиент Jira для обогащения информации о задачах (опционально).
+        """
         self.client = client
         self.settings = settings
         self.jira_client = jira_client
 
     def parse(self, dry_run: bool = False, skip_jira: bool = False) -> ParseResult:
+        """
+        Выполняет поиск и парсинг всех страниц витрин данных, соответствующих заданному паттерну.
+
+        :param dry_run: Флаг тестового запуска без сохранения результатов.
+        :param skip_jira: Флаг пропуска обогащения данных из Jira.
+        :return: Объект ParseResult, содержащий список найденных витрин.
+        """
         result = ParseResult()
         pattern = normalize_text(self.settings.datamart_page_pattern)
         for page in self.client.iter_top_level_pages():
@@ -97,6 +117,13 @@ class ConfluenceParser:
         return result
 
     def parse_datamart_page(self, page: ConfluencePage, skip_jira: bool = False) -> Datamart:
+        """
+        Парсит содержимое конкретной страницы витрины данных.
+
+        :param page: Объект страницы Confluence.
+        :param skip_jira: Флаг пропуска обогащения данных из Jira.
+        :return: Объект Datamart с извлеченной информацией.
+        """
         # Track all pages visited for this specific datamart
         visited_versions: dict[str, int] = {}
         if page.version:
@@ -153,6 +180,13 @@ class ConfluenceParser:
     def extract_checklist_facts(
         self, page: ConfluencePage, visited_versions: dict[str, int] | None = None
     ) -> list[DatamartFact]:
+        """
+        Извлекает факты (характеристики) витрины со страницы чек-листа, если она существует.
+
+        :param page: Текущая страница витрины.
+        :param visited_versions: Словарь для отслеживания версий посещенных страниц.
+        :return: Список объектов DatamartFact.
+        """
         checklist_page = self._find_checklist_page_recursive(
             page, depth=0, visited=set(), visited_versions=visited_versions
         )
@@ -194,6 +228,15 @@ class ConfluenceParser:
         visited: set[str],
         visited_versions: dict[str, int] | None = None,
     ) -> ConfluencePage | None:
+        """
+        Рекурсивно ищет страницу чек-листа в дочерних страницах.
+
+        :param page: Страница, с которой начинается поиск.
+        :param depth: Текущая глубина рекурсии.
+        :param visited: Множество ID уже посещенных страниц.
+        :param visited_versions: Словарь для отслеживания версий посещенных страниц.
+        :return: Объект ConfluencePage или None.
+        """
         if page.id in visited or depth > 3:
             return None
         visited.add(page.id)
@@ -242,6 +285,11 @@ class ConfluenceParser:
         return None
 
     def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:
+        """
+        Обогащает список изменений релиза данными из Jira (даты создания, завершения, доп. поля).
+
+        :param changes: Список объектов ReleaseChange для обогащения.
+        """
         if not self.jira_client:
             logger.warning("JiraClient is None. Skipping Jira enrichment.")
             return
@@ -346,6 +394,12 @@ class ConfluenceParser:
                 change.jira_last_activity_value = found_value
 
     def extract_stakeholders(self, html: str) -> list[Stakeholder]:
+        """
+        Извлекает информацию о стейкхолдерах (владельцах, контактах) из HTML-содержимого страницы.
+
+        :param html: HTML-код страницы.
+        :return: Список объектов Stakeholder.
+        """
         soup = BeautifulSoup(html, "html.parser")
         stakeholders: list[Stakeholder] = []
         for row in soup.find_all("tr"):
@@ -364,6 +418,12 @@ class ConfluenceParser:
         return stakeholders
 
     def extract_datamart_facts(self, html: str) -> list[DatamartFact]:
+        """
+        Извлекает основные атрибуты витрины данных из таблиц на странице.
+
+        :param html: HTML-код страницы.
+        :return: Список объектов DatamartFact.
+        """
         soup = BeautifulSoup(html, "html.parser")
         facts: list[DatamartFact] = []
         seen: set[tuple[str, str, str]] = set()
@@ -389,6 +449,14 @@ class ConfluenceParser:
     def extract_release_changes(
         self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None
     ) -> list[ReleaseChange]:
+        """
+        Находит и парсит историю изменений (релизов) для витрины.
+
+        :param page: Страница витрины.
+        :param html: HTML-код страницы.
+        :param visited_versions: Словарь посещенных версий страниц.
+        :return: Список объектов ReleaseChange.
+        """
         # Ищем страницу изменений рекурсивно
         release_page = self._find_release_page_recursive(
             page, depth=0, visited=set(), visited_versions=visited_versions
@@ -407,6 +475,15 @@ class ConfluenceParser:
         visited: set[str],
         visited_versions: dict[str, int] | None = None,
     ) -> ConfluencePage | None:
+        """
+        Рекурсивно ищет страницу с журналом изменений.
+
+        :param page: Стартовая страница.
+        :param depth: Глубина поиска.
+        :param visited: Посещенные ID страниц.
+        :param visited_versions: Словарь посещенных версий.
+        :return: Объект ConfluencePage или None.
+        """
         if page.id in visited or depth > 3:
             return None
         visited.add(page.id)
@@ -458,6 +535,13 @@ class ConfluenceParser:
     def parse_release_changes_page(
         self, html: str, source_url: str | None = None
     ) -> list[ReleaseChange]:
+        """
+        Парсит HTML-содержимое страницы изменений релиза.
+
+        :param html: HTML-код страницы.
+        :param source_url: URL страницы-источника.
+        :return: Список объектов ReleaseChange.
+        """
         soup = BeautifulSoup(html, "html.parser")
 
         # In Confluence, main content might be nested deep inside layouts, columns, or macros
@@ -549,6 +633,13 @@ class ConfluenceParser:
     def find_s2t_candidates(
         self, page: ConfluencePage, visited_versions: dict[str, int] | None = None
     ) -> list[S2TResource]:
+        """
+        Ищет потенциальные ссылки на файлы S2T на странице и в дочерних элементах.
+
+        :param page: Страница для поиска.
+        :param visited_versions: Словарь посещенных версий страниц.
+        :return: Список объектов S2TResource.
+        """
         return self._find_s2t_recursive(
             page, depth=0, visited=set(), visited_versions=visited_versions
         )
@@ -560,6 +651,15 @@ class ConfluenceParser:
         visited: set[str],
         visited_versions: dict[str, int] | None = None,
     ) -> list[S2TResource]:
+        """
+        Рекурсивный поиск файлов S2T.
+
+        :param page: Текущая страница.
+        :param depth: Глубина поиска.
+        :param visited: Посещенные ID.
+        :param visited_versions: Словарь посещенных версий.
+        :return: Список объектов S2TResource.
+        """
         if page.id in visited or depth > 5:
             return []
         visited.add(page.id)
@@ -688,6 +788,14 @@ class ConfluenceParser:
     def _release_page_from_link(
         self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None
     ) -> ConfluencePage | None:
+        """
+        Ищет ссылку на страницу изменений релиза в HTML-коде текущей страницы.
+
+        :param page: Текущая страница.
+        :param html: HTML-код для анализа.
+        :param visited_versions: Словарь посещенных версий.
+        :return: Объект ConfluencePage или None.
+        """
         # Исключаем страницы-шаблоны
         if "шаблон" in normalize_text(page.title):
             return None
@@ -774,6 +882,13 @@ class ConfluenceParser:
     def _extract_s2t_table_resources(
         self, page: ConfluencePage, soup: BeautifulSoup
     ) -> list[S2TResource]:
+        """
+        Извлекает ссылки на файлы S2T из таблиц на странице.
+
+        :param page: Текущая страница.
+        :param soup: Объект BeautifulSoup для анализа.
+        :return: Список объектов S2TResource.
+        """
         resources: list[S2TResource] = []
         tables = soup.find_all("table") or [soup]
         for table in tables:
@@ -829,6 +944,12 @@ class ConfluenceParser:
         return resources
 
     def choose_latest_s2t(self, candidates: list[S2TResource]) -> S2TResource | None:
+        """
+        Выбирает наиболее актуальный (последний) файл S2T из списка кандидатов.
+
+        :param candidates: Список найденных ресурсов S2T.
+        :return: Наилучший объект S2TResource или None.
+        """
         if not candidates:
             logger.warning("S2T resource was not found")
             return None
@@ -852,6 +973,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _comparable_datetime(value: datetime | None) -> datetime:
+        """
+        Приводит объект datetime к сопоставимому формату с временной зоной UTC.
+
+        :param value: Исходный объект datetime или None.
+        :return: Объект datetime в UTC.
+        """
         if not value:
             return datetime.min.replace(tzinfo=UTC)
         if value.tzinfo is None:
@@ -859,21 +986,47 @@ class ConfluenceParser:
         return value.astimezone(UTC)
 
     def _looks_like_s2t(self, value: str) -> bool:
+        """
+        Проверяет, соответствует ли строка шаблонам имен S2T.
+
+        :param value: Текст для проверки.
+        :return: True, если текст похож на S2T.
+        """
         return any(
             normalize_text(pattern) in normalize_text(value)
             for pattern in self.settings.s2t_patterns
         )
 
     def _has_s2t_extension(self, value: str) -> bool:
+        """
+        Проверяет, имеет ли строка расширение поддерживаемого S2T-файла.
+
+        :param value: Имя файла или URL.
+        :return: True, если расширение поддерживается.
+        """
         return any(suffix in value.lower() for suffix in SUPPORTED_S2T_SUFFIXES)
 
     def _looks_like_s2t_file(self, href: str, title: str) -> bool:
+        """
+        Проверяет, является ли ссылка или заголовок файлом S2T.
+
+        :param href: URL ссылки.
+        :param title: Заголовок ссылки.
+        :return: True, если это похоже на файл S2T.
+        """
         lowered = f"{href} {title}".lower()
         if not self._has_s2t_extension(lowered):
             return False
         return self._looks_like_s2t(lowered)
 
     def _latest_non_empty_row_resource(self, page: ConfluencePage, rows) -> S2TResource | None:
+        """
+        Ищет ресурс S2T в последней непустой строке таблицы.
+
+        :param page: Текущая страница.
+        :param rows: Список строк таблицы.
+        :return: Объект S2TResource или None.
+        """
         for row_number, row in reversed(list(enumerate(rows, start=1))):
             if not row.get_text(" ", strip=True):
                 continue
@@ -910,6 +1063,17 @@ class ConfluenceParser:
         resource_type: str,
         row_number: int,
     ) -> list[S2TResource]:
+        """
+        Извлекает ресурсы S2T из ячеек, соседствующих с ячейкой даты.
+
+        :param page: Текущая страница.
+        :param cells: Список ячеек строки.
+        :param index: Индекс ячейки с датой.
+        :param file_date: Извлеченная дата файла.
+        :param resource_type: Тип ресурса.
+        :param row_number: Номер строки в таблице.
+        :return: Список объектов S2TResource.
+        """
         resources: list[S2TResource] = []
         for link_cell in self._neighbor_cells(cells, index):
             for link in link_cell.find_all("a"):
@@ -950,6 +1114,16 @@ class ConfluenceParser:
         row_number: int,
         file_date=None,
     ) -> S2TResource:
+        """
+        Создает объект S2TResource на основе ссылки на вложение Confluence.
+
+        :param page: Текущая страница.
+        :param file_name: Имя файла вложения.
+        :param resource_type: Тип ресурса.
+        :param row_number: Номер строки (для таблиц).
+        :param file_date: Опциональная дата файла.
+        :return: Объект S2TResource.
+        """
         return S2TResource(
             title=file_name,
             url=confluence_urljoin(page.url, f"/download/attachments/{page.id}/{file_name}"),
@@ -962,6 +1136,12 @@ class ConfluenceParser:
         )
 
     def _attachment_references(self, node) -> list[str]:
+        """
+        Ищет ссылки на вложения в формате Confluence Storage (ri:filename).
+
+        :param node: HTML/Storage узел для анализа.
+        :return: Список имен файлов вложений.
+        """
         names: list[str] = []
         for tag in node.find_all():
             attrs = {str(key).lower(): str(value) for key, value in tag.attrs.items()}
@@ -973,6 +1153,12 @@ class ConfluenceParser:
     def _append_new_resources(
         self, target: list[S2TResource], resources: list[S2TResource]
     ) -> None:
+        """
+        Добавляет новые ресурсы в список, заменяя менее качественные ссылки на полные вложения при совпадении ключей.
+
+        :param target: Результирующий список ресурсов.
+        :param resources: Список новых ресурсов для добавления.
+        """
         target_by_key = {resource.resource_key: i for i, resource in enumerate(target)}
         for resource in resources:
             if resource.resource_key in target_by_key:
@@ -989,11 +1175,25 @@ class ConfluenceParser:
     def _enrich_resources(
         self, resources: list[S2TResource], attachment_index: dict[str, S2TResource]
     ) -> list[S2TResource]:
+        """
+        Массово обогащает ресурсы данными из вложений Confluence.
+
+        :param resources: Список ресурсов S2TResource.
+        :param attachment_index: Индекс вложений для быстрого поиска.
+        :return: Список обогащенных ресурсов S2TResource.
+        """
         return [self._enrich_resource(resource, attachment_index) for resource in resources]
 
     def _enrich_resource(
         self, resource: S2TResource, attachment_index: dict[str, S2TResource]
     ) -> S2TResource:
+        """
+        Обогащает одиночный ресурс (например, ссылку) реальными данными о вложении (ID, размер, URL скачивания).
+
+        :param resource: Исходный ресурс.
+        :param attachment_index: Индекс вложений.
+        :return: Обогащенный ресурс S2TResource.
+        """
         attachment = self._find_attachment(resource, attachment_index)
         if not attachment:
             return resource
@@ -1016,6 +1216,13 @@ class ConfluenceParser:
     def _find_attachment(
         self, resource: S2TResource, attachment_index: dict[str, S2TResource]
     ) -> S2TResource | None:
+        """
+        Ищет вложение в индексе по различным признакам (имя файла, заголовок, URL).
+
+        :param resource: Ресурс для поиска.
+        :param attachment_index: Индекс вложений.
+        :return: Совпадающее вложение S2TResource или None.
+        """
         for value in (
             resource.file_name,
             resource.title,
@@ -1030,6 +1237,12 @@ class ConfluenceParser:
         return None
 
     def _attachment_index(self, attachments: list[S2TResource]) -> dict[str, S2TResource]:
+        """
+        Строит индекс вложений для быстрого сопоставления ссылок с реальными файлами.
+
+        :param attachments: Список вложений.
+        :return: Словарь-индекс.
+        """
         index: dict[str, S2TResource] = {}
         for attachment in attachments:
             for value in (
@@ -1047,12 +1260,24 @@ class ConfluenceParser:
 
     @staticmethod
     def _attachment_lookup_key(value: str | None) -> str | None:
+        """
+        Генерирует нормализованный ключ для поиска вложения.
+
+        :param value: Исходное значение (имя или URL).
+        :return: Нормализованный ключ.
+        """
         if not value:
             return None
         return unquote(value).strip().casefold()
 
     @staticmethod
     def _file_name_from_url(url: str | None) -> str | None:
+        """
+        Извлекает имя файла из URL.
+
+        :param url: URL файла.
+        :return: Имя файла или None.
+        """
         if not url:
             return None
         path = urlparse(url).path
@@ -1062,6 +1287,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _table_has_latest_marker(rows) -> bool:
+        """
+        Проверяет, содержит ли таблица маркер актуальной версии ("latest", "актуальный" и т.д.).
+
+        :param rows: Строки таблицы.
+        :return: True, если маркер найден.
+        """
         for row in rows:
             tokens = normalize_text(row.get_text(" ", strip=True)).split()
             if any(marker in tokens for marker in LATEST_MARKERS):
@@ -1070,16 +1301,35 @@ class ConfluenceParser:
 
     @staticmethod
     def _neighbor_cells(cells, index: int):
+        """
+        Возвращает список соседних ячеек для заданного индекса в строке.
+
+        :param cells: Список ячеек.
+        :param index: Базовый индекс.
+        :return: Список соседних ячеек.
+        """
         start = max(0, index - 1)
         end = min(len(cells), index + 2)
         return [cells[i] for i in range(start, end) if i != index]
 
     @staticmethod
     def _clean_text(value: str) -> str:
+        """
+        Очищает текст от лишних пробельных символов.
+
+        :param value: Исходный текст.
+        :return: Очищенный текст.
+        """
         return re.sub(r"\s+", " ", value).strip()
 
     @staticmethod
     def _fact_key(label: str) -> str:
+        """
+        Определяет программный ключ факта на основе его текстового заголовка.
+
+        :param label: Заголовок факта из Confluence.
+        :return: Строковый ключ (например, "db_name") или "unknown".
+        """
         normalized = normalize_text(label)
         for key, aliases in FACT_ALIASES.items():
             if any(alias in normalized for alias in aliases):
@@ -1088,6 +1338,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _links_from_node(node) -> list[dict[str, str]]:
+        """
+        Извлекает все ссылки из HTML-узла.
+
+        :param node: Узел для поиска ссылок.
+        :return: Список словарей с заголовком и URL ссылки.
+        """
         links = []
         for link in node.find_all("a"):
             href = link.get("href")
@@ -1098,6 +1354,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _page_id_from_url(url: str) -> str | None:
+        """
+        Извлекает ID страницы Confluence из URL.
+
+        :param url: URL страницы.
+        :return: Идентификатор страницы или None.
+        """
         parsed = urlparse(url)
         query = parse_qs(parsed.query)
         page_id = query.get("pageId", [None])[0]
@@ -1111,6 +1373,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _jira_keys_from_node(node) -> list[str]:
+        """
+        Извлекает все ключи задач Jira из HTML-узла.
+
+        :param node: Узел для поиска.
+        :return: Список найденных ключей Jira.
+        """
         keys = []
         for tag in node.find_all(attrs={"data-jira-key": True}):
             if tag.get("data-jira-key"):
@@ -1126,11 +1394,23 @@ class ConfluenceParser:
 
     @staticmethod
     def _jira_key_from_node(node) -> str | None:
+        """
+        Извлекает первый встреченный ключ задачи Jira из узла.
+
+        :param node: Узел для поиска.
+        :return: Ключ Jira или None.
+        """
         keys = ConfluenceParser._jira_keys_from_node(node)
         return keys[0] if keys else None
 
     @staticmethod
     def _jira_title_from_node(node) -> str | None:
+        """
+        Извлекает заголовок задачи Jira из макроса Jira в Confluence.
+
+        :param node: Узел макроса.
+        :return: Текст заголовка или None.
+        """
         summary = node.find(class_="summary")
         if not summary:
             return None
@@ -1141,6 +1421,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _jira_status_from_node(node) -> str | None:
+        """
+        Извлекает статус задачи Jira из макроса Jira.
+
+        :param node: Узел макроса.
+        :return: Текст статуса или None.
+        """
         for tag in node.find_all(class_=lambda value: value and "aui-lozenge" in value):
             if tag.find_parent(class_=lambda value: value and "status-macro" in value):
                 continue
@@ -1151,6 +1437,12 @@ class ConfluenceParser:
 
     @staticmethod
     def _release_change_type(node) -> str | None:
+        """
+        Определяет тип изменения в релизе (новое, исправление и т.д.) на основе текста или макросов статуса.
+
+        :param node: Узел строки изменения.
+        :return: Тип изменения (в нижнем регистре) или None.
+        """
         for tag in node.find_all(class_=lambda value: value and "status-macro" in value):
             text = ConfluenceParser._clean_text(tag.get_text(" ", strip=True))
             if text:
@@ -1163,6 +1455,13 @@ class ConfluenceParser:
 
     @staticmethod
     def _release_summary(node, change_type: str | None) -> str | None:
+        """
+        Извлекает текстовое описание изменения, очищая его от типа изменения и лишних символов.
+
+        :param node: Узел строки изменения.
+        :param change_type: Ранее определенный тип изменения для удаления из текста.
+        :return: Очищенное описание изменения или None.
+        """
         text = ConfluenceParser._clean_text(node.get_text(" ", strip=True))
         if change_type:
             text = re.sub(change_type, "", text, count=1, flags=re.IGNORECASE).strip()
@@ -1170,6 +1469,13 @@ class ConfluenceParser:
         return text or None
 
     def _stakeholders_from_text(self, text: str, row) -> list[Stakeholder]:
+        """
+        Парсит информацию о стейкхолдерах из текстового блока, извлекая имена, email и ссылки на профили.
+
+        :param text: Текст для парсинга.
+        :param row: HTML-строка таблицы (для поиска ссылок).
+        :return: Список объектов Stakeholder.
+        """
         emails = EMAIL_RE.findall(text)
         names = [
             part.strip(" ,;")

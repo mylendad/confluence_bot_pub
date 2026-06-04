@@ -8,9 +8,17 @@ from services.ingestion.s2t.models import S2TAttribute, S2TParseIssue, S2TParseR
 
 
 class CsvS2TParser:
+    """Парсер S2T-файлов в формате CSV."""
     def parse(
         self, path: Path, datamart_name: str, s2t_file_date: date | None = None
     ) -> S2TParseResult:
+        """
+        Парсит CSV-файл и извлекает атрибуты S2T.
+        :param path: Путь к CSV-файлу.
+        :param datamart_name: Название витрины данных.
+        :param s2t_file_date: Дата файла (опционально).
+        :return: Объект S2TParseResult.
+        """
         df = pd.read_csv(path, dtype=str)
         helper = ExcelS2TParser()
         mapping = helper._build_column_mapping(df.columns)

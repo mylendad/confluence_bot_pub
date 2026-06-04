@@ -11,7 +11,14 @@ from shared.utils.text_utils import fuzzy_contains, normalize_text
 
 
 class IntentClassifier:
+    """
+    Классификатор намерений пользователя на основе текста вопроса.
+    """
     def classify(self, question: str) -> str:
+        """
+        Классифицирует вопрос пользователя для определения стратегии поиска ответа.
+        :param question: Текст вопроса пользователя.
+        """
         q = normalize_text(question)
 
         # "Изменения за период/даты" -> структурированная история (из БД)
@@ -85,6 +92,10 @@ class IntentClassifier:
 
 
 class RAGRetriever:
+    """
+    Основной класс для поиска информации и формирования ответов (RAG).
+    Использует метаданные из БД, векторное хранилище и LLM.
+    """
     def __init__(
         self,
         metadata_repo: MetadataRepository,
@@ -92,6 +103,13 @@ class RAGRetriever:
         history_repo: HistoryRepository,
         answer_generator: AnswerGenerator | None = None,
     ) -> None:
+        """
+        Инициализирует RAGRetriever.
+        :param metadata_repo: Репозиторий для работы с метаданными витрин и атрибутов.
+        :param vector_store: Векторное хранилище для поиска по текстам.
+        :param history_repo: Репозиторий для работы с историей изменений.
+        :param answer_generator: Генератор ответов на базе LLM.
+        """
         self.metadata_repo = metadata_repo
         self.vector_store = vector_store
         self.history_repo = history_repo
@@ -99,6 +117,10 @@ class RAGRetriever:
         self.intent_classifier = IntentClassifier()
 
     def answer(self, question: str) -> RAGAnswer:
+        """
+        Главный метод для получения ответа на вопрос.
+        :param question: Текст вопроса пользователя.
+        """
         intent = self.intent_classifier.classify(question)
         if intent == "datamart_list":
             return self._datamart_list()
@@ -125,6 +147,7 @@ class RAGRetriever:
         return self._vector_answer(question)
 
     def _owner_lookup(self, question: str) -> RAGAnswer:
+        """Поиск владельцев и ответственных за витрину."""
         attrs = self.metadata_repo.list_attributes()
         if not attrs:
             return RAGAnswer(
@@ -172,6 +195,7 @@ class RAGRetriever:
         )
 
     def _attribute_usage(self, question: str) -> RAGAnswer:
+        """Поиск витрин, в которых используется указанный атрибут."""
         token = self._extract_attribute_name(question)
         if not token:
             return RAGAnswer(answer="Не удалось определить атрибут в вопросе.", sources=[])
@@ -185,6 +209,7 @@ class RAGRetriever:
         )
 
     def _attribute_composition(self, question: str) -> RAGAnswer:
+        """Получение списка всех атрибутов витрины."""
         datamart = self._extract_datamart_name(question)
         attrs = (
             self.metadata_repo.list_attributes(datamart_name=datamart)
@@ -200,6 +225,7 @@ class RAGRetriever:
         )
 
     def _last_year_changes(self, question: str) -> RAGAnswer:
+        """Поиск изменений в атрибутах за последний год из локальной истории."""
         until = datetime.utcnow()
         since = self._changes_period_start(question, until)
         requested_datamart = self._extract_datamart_name(question)
@@ -253,6 +279,7 @@ class RAGRetriever:
         )
 
     def _datamart_list(self) -> RAGAnswer:
+        """Получение списка всех доступных витрин."""
         datamarts = self.metadata_repo.list_datamarts()
         if not datamarts:
             return RAGAnswer(
@@ -299,6 +326,7 @@ class RAGRetriever:
         )
 
     def _datamart_fact(self, question: str) -> RAGAnswer:
+        """Поиск конкретных фактов о витрине (Бизнес-заказчики, ссылки на метаданные и т.д.)."""
         fact_key = self._fact_key_from_question(question)
         datamarts = self._datamarts_from_question(question)
         
@@ -361,6 +389,7 @@ class RAGRetriever:
         )
 
     def _release_changes(self, question: str) -> RAGAnswer:
+        """Поиск изменений в релизах из документации на Confluence."""
         datamarts = self._datamarts_from_question(question)
         matching: list[tuple[dict, dict]] = []
         for datamart in datamarts:
@@ -446,6 +475,7 @@ class RAGRetriever:
         )
 
     def _attribute_logic(self, question: str) -> RAGAnswer | None:
+        """Получение логики преобразования атрибута из S2T."""
         attrs = self._attrs_from_question(question)
         if not attrs:
             return None
@@ -456,6 +486,7 @@ class RAGRetriever:
         return RAGAnswer(answer="\n".join(lines), sources=[self._source(attr) for attr in attrs])
 
     def _source_lineage(self, question: str) -> RAGAnswer | None:
+        """Получение lineage (источников) атрибута из S2T."""
         attrs = self._attrs_from_question(question)
         if not attrs:
             return None
@@ -469,6 +500,7 @@ class RAGRetriever:
         return RAGAnswer(answer="\n".join(lines), sources=[self._source(attr) for attr in attrs])
 
     def _attrs_from_question(self, question: str):
+        """Извлечение атрибутов из вопроса на основе токенов."""
         for token in reversed(question.replace("?", " ").replace('"', " ").split()):
             token = token.strip(" .,;:'`()[]{}")
             if "_" in token or token.isidentifier():
@@ -478,6 +510,7 @@ class RAGRetriever:
         return []
 
     def _vector_answer(self, question: str) -> RAGAnswer:
+        """Формирование ответа с помощью векторного поиска и LLM."""
         docs = self.vector_store.search(question, k=5)
         if not docs:
             return RAGAnswer(
@@ -496,12 +529,14 @@ class RAGRetriever:
 
     @staticmethod
     def _changes_period_start(question: str, until: datetime) -> datetime:
+        """Определение даты начала периода для поиска изменений."""
         q = normalize_text(question)
         if ("текущ" in q or "этот" in q) and "год" in q:
             return datetime(until.year, 1, 1)
         return until - timedelta(days=365)
 
     def _datamarts_from_question(self, question: str) -> list[dict]:
+        """Извлечение списка витрин, упомянутых в вопросе."""
         datamarts = self.metadata_repo.list_datamarts()
         requested_datamart = self._extract_datamart_name(question)
         if not requested_datamart:
@@ -549,6 +584,7 @@ class RAGRetriever:
 
     @staticmethod
     def _fact_key_from_question(question: str) -> str | None:
+        """Определение ключа факта (БД, стейкхолдеры и т.д.) по тексту вопроса."""
         q = normalize_text(question)
         checks = [
             (
@@ -578,6 +614,7 @@ class RAGRetriever:
 
     @staticmethod
     def _fact_matches_question(fact: dict, question: str) -> bool:
+        """Проверка соответствия факта вопросу (fuzzy match)."""
         q = normalize_text(question)
         label = normalize_text(fact.get("label") or "")
         key = fact.get("key")
@@ -610,6 +647,7 @@ class RAGRetriever:
 
     @staticmethod
     def _extract_attribute_name(question: str) -> str | None:
+        """Извлечение имени атрибута из вопроса."""
         q = question.replace("?", " ").replace("!", " ").replace('"', " ").replace("'", " ")
         tokens = q.split()
         for token in reversed(tokens):
@@ -622,6 +660,7 @@ class RAGRetriever:
         return None
 
     def _extract_datamart_name(self, question: str) -> str | None:
+        """Извлечение названия витрины из вопроса."""
         q_norm = normalize_text(question)
         datamarts = self.metadata_repo.list_datamarts()
         names = sorted(
@@ -693,6 +732,7 @@ class RAGRetriever:
 
     @staticmethod
     def _filter_attrs_by_datamart(attrs, datamart_name: str):
+        """Фильтрация атрибутов по названию витрины."""
         return [
             attr
             for attr in attrs
@@ -703,6 +743,7 @@ class RAGRetriever:
 
     @staticmethod
     def _normalize_cx(text: str) -> str:
+        """Нормализация кириллических и латинских символов 'C' и 'X'."""
         # Normalize both Cyrillic and Latin C/X to Latin C/X
         return (
             text.replace("С", "C").replace("с", "c").replace("Х", "X").replace("х", "x")
@@ -712,6 +753,7 @@ class RAGRetriever:
     def _matches_datamart(
         actual_name: str | None, requested_name: str, actual_code: str | None = None
     ) -> bool:
+        """Проверка соответствия фактического названия витрины запрошенному."""
         requested = RAGRetriever._normalize_cx(normalize_text(requested_name))
         actual = RAGRetriever._normalize_cx(normalize_text(actual_name or ""))
         code = normalize_text(actual_code or "")
@@ -719,6 +761,7 @@ class RAGRetriever:
 
     @staticmethod
     def _source(attr) -> dict:
+        """Преобразование атрибута в словарь для использования в качестве источника."""
         return {
             "datamart": attr.datamart_name,
             "owner": attr.owner,
@@ -730,4 +773,5 @@ class RAGRetriever:
 
     @staticmethod
     def _path(*parts: str | None) -> str:
+        """Сборка полного пути к полю (схема.таблица.поле)."""
         return ".".join(part for part in parts if part) or "-"

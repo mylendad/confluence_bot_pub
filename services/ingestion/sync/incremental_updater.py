@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class IncrementalUpdateItem:
+    """
+    Элемент результата инкрементального обновления для одной витрины/ресурса.
+    """
     datamart_name: str
     resource_key: str
     file_name: str | None
@@ -35,26 +38,37 @@ class IncrementalUpdateItem:
 
 @dataclass(frozen=True)
 class IncrementalUpdateResult:
+    """
+    Результат выполнения инкрементального обновления для всех витрин.
+    """
     items: list[IncrementalUpdateItem] = field(default_factory=list)
 
     @property
     def downloaded_count(self) -> int:
+        """Количество скачанных файлов."""
         return sum(1 for item in self.items if item.will_download)
 
     @property
     def parsed_count(self) -> int:
+        """Количество распарсенных S2T файлов."""
         return sum(1 for item in self.items if item.will_parse)
 
     @property
     def reindexed_count(self) -> int:
+        """Количество переиндексированных витрин."""
         return sum(1 for item in self.items if item.will_reindex)
 
     @property
     def changes_count(self) -> int:
+        """Общее количество обнаруженных изменений в атрибутах."""
         return sum(item.changes_detected for item in self.items)
 
 
 class IncrementalUpdater:
+    """
+    Оркестратор инкрементального обновления данных.
+    Координирует работу парсеров, клиентов и репозиториев для синхронизации состояния.
+    """
     def __init__(
         self,
         *,
@@ -70,6 +84,20 @@ class IncrementalUpdater:
         s2t_parser: S2TParser | None = None,
         diff_service: DiffService | None = None,
     ) -> None:
+        """
+        Инициализирует IncrementalUpdater.
+        :param metadata_sync: Сервис синхронизации метаданных.
+        :param confluence_client: Клиент Confluence.
+        :param state_repo: Репозиторий состояний S2T.
+        :param metadata_repo: Репозиторий метаданных.
+        :param history_repo: Репозиторий истории изменений.
+        :param indexer: Индексатор RAG.
+        :param data_dir: Директория для хранения данных.
+        :param hash_service: Сервис для вычисления хэшей.
+        :param comparator: Сервис сравнения состояний.
+        :param s2t_parser: Парсер S2T.
+        :param diff_service: Сервис вычисления разницы атрибутов.
+        """
         self.metadata_sync = metadata_sync
         self.confluence_client = confluence_client
         self.state_repo = state_repo
@@ -83,6 +111,11 @@ class IncrementalUpdater:
         self.diff_service = diff_service or DiffService()
 
     def run(self, dry_run: bool = False) -> IncrementalUpdateResult:
+        """
+        Запускает процесс инкрементального обновления.
+        :param dry_run: Если True, изменения не сохраняются.
+        :return: Объект IncrementalUpdateResult.
+        """
         items: list[IncrementalUpdateItem] = []
         active_names = []
         
@@ -119,6 +152,12 @@ class IncrementalUpdater:
     def _process_snapshot(
         self, snapshot: S2TMetadataSnapshot, dry_run: bool
     ) -> IncrementalUpdateItem:
+        """
+        Обрабатывает один снимок метаданных, принимая решение о необходимости обновления.
+        :param snapshot: Снимок метаданных.
+        :param dry_run: Режим пробного запуска.
+        :return: Элемент результата обновления.
+        """
         resource = snapshot.resource
         resource_key = snapshot.unique_key
         previous = self.state_repo.get(resource_key)
@@ -327,6 +366,13 @@ class IncrementalUpdater:
         )
 
     def _write_raw_file(self, datamart_name: str, file_name: str | None, content: bytes) -> Path:
+        """
+        Сохраняет бинарное содержимое файла на диск.
+        :param datamart_name: Название витрины.
+        :param file_name: Имя файла.
+        :param content: Бинарные данные.
+        :return: Путь к сохраненному файлу.
+        """
         raw_dir = self.data_dir / "raw"
         raw_dir.mkdir(parents=True, exist_ok=True)
         safe_name = self._safe_file_name(file_name or "s2t.bin")
@@ -339,5 +385,10 @@ class IncrementalUpdater:
 
     @staticmethod
     def _safe_file_name(value: str) -> str:
+        """
+        Создает безопасное имя файла, удаляя недопустимые символы.
+        :param value: Исходная строка для имени файла.
+        :return: Безопасное имя файла.
+        """
         parsed_name = Path(urlparse(value).path).name or "s2t.bin"
         return "".join(char if char.isalnum() or char in "._-" else "_" for char in parsed_name)

@@ -18,73 +18,35 @@ HTTP-клиент для Confluence REST API.
 
 Код:
 
-- `app/confluence/client.py`
-- `app/confluence/models.py`
-
-Основные API-запросы:
-
-```text
-GET /rest/api/content/{page_id}
-GET /rest/api/content/{page_id}/child/page
-GET /rest/api/content/{page_id}/child/attachment
-GET /rest/api/content/search
-```
+- `services/ingestion/confluence/client.py`
+- `services/ingestion/confluence/models.py`
 
 ### Confluence Parser
 
 Модуль поиска витрин и выбора актуального S2T.
 
-Назначение:
-
-- ищет страницы витрин по `DATAMART_PAGE_PATTERN`;
-- извлекает stakeholders из тела страницы;
-- находит S2T-кандидаты во вложениях, ссылках, таблицах и дочерних страницах;
-- выбирает актуальный S2T по дате, маркеру `новый/latest`, версии и времени обновления;
-- обогащает HTML/storage-кандидаты metadata из Confluence API.
-
 Код:
 
-- `app/confluence/parser.py`
-
-Важное разделение ответственности:
-
-- Confluence API является источником истины для технических metadata файла;
-- HTML/storage body используется только для семантики страницы: где лежит S2T, какая строка
-  таблицы считается актуальной, кто указан как stakeholder.
+- `services/ingestion/confluence/parser.py`
 
 ### Metadata Sync
 
 Подсистема сборки стабильного metadata snapshot.
 
-Назначение:
-
-- вызывает `ConfluenceParser`;
-- получает выбранный S2T для каждой витрины;
-- формирует JSON metadata snapshot;
-- считает стабильный `metadata_hash`.
-
 Код:
 
-- `app/sync/metadata_sync_service.py`
-- `app/sync/hash_service.py`
+- `services/ingestion/sync/metadata_sync_service.py`
+- `services/ingestion/sync/hash_service.py`
 
 ### Incremental Updater
 
 Подсистема metadata-first обновления локальной базы и RAG.
 
-Назначение:
-
-- сравнивает новый metadata snapshot с `s2t_state`;
-- скачивает S2T только при изменении metadata;
-- считает `sha256(content)`;
-- парсит S2T только при изменении содержимого;
-- обновляет `attributes`, `documents`, vector store и `change_log` только для затронутой витрины.
-
 Код:
 
-- `app/sync/incremental_updater.py`
-- `app/sync/state_comparator.py`
-- `app/storage/s2t_state_repository.py`
+- `services/ingestion/sync/incremental_updater.py`
+- `services/ingestion/sync/state_comparator.py`
+- `shared/storage/s2t_state_repository.py`
 
 ## Workflow
 
@@ -93,7 +55,7 @@ GET /rest/api/content/search
 Перед ответами пользователя или по расписанию запускается обновление локального индекса:
 
 ```bash
-.venv/bin/python -m app.cli update-rag
+python cli.py update-rag
 ```
 
 Проверка состояния:
@@ -270,13 +232,13 @@ Bot Service:
 Проверка поиска Confluence без обновления локального состояния:
 
 ```bash
-.venv/bin/python -m app.cli parse-confluence --dry-run
+python cli.py parse-confluence --dry-run
 ```
 
 Проверка инкрементального плана:
 
 ```bash
-.venv/bin/python -m app.cli update-rag --dry-run
+python cli.py update-rag --dry-run
 ```
 
 Dry-run показывает:
@@ -297,10 +259,10 @@ Dry-run показывает:
 | Витрины не находятся                          | Неверный space/root/pattern.                                                                                                             | Проверить `CONFLUENCE_SPACE_KEY`, `CONFLUENCE_ROOT_PAGE_ID`, `DATAMART_PAGE_PATTERN`.                                                     |
 | S2T не находится                                     | Файл не похож на S2T или лежит вне ожидаемой страницы.                                                  | Проверить `S2T_SECTION_PATTERNS`, наличие `.xlsx/.xls/.csv`, дочерние S2T-страницы.                                  |
 | Выбрана старая S2T                                 | На странице нет даты/маркера актуальности или таблица оформлена нестандартно. | Проверить таблицу S2T в Confluence, маркеры `новый/latest/актуальный`, дату в названии файла. |
-| Metadata изменилась, но RAG не обновился | Содержимое файла не изменилось, совпал `content_hash`.                                                        | Проверить отчет `.venv/bin/python -m app.cli update-rag --dry-run` и состояние `s2t_state`.                                                              |
+| Metadata изменилась, но RAG не обновился | Содержимое файла не изменилось, совпал `content_hash`.                                                        | Проверить отчет `python cli.py update-rag --dry-run` и состояние `s2t_state`.                                                              |
 | Файл найден, но не скачивается         | У ресурса нет `download_url` или ссылка не является вложением.                                          | Лучше прикрепить S2T как вложение Confluence, а не внешнюю ссылку.                                                    |
 | Парсинг S2T падает                                 | Неожиданный формат Excel/CSV или отсутствуют нужные колонки.                                         | Проверить листы `Target columns`, `Source columns`, `Datamart info`, `S2T`.                                                        |
-| Ответ говорит "данных нет"                 | Локальная база не обновлена или витрина не прошла фильтр.                                        | Запустить `.venv/bin/python -m app.cli update-rag --dry-run`, затем `.venv/bin/python -m app.cli update-rag`.                                                                                  |
+| Ответ говорит "данных нет"                 | Локальная база не обновлена или витрина не прошла фильтр.                                        | Запустить `python cli.py update-rag --dry-run`, затем `python cli.py update-rag`.                                                                                  |
 | Изменения за год пустые                     | Была только baseline-загрузка или нет записей в `change_log`.                                                  | Проверить дату первой синхронизации и историю `change_log`.                                                    |
 | GigaChat error                                                  | Неверные credentials/scope или недоступен LLM.                                                                              | Проверить `LLM_PROVIDER`, `GIGACHAT_CREDENTIALS`, `GIGACHAT_SCOPE`.                                                                       |
 
@@ -309,19 +271,19 @@ Dry-run показывает:
 Перед регулярным запуском:
 
 1. Заполнить `.env`.
-2. Проверить доступ к Confluence через `.venv/bin/python -m app.cli parse-confluence --dry-run`.
-3. Проверить план обновления через `.venv/bin/python -m app.cli update-rag --dry-run`.
-4. Выполнить `.venv/bin/python -m app.cli update-rag`.
+2. Проверить доступ к Confluence через `python cli.py parse-confluence --dry-run`.
+3. Проверить план обновления через `python cli.py update-rag --dry-run`.
+4. Выполнить `python cli.py update-rag`.
 5. Задать smoke-вопрос через CLI или HTTP.
 
 Для планировщика использовать:
 
 ```bash
-.venv/bin/python -m app.cli update-rag
+python cli.py update-rag
 ```
 
 Не использовать для регулярного refresh:
 
 ```bash
-.venv/bin/python -m app.cli build-rag --full
+python cli.py build-rag --full
 ```

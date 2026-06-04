@@ -10,7 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 class JiraClient:
+    """
+    Клиент для взаимодействия с API Jira.
+    Позволяет получать информацию о задачах и метаданные полей.
+    """
     def __init__(self, settings: Settings) -> None:
+        """
+        Инициализирует JiraClient.
+        :param settings: Объект настроек приложения.
+        """
         self.settings = settings
         self.base_url = settings.jira_base_url.rstrip("/")
         self.client = httpx.Client(
@@ -20,6 +28,7 @@ class JiraClient:
         self._setup_auth()
 
     def _setup_auth(self) -> None:
+        """Настраивает заголовки аутентификации на основе предоставленных настроек."""
         token = self.settings.jira_auth_token
         if token:
             self.client.headers["Authorization"] = f"Bearer {token}"
@@ -27,6 +36,13 @@ class JiraClient:
             self.client.auth = (self.settings.jira_username, self.settings.jira_token)
 
     def _request(self, method: str, path: str, **kwargs) -> httpx.Response:
+        """
+        Выполняет HTTP-запрос к API Jira с поддержкой повторных попыток.
+        :param method: Метод HTTP (GET, POST и т.д.).
+        :param path: Путь запроса.
+        :param kwargs: Дополнительные аргументы запроса.
+        :return: Ответ httpx.Response.
+        """
         # Re-use the confluence request delay setting for Jira to prevent 429s
         if getattr(self.settings, "confluence_request_delay", 0) > 0:
             time.sleep(self.settings.confluence_request_delay)
@@ -58,6 +74,11 @@ class JiraClient:
 
     @lru_cache(maxsize=1024)
     def get_issue(self, issue_key: str) -> dict | None:
+        """
+        Получает информацию о конкретной задаче Jira по её ключу.
+        :param issue_key: Ключ задачи Jira (например, 'PROJ-123').
+        :return: Словарь с данными задачи или None в случае ошибки.
+        """
         url = f"{self.base_url}/rest/api/2/issue/{issue_key}"
         params = {"expand": "changelog"}
         try:
@@ -80,6 +101,10 @@ class JiraClient:
 
     @lru_cache(maxsize=1)
     def get_field_mapping(self) -> dict[str, str]:
+        """
+        Получает карту соответствия имен полей и их идентификаторов в Jira.
+        :return: Словарь, где ключи - названия полей в верхнем регистре, а значения - их ID.
+        """
         url = f"{self.base_url}/rest/api/2/field"
         try:
             response = self._request("GET", url)
@@ -90,6 +115,10 @@ class JiraClient:
             return {}
 
     def check_health(self) -> dict:
+        """
+        Проверяет работоспособность и задержку соединения с Jira.
+        :return: Словарь с состоянием здоровья ("ok" или "error") и задержкой в мс.
+        """
         import time
         start_time = time.time()
         try:
@@ -102,4 +131,5 @@ class JiraClient:
             return {"status": "error", "message": str(exc)}
 
     def close(self) -> None:
+        """Закрывает HTTP-клиент Jira."""
         self.client.close()

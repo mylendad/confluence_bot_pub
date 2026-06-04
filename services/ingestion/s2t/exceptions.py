@@ -1,2 +1,4 @@
 class S2TParseError(RuntimeError):
-    """Raised when an S2T document cannot be parsed."""
+    """
+    Исключение, возникающее при невозможности распарсить S2T-документ.
+    """

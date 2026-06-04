@@ -11,6 +11,11 @@ DATE_PATTERNS = [
 
 
 def parse_date_from_text(text: str) -> date | None:
+    """
+    Пытается извлечь дату из текста, используя предопределенные шаблоны.
+    :param text: Текст, содержащий дату.
+    :return: Объект date или None, если дата не найдена.
+    """
     for pattern, fmt in DATE_PATTERNS:
         match = pattern.search(text)
         if match:
@@ -22,4 +27,8 @@ def parse_date_from_text(text: str) -> date | None:
 
 
 def utc_now() -> datetime:
+    """
+    Возвращает текущую дату и время в формате UTC.
+    :return: Текущий объект datetime в UTC.
+    """
     return datetime.utcnow()

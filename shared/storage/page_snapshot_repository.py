@@ -9,10 +9,22 @@ logger = logging.getLogger(__name__)
 
 
 class PageSnapshotRepository:
+    """
+    Репозиторий для хранения снимков (снапшотов) страниц Confluence.
+    """
     def __init__(self, db: SQLite) -> None:
+        """
+        Инициализирует PageSnapshotRepository.
+        :param db: Объект SQLite для взаимодействия с базой данных.
+        """
         self.db = db
 
     def get(self, datamart_page_id: str) -> tuple[dict[str, int], Datamart] | None:
+        """
+        Извлекает сохраненный снимок страницы по её ID.
+        :param datamart_page_id: Идентификатор страницы витрины в Confluence.
+        :return: Кортеж (карта версий, объект Datamart) или None, если снимок не найден.
+        """
         with self.db.connect() as conn:
             row = conn.execute(
                 "select version_map_json, extracted_data_json from page_snapshots where datamart_page_id = ?",
@@ -29,6 +41,12 @@ class PageSnapshotRepository:
                 return None
 
     def upsert(self, datamart_page_id: str, version_map: dict[str, int], datamart: Datamart) -> None:
+        """
+        Сохраняет или обновляет снимок страницы.
+        :param datamart_page_id: Идентификатор страницы витрины в Confluence.
+        :param version_map: Словарь соответствия путей к файлам и их версий.
+        :param datamart: Извлеченный объект Datamart.
+        """
         with self.db.connect() as conn:
             conn.execute(
                 """
@@ -48,5 +66,9 @@ class PageSnapshotRepository:
             )
 
     def delete(self, datamart_page_id: str) -> None:
+        """
+        Удаляет снимок страницы из базы данных.
+        :param datamart_page_id: Идентификатор страницы для удаления.
+        """
         with self.db.connect() as conn:
             conn.execute("delete from page_snapshots where datamart_page_id = ?", (datamart_page_id,))

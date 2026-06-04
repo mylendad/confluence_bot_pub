@@ -2,6 +2,13 @@ from urllib.parse import urljoin, urlparse
 
 
 def confluence_urljoin(base_url: str, link: str | None) -> str:
+    """
+    Безопасно объединяет базовый URL Confluence с относительной или абсолютной ссылкой.
+    Корректно обрабатывает пути контекста Confluence.
+    :param base_url: Базовый URL Confluence.
+    :param link: Ссылка для объединения.
+    :return: Полный URL.
+    """
     if not link:
         return base_url
     if urlparse(link).scheme:
@@ -15,6 +22,11 @@ def confluence_urljoin(base_url: str, link: str | None) -> str:
 
 
 def _context_path(path: str) -> str:
+    """
+    Извлекает путь контекста из URL Confluence (например, '/confluence').
+    :param path: Путь из URL.
+    :return: Путь контекста или пустая строка.
+    """
     parts = [part for part in path.split("/") if part]
     if not parts:
         return ""

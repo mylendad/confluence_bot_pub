@@ -1,8 +1,10 @@
 # Documentation
 
-- [Architecture](architecture.md) — архитектура, модули, хранилища и потоки данных.
-- [Confluence Integration](confluence-workflow.md) — Confluence API, выбор S2T, metadata-first workflow и troubleshooting.
-- [Incremental S2T Sync](incremental-sync.md) — инкрементальное обновление S2T/RAG.
-- [RAG And Bot Logic](rag-and-bot.md) — structured retriever, RAG и логика ответов.
-- [Operations](operations.md) — команды запуска, dry-run, тестирование и troubleshooting.
+Этот раздел содержит подробную техническую документацию по проекту.
 
+- [Карта проекта](project_map.md) — обзор структуры директорий и назначения модулей.
+- [Архитектура](architecture.md) — описание логики работы, потоков данных и микросервисного подхода.
+- [Операции](operations.md) — руководство по запуску, тестированию и обслуживанию.
+- [Интеграция с Confluence](confluence-workflow.md) — работа с API, выбор S2T и metadata-first подход.
+- [Инкрементальная синхронизация](incremental-sync.md) — детальное описание алгоритма обновления данных.
+- [Логика RAG и бота](rag-and-bot.md) — описание работы поискового ретривера и генерации ответов.

@@ -5,10 +5,21 @@ from shared.storage.sqlite import SQLite
 
 
 class HistoryRepository:
+    """
+    Репозиторий для хранения и получения истории изменений (change_log) в SQLite.
+    """
     def __init__(self, db: SQLite) -> None:
+        """
+        Инициализирует репозиторий истории.
+        :param db: Экземпляр SQLite для доступа к базе данных.
+        """
         self.db = db
 
     def add_many(self, entries: list[ChangeLogEntry]) -> None:
+        """
+        Сохраняет список записей об изменениях в базу данных.
+        :param entries: Список объектов ChangeLogEntry.
+        """
         with self.db.connect() as conn:
             for entry in entries:
                 conn.execute(
@@ -37,6 +48,12 @@ class HistoryRepository:
     def list_changes(
         self, since: datetime | None = None, datamart_name: str | None = None
     ) -> list[ChangeLogEntry]:
+        """
+        Возвращает список изменений с возможностью фильтрации.
+        :param since: Начиная с какой даты искать изменения.
+        :param datamart_name: Фильтр по названию витрины данных.
+        :return: Список объектов ChangeLogEntry.
+        """
         sql = "select * from change_log where 1=1"
         params: list[str] = []
         if since:

@@ -72,13 +72,13 @@ Where: ...
 Для полной пересборки используется:
 
 ```bash
-.venv/bin/python -m app.cli build-rag --full
+python cli.py build-rag --full
 ```
 
 Для регулярного обновления Confluence используется:
 
 ```bash
-.venv/bin/python -m app.cli update-rag
+python cli.py update-rag
 ```
 
 ## Structured retriever

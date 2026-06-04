@@ -3,6 +3,11 @@ from difflib import SequenceMatcher
 
 
 def normalize_text(value: str | None) -> str:
+    """
+    Нормализует текст: удаляет пунктуацию, спецсимволы, лишние пробелы и приводит к нижнему регистру.
+    :param value: Входная строка для нормализации.
+    :return: Нормализованная строка.
+    """
     if not value:
         return ""
     # Remove punctuation and special characters, collapse spaces, lowercase
@@ -11,6 +16,13 @@ def normalize_text(value: str | None) -> str:
 
 
 def fuzzy_contains(text: str, candidates: list[str], threshold: float = 0.78) -> bool:
+    """
+    Проверяет, содержит ли текст хотя бы одного из кандидатов с использованием нечеткого поиска.
+    :param text: Текст для поиска.
+    :param candidates: Список строк-кандидатов.
+    :param threshold: Порог схожести для SequenceMatcher (по умолчанию 0.78).
+    :return: True, если найдено совпадение, иначе False.
+    """
     normalized = normalize_text(text)
     if any(normalize_text(candidate) in normalized for candidate in candidates):
         return True

@@ -7,6 +7,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """
+    Класс для управления настройками приложения, использующий pydantic-settings.
+    Загружает конфигурацию из переменных окружения и .env файла.
+    """
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     confluence_base_url: str = "https://confluence.example.ru"
@@ -55,18 +59,34 @@ class Settings(BaseSettings):
 
     @property
     def s2t_patterns(self) -> list[str]:
+        """
+        Возвращает список паттернов для поиска секций S2T.
+        :return: Список строк паттернов.
+        """
         return [item.strip() for item in self.s2t_section_patterns.split(",") if item.strip()]
 
     @property
     def confluence_auth_token(self) -> str | None:
+        """
+        Возвращает доступный токен авторизации Confluence.
+        :return: Токен или None.
+        """
         return self.confluence_token or self.confluence_api_token
 
     @property
     def jira_auth_token(self) -> str | None:
+        """
+        Возвращает доступный токен авторизации Jira.
+        :return: Токен или None.
+        """
         return self.jira_token or self.jira_api_token
 
     @model_validator(mode="after")
     def populate_confluence_from_page_url(self) -> "Settings":
+        """
+        Валидатор для автоматического заполнения базового URL и ID корневой страницы из полного URL.
+        :return: Обновленный объект настроек.
+        """
         if not self.confluence_page_url:
             return self
 
@@ -81,9 +101,17 @@ class Settings(BaseSettings):
 
     @property
     def gigachat_auth_key(self) -> str | None:
+        """
+        Возвращает доступный ключ авторизации GigaChat.
+        :return: Ключ или None.
+        """
         return self.gigachat_credentials or self.gigachat_api_key or self.gigachat_api_pers
 
 
 @lru_cache
 def get_settings() -> Settings:
+    """
+    Возвращает закешированный экземпляр настроек.
+    :return: Объект Settings.
+    """
     return Settings()

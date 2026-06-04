@@ -93,12 +93,23 @@ TEMPLATE_SHEETS = {"Target columns", "Source columns", "Datamart info", "S2T"}
 
 
 class ExcelS2TParser:
+    """
+    Парсер S2T-файлов в формате Excel (.xlsx, .xls).
+    Поддерживает стандартные шаблоны и произвольные таблицы с маппингом колонок.
+    """
     def parse(
         self,
         path: Path,
         datamart_name: str,
         s2t_file_date: date | None = None,
     ) -> S2TParseResult:
+        """
+        Парсит Excel-файл и извлекает атрибуты S2T.
+        :param path: Путь к файлу.
+        :param datamart_name: Название витрины данных.
+        :param s2t_file_date: Дата файла (опционально).
+        :return: Объект S2TParseResult.
+        """
         result = S2TParseResult()
         workbook = pd.ExcelFile(path)
         sheet_names = set(workbook.sheet_names)
@@ -163,6 +174,15 @@ class ExcelS2TParser:
         s2t_file_date: date | None,
         s2t_sheet_name: str = "S2T",
     ) -> S2TParseResult:
+        """
+        Парсит файл, соответствующий стандартному шаблону S2T.
+        :param workbook: Загруженная книга Excel.
+        :param path: Путь к файлу.
+        :param datamart_name: Название витрины данных.
+        :param s2t_file_date: Дата файла (опционально).
+        :param s2t_sheet_name: Название листа с данными S2T.
+        :return: Объект S2TParseResult.
+        """
         result = S2TParseResult()
         target_notes = self._read_target_notes(workbook)
         datamart_info = self._read_datamart_info(workbook)
@@ -208,6 +228,11 @@ class ExcelS2TParser:
     def _read_target_notes(
         self, workbook: pd.ExcelFile
     ) -> dict[tuple[str, str, str], dict[str, str | None]]:
+        """
+        Читает описания целевых полей из листа 'Target columns'.
+        :param workbook: Загруженная книга Excel.
+        :return: Словарь описаний, где ключ - (schema, table, field).
+        """
         df = pd.read_excel(workbook, sheet_name="Target columns", header=0, dtype=str)
         mapping = self._build_column_mapping(df.columns)
         notes: dict[tuple[str, str, str], dict[str, str | None]] = {}
@@ -225,6 +250,11 @@ class ExcelS2TParser:
         return notes
 
     def _read_datamart_info(self, workbook: pd.ExcelFile) -> dict[str, str | None]:
+        """
+        Читает общую информацию о витрине из листа 'Datamart info'.
+        :param workbook: Загруженная книга Excel.
+        :return: Словарь с общей информацией о витрине.
+        """
         df = pd.read_excel(workbook, sheet_name="Datamart info", header=0, dtype=str)
         mapping = self._build_column_mapping(df.columns)
         for _, row in df.iloc[1:].iterrows():
@@ -239,6 +269,11 @@ class ExcelS2TParser:
 
     @staticmethod
     def _target_key(payload: dict[str, str | None]) -> tuple[str, str, str]:
+        """
+        Генерирует составной ключ для целевого поля.
+        :param payload: Словарь с данными строки S2T.
+        :return: Кортеж (schema, table, field).
+        """
         return (
             (payload.get("target_schema") or "").strip().lower(),
             (payload.get("target_table") or "").strip().lower(),
@@ -246,6 +281,11 @@ class ExcelS2TParser:
         )
 
     def _find_header_row(self, df: pd.DataFrame) -> int | None:
+        """
+        Ищет строку заголовка в таблице по совпадению названий колонок с алиасами.
+        :param df: DataFrame для поиска заголовка.
+        :return: Индекс строки заголовка или None.
+        """
         aliases = {normalize_text(alias) for values in COLUMN_ALIASES.values() for alias in values}
         best_row: int | None = None
         best_score = 0
@@ -258,6 +298,11 @@ class ExcelS2TParser:
         return best_row if best_score >= 2 else None
 
     def _build_column_mapping(self, columns: Any) -> dict[str, str]:
+        """
+        Строит карту соответствия названий колонок в файле внутренним полям модели.
+        :param columns: Список названий колонок из файла.
+        :return: Словарь маппинга {название_в_файле: внутреннее_название}.
+        """
         mapping: dict[str, str] = {}
         alias_lookup = {
             normalize_text(alias): field
@@ -272,6 +317,12 @@ class ExcelS2TParser:
 
     @staticmethod
     def _row_payload(row: pd.Series, mapping: dict[str, str]) -> dict[str, str | None]:
+        """
+        Извлекает данные строки в виде словаря на основе маппинга колонок.
+        :param row: Строка данных из pandas.
+        :param mapping: Словарь маппинга колонок.
+        :return: Словарь с данными строки.
+        """
         payload: dict[str, str | None] = {}
         for column, field in mapping.items():
             value = row.get(column)

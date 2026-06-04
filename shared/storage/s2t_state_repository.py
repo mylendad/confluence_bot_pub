@@ -7,6 +7,9 @@ from shared.storage.sqlite import SQLite
 
 @dataclass(frozen=True)
 class S2TState:
+    """
+    Представляет состояние ресурса S2T (файла или страницы) для инкрементальной синхронизации.
+    """
     resource_key: str
     datamart_name: str
     page_id: str | None
@@ -23,10 +26,22 @@ class S2TState:
 
 
 class S2TStateRepository:
+    """
+    Репозиторий для управления состоянием ресурсов S2T в SQLite.
+    """
     def __init__(self, db: SQLite) -> None:
+        """
+        Инициализирует S2TStateRepository.
+        :param db: Объект SQLite для взаимодействия с базой данных.
+        """
         self.db = db
 
     def get(self, resource_key: str) -> S2TState | None:
+        """
+        Извлекает состояние ресурса по его ключу.
+        :param resource_key: Уникальный ключ ресурса.
+        :return: Объект S2TState или None, если ресурс не найден.
+        """
         with self.db.connect() as conn:
             row = conn.execute(
                 "select * from s2t_state where resource_key = ?", (resource_key,)
@@ -49,6 +64,21 @@ class S2TStateRepository:
         synced: bool,
         updated_at: datetime | None,
     ) -> None:
+        """
+        Обновляет или добавляет состояние ресурса.
+        :param resource_key: Уникальный ключ ресурса.
+        :param datamart_name: Название витрины данных.
+        :param page_id: ID страницы в Confluence.
+        :param resource_type: Тип ресурса (например, attachment).
+        :param title: Заголовок.
+        :param file_name: Имя файла.
+        :param url: URL ресурса.
+        :param metadata: Метаданные в виде словаря.
+        :param metadata_hash: Хеш метаданных.
+        :param content_hash: Хеш содержимого.
+        :param synced: Флаг, указывающий на успешную синхронизацию.
+        :param updated_at: Дата последнего обновления.
+        """
         now = datetime.utcnow()
         synced_at = now if synced else None
         with self.db.connect() as conn:
@@ -99,12 +129,21 @@ class S2TStateRepository:
             )
 
     def list_all(self) -> list[S2TState]:
+        """
+        Возвращает список всех состояний ресурсов.
+        :return: Список объектов S2TState.
+        """
         with self.db.connect() as conn:
             rows = conn.execute("select * from s2t_state").fetchall()
         return [self._row_to_state(row) for row in rows]
 
     @staticmethod
     def _row_to_state(row) -> S2TState:
+        """
+        Преобразует строку базы данных в объект S2TState.
+        :param row: Строка результата запроса.
+        :return: Объект S2TState.
+        """
         return S2TState(
             resource_key=row["resource_key"],
             datamart_name=row["datamart_name"],

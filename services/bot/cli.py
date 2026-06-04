@@ -32,6 +32,10 @@ app = typer.Typer(no_args_is_help=True)
 
 
 def _repos():
+    """
+    Инициализирует и возвращает основные репозитории и настройки.
+    :return: Кортеж (settings, metadata_repo, history_repo, indexer).
+    """
     settings = get_settings()
     configure_logging(settings.log_level)
     db = SQLite(settings.sqlite_db_path)
@@ -45,6 +49,10 @@ def _repos():
 
 @app.command("parse-confluence")
 def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
+    """
+    Парсит страницы Confluence для поиска витрин данных и вложений S2T.
+    :param dry_run: Если True, изменения не будут сохранены в базу данных.
+    """
     settings = get_settings()
     configure_logging(settings.log_level)
     jira_client = None
@@ -80,6 +88,11 @@ def parse_s2t(
     path: Path,
     datamart: str = typer.Option(..., "--datamart"),
 ) -> None:
+    """
+    Парсит локальный файл S2T (Excel или CSV) и сохраняет атрибуты в БД.
+    :param path: Путь к файлу S2T.
+    :param datamart: Название витрины данных.
+    """
     if not path.exists():
         raise typer.BadParameter(f"S2T file not found: {path}", param_hint="path")
     if not path.is_file():
@@ -110,6 +123,10 @@ def parse_s2t(
 
 @app.command("build-rag")
 def build_rag(full: bool = typer.Option(False, "--full")) -> None:
+    """
+    Перестраивает RAG-индекс на основе данных, уже находящихся в SQLite.
+    :param full: Флаг полной пересборки.
+    """
     _, _, _, indexer = _repos()
     docs = indexer.rebuild_from_storage()
     typer.echo(f"Indexed documents: {len(docs)}")
@@ -122,6 +139,11 @@ def update_rag(
     since: str | None = typer.Option(None, "--since"),
     dry_run: bool = typer.Option(False, "--dry-run"),
 ) -> None:
+    """
+    Выполняет инкрементальное обновление: парсинг Confluence -> скачивание S2T -> diff -> реиндексация RAG.
+    :param since: Опциональный фильтр даты.
+    :param dry_run: Если True, скачивание и обновление не будут выполнены физически.
+    """
     settings = get_settings()
     configure_logging(settings.log_level)
     db = SQLite(settings.sqlite_db_path)
@@ -166,6 +188,11 @@ def update_rag(
 def _print_incremental_update_result(
     result: IncrementalUpdateResult, dry_run: bool = False
 ) -> None:
+    """
+    Выводит результаты инкрементального обновления в консоль.
+    :param result: Объект с результатами IncrementalUpdateResult.
+    :param dry_run: Был ли это тестовый запуск.
+    """
     prefix = "Dry run" if dry_run else "Incremental update"
     typer.echo(f"{prefix} S2T resources: {len(result.items)}")
     for item in result.items:
@@ -191,6 +218,11 @@ def _print_incremental_update_result(
 
 
 def _raise_confluence_cli_error(base_url: str, exc: Exception) -> None:
+    """
+    Преобразует ошибки Confluence в понятные сообщения для CLI.
+    :param base_url: Базовый URL Confluence.
+    :param exc: Исключение.
+    """
     if isinstance(exc, ConfluenceAuthError):
         message = (
             f"Confluence authentication failed for {base_url}. Проверьте "
@@ -216,12 +248,19 @@ def _raise_confluence_cli_error(base_url: str, exc: Exception) -> None:
 
 @app.command("ask")
 def ask(question: str) -> None:
+    """
+    Задает разовый вопрос RAG-боту.
+    :param question: Текст вопроса.
+    """
     service = BotService(build_retriever())
     typer.echo(service.format_answer(service.ask(question)))
 
 
 @app.command("chat")
 def chat() -> None:
+    """
+    Запускает интерактивный чат с ботом в консоли.
+    """
     service = BotService(build_retriever())
     adapter = CLIAdapter()
     adapter.send_message("Введите вопрос. Для выхода: exit")
@@ -239,6 +278,11 @@ def changes(
     datamart: str | None = typer.Option(None, "--datamart"),
     last_year: bool = typer.Option(False, "--last-year"),
 ) -> None:
+    """
+    Выводит историю изменений из локальной базы данных.
+    :param datamart: Фильтр по названию витрины.
+    :param last_year: Если True, показывать изменения только за последний год.
+    """
     _, _, history_repo, _ = _repos()
     since = datetime.utcnow() - timedelta(days=365) if last_year else None
     entries = history_repo.list_changes(since=since, datamart_name=datamart)
@@ -249,6 +293,10 @@ def changes(
 
 @app.command("find-attribute")
 def find_attribute(attribute: str) -> None:
+    """
+    Ищет использование атрибута во всех известных витринах данных.
+    :param attribute: Имя атрибута (целевое или исходное).
+    """
     _, metadata_repo, _, _ = _repos()
     attrs = metadata_repo.find_attribute_usage(attribute)
     for attr in attrs:

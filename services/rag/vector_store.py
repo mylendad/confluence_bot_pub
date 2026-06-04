@@ -6,18 +6,36 @@ from services.rag.models import RAGDocument, RetrievedDocument
 
 
 class JsonVectorStore:
+    """
+    Локальное векторное хранилище на базе JSONL-файла.
+    Обеспечивает сохранение документов и поиск по сходству через эмбеддинги.
+    """
     def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:
+        """
+        Инициализирует JsonVectorStore.
+        :param directory: Директория для хранения файла индекса.
+        :param embedder: Объект для вычисления эмбеддингов текстов.
+        """
         self.directory = directory
         self.directory.mkdir(parents=True, exist_ok=True)
         self.path = self.directory / "documents.jsonl"
         self.embedder = embedder or LocalTextEmbedder()
 
     def replace_all(self, documents: list[RAGDocument]) -> None:
+        """
+        Полностью заменяет все документы в хранилище.
+        :param documents: Список новых документов для сохранения.
+        """
         with self.path.open("w", encoding="utf-8") as file:
             for document in documents:
                 file.write(document.model_dump_json() + "\n")
 
     def replace_for_datamart(self, datamart_name: str, documents: list[RAGDocument]) -> None:
+        """
+        Заменяет документы только для указанной витрины.
+        :param datamart_name: Название витрины.
+        :param documents: Новые документы для данной витрины.
+        """
         existing = self._read_documents()
         unchanged = [
             doc for doc in existing if doc.metadata.get("datamart_name") != datamart_name
@@ -25,6 +43,11 @@ class JsonVectorStore:
         self.replace_all([*unchanged, *documents])
 
     def search(self, query: str, k: int = 5) -> list[RetrievedDocument]:
+        """
+        Выполняет поиск наиболее похожих документов по запросу.
+        :param query: Текст запроса.
+        :param k: Количество возвращаемых результатов.
+        """
         results: list[RetrievedDocument] = []
         for doc in self._read_documents():
             score = self.embedder.similarity(query, doc.text)
@@ -33,6 +56,7 @@ class JsonVectorStore:
         return sorted(results, key=lambda item: item.score, reverse=True)[:k]
 
     def _read_documents(self) -> list[RAGDocument]:
+        """Читает все документы из JSONL-файла."""
         if not self.path.exists():
             return []
         documents: list[RAGDocument] = []

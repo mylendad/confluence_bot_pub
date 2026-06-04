@@ -6,13 +6,24 @@ import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Annotated, Any, Optional
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, status, Body, Path as FastPath
 from fastapi.responses import RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
 
-from services.bot.http_adapter import AskRequest, AskResponse
+from services.bot.http_adapter import (
+    AskRequest,
+    AskResponse,
+    TokensSaveRequest,
+    TokensStatusResponse,
+    MessageResponse,
+    ExternalHealthResponse,
+    QuestionTemplate,
+    SyncLastEventsResponse,
+    SyncStatusResponse,
+    ChatHistoryMessage,
+)
 from services.bot.service import BotService
 from shared.config.config import get_settings
 from shared.factory import (
@@ -32,30 +43,18 @@ from shared.storage.sqlite import SQLite
 BASE_DIR = Path(__file__).parent.parent.parent
 ENV_PATH = BASE_DIR / ".env"
 
-# Базовые константы, которые всегда должны быть в .env
-DEFAULT_ENV_VARS = {
-    "DATAMART_PAGE_PATTERN": "Витрина",
-    "CONFLUENCE_BASE_URL": "https://confluence.delta.sbrf.ru",
-    "CONFLUENCE_SPACE_KEY": "TEAM",
-    "CONFLUENCE_AUTH_TYPE": "bearer",
-    "CONFLUENCE_VERIFY_SSL": "false",
-    "DATA_DIR": "./data",
-    "CONFLUENCE_ROOT_PAGE_ID": "14561190342",
-    "SQLITE_DB_PATH": "./data/app.db",
-    "VECTOR_STORE_DIR": "./data/vector_store",
-    "RAG_UPDATE_CRON": "0 2 * * *",
-    "CHANGE_HISTORY_DAYS": "365",
-    "EMBEDDING_PROVIDER": "local",
-    "EMBEDDING_MODEL": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "LLM_PROVIDER": "gigachat",
-    "GIGACHAT_SCOPE": "GIGACHAT_API_PERS",
-    "GIGACHAT_MODEL": "GigaChat",
-    "JIRA_BASE_URL": "https://jira.delta.sbrf.ru",
-    "JIRA_VERIFY_SSL": "false",
-}
+app = FastAPI(
+    title="Confluence S2T RAG Bot",
+    description="API для работы с RAG-ботом по документации витрин данных",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+configure_logging()
+logger = logging.getLogger(__name__)
 
 
-def _update_env_file(updates: dict):
+def _update_env_file(updates: dict[str, str]):
     """Обновляет или добавляет переменные в .env, сохраняя остальные."""
     lines = []
     if ENV_PATH.exists():
@@ -87,28 +86,16 @@ def _update_env_file(updates: dict):
     get_settings.cache_clear()
 
 
-class TokensSaveRequest(BaseModel):
-    confluence_token: str | None = None
-    jira_token: str | None = None
-    gigachat_token: str | None = None
-
-
-class TokensStatusResponse(BaseModel):
-    configured: bool
-    confluence: bool
-    jira: bool
-    gigachat: bool
-
-
-app = FastAPI(title="Confluence S2T RAG Bot")
-configure_logging()
-logger = logging.getLogger(__name__)
-
-
 # --- Эндпоинты для управления токенами ---
-@app.post("/api/save-tokens")
-async def save_tokens(request: TokensSaveRequest):
-    """Сохраняет переданные токены в .env."""
+@app.post(
+    "/api/save-tokens",
+    response_model=MessageResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Сохранить токены",
+    tags=["Settings"],
+    description="Сохраняет переданные токены (Confluence, Jira, GigaChat) в локальный файл .env."
+)
+async def save_tokens(request: Annotated[TokensSaveRequest, Body(description="Набор токенов для сохранения")]):
     updates = {}
     if request.confluence_token is not None:
         updates["CONFLUENCE_TOKEN"] = request.confluence_token
@@ -118,14 +105,21 @@ async def save_tokens(request: TokensSaveRequest):
     if request.gigachat_token is not None:
         updates["GIGACHAT_CREDENTIALS"] = request.gigachat_token
         updates["GIGACHAT_API_PERS"] = request.gigachat_token
+    
     if updates:
         _update_env_file(updates)
-    return {"message": "Токены сохранены"}
+    
+    return MessageResponse(message="Токены сохранены")
 
 
-@app.post("/api/clear-tokens")
+@app.post(
+    "/api/clear-tokens",
+    response_model=MessageResponse,
+    summary="Удалить токены",
+    tags=["Settings"],
+    description="Удаляет токены из конфигурации."
+)
 async def clear_tokens():
-    """Очищает токены в .env (устанавливает пустые значения)."""
     updates = {
         "CONFLUENCE_TOKEN": "",
         "JIRA_TOKEN": "",
@@ -134,301 +128,194 @@ async def clear_tokens():
         "GIGACHAT_API_PERS": "",
     }
     _update_env_file(updates)
-    return {"message": "Токены удалены"}
+    return MessageResponse(message="Токены удалены")
 
 
-@app.get("/api/tokens-status")
+@app.get(
+    "/api/tokens-status",
+    response_model=TokensStatusResponse,
+    summary="Статус токенов",
+    tags=["Settings"]
+)
 async def tokens_status():
-    """Возвращает, какие токены заданы в .env."""
     settings = get_settings()
-    confluence_ok = bool(settings.confluence_token)
-    jira_ok = bool(settings.jira_token)
-    gigachat_ok = bool(settings.gigachat_credentials)
-    configured = confluence_ok and jira_ok and gigachat_ok
+    c_ok = bool(settings.confluence_token)
+    j_ok = bool(settings.jira_token)
+    g_ok = bool(settings.gigachat_credentials)
     return TokensStatusResponse(
-        configured=configured, confluence=confluence_ok, jira=jira_ok, gigachat=gigachat_ok
+        configured=c_ok and j_ok and g_ok, 
+        confluence=c_ok, 
+        jira=j_ok, 
+        gigachat=g_ok
     )
 
 
-# --- Фоновые команды с реальным временем логов ---
+# --- Фоновые команды ---
 async def _run_cli_command_streaming(args: list[str], command_name: str):
-    """Запускает CLI команду и построчно логирует вывод в реальном времени."""
     try:
-        logger.info("Запуск команды %s: python -m services.bot.cli %s", command_name, " ".join(args))
+        logger.info(f"Запуск команды {command_name}: python -m services.bot.cli {' '.join(args)}")
         process = await asyncio.create_subprocess_exec(
-            sys.executable,
-            "-m",
-            "services.bot.cli",
-            *args,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
+            sys.executable, "-m", "services.bot.cli", *args,
+            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
             env={**os.environ, "PYTHONUNBUFFERED": "1"},
         )
-
         async def read_stream(stream, log_func):
             while True:
                 line = await stream.readline()
-                if not line:
-                    break
+                if not line: break
                 text = line.decode("utf-8", errors="replace").rstrip()
-                if text:
-                    log_func("[CLI] %s", text)
-                    for handler in logging.getLogger().handlers:
-                        handler.flush()
-
-        await asyncio.gather(
-            read_stream(process.stdout, logger.info), read_stream(process.stderr, logger.error)
-        )
-        return_code = await process.wait()
-        if return_code == 0:
-            logger.info("✅ Команда %s завершена успешно", command_name)
-        else:
-            logger.error("❌ Команда %s завершена с кодом %d", command_name, return_code)
-    except Exception as e:
-        logger.exception("Ошибка при выполнении команды %s: %s", command_name, e)
+                if text: log_func(f"[CLI] {text}")
+        await asyncio.gather(read_stream(process.stdout, logger.info), read_stream(process.stderr, logger.error))
+        await process.wait()
+    except Exception:
+        logger.exception(f"Ошибка команды {command_name}")
 
 
-@app.post("/api/update-rag")
+@app.post(
+    "/api/update-rag",
+    response_model=MessageResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+    summary="Обновить RAG",
+    tags=["Commands"]
+)
 async def update_rag(background_tasks: BackgroundTasks):
-    """Запускает инкрементальное обновление RAG в фоне с потоковым логированием."""
     background_tasks.add_task(_run_cli_command_streaming, ["update-rag"], "update-rag")
-    return {"message": "Команда update-rag запущена в фоне. Смотрите логи."}
+    return MessageResponse(message="Команда запущена в фоне")
 
 
-@app.post("/api/shutdown")
+@app.post(
+    "/api/shutdown",
+    response_model=MessageResponse,
+    summary="Выключить сервер",
+    tags=["System"]
+)
 async def shutdown(background_tasks: BackgroundTasks):
-    """Останавливает сервер."""
-
-    async def _shutdown():
+    async def _s():
         await asyncio.sleep(0.5)
-        logger.info("Shutting down server...")
         sys.exit(0)
+    background_tasks.add_task(_s)
+    return MessageResponse(message="Сервер останавливается")
 
-    background_tasks.add_task(_shutdown)
-    return {"message": "Сервер останавливается..."}
 
-
-@app.post("/api/clear-chat-history")
-async def clear_chat_history(request: dict):
-    session_id = request.get("session_id")
-    if not session_id:
-        raise HTTPException(400, "session_id required")
+@app.post(
+    "/api/clear-chat-history",
+    response_model=MessageResponse,
+    summary="Очистить чат",
+    tags=["Chat"]
+)
+async def clear_chat_history(request: Annotated[dict[str, Any], Body(example={"session_id": "123"})]):
+    sid = request.get("session_id")
+    if not sid: raise HTTPException(400, "session_id required")
     repo = build_chat_history_repository()
     with repo.db.connect() as conn:
-        conn.execute("delete from chat_history where session_id = ?", (session_id,))
-    return {"message": "История очищена"}
+        conn.execute("DELETE FROM chat_history WHERE session_id = ?", (sid,))
+    return MessageResponse(message="История очищена")
 
 
-@app.get("/api/logs/download")
+@app.get("/api/logs/download", summary="Скачать логи", tags=["System"])
 async def download_logs():
-    """Скачать текущие логи в файл."""
-    logs = memory_handler.get_logs()
-    content = "\n".join(logs)
     return Response(
-        content=content,
+        content="\n".join(memory_handler.get_logs()),
         media_type="text/plain",
-        headers={"Content-Disposition": "attachment; filename=logs.txt"},
+        headers={"Content-Disposition": "attachment; filename=logs.txt"}
     )
 
 
-# --- Список витрин для инлайн-кнопок ---
-def _clean_datamart_list():
-    """Возвращает отфильтрованный список витрин (как в RAGRetriever._datamart_list)."""
+# --- Бизнес-логика ---
+@app.get("/api/datamarts/list", response_model=list[str], summary="Список витрин", tags=["Data"])
+async def list_datamarts():
     import re
     from shared.utils.text_utils import normalize_text
-
     meta_repo = build_metadata_repository()
     datamarts = meta_repo.list_datamarts()
-    junk_patterns = [
-        r"\bтз\b",
-        r"техническ[ои][еи] задани[ея]",
-        r"чек лист",
-        r"препятствия",
-        r"функциональное решение",
-        r"функцональное решение",
-        r"страниц[аы] для 2лс",
-        r"копия",
-        r"изменения в релизах",
-    ]
-    combined_junk = "|".join(junk_patterns)
+    junk = r"\bтз\b|техническ[ои][еи] задани[ея]|чек лист|препятствия|функциональное решение|функцональное решение|страниц[аы] для 2лс|копия|изменения в релизах"
     filtered = []
     for dm in datamarts:
         name = dm.get("name", "")
-        if not name:
-            continue
-        if "inner" in name.lower():
-            filtered.append(name)
-            continue
-        norm_name = normalize_text(name)
-        if re.search(combined_junk, norm_name):
-            continue
-        if re.search(r"тз\s*-|тз\s*--", name.lower()):
-            continue
+        if not name: continue
+        if "inner" in name.lower(): filtered.append(name); continue
+        if re.search(junk, normalize_text(name), re.IGNORECASE): continue
+        if re.search(r"тз\s*-|тз\s*--", name.lower()): continue
         filtered.append(name)
     return sorted(set(filtered))
 
 
-@app.get("/api/datamarts/list")
-async def list_datamarts():
-    return _clean_datamart_list()
-
-
-# --- Остальные эндпоинты ---
-@app.post("/ask", response_model=AskResponse)
-def ask(request: AskRequest) -> AskResponse:
-    # Используем настройки из .env как базу, но позволяем переопределить токены из UI
+@app.post("/ask", response_model=AskResponse, summary="Задать вопрос", tags=["Chat"])
+async def ask(request: Annotated[AskRequest, Body()]):
     settings = copy.deepcopy(get_settings())
-    if request.confluence_token:
-        settings.confluence_token = request.confluence_token
-        settings.confluence_api_token = request.confluence_token
-    if request.gigachat_token:
-        settings.gigachat_credentials = request.gigachat_token
-        settings.gigachat_api_key = request.gigachat_token
-
+    if request.confluence_token: settings.confluence_token = request.confluence_token
+    if request.gigachat_token: settings.gigachat_credentials = request.gigachat_token
     try:
         service = BotService(build_retriever(settings))
         answer = service.ask(request.question)
         if request.session_id:
-            history_repo = build_chat_history_repository(settings)
-            history_repo.add(
-                ChatMessage(
-                    session_id=request.session_id,
-                    user_message=request.question,
-                    bot_response=answer.answer,
-                    sources=[s.get("url") or s.get("file_name") or "" for s in answer.sources],
-                    created_at=datetime.utcnow(),
-                )
-            )
+            repo = build_chat_history_repository(settings)
+            repo.add(ChatMessage(
+                session_id=request.session_id,
+                user_message=request.question,
+                bot_response=answer.answer,
+                sources=[s.get("url") or s.get("file_name") or "" for s in answer.sources],
+                created_at=datetime.utcnow()
+            ))
         return AskResponse(answer=answer.answer, sources=answer.sources)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.exception("Ask error")
+        raise HTTPException(500, detail=str(e))
 
 
-@app.get("/health")
-def health() -> dict[str, str]:
+@app.get("/health", summary="Health check", tags=["System"])
+async def health():
     return {"status": "ok"}
 
 
-@app.get("/api/health/external")
+@app.get("/api/health/external", response_model=ExternalHealthResponse, summary="Статус внешних систем", tags=["System"])
 async def health_external():
-    conf_client = build_confluence_client()
-    llm_gen = build_llm_generator()
+    c, l = build_confluence_client(), build_llm_generator()
     from shared.factory import build_jira_client
-
-    jira_client = build_jira_client()
-    conf_status = conf_client.check_health()
-    jira_status = jira_client.check_health()
-    llm_status = llm_gen.check_health()
-    logger.info(
-        "Health check: Confluence=%s, Jira=%s, GigaChat=%s (details: %s)",
-        conf_status.get("status"),
-        jira_status.get("status"),
-        llm_status.get("status"),
-        llm_status,
-    )
-    return {"confluence": conf_status, "gigachat": llm_status, "jira": jira_status}
+    j = build_jira_client()
+    return ExternalHealthResponse(confluence=c.check_health(), gigachat=l.check_health(), jira=j.check_health())
 
 
-@app.get("/api/logs")
-def get_logs() -> list[str]:
+@app.get("/api/logs", response_model=list[str], summary="Логи", tags=["System"])
+async def get_logs():
     return memory_handler.get_logs()
 
 
-@app.get("/api/questions/templates")
-def get_question_templates() -> list[dict]:
+@app.get("/api/questions/templates", response_model=list[QuestionTemplate], summary="Шаблоны", tags=["Chat"])
+async def get_question_templates():
     return [
-        {
-            "id": "owner",
-            "label": "Владелец витрины",
-            "template": "Кто владелец витрины {datamart}?",
-        },
-        {
-            "id": "attributes",
-            "label": "Состав атрибутов",
-            "template": "Какие атрибуты входят в витрину {datamart}?",
-        },
-        {
-            "id": "logic",
-            "label": "Логика расчета",
-            "template": "Какая логика расчета у атрибута {attribute} в витрине {datamart}?",
-        },
-        {
-            "id": "history",
-            "label": "История изменений",
-            "template": "Какие последние изменения были в витрине {datamart}?",
-        },
+        QuestionTemplate(id="owner", label="Владелец витрины", template="Кто владелец витрины {datamart}?"),
+        QuestionTemplate(id="attributes", label="Состав атрибутов", template="Какие атрибуты входят в витрину {datamart}?"),
+        QuestionTemplate(id="logic", label="Логика расчета", template="Какая логика расчета у атрибута {attribute} в витрине {datamart}?"),
+        QuestionTemplate(id="history", label="История изменений", template="Какие последние изменения были в витрине {datamart}?"),
     ]
 
 
-@app.get("/api/sync/last-events")
-def get_sync_last_events() -> dict:
-    state_repo = build_state_repository()
-    states = state_repo.list_all()
-    last_parsing = None
-    if states:
-        valid = [s.last_synced_at for s in states if s.last_synced_at]
-        if valid:
-            last_parsing = max(valid)
-
-    meta_repo = build_metadata_repository()
-    datamarts = meta_repo.list_datamarts()
-    last_meta_update = None
-    if datamarts:
-        updates = [d.get("updated_at") for d in datamarts if d.get("updated_at")]
-        if updates:
-            last_meta_update = max(updates)
-    return {
-        "last_parsing": last_parsing.isoformat() if last_parsing else None,
-        "last_rag_update": last_meta_update,
-        "status": "ok",
-    }
+@app.get("/api/sync/last-events", response_model=SyncLastEventsResponse, summary="События синхронизации", tags=["Sync"])
+async def get_sync_last_events():
+    s_repo, m_repo = build_state_repository(), build_metadata_repository()
+    states, dms = s_repo.list_all(), m_repo.list_datamarts()
+    lp = max([s.last_synced_at for s in states if s.last_synced_at]).isoformat() if states else None
+    lru = max([d.get("updated_at") for d in dms if d.get("updated_at")]) if dms else None
+    return SyncLastEventsResponse(last_parsing=lp, last_rag_update=lru, status="ok")
 
 
-@app.get("/api/sync/status")
-def get_sync_status() -> dict:
-    repo = build_state_repository()
-    states = repo.list_all()
-    if not states:
-        return {"last_sync": None, "total_datamarts": 0, "status": "no_data"}
-    last_sync = None
-    if any(s.last_synced_at for s in states):
-        last_sync = max(s.last_synced_at for s in states if s.last_synced_at)
-    return {
-        "last_sync": last_sync.isoformat() if last_sync else None,
-        "total_datamarts": len(set(s.datamart_name for s in states)),
-        "resources": [
-            {
-                "datamart": s.datamart_name,
-                "file": s.file_name,
-                "last_synced": s.last_synced_at.isoformat() if s.last_synced_at else None,
-                "status": "synced" if s.content_hash else "pending",
-            }
-            for s in states
-        ],
-    }
+@app.get("/api/sync/status", response_model=SyncStatusResponse, summary="Статус синхронизации", tags=["Sync"])
+async def get_sync_status():
+    repo = build_state_repository(); states = repo.list_all()
+    if not states: return SyncStatusResponse(last_sync=None, total_datamarts=0, status="no_data", resources=[])
+    ls = max([s.last_synced_at for s in states if s.last_synced_at]).isoformat() if any(s.last_synced_at for s in states) else None
+    res = [{"datamart": s.datamart_name, "file": s.file_name, "last_synced": s.last_synced_at.isoformat() if s.last_synced_at else None, "status": "synced" if s.content_hash else "pending"} for s in states]
+    return SyncStatusResponse(last_sync=ls, total_datamarts=len(set(s.datamart_name for s in states)), status="ok", resources=res)
 
 
-@app.get("/api/chat/history/{session_id}")
-def get_chat_history(session_id: str) -> list[dict]:
-    repo = build_chat_history_repository()
-    messages = repo.list_by_session(session_id)
-    return [
-        {
-            "user": m.user_message,
-            "bot": m.bot_response,
-            "sources": m.sources,
-            "timestamp": m.created_at.isoformat(),
-        }
-        for m in messages
-    ]
+@app.get("/api/chat/history/{session_id}", response_model=list[ChatHistoryMessage], summary="История чата", tags=["Chat"])
+async def get_chat_history(session_id: Annotated[str, FastPath(description="ID сессии")]):
+    repo = build_chat_history_repository(); msgs = repo.list_by_session(session_id)
+    return [ChatHistoryMessage(user=m.user_message, bot=m.bot_response, sources=m.sources, timestamp=m.created_at.isoformat()) for m in msgs]
 
-
-# --- Монтирование статики и редирект ---
 static_path = BASE_DIR / "web"
-
 app.mount("/ui", StaticFiles(directory=str(static_path), html=True), name="ui")
 
-
-@app.get("/")
-async def root():
-    return RedirectResponse(url="/ui/")
+@app.get("/", include_in_schema=False)
+async def root(): return RedirectResponse(url="/ui/")

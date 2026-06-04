@@ -1,6 +1,10 @@
 class ConfluenceError(RuntimeError):
-    """Base Confluence integration error."""
+    """
+    Базовый класс для всех ошибок интеграции с Confluence.
+    """
 
 
 class ConfluenceAuthError(ConfluenceError):
-    """Raised when Confluence authentication fails."""
+    """
+    Исключение, возникающее при ошибках аутентификации в Confluence.
+    """

@@ -10,12 +10,22 @@ from shared.utils.hashing import stable_hash
 
 
 class RAGIndexer:
+    """
+    Класс для индексации данных о витринах и атрибутах в RAG-систему.
+    Отвечает за преобразование объектов Datamart и S2TAttribute в RAGDocument.
+    """
     def __init__(
         self,
         metadata_repo: MetadataRepository,
         document_repo: DocumentRepository,
         vector_store: JsonVectorStore,
     ) -> None:
+        """
+        Инициализирует RAGIndexer.
+        :param metadata_repo: Репозиторий метаданных.
+        :param document_repo: Репозиторий документов.
+        :param vector_store: Векторное хранилище.
+        """
         self.metadata_repo = metadata_repo
         self.document_repo = document_repo
         self.vector_store = vector_store
@@ -23,11 +33,21 @@ class RAGIndexer:
     def index_datamart(
         self, datamart: Datamart, attributes: list[S2TAttribute]
     ) -> list[RAGDocument]:
+        """
+        Индексирует новую или обновляет существующую витрину.
+        :param datamart: Объект витрины.
+        :param attributes: Список атрибутов витрины.
+        """
         return self.update_datamart(datamart, attributes)
 
     def update_datamart(
         self, datamart: Datamart, attributes: list[S2TAttribute]
     ) -> list[RAGDocument]:
+        """
+        Обновляет информацию о витрине и её атрибутах в хранилищах.
+        :param datamart: Объект витрины.
+        :param attributes: Список атрибутов витрины.
+        """
         self.metadata_repo.upsert_datamart(datamart)
         self.metadata_repo.replace_attributes_for_datamart(datamart.name, attributes)
         documents = [
@@ -39,6 +59,7 @@ class RAGIndexer:
         return documents
 
     def rebuild_from_storage(self) -> list[RAGDocument]:
+        """Полностью перестраивает индекс на основе данных из SQLite."""
         attributes = self.metadata_repo.list_attributes()
         documents = [self._attribute_document(None, attribute) for attribute in attributes]
         for row in self.metadata_repo.list_datamarts():
@@ -50,6 +71,7 @@ class RAGIndexer:
     def _attribute_document(
         self, datamart: Datamart | None, attribute: S2TAttribute
     ) -> RAGDocument:
+        """Создает RAG-документ для одного атрибута S2T."""
         source_path = self._path(
             attribute.source_schema,
             attribute.source_table,
@@ -102,6 +124,7 @@ class RAGIndexer:
         return RAGDocument(id=stable_hash(metadata | {"text": text}), text=text, metadata=metadata)
 
     def _datamart_documents(self, datamart: Datamart, has_s2t: bool = True) -> list[RAGDocument]:
+        """Создает RAG-документы на основе метаданных витрины (факты, релизы)."""
         documents: list[RAGDocument] = []
         
         # Индикатор наличия S2T файла
@@ -174,6 +197,7 @@ class RAGIndexer:
         return documents
 
     def _stored_datamart_documents(self, row: dict) -> list[RAGDocument]:
+        """Создает RAG-документы для витрины, загруженной из БД."""
         datamart = Datamart(
             name=row["name"],
             code=row.get("code"),
@@ -188,5 +212,5 @@ class RAGIndexer:
 
     @staticmethod
     def _path(*parts: str | None) -> str:
+        """Сборка строкового представления пути (схема.таблица.поле)."""
         return ".".join(part for part in parts if part) or "не указано"
-

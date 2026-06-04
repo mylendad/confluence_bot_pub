@@ -3,14 +3,23 @@ from services.rag.retriever import RAGRetriever
 
 
 class BotService:
+    """
+    Бизнес-логика бота для взаимодействия с RAG-системой.
+    """
     def __init__(self, retriever: RAGRetriever) -> None:
+        """
+        Инициализирует BotService.
+        :param retriever: Объект ретривера для поиска ответов.
+        """
         self.retriever = retriever
 
     def ask(self, question: str) -> RAGAnswer:
+        """Задает вопрос RAG-системе и возвращает ответ."""
         return self.retriever.answer(question)
 
     @staticmethod
     def format_answer(answer: RAGAnswer) -> str:
+        """Форматирует ответ RAG-системы для отображения пользователю."""
         if not answer.sources:
             return f"Ответ:\n{answer.answer}"
         source_lines = []

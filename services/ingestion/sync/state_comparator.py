@@ -8,14 +8,23 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class MetadataDecision:
+    """Результат сравнения метаданных: флаг изменения и список причин."""
     changed: bool
     reasons: list[str]
 
 
 class StateComparator:
+    """Сервис для сравнения текущих метаданных с сохраненным состоянием."""
     def compare(
         self, previous: S2TState | None, metadata_hash: str, metadata: dict
     ) -> MetadataDecision:
+        """
+        Сравнивает текущие метаданные с предыдущим состоянием.
+        :param previous: Предыдущее состояние из базы данных.
+        :param metadata_hash: Хэш текущих метаданных.
+        :param metadata: Словарь текущих метаданных.
+        :return: Объект MetadataDecision.
+        """
         if previous is None:
             return MetadataDecision(changed=True, reasons=["new resource"])
         if previous.metadata_hash == metadata_hash:

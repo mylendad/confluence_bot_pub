@@ -5,13 +5,24 @@ from pathlib import Path
 
 
 class SQLite:
+    """
+    Класс для управления базой данных SQLite, включая инициализацию схемы и управление соединениями.
+    """
     def __init__(self, path: Path) -> None:
+        """
+        Инициализирует объект SQLite и создает базу данных, если она не существует.
+        :param path: Путь к файлу базы данных SQLite.
+        """
         self.path = path
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.init_schema()
 
     @contextmanager
     def connect(self) -> Iterator[sqlite3.Connection]:
+        """
+        Контекстный менеджер для создания соединения с базой данных.
+        :return: Итератор с объектом соединения sqlite3.Connection.
+        """
         conn = sqlite3.connect(self.path)
         conn.row_factory = sqlite3.Row
         try:
@@ -21,6 +32,9 @@ class SQLite:
             conn.close()
 
     def init_schema(self) -> None:
+        """
+        Инициализирует схему базы данных, создавая необходимые таблицы и индексы.
+        """
         with self.connect() as conn:
             conn.executescript(
                 """
@@ -103,6 +117,13 @@ class SQLite:
 
     @staticmethod
     def _ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) -> None:
+        """
+        Убеждается, что колонка существует в таблице, и добавляет её, если нет.
+        :param conn: Соединение с базой данных.
+        :param table: Имя таблицы.
+        :param column: Имя колонки.
+        :param ddl: Определение колонки (тип и т.д.).
+        """
         columns = {row["name"] for row in conn.execute(f"pragma table_info({table})")}
         if column not in columns:
             conn.execute(f"alter table {table} add column {column} {ddl}")

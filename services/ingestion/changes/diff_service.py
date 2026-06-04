@@ -19,12 +19,23 @@ IMPORTANT_FIELDS = [
 
 
 class DiffService:
+    """
+    Сервис для вычисления разницы (diff) между старым и новым набором атрибутов S2T.
+    Генерирует записи ChangeLogEntry для добавленных, удаленных и измененных атрибутов.
+    """
     def diff_attributes(
         self,
         old: list[S2TAttribute],
         new: list[S2TAttribute],
         source_url: str | None = None,
     ) -> list[ChangeLogEntry]:
+        """
+        Сравнивает два списка атрибутов и возвращает список обнаруженных изменений.
+        :param old: Старый список атрибутов.
+        :param new: Новый список атрибутов.
+        :param source_url: URL источника (Confluence).
+        :return: Список объектов ChangeLogEntry.
+        """
         old_by_key = {item.attribute_key: item for item in old}
         new_by_key = {item.attribute_key: item for item in new}
         changes: list[ChangeLogEntry] = []
@@ -65,6 +76,16 @@ class DiffService:
         now: datetime,
         source_url: str | None,
     ) -> ChangeLogEntry:
+        """
+        Создает объект ChangeLogEntry на основе данных об изменении.
+        :param item: Атрибут, в котором произошло изменение.
+        :param change_type: Тип изменения (added, removed, modified).
+        :param old_value: Старое значение.
+        :param new_value: Новое значение.
+        :param now: Текущее время.
+        :param source_url: URL источника.
+        :return: Объект ChangeLogEntry.
+        """
         payload = {
             "key": item.attribute_key,
             "change_type": change_type,

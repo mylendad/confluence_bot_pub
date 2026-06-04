@@ -17,7 +17,18 @@ logger = logging.getLogger(__name__)
 
 
 class ConfluenceClient:
+    """
+    Клиент для взаимодействия с API Confluence.
+    Обеспечивает получение страниц, вложений и выполнение поисковых запросов.
+    """
+
     def __init__(self, settings: Settings, client: httpx.Client | None = None) -> None:
+        """
+        Инициализирует клиент Confluence.
+
+        :param settings: Объект настроек приложения Settings.
+        :param client: Внешний экземпляр httpx.Client (опционально).
+        """
         self.settings = settings
         auth, headers = self._auth_config(settings)
 
@@ -59,6 +70,12 @@ class ConfluenceClient:
 
     @staticmethod
     def _auth_config(settings: Settings) -> tuple[tuple[str, str] | None, dict[str, str]]:
+        """
+        Конфигурирует параметры аутентификации на основе настроек.
+
+        :param settings: Объект настроек.
+        :return: Кортеж из параметров (user, password) для Basic Auth и словаря заголовков.
+        """
         auth_type = settings.confluence_auth_type.lower().strip()
         token = settings.confluence_auth_token
         username = settings.confluence_username
@@ -85,6 +102,14 @@ class ConfluenceClient:
         return None, headers
 
     def _request(self, method: str, path: str, **kwargs) -> httpx.Response:
+        """
+        Выполняет HTTP-запрос к API Confluence с обработкой повторных попыток и ограничений скорости.
+
+        :param method: HTTP метод (GET, POST и т.д.).
+        :param path: Относительный путь к ресурсу API.
+        :param kwargs: Дополнительные аргументы для httpx.request.
+        :return: Ответ httpx.Response.
+        """
         if self.settings.confluence_request_delay > 0:
             time.sleep(self.settings.confluence_request_delay)
 
@@ -115,6 +140,13 @@ class ConfluenceClient:
         raise ConfluenceError(f"Failed to execute {method} {path} after {max_retries} attempts")
 
     def _get(self, path: str, params: dict | None = None) -> dict:
+        """
+        Выполняет GET-запрос и возвращает JSON-ответ.
+
+        :param path: Путь к ресурсу.
+        :param params: Параметры запроса.
+        :return: Словарь с данными ответа.
+        """
         response = self._request("GET", path, params=params)
 
         if response.status_code in {401, 403}:
@@ -124,6 +156,12 @@ class ConfluenceClient:
         return response.json()
 
     def _validate_download_response(self, response: httpx.Response, original_url: str):
+        """
+        Проверяет корректность ответа при скачивании файла.
+
+        :param response: Ответ от сервера.
+        :param original_url: Исходный URL скачивания.
+        """
         logger.info(
             "Validating download response. final_url=%s, status_code=%s",
             response.url,
@@ -142,6 +180,12 @@ class ConfluenceClient:
             )
 
     def get_page(self, page_id: str) -> ConfluencePage:
+        """
+        Получает информацию о странице по её ID.
+
+        :param page_id: Идентификатор страницы.
+        :return: Объект ConfluencePage.
+        """
         if page_id in self._cache_get_page:
             return self._cache_get_page[page_id]
         payload = self._get(
@@ -153,6 +197,12 @@ class ConfluenceClient:
         return page
 
     def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
+        """
+        Ищет страницы с использованием языка запросов CQL.
+
+        :param cql: Запрос на языке CQL.
+        :return: Итератор по объектам ConfluencePage.
+        """
         limit = 50
         start = 0
         while True:
@@ -173,7 +223,12 @@ class ConfluenceClient:
             start += limit
 
     def find_page_by_title(self, title: str) -> ConfluencePage | None:
-        """Finds a page exactly by its title using CQL."""
+        """
+        Находит страницу по точному совпадению заголовка с использованием CQL.
+
+        :param title: Заголовок страницы.
+        :return: Объект ConfluencePage или None, если страница не найдена.
+        """
         cql = f'title = "{title}"'
         try:
             pages = list(self.search_pages(cql))
@@ -183,6 +238,12 @@ class ConfluenceClient:
             return None
 
     def get_children(self, page_id: str) -> list[ConfluencePage]:
+        """
+        Возвращает список дочерних страниц для указанной страницы.
+
+        :param page_id: Идентификатор родительской страницы.
+        :return: Список объектов ConfluencePage.
+        """
         payload = self._get(
             f"/rest/api/content/{page_id}/child/page",
             {"expand": "body.storage,version,history.lastUpdated", "limit": 100},
@@ -190,6 +251,12 @@ class ConfluenceClient:
         return [self._page_from_payload(item) for item in payload.get("results", [])]
 
     def get_attachments(self, page_id: str) -> list[S2TResource]:
+        """
+        Возвращает список вложений для указанной страницы.
+
+        :param page_id: Идентификатор страницы.
+        :return: Список объектов S2TResource.
+        """
         if page_id in self._cache_get_attachments:
             return self._cache_get_attachments[page_id]
 
@@ -228,6 +295,12 @@ class ConfluenceClient:
         return resources
 
     def download(self, url: str) -> bytes:
+        """
+        Скачивает содержимое по указанному URL.
+
+        :param url: URL для скачивания.
+        :return: Бинарное содержимое файла.
+        """
         logger.info("Downloading from URL: %s", url)
         if url.startswith("http"):
             response = self.http.get(url, follow_redirects=True)
@@ -242,6 +315,13 @@ class ConfluenceClient:
         return response.content
 
     def download_resource(self, resource: S2TResource, datamart_page_id: str | None = None) -> bytes:
+        """
+        Скачивает ресурс (вложение), используя прямой URL или REST API в качестве резервного механизма.
+
+        :param resource: Объект ресурса S2TResource.
+        :param datamart_page_id: Опциональный ID страницы витрины данных для поиска вложения.
+        :return: Бинарное содержимое ресурса.
+        """
         url = resource.download_url or resource.url
         if not url:
             raise ConfluenceError("Attachment download URL is absent")
@@ -286,6 +366,14 @@ class ConfluenceClient:
     def _download_attachment_via_rest(
         self, page_id: str, attachment_id: str, original_error: Exception
     ) -> bytes:
+        """
+        Скачивает вложение через эндпоинт REST API.
+
+        :param page_id: Идентификатор страницы.
+        :param attachment_id: Идентификатор вложения.
+        :param original_error: Исходное исключение для сохранения контекста ошибки.
+        :return: Бинарное содержимое вложения.
+        """
         url = f"/rest/api/content/{page_id}/child/attachment/{attachment_id}/download"
         logger.info("Downloading from URL (REST fallback): %s", url)
         response = self._request("GET", url, follow_redirects=True)
@@ -302,6 +390,12 @@ class ConfluenceClient:
         return response.content
 
     def get_pages_metadata_bulk(self, page_ids: list[str]) -> dict[str, ConfluencePage]:
+        """
+        Массово получает метаданные страниц по списку их идентификаторов.
+
+        :param page_ids: Список ID страниц.
+        :return: Словарь сопоставления ID страницы и объекта ConfluencePage.
+        """
         if not page_ids:
             return {}
         
@@ -324,6 +418,11 @@ class ConfluenceClient:
         return result
 
     def check_health(self) -> dict:
+        """
+        Проверяет работоспособность и задержку соединения с Confluence.
+
+        :return: Словарь с состоянием здоровья ("ok" или "error") и задержкой в мс.
+        """
         start_time = time.time()
         try:
             self._get("/rest/api/content", {"limit": 1})
@@ -333,6 +432,11 @@ class ConfluenceClient:
             return {"status": "error", "message": str(exc)}
 
     def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
+        """
+        Итерируется по всем страницам верхнего уровня, определенным в настройках (через ID корня или ключ пространства).
+
+        :return: Итератор объектов ConfluencePage.
+        """
         if self.settings.confluence_root_page_id:
             root_id = self.settings.confluence_root_page_id
             cql = f"(id = {root_id} or ancestor = {root_id}) and type = page"
@@ -343,6 +447,12 @@ class ConfluenceClient:
         yield from self.search_pages(cql)
 
     def _page_from_payload(self, payload: dict) -> ConfluencePage:
+        """
+        Преобразует JSON-ответ API Confluence в объект модели ConfluencePage.
+
+        :param payload: Словарь с данными ответа API.
+        :return: Объект ConfluencePage.
+        """
         links = payload.get("_links", {})
         webui = links.get("webui", "")
         version = payload.get("version", {})
@@ -362,6 +472,12 @@ class ConfluenceClient:
 
     @staticmethod
     def _parse_datetime(value: str | None) -> datetime | None:
+        """
+        Парсит строку даты и времени из формата ISO, используемого Confluence.
+
+        :param value: Строка даты и времени.
+        :return: Объект datetime или None, если парсинг невозможен.
+        """
         if not value:
             return None
         try:

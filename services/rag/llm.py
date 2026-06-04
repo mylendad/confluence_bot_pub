@@ -9,23 +9,38 @@ logger = logging.getLogger(__name__)
 
 
 class AnswerGenerator(Protocol):
+    """Интерфейс для генератора ответов на основе LLM."""
     def generate(self, question: str, context: str) -> str:
+        """
+        Генерирует текстовый ответ на основе вопроса и контекста.
+        :param question: Текст вопроса.
+        :param context: Текстовый контекст для генерации ответа.
+        """
         ...
 
     def check_health(self) -> dict:
+        """Проверяет работоспособность сервиса генерации."""
         ...
 
 
 class StubAnswerGenerator:
+    """Заглушка генератора ответов, возвращающая только контекст."""
     def generate(self, question: str, context: str) -> str:
+        """Возвращает найденный контекст в качестве ответа."""
         return f"Нашел релевантные фрагменты:\n{context}"
 
     def check_health(self) -> dict:
+        """Всегда возвращает статус ok."""
         return {"status": "ok", "provider": "stub"}
 
 
 class GigaChatAnswerGenerator:
+    """Генератор ответов на базе GigaChat LLM."""
     def __init__(self, settings: Settings) -> None:
+        """
+        Инициализирует GigaChatAnswerGenerator.
+        :param settings: Объект настроек приложения.
+        """
         if not settings.gigachat_auth_key:
             raise RuntimeError(
                 "GigaChat credentials are missing. Set GIGACHAT_CREDENTIALS in .env."
@@ -34,6 +49,7 @@ class GigaChatAnswerGenerator:
         self.llm = None
 
     def _get_llm(self):
+        """Ленивая инициализация объекта LangChain GigaChat."""
         if self.llm is not None:
             return self.llm
         try:
@@ -55,6 +71,11 @@ class GigaChatAnswerGenerator:
         return self.llm
 
     def generate(self, question: str, context: str) -> str:
+        """
+        Вызывает GigaChat для генерации ответа на вопрос.
+        :param question: Текст вопроса.
+        :param context: Найденный контекст.
+        """
         prompt = (
             f"{ANSWER_SYSTEM_PROMPT}\n\n"
             f"Контекст:\n{context}\n\n"
@@ -90,6 +111,7 @@ class GigaChatAnswerGenerator:
         return f"Не удалось вызвать LLM для генеративного ответа: {last_exc}"
 
     def check_health(self) -> dict:
+        """Проверяет доступность API GigaChat."""
         start_time = time.time()
         try:
             # Simple ping to GigaChat
@@ -106,6 +128,10 @@ class GigaChatAnswerGenerator:
 
 
 def build_answer_generator(settings: Settings) -> AnswerGenerator:
+    """
+    Фабричный метод для создания генератора ответов.
+    :param settings: Объект настроек.
+    """
     if settings.llm_provider.lower() == "gigachat":
         logger.info("Building GigaChat answer generator")
         return GigaChatAnswerGenerator(settings)
