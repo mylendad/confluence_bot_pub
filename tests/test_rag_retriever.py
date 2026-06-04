@@ -331,3 +331,91 @@ def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> Non
     # Test punctuation normalization
     answer2 = retriever.answer("Витрина Метрики ТБ Заинтересованные со стороны бизнеса")
     assert "Owner 3" in answer2.answer
+
+def test_release_changes_intent_robustness_to_typos(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    # Mock datamart with release changes
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Агрегаты ПФР",
+            confluence_page_id="14716930658",
+            confluence_url="https://confluence.example.ru/pfr",
+            release_changes=[
+                ReleaseChange(
+                    version="20260515",
+                    change_type="НОВОЕ",
+                    summary="Первичный вывод витрины",
+                )
+            ]
+        )
+    )
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+
+    # Test with typo "поледние"
+    answer = retriever.answer("какие поледние изменения в Витрина Агрегаты ПФР")
+
+    assert "Изменения в релизах" in answer.answer
+    assert "20260515" in answer.answer
+    assert "Первичный вывод витрины" in answer.answer
+
+def test_release_changes_priority_over_history(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    history_repo = HistoryRepository(db)
+    
+    # Mock datamart with release changes
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Тест",
+            confluence_page_id="123",
+            confluence_url="https://confluence.example.ru/test",
+            release_changes=[
+                ReleaseChange(version="v1", summary="Business Release")
+            ]
+        )
+    )
+    
+    # Mock technical history
+    history_repo.add_many([
+        ChangeLogEntry(
+            id="1",
+            datamart_name="Витрина Тест",
+            entity_type="attribute",
+            change_type="added",
+            entity_name="test_field",
+            change_date=datetime.utcnow()
+        )
+    ])
+    
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), history_repo)
+
+    # Question with "год" should prefer release_changes (Confluence)
+    answer = retriever.answer("изменения за год в Витрина Тест")
+
+    assert "Изменения в релизах" in answer.answer
+    assert "Business Release" in answer.answer
+    assert "Добавлены атрибуты" not in answer.answer  # This would be in technical history
+
+def test_release_changes_uses_resolution_date_label(tmp_path: Path) -> None:
+    db = SQLite(tmp_path / "app.db")
+    metadata_repo = MetadataRepository(db)
+    metadata_repo.upsert_datamart(
+        Datamart(
+            name="Витрина Тест",
+            confluence_page_id="123",
+            confluence_url="https://confluence.example.ru/test",
+            release_changes=[
+                ReleaseChange(
+                    version="v1",
+                    summary="Test",
+                    jira_done_at=datetime(2025, 12, 6, 8, 53)
+                )
+            ]
+        )
+    )
+    retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
+
+    answer = retriever.answer("изменения в Витрина Тест")
+
+    assert "Дата решения: 2025-12-06" in answer.answer

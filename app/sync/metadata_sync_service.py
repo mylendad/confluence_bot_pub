@@ -130,7 +130,7 @@ class MetadataSyncService:
 
     def _get_datamart_with_cache(self, page) -> Datamart | None:
         if not self.snapshot_repo:
-            return self.parser.parse_datamart_page(page, skip_jira=True)
+            return self.parser.parse_datamart_page(page, skip_jira=False)
             
         snapshot = self.snapshot_repo.get(page.id)
         if snapshot:
@@ -138,7 +138,7 @@ class MetadataSyncService:
             if self._verify_versions(version_map):
                 return cached_datamart
         
-        datamart = self.parser.parse_datamart_page(page, skip_jira=True)
+        datamart = self.parser.parse_datamart_page(page, skip_jira=False)
         if datamart:
             self.snapshot_repo.upsert(page.id, datamart.visited_pages, datamart)
         return datamart

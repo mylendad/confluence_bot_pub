@@ -262,60 +262,76 @@ class ConfluenceParser:
                 except Exception:
                     logger.warning("Failed to parse Jira created date: %s", created)
 
-            changelog = issue.get("changelog", {})
-            histories = changelog.get("histories", [])
-            # Сортируем истории: от новых к старым
-            histories.sort(key=lambda x: x.get("created", ""), reverse=True)
+            # 1. Пытаемся взять дату решения напрямую из системного поля
+            resolution_date = fields.get("resolutiondate")
+            if resolution_date:
+                try:
+                    change.jira_done_at = datetime.fromisoformat(resolution_date.replace("Z", "+00:00"))
+                except Exception:
+                    logger.warning("Failed to parse Jira resolution date: %s", resolution_date)
 
-            # 1. Ищем дату завершения (поле Status или Решение)
+            # 2. Если даты решения нет, ищем в истории изменений (changelog)
+            if not change.jira_done_at:
+                changelog = issue.get("changelog", {})
+                histories = changelog.get("histories", [])
+                # Сортируем истории: от новых к старым
+                histories.sort(key=lambda x: x.get("created", ""), reverse=True)
+
+                # Ищем дату завершения (поле Status или Решение)
+                tag = (change.change_type or "").lower()
+                done_statuses = {
+                    "сделан",
+                    "сделано",
+                    "done",
+                    "resolved",
+                    "решено",
+                    "закрыт",
+                    "closed",
+                    "выполнено",
+                    "выполнен",
+                    "завершено",
+                    "завершен",
+                    "готово",
+                    "готов",
+                }
+
+                for history in histories:
+                    history_created = history.get("created")
+                    found_done_in_this_history = False
+                    for item in history.get("items", []):
+                        field_name = (item.get("field") or "").lower()
+                        status_name = (item.get("toString") or "").lower()
+
+                        # Проверяем системные поля (Status, Resolution/Решение) или поле-тег из Confluence
+                        is_done_field = field_name in {"status", "resolution", "решение"}
+                        is_tag_field = tag and field_name == tag
+
+                        if (is_done_field or is_tag_field) and status_name in done_statuses:
+                            found_done_in_this_history = True
+                            break
+
+                    if found_done_in_this_history and history_created:
+                        try:
+                            # Jira присылает дату типа 2025-10-15T14:04:57.000+0300
+                            clean_date = history_created.replace("Z", "+00:00")
+                            change.jira_done_at = datetime.fromisoformat(clean_date)
+                            break
+                        except Exception as exc:
+                            logger.warning(
+                                "Failed to parse Jira history date %s: %s", history_created, exc
+                            )
+
+            # 3. Ищем значение для конкретного типа изменения (если есть)
             tag = (change.change_type or "").lower()
-            done_statuses = {
-                "сделан",
-                "сделано",
-                "done",
-                "resolved",
-                "решено",
-                "закрыт",
-                "closed",
-                "выполнено",
-                "выполнен",
-                "завершено",
-                "завершен",
-                "готово",
-                "готов",
-            }
-
-            for history in histories:
-                history_created = history.get("created")
-                found_done_in_this_history = False
-                for item in history.get("items", []):
-                    field_name = (item.get("field") or "").lower()
-                    status_name = (item.get("toString") or "").lower()
-
-                    # Проверяем системные поля (Status, Resolution/Решение) или поле-тег из Confluence
-                    is_done_field = field_name in {"status", "resolution", "решение"}
-                    is_tag_field = tag and field_name == tag
-
-                    if (is_done_field or is_tag_field) and status_name in done_statuses:
-                        found_done_in_this_history = True
-                        break
-
-                if found_done_in_this_history and history_created:
-                    try:
-                        # Jira присылает дату типа 2025-10-15T14:04:57.000+0300
-                        clean_date = history_created.replace("Z", "+00:00")
-                        change.jira_done_at = datetime.fromisoformat(clean_date)
-                        break
-                    except Exception as exc:
-                        logger.warning(
-                            "Failed to parse Jira history date %s: %s", history_created, exc
-                        )
-
-            # 2. Ищем значение для конкретного типа изменения (если есть)
             if tag:
                 tag_upper = tag.upper()
                 found_value = None
-                for history in histories:
+                # Сначала ищем в истории (для динамических статусов)
+                # Note: histories might not be defined if resolutiondate was found directly
+                changelog = issue.get("changelog", {})
+                current_histories = changelog.get("histories", [])
+                
+                for history in current_histories:
                     for item in history.get("items", []):
                         if (item.get("field") or "").upper() == tag_upper:
                             found_value = item.get("toString")

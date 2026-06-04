@@ -14,16 +14,20 @@ class IntentClassifier:
     def classify(self, question: str) -> str:
         q = normalize_text(question)
 
-        # "Изменения за период/год/даты" -> структурированная история (из БД)
+        # "Изменения за период/даты" -> структурированная история (из БД)
         if "измен" in q and any(
-            word in q for word in ["период", "дата", "датам", "история", "год", "текущ"]
+            word in q for word in ["период", "дата", "датам", "история", "текущ"]
         ):
             # Но если прямо упомянут "релиз", то все же Confluence
             if "релиз" not in q:
                 return "last_year_changes"
 
         # Приоритет для "Изменений в релизах" (Confluence)
-        if "релиз" in q or ("измен" in q and any(word in q for word in ["год", "последн"])):
+        if (
+            "релиз" in q 
+            or ("измен" in q and any(word in q for word in ["год", "последн", "поледн", "послед", "свеж", "нов"]))
+            or ("измен" in q and ("витрин" in q or "март" in q))
+        ):
             return "release_changes"
 
         if any(
@@ -421,7 +425,7 @@ class RAGRetriever:
             if jira_created:
                 parts.append(f"- Создана в Jira: {jira_created}")
             if jira_done:
-                parts.append(f"- Выполнена в Jira: {jira_done}")
+                parts.append(f"- Дата решения: {jira_done}")
             parts.append(f"- Статус/Результат (Jira): {jira_status}")
             parts.append(f"- Источник: [Confluence]({conf_url})")
 

@@ -3223,7 +3223,7 @@
         "kind": 6,
         "importPath": "app.rag.retriever",
         "description": "app.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        # \"Изменения за период/год/даты\" -> структурированная история (из БД)\n        if \"измен\" in q and any(\n            word in q for word in [\"период\", \"дата\", \"датам\", \"история\", \"год\", \"текущ\"]\n        ):\n            # Но если прямо упомянут \"релиз\", то все же Confluence\n            if \"релиз\" not in q:\n                return \"last_year_changes\"",
+        "peekOfCode": "class IntentClassifier:\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        # \"Изменения за период/даты\" -> структурированная история (из БД)\n        if \"измен\" in q and any(\n            word in q for word in [\"период\", \"дата\", \"датам\", \"история\", \"текущ\"]\n        ):\n            # Но если прямо упомянут \"релиз\", то все же Confluence\n            if \"релиз\" not in q:\n                return \"last_year_changes\"",
         "detail": "app.rag.retriever",
         "documentation": {}
     },
@@ -4295,6 +4295,33 @@
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
         "peekOfCode": "def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеров\",\n            confluence_page_id=\"1\",\n            confluence_url=\"url1\",\n            facts=[DatamartFact(key=\"business_stakeholders\", label=\"Заинтересованные со стороны бизнеса\", value=\"Owner 1\")]\n        )",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_release_changes_intent_robustness_to_typos",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_release_changes_intent_robustness_to_typos(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    # Mock datamart with release changes\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Агрегаты ПФР\",\n            confluence_page_id=\"14716930658\",\n            confluence_url=\"https://confluence.example.ru/pfr\",\n            release_changes=[",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_release_changes_priority_over_history",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_release_changes_priority_over_history(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    # Mock datamart with release changes\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Тест\",\n            confluence_page_id=\"123\",\n            confluence_url=\"https://confluence.example.ru/test\",",
+        "detail": "tests.test_rag_retriever",
+        "documentation": {}
+    },
+    {
+        "label": "test_release_changes_uses_resolution_date_label",
+        "kind": 2,
+        "importPath": "tests.test_rag_retriever",
+        "description": "tests.test_rag_retriever",
+        "peekOfCode": "def test_release_changes_uses_resolution_date_label(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Тест\",\n            confluence_page_id=\"123\",\n            confluence_url=\"https://confluence.example.ru/test\",\n            release_changes=[\n                ReleaseChange(",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
