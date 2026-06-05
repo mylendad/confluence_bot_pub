@@ -1,8 +1,11 @@
+# Используем bash для поддержки команды source
+SHELL := /bin/bash
+
 # Переменные
 VENV = .venv
 VENV_BIN = $(VENV)/bin
 PYTHON = $(VENV_BIN)/python3
-PIP = $(VENV_BIN)/pip
+PIP = $(PYTHON) -m pip
 UVICORN = $(VENV_BIN)/uvicorn
 RUFF = $(VENV_BIN)/ruff
 PYTEST = $(VENV_BIN)/pytest
@@ -12,27 +15,25 @@ APP_MODULE = services.bot.main:app
 
 help:
 	@echo "Доступные команды:"
-	@echo "  make install  - Создание .venv и установка зависимостей"
-	@echo "  make run      - Запуск сервера с активацией .venv и открытие UI"
-	@echo "  make test     - Запуск тестов через .venv"
+	@echo "  make install  - Создание .venv и установка зависимостей (с активацией)"
+	@echo "  make run      - Запуск сервера и открытие UI"
+	@echo "  make test     - Запуск тестов"
 	@echo "  make lint     - Проверка ruff"
 	@echo "  make format   - Форматирование ruff"
 	@echo "  make clean    - Очистка временных файлов"
 
-venv: $(VENV)/bin/activate
-
 $(VENV)/bin/activate:
 	@echo "Создание виртуального окружения..."
 	python3 -m venv $(VENV)
-	. $(VENV_BIN)/activate && pip install --upgrade pip
 
-install: venv
-	@echo "Активация $(VENV) и установка зависимостей..."
-	. $(VENV_BIN)/activate && pip install -e ".[dev]"
+install: $(VENV)/bin/activate
+	@echo "Активация окружения и установка зависимостей..."
+	source $(VENV_BIN)/activate && \
+	$(PIP) install --upgrade pip && \
+	$(PIP) install -e ".[dev]"
 
-run: venv
-	@echo "Запуск сервера из $(VENV) на http://127.0.0.1:8000..."
-	@# Команда для открытия браузера в зависимости от ОС
+run: $(VENV)/bin/activate
+	@echo "Запуск сервера на http://127.0.0.1:8000..."
 	@if [ "$$(uname)" = "Darwin" ]; then \
 		open http://127.0.0.1:8000; \
 	elif [ "$$(expr substr $$(uname -s) 1 5)" = "Linux" ]; then \
@@ -40,16 +41,16 @@ run: venv
 	elif [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW32_NT" ] || [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW64_NT" ]; then \
 		start http://127.0.0.1:8000; \
 	fi
-	. $(VENV_BIN)/activate && $(UVICORN) $(APP_MODULE) --reload
+	source $(VENV_BIN)/activate && $(UVICORN) $(APP_MODULE) --reload
 
-test: venv
-	. $(VENV_BIN)/activate && $(PYTEST)
+test: $(VENV)/bin/activate
+	source $(VENV_BIN)/activate && $(PYTEST)
 
-lint: venv
-	. $(VENV_BIN)/activate && $(RUFF) check .
+lint: $(VENV)/bin/activate
+	source $(VENV_BIN)/activate && $(RUFF) check .
 
-format: venv
-	. $(VENV_BIN)/activate && $(RUFF) format .
+format: $(VENV)/bin/activate
+	source $(VENV_BIN)/activate && $(RUFF) format .
 
 clean:
 	rm -rf `find . -name __pycache__`
@@ -59,4 +60,4 @@ clean:
 	rm -rf *.egg-info
 	rm -rf dist
 	rm -rf build
-	@echo "Для удаления окружения выполните: rm -rf $(VENV)"
+	@echo "Окружение .venv не удалено. Для удаления: rm -rf $(VENV)"
