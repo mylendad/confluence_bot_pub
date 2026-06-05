@@ -27,9 +27,12 @@ $(VENV)/bin/activate:
 	python3 -m venv $(VENV)
 
 install: $(VENV)/bin/activate
-	@echo "Активация окружения и установка зависимостей..."
+	@echo "Активация окружения и установка/обновление pip..."
 	source $(VENV_BIN)/activate && \
-	$(PIP) install --upgrade pip && \
+	$(PYTHON) -m ensurepip --upgrade && \
+	$(PIP) install --upgrade pip
+	@echo "Установка зависимостей проекта..."
+	source $(VENV_BIN)/activate && \
 	$(PIP) install -e ".[dev]"
 
 run: $(VENV)/bin/activate
