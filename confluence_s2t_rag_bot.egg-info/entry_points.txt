@@ -1,0 +1,3 @@
+[console_scripts]
+confluence-bot = services.bot.cli:app
+services.bot.cli = services.bot.cli:app

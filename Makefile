@@ -1,27 +1,36 @@
 # Переменные
-PYTHON = python3
-PIP = $(PYTHON) -m pip
-PYTEST = $(PYTHON) -m pytest
-UVICORN = uvicorn
+VENV = .venv
+PYTHON = $(VENV)/bin/python3
+PIP = $(VENV)/bin/pip
+PYTEST = $(VENV)/bin/pytest
+UVICORN = $(VENV)/bin/uvicorn
+RUFF = $(VENV)/bin/ruff
 APP_MODULE = services.bot.main:app
 
-.PHONY: help install test lint format run clean
+.PHONY: help install test lint format run clean venv
 
 help:
 	@echo "Доступные команды:"
-	@echo "  make install  - Установка зависимостей (включая инструменты разработки)"
-	@echo "  make run      - Запуск сервера и автоматическое открытие UI"
-	@echo "  make test     - Запуск тестов"
-	@echo "  make lint     - Проверка кода линтером (ruff)"
-	@echo "  make format   - Форматирование кода (ruff)"
+	@echo "  make install  - Создание .venv и установка зависимостей"
+	@echo "  make run      - Запуск сервера из .venv и открытие UI"
+	@echo "  make test     - Запуск тестов из .venv"
+	@echo "  make lint     - Проверка ruff из .venv"
+	@echo "  make format   - Форматирование ruff из .venv"
 	@echo "  make clean    - Очистка временных файлов"
 
-install:
+venv: $(VENV)/bin/activate
+
+$(VENV)/bin/activate:
+	@echo "Создание виртуального окружения..."
+	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
+
+install: venv
+	@echo "Установка зависимостей в $(VENV)..."
 	$(PIP) install -e ".[dev]"
 
-run:
-	@echo "Запуск сервера на http://127.0.0.1:8000..."
+run: venv
+	@echo "Запуск сервера из $(VENV) на http://127.0.0.1:8000..."
 	@# Команда для открытия браузера в зависимости от ОС
 	@if [ "$$(uname)" = "Darwin" ]; then \
 		open http://127.0.0.1:8000; \
@@ -30,16 +39,16 @@ run:
 	elif [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW32_NT" ] || [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW64_NT" ]; then \
 		start http://127.0.0.1:8000; \
 	fi
-	$(PYTHON) -m uvicorn $(APP_MODULE) --reload
+	$(UVICORN) $(APP_MODULE) --reload
 
-test:
+test: venv
 	$(PYTEST)
 
-lint:
-	ruff check .
+lint: venv
+	$(RUFF) check .
 
-format:
-	ruff format .
+format: venv
+	$(RUFF) format .
 
 clean:
 	rm -rf `find . -name __pycache__`
@@ -49,3 +58,4 @@ clean:
 	rm -rf *.egg-info
 	rm -rf dist
 	rm -rf build
+	@echo "Для удаления окружения выполните: rm -rf $(VENV)"
