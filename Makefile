@@ -11,31 +11,26 @@ RUFF = $(VENV_BIN)/ruff
 PYTEST = $(VENV_BIN)/pytest
 APP_MODULE = services.bot.main:app
 
-.PHONY: help install test lint format run clean venv
+.PHONY: help install test lint format run clean
 
 help:
 	@echo "Доступные команды:"
-	@echo "  make install  - Создание .venv и установка зависимостей (с активацией)"
+	@echo "  make install  - Установка зависимостей (активирует существующий .venv)"
 	@echo "  make run      - Запуск сервера и открытие UI"
 	@echo "  make test     - Запуск тестов"
 	@echo "  make lint     - Проверка ruff"
 	@echo "  make format   - Форматирование ruff"
 	@echo "  make clean    - Очистка временных файлов"
 
-$(VENV)/bin/activate:
-	@echo "Создание виртуального окружения..."
-	python3 -m venv $(VENV)
-
-install: $(VENV)/bin/activate
-	@echo "Активация окружения и установка/обновление pip..."
+install:
+	@echo "Активация окружения и обновление pip..."
 	source $(VENV_BIN)/activate && \
-	$(PYTHON) -m ensurepip --upgrade && \
-	$(PIP) install --upgrade pip
+	$(PYTHON) -m pip install --upgrade pip
 	@echo "Установка зависимостей проекта..."
 	source $(VENV_BIN)/activate && \
 	$(PIP) install -e ".[dev]"
 
-run: $(VENV)/bin/activate
+run:
 	@echo "Запуск сервера на http://127.0.0.1:8000..."
 	@if [ "$$(uname)" = "Darwin" ]; then \
 		open http://127.0.0.1:8000; \
@@ -46,13 +41,13 @@ run: $(VENV)/bin/activate
 	fi
 	source $(VENV_BIN)/activate && $(UVICORN) $(APP_MODULE) --reload
 
-test: $(VENV)/bin/activate
+test:
 	source $(VENV_BIN)/activate && $(PYTEST)
 
-lint: $(VENV)/bin/activate
+lint:
 	source $(VENV_BIN)/activate && $(RUFF) check .
 
-format: $(VENV)/bin/activate
+format:
 	source $(VENV_BIN)/activate && $(RUFF) format .
 
 clean:
@@ -63,4 +58,3 @@ clean:
 	rm -rf *.egg-info
 	rm -rf dist
 	rm -rf build
-	@echo "Окружение .venv не удалено. Для удаления: rm -rf $(VENV)"
