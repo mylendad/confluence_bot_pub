@@ -1,10 +1,11 @@
 # Переменные
 VENV = .venv
-PYTHON = $(VENV)/bin/python3
-PIP = $(VENV)/bin/pip
-PYTEST = $(VENV)/bin/pytest
-UVICORN = $(VENV)/bin/uvicorn
-RUFF = $(VENV)/bin/ruff
+VENV_BIN = $(VENV)/bin
+PYTHON = $(VENV_BIN)/python3
+PIP = $(VENV_BIN)/pip
+UVICORN = $(VENV_BIN)/uvicorn
+RUFF = $(VENV_BIN)/ruff
+PYTEST = $(VENV_BIN)/pytest
 APP_MODULE = services.bot.main:app
 
 .PHONY: help install test lint format run clean venv
@@ -12,10 +13,10 @@ APP_MODULE = services.bot.main:app
 help:
 	@echo "Доступные команды:"
 	@echo "  make install  - Создание .venv и установка зависимостей"
-	@echo "  make run      - Запуск сервера из .venv и открытие UI"
-	@echo "  make test     - Запуск тестов из .venv"
-	@echo "  make lint     - Проверка ruff из .venv"
-	@echo "  make format   - Форматирование ruff из .venv"
+	@echo "  make run      - Запуск сервера с активацией .venv и открытие UI"
+	@echo "  make test     - Запуск тестов через .venv"
+	@echo "  make lint     - Проверка ruff"
+	@echo "  make format   - Форматирование ruff"
 	@echo "  make clean    - Очистка временных файлов"
 
 venv: $(VENV)/bin/activate
@@ -23,11 +24,11 @@ venv: $(VENV)/bin/activate
 $(VENV)/bin/activate:
 	@echo "Создание виртуального окружения..."
 	python3 -m venv $(VENV)
-	$(PIP) install --upgrade pip
+	. $(VENV_BIN)/activate && pip install --upgrade pip
 
 install: venv
-	@echo "Установка зависимостей в $(VENV)..."
-	$(PIP) install -e ".[dev]"
+	@echo "Активация $(VENV) и установка зависимостей..."
+	. $(VENV_BIN)/activate && pip install -e ".[dev]"
 
 run: venv
 	@echo "Запуск сервера из $(VENV) на http://127.0.0.1:8000..."
@@ -39,16 +40,16 @@ run: venv
 	elif [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW32_NT" ] || [ "$$(expr substr $$(uname -s) 1 10)" = "MINGW64_NT" ]; then \
 		start http://127.0.0.1:8000; \
 	fi
-	$(UVICORN) $(APP_MODULE) --reload
+	. $(VENV_BIN)/activate && $(UVICORN) $(APP_MODULE) --reload
 
 test: venv
-	$(PYTEST)
+	. $(VENV_BIN)/activate && $(PYTEST)
 
 lint: venv
-	$(RUFF) check .
+	. $(VENV_BIN)/activate && $(RUFF) check .
 
 format: venv
-	$(RUFF) format .
+	. $(VENV_BIN)/activate && $(RUFF) format .
 
 clean:
 	rm -rf `find . -name __pycache__`
