@@ -3053,7 +3053,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных да\n    нных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.",
+        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -3062,7 +3062,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных да\n    нных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"",
+        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"\n    def __init__(",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },

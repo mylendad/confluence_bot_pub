@@ -64,8 +64,7 @@ FACT_ALIASES = {
 }
 JIRA_KEY_RE = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
 PLACEHOLDER_TEXTS = {
-    "получение подробных да
-    нных проблемы",
+    "получение подробных данных проблемы",
     "статус",
 }
 
@@ -316,7 +315,9 @@ class ConfluenceParser:
             resolution_date = fields.get("resolutiondate")
             if resolution_date:
                 try:
-                    change.jira_done_at = datetime.fromisoformat(resolution_date.replace("Z", "+00:00"))
+                    change.jira_done_at = datetime.fromisoformat(
+                        resolution_date.replace("Z", "+00:00")
+                    )
                 except Exception:
                     logger.warning("Failed to parse Jira resolution date: %s", resolution_date)
 
@@ -380,7 +381,7 @@ class ConfluenceParser:
                 # Note: histories might not be defined if resolutiondate was found directly
                 changelog = issue.get("changelog", {})
                 current_histories = changelog.get("histories", [])
-                
+
                 for history in current_histories:
                     for item in history.get("items", []):
                         if (item.get("field") or "").upper() == tag_upper:
@@ -434,9 +435,12 @@ class ConfluenceParser:
             header_row = table.find("tr")
             if not header_row:
                 continue
-                
-            headers = [self._clean_text(th.get_text(" ", strip=True)) for th in header_row.find_all("th", recursive=False)]
-            
+
+            headers = [
+                self._clean_text(th.get_text(" ", strip=True))
+                for th in header_row.find_all("th", recursive=False)
+            ]
+
             # Если это широкая таблица (заголовков много), парсим каждую строку как отдельный факт
             if len(headers) >= 3:
                 table_title = ""
@@ -444,8 +448,8 @@ class ConfluenceParser:
                 prev_node = table.find_previous(["h1", "h2", "h3", "h4", "p"])
                 if prev_node:
                     table_title = self._clean_text(prev_node.get_text(" ", strip=True))
-                
-                for row in table.find_all("tr")[1:]: # Пропускаем заголовок
+
+                for row in table.find_all("tr")[1:]:  # Пропускаем заголовок
                     cells = row.find_all(["td", "th"], recursive=False)
                     if len(cells) == len(headers):
                         row_parts = []
@@ -453,29 +457,36 @@ class ConfluenceParser:
                             cell_val = self._clean_text(cell.get_text(" ", strip=True))
                             if cell_val and headers[i]:
                                 row_parts.append(f"{headers[i]}: {cell_val}")
-                        
+
                         if row_parts:
                             full_val = " | ".join(row_parts)
                             key = self._fact_key(table_title) if table_title else "table_row"
                             label = table_title or "Данные таблицы"
-                            facts.append(DatamartFact(key=key, label=label, value=full_val, links=self._links_from_node(row)))
-                continue # Горизонтальную таблицу обработали, идем дальше
+                            facts.append(
+                                DatamartFact(
+                                    key=key,
+                                    label=label,
+                                    value=full_val,
+                                    links=self._links_from_node(row),
+                                )
+                            )
+                continue  # Горизонтальную таблицу обработали, идем дальше
 
             # 2. Обработка вертикальных таблиц (Ключ в левой колонке)
             for row in table.find_all("tr"):
                 cells = row.find_all(["th", "td"], recursive=False)
                 if len(cells) < 2:
                     continue
-                
+
                 label_node = cells[0]
                 value_node = cells[1]
-                
+
                 label = self._clean_text(label_node.get_text(" ", strip=True))
                 if not label:
                     continue
-                
+
                 key = self._fact_key(label)
-                # Даже если ключ unknown, для чек-листов мы часто хотим сохранить строку, 
+                # Даже если ключ unknown, для чек-листов мы часто хотим сохранить строку,
                 # но здесь полагаемся на фильтрацию по FACT_ALIASES для чистоты RAG
                 if key == "unknown":
                     continue
@@ -486,13 +497,19 @@ class ConfluenceParser:
                     sub_rows_texts = []
                     sub_header_tr = sub_table.find("tr")
                     if sub_header_tr:
-                        sub_headers = [self._clean_text(th.get_text(" ", strip=True)) for th in sub_header_tr.find_all(["th", "td"])]
+                        sub_headers = [
+                            self._clean_text(th.get_text(" ", strip=True))
+                            for th in sub_header_tr.find_all(["th", "td"])
+                        ]
                         for sub_tr in sub_table.find_all("tr")[1:]:
                             sub_tds = sub_tr.find_all(["td", "th"])
                             if len(sub_tds) == len(sub_headers):
-                                row_str = "; ".join(f"{sub_headers[i]}: {self._clean_text(td.get_text())}" for i, td in enumerate(sub_tds))
+                                row_str = "; ".join(
+                                    f"{sub_headers[i]}: {self._clean_text(td.get_text())}"
+                                    for i, td in enumerate(sub_tds)
+                                )
                                 sub_rows_texts.append(row_str)
-                    
+
                     if sub_rows_texts:
                         value = " [ " + " | ".join(sub_rows_texts) + " ] "
                     else:
@@ -507,8 +524,12 @@ class ConfluenceParser:
                 if marker in seen:
                     continue
                 seen.add(marker)
-                facts.append(DatamartFact(key=key, label=label, value=value, links=self._links_from_node(value_node)))
-        
+                facts.append(
+                    DatamartFact(
+                        key=key, label=label, value=value, links=self._links_from_node(value_node)
+                    )
+                )
+
         return facts
 
     def extract_release_changes(

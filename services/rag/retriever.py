@@ -486,10 +486,32 @@ class RAGRetriever:
         return RAGAnswer(answer="\n".join(lines), sources=[self._source(attr) for attr in attrs])
 
     def _source_lineage(self, question: str) -> RAGAnswer | None:
-        """Получение lineage (источников) атрибута из S2T."""
+        """Получение lineage (источников) атрибута или всей витрины из S2T."""
         attrs = self._attrs_from_question(question)
+        
+        # Если атрибут не найден, пробуем найти все источники для витрины целиком
         if not attrs:
+            datamart_name = self._extract_datamart_name(question)
+            if datamart_name:
+                attrs = self.metadata_repo.list_attributes(datamart_name=datamart_name)
+                if attrs:
+                    sources_map: dict[str, set[str]] = {}
+                    for attr in attrs:
+                        src_sys = attr.source_schema or "Не указана"
+                        src_tab = attr.source_table or "Не указана"
+                        sources_map.setdefault(src_sys, set()).add(src_tab)
+                    
+                    lines = [f"Источники данных для витрины `{datamart_name}`:"]
+                    for sys, tables in sorted(sources_map.items()):
+                        tables_str = ", ".join(sorted(tables))
+                        lines.append(f"- Система `{sys}`: таблицы {tables_str}")
+                    
+                    return RAGAnswer(
+                        answer="\n".join(lines),
+                        sources=[self._source(a) for a in attrs[:5]]
+                    )
             return None
+
         lines = [
             (
                 f"{self._path(attr.target_schema, attr.target_table, attr.target_field)} <- "
