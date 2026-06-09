@@ -4,10 +4,10 @@ from pathlib import Path
 from services.ingestion.changes.history_repository import HistoryRepository
 from services.ingestion.changes.models import ChangeLogEntry
 from services.ingestion.confluence.models import Datamart, DatamartFact, ReleaseChange
+from services.ingestion.s2t.models import S2TAttribute
 from services.rag.llm import AnswerGenerator
 from services.rag.retriever import RAGRetriever
 from services.rag.vector_store import JsonVectorStore
-from services.ingestion.s2t.models import S2TAttribute
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.sqlite import SQLite
 

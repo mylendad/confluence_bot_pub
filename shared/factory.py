@@ -1,9 +1,9 @@
 from services.ingestion.changes.history_repository import HistoryRepository
-from shared.config.config import Settings, get_settings
 from services.ingestion.confluence.client import ConfluenceClient
 from services.rag.llm import AnswerGenerator, build_answer_generator
 from services.rag.retriever import RAGRetriever
 from services.rag.vector_store import JsonVectorStore
+from shared.config.config import Settings, get_settings
 from shared.storage.chat_history_repository import ChatHistoryRepository
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.s2t_state_repository import S2TStateRepository

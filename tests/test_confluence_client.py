@@ -1,9 +1,9 @@
 import httpx
 import pytest
 
-from shared.config.config import Settings
 from services.ingestion.confluence.client import ConfluenceClient
 from services.ingestion.confluence.exceptions import ConfluenceAuthError
+from shared.config.config import Settings
 
 
 def test_attachment_download_url_keeps_cloud_context_path() -> None:

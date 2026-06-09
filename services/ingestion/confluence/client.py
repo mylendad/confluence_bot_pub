@@ -8,10 +8,10 @@ from pathlib import Path
 
 import httpx
 
-from shared.config.config import Settings
 from services.ingestion.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from services.ingestion.confluence.models import ConfluencePage, S2TResource
 from services.ingestion.confluence.urls import confluence_urljoin
+from shared.config.config import Settings
 
 logger = logging.getLogger(__name__)
 
@@ -167,7 +167,7 @@ class ConfluenceClient:
                     "CONFLUENCE_AUTH_TYPE=token."
                 )
             else:
-                msg = f"Confluence access forbidden (403). Check your account permissions or IP restrictions."
+                msg = "Confluence access forbidden (403). Check your account permissions or IP restrictions."
             
             raise ConfluenceAuthError(msg)
 

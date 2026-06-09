@@ -9,24 +9,24 @@ from services.bot.cli_adapter import CLIAdapter
 from services.bot.service import BotService
 from services.ingestion.changes.diff_service import DiffService
 from services.ingestion.changes.history_repository import HistoryRepository
-from shared.config.config import get_settings
 from services.ingestion.confluence.client import ConfluenceClient
 from services.ingestion.confluence.exceptions import ConfluenceAuthError, ConfluenceError
 from services.ingestion.confluence.jira_client import JiraClient
 from services.ingestion.confluence.models import Datamart
 from services.ingestion.confluence.parser import ConfluenceParser
-from shared.factory import build_retriever
-from shared.logging.logging_config import configure_logging
-from services.rag.indexer import RAGIndexer
-from services.rag.vector_store import JsonVectorStore
 from services.ingestion.s2t.exceptions import S2TParseError
 from services.ingestion.s2t.parser import S2TParser
+from services.ingestion.sync.incremental_updater import IncrementalUpdater, IncrementalUpdateResult
+from services.ingestion.sync.metadata_sync_service import MetadataSyncService
+from services.rag.indexer import RAGIndexer
+from services.rag.vector_store import JsonVectorStore
+from shared.config.config import get_settings
+from shared.factory import build_retriever
+from shared.logging.logging_config import configure_logging
 from shared.storage.document_repository import DocumentRepository
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.s2t_state_repository import S2TStateRepository
 from shared.storage.sqlite import SQLite
-from services.ingestion.sync.incremental_updater import IncrementalUpdater, IncrementalUpdateResult
-from services.ingestion.sync.metadata_sync_service import MetadataSyncService
 
 app = typer.Typer(no_args_is_help=True)
 

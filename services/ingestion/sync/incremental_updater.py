@@ -7,13 +7,13 @@ from services.ingestion.changes.diff_service import DiffService
 from services.ingestion.changes.history_repository import HistoryRepository
 from services.ingestion.confluence.client import ConfluenceClient
 from services.ingestion.confluence.exceptions import ConfluenceAuthError, ConfluenceError
-from services.rag.indexer import RAGIndexer
 from services.ingestion.s2t.parser import S2TParser
-from shared.storage.metadata_repository import MetadataRepository
-from shared.storage.s2t_state_repository import S2TStateRepository
 from services.ingestion.sync.hash_service import HashService
 from services.ingestion.sync.metadata_sync_service import MetadataSyncService, S2TMetadataSnapshot
 from services.ingestion.sync.state_comparator import StateComparator
+from services.rag.indexer import RAGIndexer
+from shared.storage.metadata_repository import MetadataRepository
+from shared.storage.s2t_state_repository import S2TStateRepository
 
 logger = logging.getLogger(__name__)
 

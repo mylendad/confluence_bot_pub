@@ -5,8 +5,8 @@ from datetime import UTC
 
 from services.ingestion.confluence.models import Datamart, S2TResource
 from services.ingestion.confluence.parser import ConfluenceParser
-from shared.storage.page_snapshot_repository import PageSnapshotRepository
 from services.ingestion.sync.hash_service import HashService
+from shared.storage.page_snapshot_repository import PageSnapshotRepository
 from shared.utils.hashing import stable_hash
 from shared.utils.text_utils import normalize_text
 

@@ -1,28 +1,28 @@
-import os
-import copy
-import subprocess
-import sys
 import asyncio
+import copy
 import logging
+import os
+import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, status, Body, Path as FastPath
+from fastapi import BackgroundTasks, Body, FastAPI, HTTPException, status
+from fastapi import Path as FastPath
 from fastapi.responses import RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from services.bot.http_adapter import (
     AskRequest,
     AskResponse,
-    TokensSaveRequest,
-    TokensStatusResponse,
-    MessageResponse,
+    ChatHistoryMessage,
     ExternalHealthResponse,
+    MessageResponse,
     QuestionTemplate,
     SyncLastEventsResponse,
     SyncStatusResponse,
-    ChatHistoryMessage,
+    TokensSaveRequest,
+    TokensStatusResponse,
 )
 from services.bot.service import BotService
 from shared.config.config import get_settings
@@ -34,10 +34,8 @@ from shared.factory import (
     build_retriever,
     build_state_repository,
 )
-from shared.logging.logging_config import memory_handler, configure_logging
+from shared.logging.logging_config import configure_logging, memory_handler
 from shared.storage.chat_history_repository import ChatMessage
-from shared.storage.metadata_repository import MetadataRepository
-from shared.storage.sqlite import SQLite
 
 # --- Работа с .env (абсолютный путь) ---
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -225,6 +223,7 @@ async def download_logs():
 @app.get("/api/datamarts/list", response_model=list[str], summary="Список витрин", tags=["Data"])
 async def list_datamarts():
     import re
+
     from shared.utils.text_utils import normalize_text
     meta_repo = build_metadata_repository()
     datamarts = meta_repo.list_datamarts()

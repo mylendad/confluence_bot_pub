@@ -2,8 +2,8 @@ import logging
 import time
 from typing import Protocol
 
-from shared.config.config import Settings
 from services.rag.prompts import ANSWER_SYSTEM_PROMPT
+from shared.config.config import Settings
 
 logger = logging.getLogger(__name__)
 

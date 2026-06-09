@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from shared.config.config import Settings
 from services.ingestion.confluence.models import ConfluencePage, S2TResource
 from services.ingestion.confluence.parser import ConfluenceParser
+from shared.config.config import Settings
 
 
 class FakeClient:

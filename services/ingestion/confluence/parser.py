@@ -5,7 +5,6 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from bs4 import BeautifulSoup
 
-from shared.config.config import Settings
 from services.ingestion.confluence.client import ConfluenceClient
 from services.ingestion.confluence.jira_client import JiraClient
 from services.ingestion.confluence.models import (
@@ -18,6 +17,7 @@ from services.ingestion.confluence.models import (
     Stakeholder,
 )
 from services.ingestion.confluence.urls import confluence_urljoin
+from shared.config.config import Settings
 from shared.utils.date_utils import parse_date_from_text
 from shared.utils.text_utils import fuzzy_contains, normalize_text
 

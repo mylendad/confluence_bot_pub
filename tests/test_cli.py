@@ -3,8 +3,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from services.ingestion.changes.history_repository import HistoryRepository
 from services.bot.cli import _raise_confluence_cli_error, parse_s2t
+from services.ingestion.changes.history_repository import HistoryRepository
 from shared.config.config import get_settings
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.sqlite import SQLite

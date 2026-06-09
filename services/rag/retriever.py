@@ -123,28 +123,48 @@ class RAGRetriever:
         """
         intent = self.intent_classifier.classify(question)
         if intent == "datamart_list":
-            return self._datamart_list()
-        if intent == "datamart_fact":
-            return self._datamart_fact(question)
-        if intent == "release_changes":
-            return self._release_changes(question)
-        if intent == "owner_lookup":
-            return self._owner_lookup(question)
-        if intent == "attribute_usage":
-            return self._attribute_usage(question)
-        if intent == "attribute_composition":
-            return self._attribute_composition(question)
-        if intent == "last_year_changes":
-            return self._last_year_changes(question)
-        if intent == "transformation_logic":
-            exact = self._attribute_logic(question)
-            if exact:
-                return exact
-        if intent == "source_lineage":
-            exact = self._source_lineage(question)
-            if exact:
-                return exact
-        return self._vector_answer(question)
+            res = self._datamart_list()
+        elif intent == "datamart_fact":
+            res = self._datamart_fact(question)
+        elif intent == "release_changes":
+            res = self._release_changes(question)
+        elif intent == "owner_lookup":
+            res = self._owner_lookup(question)
+        elif intent == "attribute_usage":
+            res = self._attribute_usage(question)
+        elif intent == "attribute_composition":
+            res = self._attribute_composition(question)
+        elif intent == "last_year_changes":
+            res = self._last_year_changes(question)
+        elif intent == "transformation_logic":
+            res = self._attribute_logic(question) or self._vector_answer(question)
+        elif intent == "source_lineage":
+            res = self._source_lineage(question) or self._vector_answer(question)
+        else:
+            res = self._vector_answer(question)
+
+        res.sources = self._deduplicate_sources(res.sources)
+        return res
+
+    def _deduplicate_sources(self, sources: list[dict]) -> list[dict]:
+        """Удаляет дубликаты из списка источников."""
+        if not sources:
+            return []
+        unique_sources = []
+        seen = set()
+        for s in sources:
+            # Выбираем ключи, которые идентифицируют источник
+            # (витрина + файл + дата + ссылка)
+            dm = s.get("datamart") or s.get("datamart_name")
+            s2t = s.get("s2t_file") or s.get("s2t_file_name")
+            date = s.get("s2t_file_date")
+            url = s.get("confluence_url") or s.get("source_url")
+
+            key = (dm, s2t, date, url)
+            if key not in seen:
+                seen.add(key)
+                unique_sources.append(s)
+        return unique_sources
 
     def _owner_lookup(self, question: str) -> RAGAnswer:
         """Поиск владельцев и ответственных за витрину."""

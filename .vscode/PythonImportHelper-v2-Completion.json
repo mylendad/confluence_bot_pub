@@ -483,102 +483,6 @@
         "documentation": {}
     },
     {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
         "label": "ConfluenceClient",
         "importPath": "services.ingestion.confluence.client",
         "description": "services.ingestion.confluence.client",
@@ -891,6 +795,270 @@
         "documentation": {}
     },
     {
+        "label": "S2TParseError",
+        "importPath": "services.ingestion.s2t.exceptions",
+        "description": "services.ingestion.s2t.exceptions",
+        "isExtraImport": true,
+        "detail": "services.ingestion.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParseError",
+        "importPath": "services.ingestion.s2t.exceptions",
+        "description": "services.ingestion.s2t.exceptions",
+        "isExtraImport": true,
+        "detail": "services.ingestion.s2t.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "services.ingestion.s2t.parser",
+        "description": "services.ingestion.s2t.parser",
+        "isExtraImport": true,
+        "detail": "services.ingestion.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "services.ingestion.s2t.parser",
+        "description": "services.ingestion.s2t.parser",
+        "isExtraImport": true,
+        "detail": "services.ingestion.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "S2TParser",
+        "importPath": "services.ingestion.s2t.parser",
+        "description": "services.ingestion.s2t.parser",
+        "isExtraImport": true,
+        "detail": "services.ingestion.s2t.parser",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "importPath": "services.ingestion.sync.incremental_updater",
+        "description": "services.ingestion.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdateResult",
+        "importPath": "services.ingestion.sync.incremental_updater",
+        "description": "services.ingestion.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "importPath": "services.ingestion.sync.incremental_updater",
+        "description": "services.ingestion.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataSyncService",
+        "importPath": "services.ingestion.sync.metadata_sync_service",
+        "description": "services.ingestion.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataSyncService",
+        "importPath": "services.ingestion.sync.metadata_sync_service",
+        "description": "services.ingestion.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "S2TMetadataSnapshot",
+        "importPath": "services.ingestion.sync.metadata_sync_service",
+        "description": "services.ingestion.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "S2TMetadataSnapshot",
+        "importPath": "services.ingestion.sync.metadata_sync_service",
+        "description": "services.ingestion.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "services.rag.indexer",
+        "description": "services.rag.indexer",
+        "isExtraImport": true,
+        "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "services.rag.indexer",
+        "description": "services.rag.indexer",
+        "isExtraImport": true,
+        "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "services.rag.indexer",
+        "description": "services.rag.indexer",
+        "isExtraImport": true,
+        "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
         "label": "build_retriever",
         "importPath": "shared.factory",
         "description": "shared.factory",
@@ -955,14 +1123,6 @@
         "documentation": {}
     },
     {
-        "label": "memory_handler",
-        "importPath": "shared.logging.logging_config",
-        "description": "shared.logging.logging_config",
-        "isExtraImport": true,
-        "detail": "shared.logging.logging_config",
-        "documentation": {}
-    },
-    {
         "label": "configure_logging",
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
@@ -971,115 +1131,11 @@
         "documentation": {}
     },
     {
-        "label": "RAGIndexer",
-        "importPath": "services.rag.indexer",
-        "description": "services.rag.indexer",
+        "label": "memory_handler",
+        "importPath": "shared.logging.logging_config",
+        "description": "shared.logging.logging_config",
         "isExtraImport": true,
-        "detail": "services.rag.indexer",
-        "documentation": {}
-    },
-    {
-        "label": "RAGIndexer",
-        "importPath": "services.rag.indexer",
-        "description": "services.rag.indexer",
-        "isExtraImport": true,
-        "detail": "services.rag.indexer",
-        "documentation": {}
-    },
-    {
-        "label": "RAGIndexer",
-        "importPath": "services.rag.indexer",
-        "description": "services.rag.indexer",
-        "isExtraImport": true,
-        "detail": "services.rag.indexer",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "JsonVectorStore",
-        "importPath": "services.rag.vector_store",
-        "description": "services.rag.vector_store",
-        "isExtraImport": true,
-        "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "S2TParseError",
-        "importPath": "services.ingestion.s2t.exceptions",
-        "description": "services.ingestion.s2t.exceptions",
-        "isExtraImport": true,
-        "detail": "services.ingestion.s2t.exceptions",
-        "documentation": {}
-    },
-    {
-        "label": "S2TParseError",
-        "importPath": "services.ingestion.s2t.exceptions",
-        "description": "services.ingestion.s2t.exceptions",
-        "isExtraImport": true,
-        "detail": "services.ingestion.s2t.exceptions",
-        "documentation": {}
-    },
-    {
-        "label": "S2TParser",
-        "importPath": "services.ingestion.s2t.parser",
-        "description": "services.ingestion.s2t.parser",
-        "isExtraImport": true,
-        "detail": "services.ingestion.s2t.parser",
-        "documentation": {}
-    },
-    {
-        "label": "S2TParser",
-        "importPath": "services.ingestion.s2t.parser",
-        "description": "services.ingestion.s2t.parser",
-        "isExtraImport": true,
-        "detail": "services.ingestion.s2t.parser",
-        "documentation": {}
-    },
-    {
-        "label": "S2TParser",
-        "importPath": "services.ingestion.s2t.parser",
-        "description": "services.ingestion.s2t.parser",
-        "isExtraImport": true,
-        "detail": "services.ingestion.s2t.parser",
+        "detail": "shared.logging.logging_config",
         "documentation": {}
     },
     {
@@ -1104,14 +1160,6 @@
         "description": "shared.storage.document_repository",
         "isExtraImport": true,
         "detail": "shared.storage.document_repository",
-        "documentation": {}
-    },
-    {
-        "label": "MetadataRepository",
-        "importPath": "shared.storage.metadata_repository",
-        "description": "shared.storage.metadata_repository",
-        "isExtraImport": true,
-        "detail": "shared.storage.metadata_repository",
         "documentation": {}
     },
     {
@@ -1307,70 +1355,6 @@
         "documentation": {}
     },
     {
-        "label": "SQLite",
-        "importPath": "shared.storage.sqlite",
-        "description": "shared.storage.sqlite",
-        "isExtraImport": true,
-        "detail": "shared.storage.sqlite",
-        "documentation": {}
-    },
-    {
-        "label": "IncrementalUpdater",
-        "importPath": "services.ingestion.sync.incremental_updater",
-        "description": "services.ingestion.sync.incremental_updater",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.incremental_updater",
-        "documentation": {}
-    },
-    {
-        "label": "IncrementalUpdateResult",
-        "importPath": "services.ingestion.sync.incremental_updater",
-        "description": "services.ingestion.sync.incremental_updater",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.incremental_updater",
-        "documentation": {}
-    },
-    {
-        "label": "IncrementalUpdater",
-        "importPath": "services.ingestion.sync.incremental_updater",
-        "description": "services.ingestion.sync.incremental_updater",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.incremental_updater",
-        "documentation": {}
-    },
-    {
-        "label": "MetadataSyncService",
-        "importPath": "services.ingestion.sync.metadata_sync_service",
-        "description": "services.ingestion.sync.metadata_sync_service",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.metadata_sync_service",
-        "documentation": {}
-    },
-    {
-        "label": "MetadataSyncService",
-        "importPath": "services.ingestion.sync.metadata_sync_service",
-        "description": "services.ingestion.sync.metadata_sync_service",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.metadata_sync_service",
-        "documentation": {}
-    },
-    {
-        "label": "S2TMetadataSnapshot",
-        "importPath": "services.ingestion.sync.metadata_sync_service",
-        "description": "services.ingestion.sync.metadata_sync_service",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.metadata_sync_service",
-        "documentation": {}
-    },
-    {
-        "label": "S2TMetadataSnapshot",
-        "importPath": "services.ingestion.sync.metadata_sync_service",
-        "description": "services.ingestion.sync.metadata_sync_service",
-        "isExtraImport": true,
-        "detail": "services.ingestion.sync.metadata_sync_service",
-        "documentation": {}
-    },
-    {
         "label": "BotInterface",
         "importPath": "services.bot.ports",
         "description": "services.bot.ports",
@@ -1384,6 +1368,62 @@
         "description": "services.bot.ports",
         "isExtraImport": true,
         "detail": "services.bot.ports",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Annotated",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -1395,7 +1435,7 @@
         "documentation": {}
     },
     {
-        "label": "Field",
+        "label": "ConfigDict",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -1403,7 +1443,7 @@
         "documentation": {}
     },
     {
-        "label": "ConfigDict",
+        "label": "Field",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -1491,100 +1531,12 @@
         "documentation": {}
     },
     {
-        "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Annotated",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "os",
+        "label": "asyncio",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
         "documentation": {}
     },
     {
@@ -1597,12 +1549,21 @@
         "documentation": {}
     },
     {
-        "label": "subprocess",
+        "label": "logging",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "subprocess",
-        "description": "subprocess",
-        "detail": "subprocess",
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
         "documentation": {}
     },
     {
@@ -1615,21 +1576,19 @@
         "documentation": {}
     },
     {
-        "label": "asyncio",
-        "kind": 6,
+        "label": "BackgroundTasks",
+        "importPath": "fastapi",
+        "description": "fastapi",
         "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
+        "detail": "fastapi",
         "documentation": {}
     },
     {
-        "label": "logging",
-        "kind": 6,
+        "label": "Body",
+        "importPath": "fastapi",
+        "description": "fastapi",
         "isExtraImport": true,
-        "importPath": "logging",
-        "description": "logging",
-        "detail": "logging",
+        "detail": "fastapi",
         "documentation": {}
     },
     {
@@ -1649,23 +1608,7 @@
         "documentation": {}
     },
     {
-        "label": "BackgroundTasks",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "status",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Body",
         "importPath": "fastapi",
         "description": "fastapi",
         "isExtraImport": true,
@@ -1721,23 +1664,7 @@
         "documentation": {}
     },
     {
-        "label": "TokensSaveRequest",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
-        "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "TokensStatusResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
-        "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
-        "documentation": {}
-    },
-    {
-        "label": "MessageResponse",
+        "label": "ChatHistoryMessage",
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
         "isExtraImport": true,
@@ -1746,6 +1673,14 @@
     },
     {
         "label": "ExternalHealthResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
         "isExtraImport": true,
@@ -1777,7 +1712,15 @@
         "documentation": {}
     },
     {
-        "label": "ChatHistoryMessage",
+        "label": "TokensSaveRequest",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "TokensStatusResponse",
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
         "isExtraImport": true,
@@ -2666,7 +2609,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class AskResponse(BaseModel):\n    \"\"\"\n    Ответ бота с текстом и источниками.\n    \"\"\"\n    answer: str = Field(..., description=\"Текстовый ответ бота\")\n    sources: List[Dict[str, Any]] = Field(default_factory=list, description=\"Список источников информации\")\nclass TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"",
+        "peekOfCode": "class AskResponse(BaseModel):\n    \"\"\"\n    Ответ бота с текстом и источниками.\n    \"\"\"\n    answer: str = Field(..., description=\"Текстовый ответ бота\")\n    sources: list[dict[str, Any]] = Field(default_factory=list, description=\"Список источников информации\")\nclass TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2675,7 +2618,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"\n    confluence_token: Optional[str] = Field(None, description=\"Токен для Confluence\")\n    jira_token: Optional[str] = Field(None, description=\"Токен для Jira\")\n    gigachat_token: Optional[str] = Field(None, description=\"Токен для GigaChat\")\nclass TokensStatusResponse(BaseModel):\n    \"\"\"\n    Статус настройки токенов в системе.",
+        "peekOfCode": "class TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"\n    confluence_token: str | None = Field(None, description=\"Токен для Confluence\")\n    jira_token: str | None = Field(None, description=\"Токен для Jira\")\n    gigachat_token: str | None = Field(None, description=\"Токен для GigaChat\")\nclass TokensStatusResponse(BaseModel):\n    \"\"\"\n    Статус настройки токенов в системе.",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2693,7 +2636,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class HealthStatus(BaseModel):\n    \"\"\"\n    Статус работоспособности сервиса.\n    \"\"\"\n    status: str = Field(..., description=\"Статус сервиса (ok/error)\")\n    details: Optional[Dict[str, Any]] = Field(None, description=\"Дополнительные детали статуса\")\nclass ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"",
+        "peekOfCode": "class HealthStatus(BaseModel):\n    \"\"\"\n    Статус работоспособности сервиса.\n    \"\"\"\n    status: str = Field(..., description=\"Статус сервиса (ok/error)\")\n    details: dict[str, Any] | None = Field(None, description=\"Дополнительные детали статуса\")\nclass ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2702,7 +2645,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"\n    confluence: Dict[str, Any] = Field(..., description=\"Статус подключения к Confluence\")\n    gigachat: Dict[str, Any] = Field(..., description=\"Статус подключения к GigaChat\")\n    jira: Dict[str, Any] = Field(..., description=\"Статус подключения к Jira\")\nclass SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).",
+        "peekOfCode": "class ExternalHealthResponse(BaseModel):\n    \"\"\"\n    Статус подключения к внешним системам.\n    \"\"\"\n    confluence: dict[str, Any] = Field(..., description=\"Статус подключения к Confluence\")\n    gigachat: dict[str, Any] = Field(..., description=\"Статус подключения к GigaChat\")\n    jira: dict[str, Any] = Field(..., description=\"Статус подключения к Jira\")\nclass SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2711,7 +2654,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).\n    \"\"\"\n    datamart: str = Field(..., description=\"Название витрины\")\n    file: str = Field(..., description=\"Имя файла S2T\")\n    last_synced: Optional[str] = Field(None, description=\"Время последней синхронизации (ISO)\")\n    status: str = Field(..., description=\"Текущий статус ресурса\")\nclass SyncStatusResponse(BaseModel):\n    \"\"\"",
+        "peekOfCode": "class SyncStatusResource(BaseModel):\n    \"\"\"\n    Статус синхронизации конкретного ресурса (витрины).\n    \"\"\"\n    datamart: str = Field(..., description=\"Название витрины\")\n    file: str = Field(..., description=\"Имя файла S2T\")\n    last_synced: str | None = Field(None, description=\"Время последней синхронизации (ISO)\")\n    status: str = Field(..., description=\"Текущий статус ресурса\")\nclass SyncStatusResponse(BaseModel):\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2720,7 +2663,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class SyncStatusResponse(BaseModel):\n    \"\"\"\n    Общий статус синхронизации всех витрин.\n    \"\"\"\n    last_sync: Optional[str] = Field(None, description=\"Время самой свежей синхронизации\")\n    total_datamarts: int = Field(..., description=\"Общее количество витрин в базе\")\n    status: str = Field(..., description=\"Общий статус синхронизации\")\n    resources: List[SyncStatusResource] = Field(default_factory=list, description=\"Детальный список ресурсов\")\nclass SyncLastEventsResponse(BaseModel):\n    \"\"\"",
+        "peekOfCode": "class SyncStatusResponse(BaseModel):\n    \"\"\"\n    Общий статус синхронизации всех витрин.\n    \"\"\"\n    last_sync: str | None = Field(None, description=\"Время самой свежей синхронизации\")\n    total_datamarts: int = Field(..., description=\"Общее количество витрин в базе\")\n    status: str = Field(..., description=\"Общий статус синхронизации\")\n    resources: list[SyncStatusResource] = Field(default_factory=list, description=\"Детальный список ресурсов\")\nclass SyncLastEventsResponse(BaseModel):\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2729,7 +2672,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class SyncLastEventsResponse(BaseModel):\n    \"\"\"\n    Информация о последних событиях синхронизации.\n    \"\"\"\n    last_parsing: Optional[str] = Field(None, description=\"Время последнего парсинга файлов\")\n    last_rag_update: Optional[str] = Field(None, description=\"Время последнего обновления RAG-индекса\")\n    status: str = Field(..., description=\"Статус\")\nclass ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.",
+        "peekOfCode": "class SyncLastEventsResponse(BaseModel):\n    \"\"\"\n    Информация о последних событиях синхронизации.\n    \"\"\"\n    last_parsing: str | None = Field(None, description=\"Время последнего парсинга файлов\")\n    last_rag_update: str | None = Field(None, description=\"Время последнего обновления RAG-индекса\")\n    status: str = Field(..., description=\"Статус\")\nclass ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2738,7 +2681,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.\n    \"\"\"\n    user: str = Field(..., description=\"Сообщение пользователя\")\n    bot: str = Field(..., description=\"Ответ бота\")\n    sources: List[str] = Field(default_factory=list, description=\"Список ссылок на источники\")\n    timestamp: str = Field(..., description=\"Время сообщения (ISO)\")\nclass QuestionTemplate(BaseModel):\n    \"\"\"",
+        "peekOfCode": "class ChatHistoryMessage(BaseModel):\n    \"\"\"\n    Запись в истории чата.\n    \"\"\"\n    user: str = Field(..., description=\"Сообщение пользователя\")\n    bot: str = Field(..., description=\"Ответ бота\")\n    sources: list[str] = Field(default_factory=list, description=\"Список ссылок на источники\")\n    timestamp: str = Field(..., description=\"Время сообщения (ISO)\")\nclass QuestionTemplate(BaseModel):\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },

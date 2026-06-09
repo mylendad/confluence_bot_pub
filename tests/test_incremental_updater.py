@@ -2,6 +2,9 @@ from pathlib import Path
 
 from services.ingestion.changes.history_repository import HistoryRepository
 from services.ingestion.confluence.models import Datamart, S2TResource
+from services.ingestion.sync.hash_service import HashService
+from services.ingestion.sync.incremental_updater import IncrementalUpdater
+from services.ingestion.sync.metadata_sync_service import S2TMetadataSnapshot
 from services.rag.indexer import RAGIndexer
 from services.rag.retriever import RAGRetriever
 from services.rag.vector_store import JsonVectorStore
@@ -9,9 +12,6 @@ from shared.storage.document_repository import DocumentRepository
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.s2t_state_repository import S2TStateRepository
 from shared.storage.sqlite import SQLite
-from services.ingestion.sync.hash_service import HashService
-from services.ingestion.sync.incremental_updater import IncrementalUpdater
-from services.ingestion.sync.metadata_sync_service import S2TMetadataSnapshot
 
 
 class FakeMetadataSync:
