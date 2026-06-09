@@ -150,8 +150,29 @@ class ConfluenceClient:
         response = self._request("GET", path, params=params)
 
         if response.status_code in {401, 403}:
-            raise ConfluenceAuthError(f"Confluence authentication failed: {response.status_code}")
+            auth_header = response.headers.get("WWW-Authenticate", "Not provided")
+            server_header = response.headers.get("Server", "Unknown")
+            logger.error(
+                "Confluence Auth Error %s. URL: %s\nHeaders: %s\nWWW-Authenticate: %s\nServer: %s",
+                response.status_code,
+                response.url,
+                dict(response.headers),
+                auth_header,
+                server_header,
+            )
+            if response.status_code == 401:
+                msg = (
+                    f"Confluence authentication failed (401). Server expects: {auth_header}. "
+                    "If using Basic Auth, ensure credentials are correct. If using PAT, ensure "
+                    "CONFLUENCE_AUTH_TYPE=token."
+                )
+            else:
+                msg = f"Confluence access forbidden (403). Check your account permissions or IP restrictions."
+            
+            raise ConfluenceAuthError(msg)
+
         if response.is_error:
+            logger.error("Confluence request failed: %s %s", response.status_code, response.text[:200])
             raise ConfluenceError(f"Confluence request failed: {response.status_code}")
         return response.json()
 
