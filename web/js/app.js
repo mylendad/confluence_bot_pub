@@ -2,6 +2,7 @@ const API_BASE = '';
 const STORED_SESSION_KEY = 'chat_session_id';
 
 // DOM элементы
+const mainApp = document.getElementById('mainApp');
 const settingsPanel = document.getElementById('settingsPanel');
 const toggleSettingsBtn = document.getElementById('toggleSettingsBtn');
 const toggleLogsBtn = document.getElementById('toggleLogsBtn');
@@ -21,13 +22,16 @@ const confluenceStatusDot = document.getElementById('confluence-status-dot');
 const jiraStatusDot = document.getElementById('jira-status-dot');
 const llmStatusDot = document.getElementById('llm-status-dot');
 const updateRagBtn = document.getElementById('updateRagBtn');
-const refreshLogsBtn = document.getElementById('refreshLogsBtn');
 const clearLogsDisplayBtn = document.getElementById('clearLogsDisplayBtn');
 const downloadLogsBtn = document.getElementById('downloadLogsBtn');
 const logsArea = document.getElementById('logsArea');
 const lastUpdateRagDateSpan = document.getElementById('lastUpdateRagDate');
 const refreshUpdateRagDateBtn = document.getElementById('refreshUpdateRagDateBtn');
 const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+const infoBtn = document.getElementById('infoBtn');
+const infoModal = document.getElementById('infoModal');
+const closeInfoModalBtn = document.getElementById('closeInfoModalBtn');
+const qqBtn = document.getElementById('qqBtn');
 
 let isTyping = false;
 let currentSessionId = localStorage.getItem(STORED_SESSION_KEY);
@@ -40,7 +44,7 @@ let pendingCommand = null;
 
 // Хранение состояния для инлайн-кнопок
 let selectedTemplate = null;  // { id, label, template }
-let currentQuestion = null;    // сформированный вопрос для отправки
+let clearedLogsDisplay = false; // Флаг очистки логов
 
 // --- Вспомогательные функции ---
 async function sendQuestionToBot(question) {
@@ -91,15 +95,17 @@ function addMessage(role, text, extraButtons = null) {
     const avatar = role === 'user' ? '👤' : '🤖';
     const formattedText = text.replace(/\n/g, '<br>').replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
     let buttonsHtml = '';
+    let buttonsContainerId = 'btns_' + Math.random().toString(36).substr(2, 9);
+
     if (extraButtons && extraButtons.length) {
-        buttonsHtml = '<div class="inline-buttons">' + extraButtons.map(btn => 
-            `<button class="inline-btn" data-value="${btn.value}" data-type="${btn.type}" data-template-id="${btn.templateId || ''}" data-template="${btn.template || ''}">${btn.label}</button>`
+        buttonsHtml = `<div class="inline-buttons" id="${buttonsContainerId}">` + extraButtons.map(btn => 
+            `<button class="inline-btn-bubble" data-value="${btn.value}" data-type="${btn.type}" data-template-id="${btn.templateId || ''}" data-template="${btn.template || ''}">${btn.label}</button>`
         ).join('') + '</div>';
     }
     messageDiv.innerHTML = `
         <div class="avatar">${avatar}</div>
-        <div class="bubble">
-            ${formattedText}
+        <div class="message-content">
+            <div class="bubble">${formattedText}</div>
             ${buttonsHtml}
         </div>
     `;
@@ -108,13 +114,23 @@ function addMessage(role, text, extraButtons = null) {
     
     // Привязываем обработчики к кнопкам после добавления в DOM
     if (extraButtons && extraButtons.length) {
-        messageDiv.querySelectorAll('.inline-btn').forEach(btn => {
+        const container = document.getElementById(buttonsContainerId);
+        messageDiv.querySelectorAll('.inline-btn-bubble').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const value = btn.getAttribute('data-value');
                 const type = btn.getAttribute('data-type');
                 const templateId = btn.getAttribute('data-template-id');
                 const templateText = btn.getAttribute('data-template');
                 
+                // Удаляем или скрываем контейнер с кнопками и текстом призыва
+                if (container) container.remove();
+                const bubble = messageDiv.querySelector('.bubble');
+                if (bubble && bubble.innerHTML.includes('Выберите из списка:')) {
+                    messageDiv.remove(); // Удаляем все сообщение с призывом, если это был просто призыв
+                } else if (bubble && bubble.innerHTML.includes('Выберите витрину')) {
+                    messageDiv.remove();
+                }
+
                 if (type === 'template') {
                     // Сохраняем выбранный шаблон
                     selectedTemplate = {
@@ -149,7 +165,7 @@ async function showDatamartButtons() {
         if (resp.ok) {
             const datamarts = await resp.json();
             if (datamarts.length === 0) {
-                addMessage('bot', '❌ Нет доступных витрин. Сначала выполните Update RAG.');
+                addMessage('bot', '❌ Нет доступных витрин. Сначала выполните Обновить RAG.');
                 selectedTemplate = null;
                 return;
             }
@@ -172,26 +188,34 @@ async function showDatamartButtons() {
 }
 
 async function loadQuestionTemplates() {
-    try {
-        const resp = await fetch(`${API_BASE}/api/questions/templates`);
-        if (resp.ok) {
-            const templates = await resp.json();
-            const buttons = templates.map(t => ({ 
-                label: t.label, 
-                value: t.id, 
-                type: 'template',
-                templateId: t.id,
-                template: t.template
-            }));
-            addMessage('bot', '📝 Напишите вопрос или выберите из списка:', buttons);
-        }
-    } catch (err) {
-        console.error('Failed to load templates', err);
-    }
+    // Используем расширенный список шаблонов локально
+    const templates = [
+        {id: "owner", label: "Владелец витрины", template: "Кто владелец витрины {datamart}?"},
+        {id: "business_owner", label: "Заинтересованное лицо от бизнеса", template: "Кто Заинтересованное лицо от бизнеса (бизнес-заказчик) витрины {datamart}?"},
+        {id: "attributes", label: "Состав атрибутов", template: "Какие атрибуты входят в витрину {datamart}?"},
+        {id: "logic", label: "Логика расчета атрибута", template: "Какая логика расчета у атрибута {attribute} в витрине {datamart}?"},
+        {id: "history", label: "История изменений", template: "Какие последние изменения были в витрине {datamart}?"},
+        {id: "location", label: "Место публикации", template: "Какое место публикации витрины: источник в СМД/источник для АС Навигатор для {datamart}?"},
+        {id: "category", label: "Категория данных", template: "Какая Категория данных на дата-продукте для {datamart}?"},
+        {id: "process", label: "В рамках какого банковского процесса создана", template: "В рамках какого зарегистрированного банковского-процесса (из реестра) создана {datamart}?"},
+        {id: "periodicity", label: "Периодичность и глубина", template: "Какая периодичность и глубина (на какую глубину тянет данные) у {datamart}?"},
+        {id: "ke", label: "КЭ витрины", template: "Какой КЭ у {datamart}?"},
+        {id: "link_meta", label: "Ссылка на МЕТА", template: "Ссылка на МЕТА по {datamart}?"},
+        {id: "link_product", label: "Ссылка на дата-продукт в СМД", template: "Ссылка на дата-продукт в СМД для {datamart}?"}
+    ];
+
+    const buttons = templates.map(t => ({ 
+        label: t.label, 
+        value: t.id, 
+        type: 'template',
+        templateId: t.id,
+        template: t.template
+    }));
+    addMessage('bot', '📝 Напишите вопрос или выберите из списка:', buttons);
 }
 
 // --- Управление боковой панелью логов ---
-function openLogsSidebar() { logsSidebar.classList.add('open'); overlay.classList.add('show'); startLogsUpdates(); }
+function openLogsSidebar() { logsSidebar.classList.add('open'); overlay.classList.add('show'); clearedLogsDisplay = false; startLogsUpdates(); }
 function closeLogsSidebar() { logsSidebar.classList.remove('open'); overlay.classList.remove('show'); stopLogsUpdates(); }
 function startLogsUpdates() { if (logsUpdateInterval) clearInterval(logsUpdateInterval); fetchLogs(); logsUpdateInterval = setInterval(fetchLogs, 1000); }
 function stopLogsUpdates() { if (logsUpdateInterval) clearInterval(logsUpdateInterval); logsUpdateInterval = null; }
@@ -262,7 +286,6 @@ async function saveTokens() {
             showStatusMessage(data.message || 'Настройки сохранены на сервере', 'info');
             await updateStatusIndicators();
             await checkTokensConfigured();
-            loadQuestionTemplates();
         } else showStatusMessage(`Ошибка: ${data.detail || data.message}`, 'error');
     } catch (err) { showStatusMessage(`Ошибка сети: ${err.message}`, 'error'); }
 }
@@ -285,10 +308,14 @@ async function checkTokensConfigured() {
         if (resp.ok) {
             const data = await resp.json();
             sendBtn.disabled = !data.configured || isTyping;
-            if (!data.configured) settingsPanel.classList.add('show');
-            else if (data.configured && !window._templatesShown) {
-                window._templatesShown = true;
-                loadQuestionTemplates();
+            
+            // Если токен де-факто есть, ставим заглушку "точки" в интерфейсе (чтобы не сбивать с толку пустой инпут)
+            if (data.confluence && !confluenceTokenInput.value) { confluenceTokenInput.type = 'password'; confluenceTokenInput.value = '********'; }
+            if (data.jira && !jiraTokenInput.value) { jiraTokenInput.type = 'password'; jiraTokenInput.value = '********'; }
+            if (data.gigachat && !gigachatTokenInput.value) { gigachatTokenInput.type = 'password'; gigachatTokenInput.value = '********'; }
+            
+            if (!data.configured) {
+                settingsPanel.classList.add('show');
             }
         }
     } catch (err) { console.error(err); }
@@ -307,11 +334,24 @@ async function testConnection() { await updateStatusIndicators(); }
 
 // --- Логи ---
 async function fetchLogs() {
+    if (clearedLogsDisplay) return; // Если нажали очистить, не тянем старые логи пока не перезагрузят или не нажмут обновить (если бы кнопка была)
+    
     try {
         const resp = await fetch(`${API_BASE}/api/logs`);
         if (resp.ok) {
             const logs = await resp.json();
-            logsArea.innerText = logs.join('\n') || '(пусто)';
+            let logsHtml = '';
+            // Подсветка даты/времени
+            const dateRegex = /^(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2},\d{3})/gm;
+            
+            logs.forEach(logLine => {
+                // Экранируем HTML
+                let safeLine = logLine.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                safeLine = safeLine.replace(dateRegex, '<span class="log-date">$1</span>');
+                logsHtml += safeLine + '\n';
+            });
+            
+            logsArea.innerHTML = logsHtml || '(пусто)';
             logsArea.scrollTop = logsArea.scrollHeight;
             if (pendingCommand) {
                 const logsText = logs.join('\n');
@@ -319,30 +359,32 @@ async function fetchLogs() {
                 const error = new RegExp(`❌ Команда ${pendingCommand} завершена с кодом`).test(logsText);
                 if (success || error) {
                     if (success) {
-                        addMessage('bot', `✅ ${pendingCommand === 'update-rag' ? 'Update RAG' : pendingCommand} завершён`);
+                        addMessage('bot', `✅ Обновление RAG завершено`);
                         if (pendingCommand === 'update-rag') loadLastEvents();
-                    } else if (error) addMessage('bot', `❌ Ошибка при выполнении ${pendingCommand}`);
+                    } else if (error) addMessage('bot', `❌ Ошибка при выполнении обновления RAG`);
                     pendingCommand = null;
                 }
             }
         } else logsArea.innerText = 'Не удалось загрузить логи';
     } catch (err) { logsArea.innerText = `Ошибка: ${err.message}`; }
 }
-function clearLogsDisplay() { logsArea.innerText = '(очищено локально)'; }
+function clearLogsDisplay() { 
+    clearedLogsDisplay = true;
+    logsArea.innerHTML = ''; 
+}
 function downloadLogs() { window.location.href = `${API_BASE}/api/logs/download`; }
 
 // --- Запуск команд ---
 async function runCommand(endpoint, commandName, displayName) {
     if (pendingCommand) { showStatusMessage(`Предыдущая команда ${pendingCommand} ещё выполняется`, 'error'); return; }
     pendingCommand = commandName;
-    addMessage('bot', `🔄 ${displayName} запущен... (следите за логами)`);
+    addMessage('bot', `🔄 Обновление RAG запущено. Ожидайте <span class="typing" style="display:inline-block; padding:0;"><span>●</span><span>●</span><span>●</span></span>`);
     try {
         const resp = await fetch(`${API_BASE}${endpoint}`, { method: 'POST' });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.detail || data.message || 'Ошибка');
-        showStatusMessage(data.message || 'Команда запущена', 'info');
     } catch (err) {
-        addMessage('bot', `❌ Ошибка при запуске ${displayName}: ${err.message}`);
+        addMessage('bot', `❌ Ошибка при запуске: ${err.message}`);
         pendingCommand = null;
     }
 }
@@ -360,12 +402,25 @@ async function sendMessage() {
 function addTypingIndicator() {
     const div = document.createElement('div');
     div.className = 'message bot typing-message';
-    div.innerHTML = `<div class="avatar">🤖</div><div class="typing">🤖 <span>●</span><span>●</span><span>●</span> печатает...</div>`;
+    div.innerHTML = `<div class="avatar">🤖</div><div class="bubble typing">🤖 <span>●</span><span>●</span><span>●</span> печатает...</div>`;
     chatArea.appendChild(div);
     chatArea.scrollTop = chatArea.scrollHeight;
     return div;
 }
 function removeTypingIndicator(element) { if (element && element.remove) element.remove(); }
+
+// --- Модальное окно "Что это?" ---
+function openInfoModal() {
+    mainApp.classList.add('blur');
+    infoModal.style.display = 'block';
+    overlay.classList.add('show');
+}
+
+function closeInfoModal() {
+    mainApp.classList.remove('blur');
+    infoModal.style.display = 'none';
+    overlay.classList.remove('show');
+}
 
 // Инициализация
 async function init() {
@@ -401,9 +456,16 @@ sendBtn.onclick = sendMessage;
 toggleSettingsBtn.onclick = () => settingsPanel.classList.toggle('show');
 toggleLogsBtn.onclick = openLogsSidebar;
 closeLogsBtn.onclick = closeLogsSidebar;
-overlay.onclick = closeLogsSidebar;
-updateRagBtn.onclick = () => runCommand('/api/update-rag', 'update-rag', 'Update RAG');
-refreshLogsBtn.onclick = () => { fetchLogs(); startLogsUpdates(); };
+qqBtn.onclick = loadQuestionTemplates;
+infoBtn.onclick = openInfoModal;
+closeInfoModalBtn.onclick = closeInfoModal;
+
+overlay.onclick = () => {
+    closeLogsSidebar();
+    closeInfoModal();
+};
+
+updateRagBtn.onclick = () => runCommand('/api/update-rag', 'update-rag', 'Обновить RAG');
 clearLogsDisplayBtn.onclick = clearLogsDisplay;
 downloadLogsBtn.onclick = downloadLogs;
 refreshUpdateRagDateBtn.onclick = loadLastEvents;

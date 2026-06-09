@@ -18,6 +18,10 @@ body {
     overflow: hidden;
     position: relative;
     margin: 5vh auto;
+    transition: filter 0.3s ease;
+}
+.app.blur {
+    filter: blur(5px);
 }
 .btn-danger { background: #ff3b30; color: white; }
 .btn-danger:hover { background: #cc2f26; }
@@ -119,8 +123,18 @@ body {
 .avatar {
     width: 36px; height: 36px; border-radius: 50%; background: #e9ecef;
     display: flex; align-items: center; justify-content: center; font-size: 18px;
+    flex-shrink: 0;
 }
 .message.user .avatar { background: #007aff; color: white; }
+
+/* The container for text and buttons in bot messages */
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+}
+
 .bubble {
     background: #e9ecef; padding: 10px 14px; border-radius: 18px;
     max-width: 100%; word-wrap: break-word;
@@ -134,35 +148,54 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-top: 8px;
 }
-.inline-btn {
-    background: #e9ecef;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
+.inline-btn-bubble {
+    background: #f8f9fa; /* Более светлый фон */
+    border: 1px solid #e0e0e0;
+    padding: 8px 14px;
+    border-radius: 18px;
     font-size: 13px;
     cursor: pointer;
     text-align: left;
     width: fit-content;
-    transition: background 0.2s;
+    transition: background 0.2s, box-shadow 0.2s;
+    color: #333;
+    display: inline-block;
 }
-.inline-btn:hover {
-    background: #d0d4d8;
+.inline-btn-bubble:hover {
+    background: #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 .input-area {
     padding: 16px 20px; border-top: 1px solid #e9ecef; display: flex;
-    gap: 12px; background: white;
+    gap: 12px; background: white; align-items: center;
 }
+.qq-btn {
+    background: #e9ecef;
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.qq-btn:hover { background: #d0d4d8; }
+
 .input-area textarea {
     flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 24px;
     resize: none; font-family: inherit; font-size: 14px; max-height: 100px;
 }
-.input-area button {
+.input-area button#sendBtn {
     padding: 0 20px; background: #007aff; color: white; border: none;
-    border-radius: 24px; cursor: pointer; font-weight: 500;
+    border-radius: 24px; cursor: pointer; font-weight: 500; height: 40px;
 }
-.input-area button:disabled { opacity: 0.5; cursor: not-allowed; }
+.input-area button#sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .typing {
     color: #666; font-size: 13px; padding: 8px 12px;
     display: flex; align-items: center; gap: 6px;
@@ -170,19 +203,59 @@ body {
 .typing span { animation: blink 1.4s infinite; }
 @keyframes blink { 0%,100%{opacity:0.2;} 50%{opacity:1;} }
 
+/* Info Modal Styles */
+.info-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 1001;
+    overflow: hidden;
+}
+.info-modal-header {
+    background: #1a1a2e;
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.info-modal-content {
+    padding: 20px;
+    line-height: 1.5;
+    color: #333;
+}
+.info-modal-content p {
+    margin-bottom: 12px;
+}
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 .logs-sidebar {
     position: fixed;
     top: 0;
     right: -450px;
     width: 450px;
     height: 100%;
-    background: #f8f9fa;
+    background: #1e1e1e; /* Темный фон на всю панель */
     box-shadow: -2px 0 10px rgba(0,0,0,0.1);
     transition: right 0.3s ease;
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #ddd;
+    border-radius: 0; /* Строго прямоугольный */
+    border: none; /* Убираем белую полосу */
 }
 .logs-sidebar.open { right: 0; }
 .logs-header {
@@ -202,7 +275,7 @@ body {
 }
 .logs-area {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Добавлено колесо прокрутки */
     padding: 16px;
     background: #1e1e1e;
     color: #d4d4d4;
@@ -217,10 +290,13 @@ body {
 .logs-area:focus {
     outline: none;
 }
+.log-date {
+    color: orange;
+}
 .logs-controls {
     padding: 12px;
-    background: #fff;
-    border-top: 1px solid #ddd;
+    background: #2d2d2d;
+    border-top: 1px solid #444;
     display: flex;
     gap: 8px;
     justify-content: flex-end;

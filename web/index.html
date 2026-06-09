@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="/ui/css/styles.css">
 </head>
 <body>
-<div class="app">
+<div class="app" id="mainApp">
     <div class="header">
-        <div class="header-left"><span class="app-title">Confluence Agent</span></div>
+        <div class="header-left">
+            <span class="app-title">Confluence Agent</span>
+            <button class="icon-btn" id="infoBtn" title="Что это?">❓</button>
+        </div>
         <div class="header-right">
             <button class="icon-btn" id="toggleSettingsBtn">⚙️ Настройки</button>
             <button class="icon-btn" id="toggleLogsBtn">📋 Лог</button>
@@ -103,8 +106,21 @@
     </div>
 
     <div class="input-area">
+        <button id="qqBtn" class="qq-btn" title="Быстрые вопросы">QQ</button>
         <textarea id="questionInput" rows="1" placeholder="Введите вопрос... (Enter для отправки)"></textarea>
         <button id="sendBtn" disabled>📤</button>
+    </div>
+</div>
+
+<!-- Modal Info -->
+<div class="info-modal" id="infoModal">
+    <div class="info-modal-header">
+        <strong>🤖 Confluence Agent</strong>
+        <button id="closeInfoModalBtn" class="close-btn">&times;</button>
+    </div>
+    <div class="info-modal-content">
+        <p>Это Confluence agent! Его предназанчение — помощь в поиске информации по витринам данных на основе документации из Confluence и файлов S2T.</p>
+        <p>Для начала работы откройте настройки (кнопка "⚙️ Настройки" в правом верхнем углу) и следуйте инструкции по добавлению необходимых токенов.</p>
     </div>
 </div>
 
@@ -116,7 +132,6 @@
     </div>
     <div class="logs-area" id="logsArea">Загрузка...</div>
     <div class="logs-controls">
-        <button class="btn btn-secondary" id="refreshLogsBtn">🔄 Обновить</button>
         <button class="btn btn-secondary" id="clearLogsDisplayBtn">🗑️ Очистить экран</button>
         <button class="btn btn-secondary" id="downloadLogsBtn">💾 Скачать</button>
     </div>

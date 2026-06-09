@@ -14,6 +14,7 @@ class IntentClassifier:
     """
     Классификатор намерений пользователя на основе текста вопроса.
     """
+
     def classify(self, question: str) -> str:
         """
         Классифицирует вопрос пользователя для определения стратегии поиска ответа.
@@ -31,8 +32,11 @@ class IntentClassifier:
 
         # Приоритет для "Изменений в релизах" (Confluence)
         if (
-            "релиз" in q 
-            or ("измен" in q and any(word in q for word in ["год", "последн", "поледн", "послед", "свеж", "нов"]))
+            "релиз" in q
+            or (
+                "измен" in q
+                and any(word in q for word in ["год", "последн", "поледн", "послед", "свеж", "нов"])
+            )
             or ("измен" in q and ("витрин" in q or "март" in q))
         ):
             return "release_changes"
@@ -80,14 +84,17 @@ class IntentClassifier:
             return "source_lineage"
         if any(word in q for word in ["логика", "преобразован", "расчет", "расчёт"]):
             return "transformation_logic"
-            
+
         if (
             "витрин" in q
             and any(word in q for word in ["какие", "список", "есть"])
-            and not any(word in q for word in ["атрибут", "измен", "релиз", "epk_id", "_id", "источник", "логика"])
+            and not any(
+                word in q
+                for word in ["атрибут", "измен", "релиз", "epk_id", "_id", "источник", "логика"]
+            )
         ):
             return "datamart_list"
-            
+
         return "general_question"
 
 
@@ -96,6 +103,7 @@ class RAGRetriever:
     Основной класс для поиска информации и формирования ответов (RAG).
     Использует метаданные из БД, векторное хранилище и LLM.
     """
+
     def __init__(
         self,
         metadata_repo: MetadataRepository,
@@ -122,6 +130,8 @@ class RAGRetriever:
         :param question: Текст вопроса пользователя.
         """
         intent = self.intent_classifier.classify(question)
+
+        res = None
         if intent == "datamart_list":
             res = self._datamart_list()
         elif intent == "datamart_fact":
@@ -137,10 +147,11 @@ class RAGRetriever:
         elif intent == "last_year_changes":
             res = self._last_year_changes(question)
         elif intent == "transformation_logic":
-            res = self._attribute_logic(question) or self._vector_answer(question)
+            res = self._attribute_logic(question)
         elif intent == "source_lineage":
-            res = self._source_lineage(question) or self._vector_answer(question)
-        else:
+            res = self._source_lineage(question)
+
+        if not res:
             res = self._vector_answer(question)
 
         res.sources = self._deduplicate_sources(res.sources)
@@ -179,6 +190,12 @@ class RAGRetriever:
         if requested_datamart:
             matched = self._filter_attrs_by_datamart(attrs, requested_datamart)
             if not matched:
+                # Проверяем, есть ли такая витрина вообще
+                if self.metadata_repo.get_datamart(requested_datamart):
+                    return RAGAnswer(
+                        answer=f"Для витрины `{requested_datamart}` файл S2T не найден или еще не распаршен, поэтому владелец в S2T не указан.",
+                        sources=[],
+                    )
                 available = ", ".join(sorted({attr.datamart_name for attr in attrs}))
                 return RAGAnswer(
                     answer=(
@@ -237,6 +254,10 @@ class RAGRetriever:
             else self.metadata_repo.list_attributes()
         )
         if not attrs:
+            if datamart and self.metadata_repo.get_datamart(datamart):
+                return RAGAnswer(
+                    answer=f"Файл S2T для витрины `{datamart}` не найден на Confluence.", sources=[]
+                )
             return RAGAnswer(answer="нет s2t на конфлюенсе.", sources=[])
         fields = [attr.target_field for attr in attrs if attr.target_field]
         return RAGAnswer(
@@ -281,12 +302,9 @@ class RAGRetriever:
             lines.append(f"{label}:")
             for change in typed_changes[:20]:
                 lines.append(
-                    f"- {change.change_date.date()}: {change.datamart_name} — "
-                    f"{change.entity_name}"
+                    f"- {change.change_date.date()}: {change.datamart_name} — {change.entity_name}"
                 )
-        other_changes = [
-            change for change in changes if change.change_type not in labels
-        ]
+        other_changes = [change for change in changes if change.change_type not in labels]
         if other_changes:
             lines.append("Прочие изменения:")
             for change in other_changes[:20]:
@@ -309,28 +327,37 @@ class RAGRetriever:
 
         # Фильтруем мусор (ТЗ, Чек-листы, Спец. решения и технические страницы)
         junk_patterns = [
-            r"\bтз\b", r"техническ[ои][еи] задани[ея]", r"чек лист", 
-            r"препятствия", r"функциональное решение", r"функцональное решение",
-            r"страниц[аы] для 2лс", r"копия", r"изменения в релизах",
-            r"s2t\s*-", r"прокси-витрина", r"stage"
+            r"\bтз\b",
+            r"техническ[ои][еи] задани[ея]",
+            r"чек лист",
+            r"препятствия",
+            r"функциональное решение",
+            r"функцональное решение",
+            r"страниц[аы] для 2лс",
+            r"копия",
+            r"изменения в релизах",
+            r"s2t\s*-",
+            r"прокси-витрина",
+            r"stage",
         ]
         combined_junk = "|".join(junk_patterns)
-        
+
         filtered_names = []
         for dm in datamarts:
             name = dm.get("name", "")
-            if not name: continue
-            
+            if not name:
+                continue
+
             # Если это Inner Source - всегда оставляем
             if "inner" in name.lower():
                 filtered_names.append(name)
                 continue
-                
+
             # Проверяем нормализованное имя на мусорные слова
             norm_name = normalize_text(name)
             if re.search(combined_junk, norm_name):
                 continue
-            
+
             # Дополнительная проверка на оригинальное имя
             if re.search(r"тз\s*-|тз\s*--|s2t\s*-", name.lower()):
                 continue
@@ -343,24 +370,24 @@ class RAGRetriever:
 
         return RAGAnswer(
             answer="\n".join(lines),
-            sources=[], # Возвращаем пустой список, чтобы не было дублирования "Источников" в конце
+            sources=[],  # Возвращаем пустой список, чтобы не было дублирования "Источников" в конце
         )
 
     def _datamart_fact(self, question: str) -> RAGAnswer:
         """Поиск конкретных фактов о витрине (Бизнес-заказчики, ссылки на метаданные и т.д.)."""
         fact_key = self._fact_key_from_question(question)
         datamarts = self._datamarts_from_question(question)
-        
+
         if not datamarts:
             requested_name = self._extract_datamart_name(question)
             if requested_name:
                 return RAGAnswer(
                     answer=f"Витрина `{requested_name}` найдена, но данных по запросу на её странице нет.",
-                    sources=[]
+                    sources=[],
                 )
             return RAGAnswer(
                 answer="Не удалось определить витрину. Пожалуйста, укажите точное название.",
-                sources=[]
+                sources=[],
             )
 
         matching: list[tuple[dict, dict]] = []
@@ -371,7 +398,7 @@ class RAGRetriever:
                 if fact_key and fact.get("key") == fact_key:
                     matching.append((datamart, fact))
                     found = True
-            
+
             if not found:
                 for fact in facts:
                     if self._fact_matches_question(fact, question):
@@ -390,8 +417,7 @@ class RAGRetriever:
             links = fact.get("links") or []
             if links:
                 link_text = "; ".join(
-                    f"{link.get('title') or link.get('url')}: {link.get('url')}"
-                    for link in links
+                    f"{link.get('title') or link.get('url')}: {link.get('url')}" for link in links
                 )
                 value = f"{value} ({link_text})"
             lines.append(f"{datamart.get('name')}: {fact.get('label')} — {value}")
@@ -509,7 +535,7 @@ class RAGRetriever:
     def _source_lineage(self, question: str) -> RAGAnswer | None:
         """Получение lineage (источников) атрибута или всей витрины из S2T."""
         attrs = self._attrs_from_question(question)
-        
+
         # Если атрибут не найден, пробуем найти все источники для витрины целиком
         if not attrs:
             datamart_name = self._extract_datamart_name(question)
@@ -521,15 +547,14 @@ class RAGRetriever:
                         src_sys = attr.source_schema or "Не указана"
                         src_tab = attr.source_table or "Не указана"
                         sources_map.setdefault(src_sys, set()).add(src_tab)
-                    
+
                     lines = [f"Источники данных для витрины `{datamart_name}`:"]
                     for sys, tables in sorted(sources_map.items()):
                         tables_str = ", ".join(sorted(tables))
                         lines.append(f"- Система `{sys}`: таблицы {tables_str}")
-                    
+
                     return RAGAnswer(
-                        answer="\n".join(lines),
-                        sources=[self._source(a) for a in attrs[:5]]
+                        answer="\n".join(lines), sources=[self._source(a) for a in attrs[:5]]
                     )
             return None
 
@@ -661,31 +686,36 @@ class RAGRetriever:
         q = normalize_text(question)
         label = normalize_text(fact.get("label") or "")
         key = fact.get("key")
-        
+
         # Define aliases for all keys for fuzzy matching
         aliases_map = {
-            "data_location": ["расположение данных", "место публикации", "где лежат", "где хранятся"],
+            "data_location": [
+                "расположение данных",
+                "место публикации",
+                "где лежат",
+                "где хранятся",
+            ],
             "data_category": ["категория данных", "категория продукта", "какие данные"],
             "business_stakeholders": ["заинтересованные", "бизнес лица", "стейкхолдеры"],
             "db_name": ["имя в бд", "название в бд", "таблица в бд"],
         }
-        
+
         # 1. Match by label in question
         if label and label in q:
             return True
-            
+
         # 2. Match by aliases in question
         if key in aliases_map:
             for alias in aliases_map[key]:
                 if alias in q:
                     return True
-        
+
         # 3. Special case for meta links
         if key == "meta_links":
             requested = [item for item in ("мета", "ка фо", "карта данных", "смд") if item in q]
             if requested and any(item in label for item in requested):
                 return True
-                
+
         return False
 
     @staticmethod
@@ -735,7 +765,7 @@ class RAGRetriever:
             "ссылка",
             "мета",
             "ка фо",
-            "карта данных", 
+            "карта данных",
             "смд",
             "кэ",
             "имя",
@@ -779,18 +809,14 @@ class RAGRetriever:
         return [
             attr
             for attr in attrs
-            if RAGRetriever._matches_datamart(
-                attr.datamart_name, datamart_name, attr.datamart_code
-            )
+            if RAGRetriever._matches_datamart(attr.datamart_name, datamart_name, attr.datamart_code)
         ]
 
     @staticmethod
     def _normalize_cx(text: str) -> str:
         """Нормализация кириллических и латинских символов 'C' и 'X'."""
         # Normalize both Cyrillic and Latin C/X to Latin C/X
-        return (
-            text.replace("С", "C").replace("с", "c").replace("Х", "X").replace("х", "x")
-        )
+        return text.replace("С", "C").replace("с", "c").replace("Х", "X").replace("х", "x")
 
     @staticmethod
     def _matches_datamart(
