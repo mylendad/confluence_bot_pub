@@ -9,6 +9,7 @@ class DocumentRepository:
     """
     Репозиторий для управления документами RAG в базе данных SQLite.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует DocumentRepository.
@@ -44,7 +45,7 @@ class DocumentRepository:
                 if doc.id not in seen_ids:
                     unique_docs.append(doc)
                     seen_ids.add(doc.id)
-            
+
             for doc in unique_docs:
                 self._insert_document(conn, doc)
 

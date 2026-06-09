@@ -2510,7 +2510,7 @@
         "kind": 2,
         "importPath": "services.bot.cli",
         "description": "services.bot.cli",
-        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    \"\"\"\n    Парсит страницы Confluence для поиска витрин данных и вложений S2T.\n    :param dry_run: Если True, изменения не будут сохранены в базу данных.\n    \"\"\"\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):",
+        "peekOfCode": "def parse_confluence(dry_run: bool = typer.Option(False, \"--dry-run\")) -> None:\n    \"\"\"\n    Парсит страницы Confluence для поиска витрин данных и вложений S2T.\n    :param dry_run: Если True, изменения не будут сохранены в базу данных.\n    \"\"\"\n    settings = get_settings()\n    configure_logging(settings.log_level)\n    jira_client = None\n    # Fix: Also check for jira_auth_token\n    if settings.jira_auth_token or (",
         "detail": "services.bot.cli",
         "documentation": {}
     },
@@ -2600,7 +2600,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class AskRequest(BaseModel):\n    \"\"\"\n    Запрос на получение ответа от бота.\n    \"\"\"\n    model_config = ConfigDict(\n        json_schema_extra={\n            \"example\": {\n                \"question\": \"Кто владелец витрины клиентских операций?\",\n                \"session_id\": \"session_123\"\n            }",
+        "peekOfCode": "class AskRequest(BaseModel):\n    \"\"\"\n    Запрос на получение ответа от бота.\n    \"\"\"\n    model_config = ConfigDict(\n        json_schema_extra={\n            \"example\": {\n                \"question\": \"Кто владелец витрины клиентских операций?\",\n                \"session_id\": \"session_123\",\n            }",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2609,7 +2609,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class AskResponse(BaseModel):\n    \"\"\"\n    Ответ бота с текстом и источниками.\n    \"\"\"\n    answer: str = Field(..., description=\"Текстовый ответ бота\")\n    sources: list[dict[str, Any]] = Field(default_factory=list, description=\"Список источников информации\")\nclass TokensSaveRequest(BaseModel):\n    \"\"\"\n    Запрос на сохранение токенов доступа.\n    \"\"\"",
+        "peekOfCode": "class AskResponse(BaseModel):\n    \"\"\"\n    Ответ бота с текстом и источниками.\n    \"\"\"\n    answer: str = Field(..., description=\"Текстовый ответ бота\")\n    sources: list[dict[str, Any]] = Field(\n        default_factory=list, description=\"Список источников информации\"\n    )\nclass TokensSaveRequest(BaseModel):\n    \"\"\"",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2663,7 +2663,7 @@
         "kind": 6,
         "importPath": "services.bot.http_adapter",
         "description": "services.bot.http_adapter",
-        "peekOfCode": "class SyncStatusResponse(BaseModel):\n    \"\"\"\n    Общий статус синхронизации всех витрин.\n    \"\"\"\n    last_sync: str | None = Field(None, description=\"Время самой свежей синхронизации\")\n    total_datamarts: int = Field(..., description=\"Общее количество витрин в базе\")\n    status: str = Field(..., description=\"Общий статус синхронизации\")\n    resources: list[SyncStatusResource] = Field(default_factory=list, description=\"Детальный список ресурсов\")\nclass SyncLastEventsResponse(BaseModel):\n    \"\"\"",
+        "peekOfCode": "class SyncStatusResponse(BaseModel):\n    \"\"\"\n    Общий статус синхронизации всех витрин.\n    \"\"\"\n    last_sync: str | None = Field(None, description=\"Время самой свежей синхронизации\")\n    total_datamarts: int = Field(..., description=\"Общее количество витрин в базе\")\n    status: str = Field(..., description=\"Общий статус синхронизации\")\n    resources: list[SyncStatusResource] = Field(\n        default_factory=list, description=\"Детальный список ресурсов\"\n    )",
         "detail": "services.bot.http_adapter",
         "documentation": {}
     },
@@ -2726,7 +2726,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "app = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)\ndef _update_env_file(updates: dict[str, str]):",
+        "peekOfCode": "app = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# Global registry for active background processes",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2735,7 +2735,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "logger = logging.getLogger(__name__)\ndef _update_env_file(updates: dict[str, str]):\n    \"\"\"Обновляет или добавляет переменные в .env, сохраняя остальные.\"\"\"\n    lines = []\n    if ENV_PATH.exists():\n        lines = ENV_PATH.read_text(encoding=\"utf-8\").splitlines()\n    updated_keys = set()\n    new_lines = []\n    # Обновляем существующие строки\n    for line in lines:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n# Global registry for active background processes\n_active_processes: dict[str, asyncio.subprocess.Process] = {}\ndef _update_env_file(updates: dict[str, str]):\n    \"\"\"Обновляет или добавляет переменные в .env, сохраняя остальные.\"\"\"\n    lines = []\n    if ENV_PATH.exists():\n        lines = ENV_PATH.read_text(encoding=\"utf-8\").splitlines()\n    updated_keys = set()\n    new_lines = []",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2744,7 +2744,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "static_path = BASE_DIR / \"web\"\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\", include_in_schema=False)\nasync def root(): return RedirectResponse(url=\"/ui/\")",
+        "peekOfCode": "static_path = BASE_DIR / \"web\"\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\", include_in_schema=False)\nasync def root():\n    return RedirectResponse(url=\"/ui/\")",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -3167,7 +3167,7 @@
         "kind": 6,
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
-        "peekOfCode": "class MetadataSyncService:\n    \"\"\"\n    Сервис для синхронизации метаданных витрин данных из Confluence.\n    Обеспечивает поиск страниц, извлечение фактов и формирование снимков состояния.\n    \"\"\"\n    def __init__(\n        self, \n        parser: ConfluenceParser, \n        hash_service: HashService | None = None,\n        snapshot_repo: PageSnapshotRepository | None = None",
+        "peekOfCode": "class MetadataSyncService:\n    \"\"\"\n    Сервис для синхронизации метаданных витрин данных из Confluence.\n    Обеспечивает поиск страниц, извлечение фактов и формирование снимков состояния.\n    \"\"\"\n    def __init__(\n        self,\n        parser: ConfluenceParser,\n        hash_service: HashService | None = None,\n        snapshot_repo: PageSnapshotRepository | None = None,",
         "detail": "services.ingestion.sync.metadata_sync_service",
         "documentation": {}
     },
@@ -3374,7 +3374,7 @@
         "kind": 2,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()\n    console_handler.setFormatter(ColoredFormatter())",
+        "peekOfCode": "def configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(\n        logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\")\n    )\n    # Set colored format for console",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3383,7 +3383,7 @@
         "kind": 5,
         "importPath": "shared.logging.logging_config",
         "description": "shared.logging.logging_config",
-        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\"))\n    # Set colored format for console\n    console_handler = logging.StreamHandler()",
+        "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(\n        logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\")\n    )",
         "detail": "shared.logging.logging_config",
         "documentation": {}
     },
@@ -3590,7 +3590,7 @@
         "kind": 2,
         "importPath": "tests.test_cli",
         "description": "tests.test_cli",
-        "peekOfCode": "def test_parse_s2t_records_changes_on_reparse(\n    tmp_path: Path, monkeypatch, capsys\n) -> None:\n    monkeypatch.setenv(\"SQLITE_DB_PATH\", str(tmp_path / \"app.db\"))\n    monkeypatch.setenv(\"DATA_DIR\", str(tmp_path / \"data\"))\n    monkeypatch.setenv(\"VECTOR_STORE_DIR\", str(tmp_path / \"vector_store\"))\n    get_settings.cache_clear()\n    try:\n        base_path = tmp_path / \"base.csv\"\n        updated_path = tmp_path / \"updated.csv\"",
+        "peekOfCode": "def test_parse_s2t_records_changes_on_reparse(tmp_path: Path, monkeypatch, capsys) -> None:\n    monkeypatch.setenv(\"SQLITE_DB_PATH\", str(tmp_path / \"app.db\"))\n    monkeypatch.setenv(\"DATA_DIR\", str(tmp_path / \"data\"))\n    monkeypatch.setenv(\"VECTOR_STORE_DIR\", str(tmp_path / \"vector_store\"))\n    get_settings.cache_clear()\n    try:\n        base_path = tmp_path / \"base.csv\"\n        updated_path = tmp_path / \"updated.csv\"\n        _write_s2t(base_path, [\"epk_id\"])\n        _write_s2t(updated_path, [\"epk_id\", \"new_client_status_cd\"])",
         "detail": "tests.test_cli",
         "documentation": {}
     },
@@ -3635,7 +3635,7 @@
         "kind": 2,
         "importPath": "tests.test_config",
         "description": "tests.test_config",
-        "peekOfCode": "def test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\"\n    )\n    assert settings.confluence_base_url == \"https://confluence.delta.sbrf.ru\"\n    assert settings.confluence_root_page_id == \"4700310446\"\ndef test_confluence_page_url_overrides_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,",
+        "peekOfCode": "def test_confluence_page_url_sets_base_url_and_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,\n        confluence_page_url=\"https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446\",\n    )\n    assert settings.confluence_base_url == \"https://confluence.delta.sbrf.ru\"\n    assert settings.confluence_root_page_id == \"4700310446\"\ndef test_confluence_page_url_overrides_root_page_id() -> None:\n    settings = Settings(\n        _env_file=None,",
         "detail": "tests.test_config",
         "documentation": {}
     },
@@ -3698,7 +3698,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_non_ascii_api_token_is_auth_error() -> None:\n    with pytest.raises(ConfluenceAuthError, match=\"CONFLUENCE_TOKEN\"):\n        ConfluenceClient._auth_config(\n            Settings(\n                _env_file=None,\n                confluence_auth_type=\"bearer\",\n                confluence_api_token=\"ваш_новый_api_token\",\n            )\n        )\ndef test_attachment_download_401_is_auth_error() -> None:",
+        "peekOfCode": "def test_non_ascii_api_token_is_auth_error() -> None:\n    with pytest.raises(ConfluenceAuthError, match=\"CONFLUENCE_TOKEN\"):\n        ConfluenceClient._auth_config(\n            Settings(\n                _env_file=None,\n                confluence_auth_type=\"bearer\",\n                confluence_auth_token=\"ваш_новый_api_token\",\n            )\n        )\ndef test_attachment_download_401_is_auth_error() -> None:",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },
@@ -3914,7 +3914,7 @@
         "kind": 6,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "class FailingAnswerGenerator(AnswerGenerator):\n    def generate(self, question: str, context: str) -> str:\n        raise ConnectionError(\"LLM is unavailable\")\ndef test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентов\",",
+        "peekOfCode": "class FailingAnswerGenerator(AnswerGenerator):\n    def generate(self, question: str, context: str) -> str:\n        raise ConnectionError(\"LLM is unavailable\")\ndef test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина клиентов\",\n            target_table=\"client_dm\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3923,7 +3923,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентов\",\n                target_table=\"client_dm\",\n                target_field=\"epk_id\",\n                source_table=\"client_src\",",
+        "peekOfCode": "def test_attribute_usage_structured_answer(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина клиентов\",\n            target_table=\"client_dm\",\n            target_field=\"epk_id\",\n            source_table=\"client_src\",\n            source_field=\"epk_id\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3932,7 +3932,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_owner_lookup_uses_structured_s2t_owner(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентских операций\",\n                target_schema=\"dds_dm\",\n                target_table=\"dm_client_operations\",\n                target_field=\"epk_id\",",
+        "peekOfCode": "def test_owner_lookup_uses_structured_s2t_owner(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина клиентских операций\",\n            target_schema=\"dds_dm\",\n            target_table=\"dm_client_operations\",\n            target_field=\"epk_id\",\n            owner=\"ivanov.ii@example.ru\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3941,7 +3941,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина клиентских операций\",\n                target_field=\"epk_id\",\n                owner=\"ivanov.ii@example.ru\",\n            )",
+        "peekOfCode": "def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина клиентских операций\",\n            target_field=\"epk_id\",\n            owner=\"ivanov.ii@example.ru\",\n        )\n    ])",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3959,7 +3959,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_datamart_list_filters_junk(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(name=\"Витрина Маркеры\", confluence_page_id=\"1\", confluence_url=\"url1\")\n    )\n    metadata_repo.upsert_datamart(\n        Datamart(name=\"Техническое задание -- Витрина карта мигранта\", confluence_page_id=\"2\", confluence_url=\"url2\")\n    )\n    metadata_repo.upsert_datamart(",
+        "peekOfCode": "def test_datamart_list_filters_junk(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(name=\"Витрина Маркеры\", confluence_page_id=\"1\", confluence_url=\"url1\")\n    )\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Техническое задание -- Витрина карта мигранта\",\n            confluence_page_id=\"2\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3986,7 +3986,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_last_year_changes_answer_includes_dates_and_added_fields(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    change_date = datetime.utcnow() - timedelta(days=3)\n    history_repo.add_many(\n        [\n            ChangeLogEntry(\n                id=\"change-1\",\n                datamart_name=\"Витрина клиентских операций\",",
+        "peekOfCode": "def test_last_year_changes_answer_includes_dates_and_added_fields(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    change_date = datetime.utcnow() - timedelta(days=3)\n    history_repo.add_many([\n        ChangeLogEntry(\n            id=\"change-1\",\n            datamart_name=\"Витрина клиентских операций\",\n            datamart_code=\"DM_CLIENT_OPS\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -3995,7 +3995,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_current_year_changes_uses_january_first_period(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    now = datetime.utcnow()\n    change_date = datetime(now.year, 2, 10)\n    history_repo.add_many(\n        [\n            ChangeLogEntry(\n                id=\"change-current-year\",",
+        "peekOfCode": "def test_current_year_changes_uses_january_first_period(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    history_repo = HistoryRepository(db)\n    now = datetime.utcnow()\n    change_date = datetime(now.year, 2, 10)\n    history_repo.add_many([\n        ChangeLogEntry(\n            id=\"change-current-year\",\n            datamart_name=\"Витрина клиентских операций\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -4004,7 +4004,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_source_lineage_skips_missing_schema(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина счетов\",\n                target_table=\"dm_account_balance\",\n                target_field=\"account_balance_amt\",\n                source_table=\"account_balance\",",
+        "peekOfCode": "def test_source_lineage_skips_missing_schema(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина счетов\",\n            target_table=\"dm_account_balance\",\n            target_field=\"account_balance_amt\",\n            source_table=\"account_balance\",\n            source_field=\"balance_amt\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -4013,7 +4013,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes(\n        [\n            S2TAttribute(\n                datamart_name=\"Витрина счетов\",\n                target_table=\"dm_account_balance\",\n                target_field=\"account_balance_amt\",\n                source_table=\"account_balance\",",
+        "peekOfCode": "def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_attributes([\n        S2TAttribute(\n            datamart_name=\"Витрина счетов\",\n            target_table=\"dm_account_balance\",\n            target_field=\"account_balance_amt\",\n            source_table=\"account_balance\",\n            source_field=\"balance_amt\",",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },
@@ -4022,7 +4022,7 @@
         "kind": 2,
         "importPath": "tests.test_rag_retriever",
         "description": "tests.test_rag_retriever",
-        "peekOfCode": "def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеров\",\n            confluence_page_id=\"1\",\n            confluence_url=\"url1\",\n            facts=[DatamartFact(key=\"business_stakeholders\", label=\"Заинтересованные со стороны бизнеса\", value=\"Owner 1\")]\n        )",
+        "peekOfCode": "def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:\n    db = SQLite(tmp_path / \"app.db\")\n    metadata_repo = MetadataRepository(db)\n    metadata_repo.upsert_datamart(\n        Datamart(\n            name=\"Витрина Маркеров\",\n            confluence_page_id=\"1\",\n            confluence_url=\"url1\",\n            facts=[\n                DatamartFact(",
         "detail": "tests.test_rag_retriever",
         "documentation": {}
     },

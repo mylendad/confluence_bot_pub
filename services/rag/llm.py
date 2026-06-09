@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class AnswerGenerator(Protocol):
     """Интерфейс для генератора ответов на основе LLM."""
+
     def generate(self, question: str, context: str) -> str:
         """
         Генерирует текстовый ответ на основе вопроса и контекста.
@@ -25,6 +26,7 @@ class AnswerGenerator(Protocol):
 
 class StubAnswerGenerator:
     """Заглушка генератора ответов, возвращающая только контекст."""
+
     def generate(self, question: str, context: str) -> str:
         """Возвращает найденный контекст в качестве ответа."""
         return f"Нашел релевантные фрагменты:\n{context}"
@@ -36,6 +38,7 @@ class StubAnswerGenerator:
 
 class GigaChatAnswerGenerator:
     """Генератор ответов на базе GigaChat LLM."""
+
     def __init__(self, settings: Settings) -> None:
         """
         Инициализирует GigaChatAnswerGenerator.
@@ -66,7 +69,7 @@ class GigaChatAnswerGenerator:
             model=self.settings.gigachat_model,
             verify_ssl_certs=self.settings.gigachat_verify_ssl_certs,
             profanity_check=self.settings.gigachat_profanity_check,
-            timeout=30.0, # Add explicit timeout
+            timeout=30.0,  # Add explicit timeout
         )
         return self.llm
 
@@ -76,12 +79,7 @@ class GigaChatAnswerGenerator:
         :param question: Текст вопроса.
         :param context: Найденный контекст.
         """
-        prompt = (
-            f"{ANSWER_SYSTEM_PROMPT}\n\n"
-            f"Контекст:\n{context}\n\n"
-            f"Вопрос:\n{question}\n\n"
-            "Ответ:"
-        )
+        prompt = f"{ANSWER_SYSTEM_PROMPT}\n\nКонтекст:\n{context}\n\nВопрос:\n{question}\n\nОтвет:"
 
         max_retries = 3
         retry_delay = 1.0
@@ -94,20 +92,27 @@ class GigaChatAnswerGenerator:
             except Exception as exc:
                 last_exc = exc
                 err_str = str(exc).lower()
-                if "104" in err_str or "reset" in err_str or "time" in err_str or "deadline" in err_str:
+                if (
+                    "104" in err_str
+                    or "reset" in err_str
+                    or "time" in err_str
+                    or "deadline" in err_str
+                ):
                     logger.warning(
                         "GigaChat connection issue (attempt %d/%d), retrying in %.1fs... Error: %s",
                         attempt + 1,
                         max_retries,
                         retry_delay,
-                        err_str
+                        err_str,
                     )
                     time.sleep(retry_delay)
                     retry_delay *= 2
                     continue
                 raise exc
 
-        logger.error("Failed to generate answer after %d attempts. Last error: %s", max_retries, last_exc)
+        logger.error(
+            "Failed to generate answer after %d attempts. Last error: %s", max_retries, last_exc
+        )
         return f"Не удалось вызвать LLM для генеративного ответа: {last_exc}"
 
     def check_health(self) -> dict:

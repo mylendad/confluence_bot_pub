@@ -7,6 +7,7 @@ class ChangeLogEntry(BaseModel):
     """
     Модель записи в журнале изменений (аудит изменений в атрибутах или метаданных).
     """
+
     id: str
     datamart_name: str
     datamart_code: str | None = None

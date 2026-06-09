@@ -10,6 +10,7 @@ class S2TState:
     """
     Представляет состояние ресурса S2T (файла или страницы) для инкрементальной синхронизации.
     """
+
     resource_key: str
     datamart_name: str
     page_id: str | None
@@ -29,6 +30,7 @@ class S2TStateRepository:
     """
     Репозиторий для управления состоянием ресурсов S2T в SQLite.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует S2TStateRepository.

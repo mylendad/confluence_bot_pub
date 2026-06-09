@@ -5,6 +5,7 @@ class SberChatAdapter(BotInterface):
     """
     Адаптер для взаимодействия с ботом через SberChat.
     """
+
     def send_message(self, text: str) -> None:
         """
         Отправляет сообщение в SberChat (не реализовано).

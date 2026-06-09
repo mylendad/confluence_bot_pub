@@ -11,6 +11,7 @@ class MetadataRepository:
     """
     Репозиторий для управления метаданными витрин данных и их атрибутов в SQLite.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует MetadataRepository.
@@ -45,10 +46,15 @@ class MetadataRepository:
                     datamart.code,
                     datamart.confluence_page_id,
                     datamart.confluence_url,
-                    json.dumps([s.model_dump(mode='json') for s in datamart.stakeholders], ensure_ascii=False),
-                    json.dumps([f.model_dump(mode='json') for f in datamart.facts], ensure_ascii=False),
                     json.dumps(
-                        [c.model_dump(mode='json') for c in datamart.release_changes],
+                        [s.model_dump(mode="json") for s in datamart.stakeholders],
+                        ensure_ascii=False,
+                    ),
+                    json.dumps(
+                        [f.model_dump(mode="json") for f in datamart.facts], ensure_ascii=False
+                    ),
+                    json.dumps(
+                        [c.model_dump(mode="json") for c in datamart.release_changes],
                         ensure_ascii=False,
                     ),
                     datetime.utcnow().isoformat(),
@@ -143,12 +149,10 @@ class MetadataRepository:
         with self.db.connect() as conn:
             # Delete attributes first due to potential dependencies
             conn.execute(
-                f"delete from attributes where datamart_name not in ({placeholders})", 
-                active_names
+                f"delete from attributes where datamart_name not in ({placeholders})", active_names
             )
             cursor = conn.execute(
-                f"delete from datamarts where name not in ({placeholders})", 
-                active_names
+                f"delete from datamarts where name not in ({placeholders})", active_names
             )
             return cursor.rowcount
 

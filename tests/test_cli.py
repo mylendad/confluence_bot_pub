@@ -13,17 +13,12 @@ from shared.storage.sqlite import SQLite
 def _write_s2t(path: Path, target_fields: list[str]) -> None:
     rows = [
         "codeDatamart,target_table,target_field,UserName",
-        *[
-            f"DM_CLIENT,client_dm,{field},owner@example.ru"
-            for field in target_fields
-        ],
+        *[f"DM_CLIENT,client_dm,{field},owner@example.ru" for field in target_fields],
     ]
     path.write_text("\n".join(rows) + "\n", encoding="utf-8")
 
 
-def test_parse_s2t_records_changes_on_reparse(
-    tmp_path: Path, monkeypatch, capsys
-) -> None:
+def test_parse_s2t_records_changes_on_reparse(tmp_path: Path, monkeypatch, capsys) -> None:
     monkeypatch.setenv("SQLITE_DB_PATH", str(tmp_path / "app.db"))
     monkeypatch.setenv("DATA_DIR", str(tmp_path / "data"))
     monkeypatch.setenv("VECTOR_STORE_DIR", str(tmp_path / "vector_store"))

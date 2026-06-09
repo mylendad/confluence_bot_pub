@@ -8,6 +8,7 @@ class HistoryRepository:
     """
     Репозиторий для хранения и получения истории изменений (change_log) в SQLite.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует репозиторий истории.

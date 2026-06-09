@@ -57,7 +57,9 @@ class ConfluenceClient:
                     settings.confluence_extra_headers,
                 )
 
-        logger.info("Initializing httpx.Client with base_url=%s and headers", settings.confluence_base_url)
+        logger.info(
+            "Initializing httpx.Client with base_url=%s and headers", settings.confluence_base_url
+        )
         self.http = client or httpx.Client(
             base_url=settings.confluence_base_url,
             auth=auth,
@@ -131,12 +133,18 @@ class ConfluenceClient:
                 return response
             except httpx.RequestError as exc:
                 if attempt == max_retries - 1:
-                    logger.error("HTTP request failed after %d attempts: %s %s: %s", max_retries, method, path, exc)
+                    logger.error(
+                        "HTTP request failed after %d attempts: %s %s: %s",
+                        max_retries,
+                        method,
+                        path,
+                        exc,
+                    )
                     raise ConfluenceError(f"HTTP request failed: {exc}") from exc
                 wait = 2**attempt
                 logger.warning("Request failed: %s. Retrying in %ds...", exc, wait)
                 time.sleep(wait)
-        
+
         raise ConfluenceError(f"Failed to execute {method} {path} after {max_retries} attempts")
 
     def _get(self, path: str, params: dict | None = None) -> dict:
@@ -168,11 +176,13 @@ class ConfluenceClient:
                 )
             else:
                 msg = "Confluence access forbidden (403). Check your account permissions or IP restrictions."
-            
+
             raise ConfluenceAuthError(msg)
 
         if response.is_error:
-            logger.error("Confluence request failed: %s %s", response.status_code, response.text[:200])
+            logger.error(
+                "Confluence request failed: %s %s", response.status_code, response.text[:200]
+            )
             raise ConfluenceError(f"Confluence request failed: {response.status_code}")
         return response.json()
 
@@ -327,7 +337,7 @@ class ConfluenceClient:
             response = self.http.get(url, follow_redirects=True)
         else:
             response = self._request("GET", url, follow_redirects=True)
-            
+
         self._validate_download_response(response, original_url=url)
         if response.status_code in {401, 403}:
             raise ConfluenceAuthError(f"Attachment download forbidden: {response.status_code}")
@@ -335,7 +345,9 @@ class ConfluenceClient:
             raise ConfluenceError(f"Attachment download failed: {response.status_code}")
         return response.content
 
-    def download_resource(self, resource: S2TResource, datamart_page_id: str | None = None) -> bytes:
+    def download_resource(
+        self, resource: S2TResource, datamart_page_id: str | None = None
+    ) -> bytes:
         """
         Скачивает ресурс (вложение), используя прямой URL или REST API в качестве резервного механизма.
 
@@ -349,23 +361,30 @@ class ConfluenceClient:
         try:
             return self.download(url)
         except (ConfluenceAuthError, ConfluenceError) as exc:
-            logger.warning("Direct download failed for %s, trying REST fallback. Error: %s", resource.file_name, exc)
-            
+            logger.warning(
+                "Direct download failed for %s, trying REST fallback. Error: %s",
+                resource.file_name,
+                exc,
+            )
+
             attachment_id = resource.id
             found_page_id = resource.page_id
-            
+
             def normalize_name(name):
-                if not name: return set()
+                if not name:
+                    return set()
                 u = urllib.parse.unquote(name).strip().lower()
                 return {u, u.replace("+", " "), u.replace("+", "_"), u.replace(" ", "_")}
 
             if not attachment_id:
                 pages_to_check = []
-                if resource.page_id: pages_to_check.append(resource.page_id)
-                if datamart_page_id: pages_to_check.append(datamart_page_id)
-                
+                if resource.page_id:
+                    pages_to_check.append(resource.page_id)
+                if datamart_page_id:
+                    pages_to_check.append(datamart_page_id)
+
                 target_names = normalize_name(resource.file_name) | normalize_name(resource.title)
-                
+
                 for pid in pages_to_check:
                     try:
                         attachments = self.get_attachments(pid)
@@ -375,13 +394,16 @@ class ConfluenceClient:
                                 attachment_id = att.id
                                 found_page_id = pid
                                 break
-                        if attachment_id: break
+                        if attachment_id:
+                            break
                     except Exception:
                         pass
-            
+
             if not attachment_id or not found_page_id:
-                raise ConfluenceError(f"Could not find ID for attachment '{resource.file_name}' to perform REST fallback.") from exc
-                
+                raise ConfluenceError(
+                    f"Could not find ID for attachment '{resource.file_name}' to perform REST fallback."
+                ) from exc
+
             return self._download_attachment_via_rest(found_page_id, attachment_id, exc)
 
     def _download_attachment_via_rest(
@@ -419,7 +441,7 @@ class ConfluenceClient:
         """
         if not page_ids:
             return {}
-        
+
         result = {}
         chunk_size = 20
         for i in range(0, len(page_ids), chunk_size):
@@ -463,7 +485,7 @@ class ConfluenceClient:
             cql = f"(id = {root_id} or ancestor = {root_id}) and type = page"
         else:
             cql = f'space="{self.settings.confluence_space_key}" and type=page'
-        
+
         logger.info("Discovering pages using CQL: %s", cql)
         yield from self.search_pages(cql)
 

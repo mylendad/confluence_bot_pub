@@ -10,6 +10,7 @@ class JsonVectorStore:
     Локальное векторное хранилище на базе JSONL-файла.
     Обеспечивает сохранение документов и поиск по сходству через эмбеддинги.
     """
+
     def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:
         """
         Инициализирует JsonVectorStore.
@@ -37,9 +38,7 @@ class JsonVectorStore:
         :param documents: Новые документы для данной витрины.
         """
         existing = self._read_documents()
-        unchanged = [
-            doc for doc in existing if doc.metadata.get("datamart_name") != datamart_name
-        ]
+        unchanged = [doc for doc in existing if doc.metadata.get("datamart_name") != datamart_name]
         self.replace_all([*unchanged, *documents])
 
     def search(self, query: str, k: int = 5) -> list[RetrievedDocument]:

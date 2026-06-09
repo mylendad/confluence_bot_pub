@@ -97,6 +97,7 @@ class ExcelS2TParser:
     Парсер S2T-файлов в формате Excel (.xlsx, .xls).
     Поддерживает стандартные шаблоны и произвольные таблицы с маппингом колонок.
     """
+
     def parse(
         self,
         path: Path,
@@ -118,8 +119,12 @@ class ExcelS2TParser:
         base_template_sheets = {"Target columns", "Source columns", "Datamart info"}
         if base_template_sheets.issubset(sheet_names):
             s2t_sheet = next(
-                (s for s in workbook.sheet_names if s == "S2T" or s.startswith("S2T-") or s.startswith("S2T -")), 
-                None
+                (
+                    s
+                    for s in workbook.sheet_names
+                    if s == "S2T" or s.startswith("S2T-") or s.startswith("S2T -")
+                ),
+                None,
             )
             if s2t_sheet:
                 return self._parse_template(
@@ -198,13 +203,11 @@ class ExcelS2TParser:
                 ):
                     break
                 target_key = self._target_key(payload)
-                payload.update(
-                    {
-                        key: value
-                        for key, value in datamart_info.items()
-                        if not payload.get(key) and value
-                    }
-                )
+                payload.update({
+                    key: value
+                    for key, value in datamart_info.items()
+                    if not payload.get(key) and value
+                })
                 if target_key in target_notes:
                     for key, value in target_notes[target_key].items():
                         if not payload.get(key) and value:

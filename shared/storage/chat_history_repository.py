@@ -10,6 +10,7 @@ class ChatMessage:
     """
     Представляет сообщение в истории чата.
     """
+
     session_id: str
     user_message: str
     bot_response: str
@@ -21,6 +22,7 @@ class ChatHistoryRepository:
     """
     Репозиторий для хранения и извлечения истории чата из SQLite.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует ChatHistoryRepository.

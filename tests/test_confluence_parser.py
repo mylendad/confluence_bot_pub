@@ -268,7 +268,9 @@ def test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new() -> None
 
     assert selected is not None
     assert selected.resource_type == "table_latest_row"
-    assert selected.url == "https://confluence.example.ru/download/attachments/42/arbitrary_name.xlsx"
+    assert (
+        selected.url == "https://confluence.example.ru/download/attachments/42/arbitrary_name.xlsx"
+    )
 
 
 def test_latest_row_without_date_is_not_warning(caplog) -> None:
@@ -346,6 +348,7 @@ def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:
     assert selected is not None
     assert selected.title == "current_s2t.xlsx"
     assert selected.file_date.isoformat() == "2026-05-16"
+
 
 def test_extract_checklist_facts() -> None:
     # 1. Setup Pages

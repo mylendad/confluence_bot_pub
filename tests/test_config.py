@@ -31,7 +31,7 @@ def test_confluence_auth_token_prefers_confluence_token() -> None:
 def test_confluence_page_url_sets_base_url_and_root_page_id() -> None:
     settings = Settings(
         _env_file=None,
-        confluence_page_url="https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446"
+        confluence_page_url="https://confluence.delta.sbrf.ru/pages/viewpage.action?pageId=4700310446",
     )
 
     assert settings.confluence_base_url == "https://confluence.delta.sbrf.ru"

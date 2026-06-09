@@ -122,7 +122,7 @@ def test_non_ascii_api_token_is_auth_error() -> None:
             Settings(
                 _env_file=None,
                 confluence_auth_type="bearer",
-                confluence_api_token="ваш_новый_api_token",
+                confluence_auth_token="ваш_новый_api_token",
             )
         )
 

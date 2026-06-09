@@ -12,6 +12,7 @@ class PageSnapshotRepository:
     """
     Репозиторий для хранения снимков (снапшотов) страниц Confluence.
     """
+
     def __init__(self, db: SQLite) -> None:
         """
         Инициализирует PageSnapshotRepository.
@@ -40,7 +41,9 @@ class PageSnapshotRepository:
                 logger.error("Failed to load page snapshot for %s: %s", datamart_page_id, exc)
                 return None
 
-    def upsert(self, datamart_page_id: str, version_map: dict[str, int], datamart: Datamart) -> None:
+    def upsert(
+        self, datamart_page_id: str, version_map: dict[str, int], datamart: Datamart
+    ) -> None:
         """
         Сохраняет или обновляет снимок страницы.
         :param datamart_page_id: Идентификатор страницы витрины в Confluence.
@@ -71,4 +74,6 @@ class PageSnapshotRepository:
         :param datamart_page_id: Идентификатор страницы для удаления.
         """
         with self.db.connect() as conn:
-            conn.execute("delete from page_snapshots where datamart_page_id = ?", (datamart_page_id,))
+            conn.execute(
+                "delete from page_snapshots where datamart_page_id = ?", (datamart_page_id,)
+            )

@@ -57,13 +57,19 @@ def parse_confluence(dry_run: bool = typer.Option(False, "--dry-run")) -> None:
     configure_logging(settings.log_level)
     jira_client = None
     # Fix: Also check for jira_auth_token
-    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):
+    if settings.jira_auth_token or (
+        settings.jira_username and (settings.jira_token or settings.jira_api_token)
+    ):
         import logging
+
         logging.getLogger(__name__).info("Initializing JiraClient...")
         jira_client = JiraClient(settings)
     else:
         import logging
-        logging.getLogger(__name__).warning("Jira credentials not found in settings! jira_auth_token and (jira_username + jira_token) are missing.")
+
+        logging.getLogger(__name__).warning(
+            "Jira credentials not found in settings! jira_auth_token and (jira_username + jira_token) are missing."
+        )
     try:
         parser = ConfluenceParser(ConfluenceClient(settings), settings, jira_client=jira_client)
         result = parser.parse(dry_run=dry_run)
@@ -154,17 +160,24 @@ def update_rag(
     indexer = RAGIndexer(metadata_repo, document_repo, vector_store)
     jira_client = None
     # Fix: Also check for jira_auth_token
-    if settings.jira_auth_token or (settings.jira_username and (settings.jira_token or settings.jira_api_token)):
+    if settings.jira_auth_token or (
+        settings.jira_username and (settings.jira_token or settings.jira_api_token)
+    ):
         import logging
+
         logging.getLogger(__name__).info("Initializing JiraClient...")
         jira_client = JiraClient(settings)
     else:
         import logging
-        logging.getLogger(__name__).warning("Jira credentials not found in settings! jira_auth_token and (jira_username + jira_token) are missing.")
+
+        logging.getLogger(__name__).warning(
+            "Jira credentials not found in settings! jira_auth_token and (jira_username + jira_token) are missing."
+        )
     try:
         confluence_client = ConfluenceClient(settings)
         parser = ConfluenceParser(confluence_client, settings, jira_client=jira_client)
         from shared.storage.page_snapshot_repository import PageSnapshotRepository
+
         updater = IncrementalUpdater(
             metadata_sync=MetadataSyncService(parser, snapshot_repo=PageSnapshotRepository(db)),
             confluence_client=confluence_client,

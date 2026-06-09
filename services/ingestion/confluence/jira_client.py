@@ -14,6 +14,7 @@ class JiraClient:
     Клиент для взаимодействия с API Jira.
     Позволяет получать информацию о задачах и метаданные полей.
     """
+
     def __init__(self, settings: Settings) -> None:
         """
         Инициализирует JiraClient.
@@ -85,10 +86,10 @@ class JiraClient:
             response = self._request("GET", url, params=params)
             if response.status_code != 200:
                 logger.error(
-                    "Jira API error for %s. Status: %s. Response: %s", 
-                    issue_key, 
-                    response.status_code, 
-                    response.text[:200]
+                    "Jira API error for %s. Status: %s. Response: %s",
+                    issue_key,
+                    response.status_code,
+                    response.text[:200],
                 )
                 return None
             return response.json()
@@ -120,6 +121,7 @@ class JiraClient:
         :return: Словарь с состоянием здоровья ("ok" или "error") и задержкой в мс.
         """
         import time
+
         start_time = time.time()
         try:
             url = f"{self.base_url}/rest/api/2/myself"

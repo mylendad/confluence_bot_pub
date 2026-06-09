@@ -14,6 +14,7 @@ class RAGIndexer:
     Класс для индексации данных о витринах и атрибутах в RAG-систему.
     Отвечает за преобразование объектов Datamart и S2TAttribute в RAGDocument.
     """
+
     def __init__(
         self,
         metadata_repo: MetadataRepository,
@@ -78,9 +79,7 @@ class RAGIndexer:
             attribute.source_field,
         )
         description = (
-            attribute.business_description
-            or attribute.target_field_description
-            or "не указано"
+            attribute.business_description or attribute.target_field_description or "не указано"
         )
         text_parts = [
             f"Витрина: {attribute.datamart_name}",
@@ -103,7 +102,9 @@ class RAGIndexer:
             "datamart_name": attribute.datamart_name,
             "datamart_code": attribute.datamart_code,
             "owner": attribute.owner,
-            "stakeholders": [s.model_dump(mode="json") for s in datamart.stakeholders] if datamart else [],
+            "stakeholders": [s.model_dump(mode="json") for s in datamart.stakeholders]
+            if datamart
+            else [],
             "source_type": "s2t",
             "confluence_page_id": datamart.confluence_page_id if datamart else None,
             "confluence_url": datamart.confluence_url if datamart else None,
@@ -126,7 +127,7 @@ class RAGIndexer:
     def _datamart_documents(self, datamart: Datamart, has_s2t: bool = True) -> list[RAGDocument]:
         """Создает RAG-документы на основе метаданных витрины (факты, релизы)."""
         documents: list[RAGDocument] = []
-        
+
         # Индикатор наличия S2T файла
         if not has_s2t:
             text = f"Витрина: {datamart.name}. Файл S2T: нет s2t на конфлюенсе."
@@ -141,10 +142,7 @@ class RAGIndexer:
             )
 
         for fact in datamart.facts:
-            text = (
-                f"Витрина: {datamart.name}. Показатель: {fact.label}. "
-                f"Значение: {fact.value}."
-            )
+            text = f"Витрина: {datamart.name}. Показатель: {fact.label}. Значение: {fact.value}."
             if fact.links:
                 text += " Ссылки: " + "; ".join(
                     f"{link.get('title')}: {link.get('url')}" for link in fact.links
@@ -177,14 +175,16 @@ class RAGIndexer:
                 text_parts.append(f"Завершена в Jira: {change.jira_done_at.date()}")
             if change.jira_last_activity_value:
                 text_parts.append(f"Результат из Jira: {change.jira_last_activity_value}")
-            
+
             text = ". ".join(text_parts) + "."
             metadata = {
                 "datamart_name": datamart.name,
                 "source_type": "release_change",
                 "version": change.version,
                 "jira_key": change.jira_key,
-                "jira_created_at": change.jira_created_at.isoformat() if change.jira_created_at else None,
+                "jira_created_at": change.jira_created_at.isoformat()
+                if change.jira_created_at
+                else None,
                 "jira_done_at": change.jira_done_at.isoformat() if change.jira_done_at else None,
                 "jira_last_activity_value": change.jira_last_activity_value,
                 "change_type": change.change_type,

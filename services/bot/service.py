@@ -6,6 +6,7 @@ class BotService:
     """
     Бизнес-логика бота для взаимодействия с RAG-системой.
     """
+
     def __init__(self, retriever: RAGRetriever) -> None:
         """
         Инициализирует BotService.
@@ -28,10 +29,10 @@ class BotService:
         seen = set()
         for s in answer.sources:
             # Используем те же поля, что и при выводе, для определения уникальности
-            dm = s.get('datamart') or s.get('datamart_name') or '-'
-            s2t = s.get('s2t_file') or s.get('s2t_file_name') or 'нет s2t'
-            date = s.get('s2t_file_date') or '-'
-            url = s.get('confluence_url') or s.get('source_url') or '-'
+            dm = s.get("datamart") or s.get("datamart_name") or "-"
+            s2t = s.get("s2t_file") or s.get("s2t_file_name") or "нет s2t"
+            date = s.get("s2t_file_date") or "-"
+            url = s.get("confluence_url") or s.get("source_url") or "-"
 
             key = (dm, s2t, date, url)
             if key not in seen:
@@ -40,7 +41,7 @@ class BotService:
 
         source_lines = []
         for idx, source in enumerate(unique_sources, start=1):
-            s2t_file = source.get('s2t_file') or source.get('s2t_file_name')
+            s2t_file = source.get("s2t_file") or source.get("s2t_file_name")
             s2t_display = s2t_file if s2t_file else "нет s2t на конфлюенсе"
             source_lines.append(
                 f"{idx}. Витрина: {source.get('datamart') or source.get('datamart_name') or '-'}\n"

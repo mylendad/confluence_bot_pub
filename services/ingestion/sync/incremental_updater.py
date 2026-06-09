@@ -23,6 +23,7 @@ class IncrementalUpdateItem:
     """
     Элемент результата инкрементального обновления для одной витрины/ресурса.
     """
+
     datamart_name: str
     resource_key: str
     file_name: str | None
@@ -41,6 +42,7 @@ class IncrementalUpdateResult:
     """
     Результат выполнения инкрементального обновления для всех витрин.
     """
+
     items: list[IncrementalUpdateItem] = field(default_factory=list)
 
     @property
@@ -69,6 +71,7 @@ class IncrementalUpdater:
     Оркестратор инкрементального обновления данных.
     Координирует работу парсеров, клиентов и репозиториев для синхронизации состояния.
     """
+
     def __init__(
         self,
         *,
@@ -118,7 +121,7 @@ class IncrementalUpdater:
         """
         items: list[IncrementalUpdateItem] = []
         active_names = []
-        
+
         for snapshot in self.metadata_sync.collect():
             try:
                 item = self._process_snapshot(snapshot, dry_run=dry_run)
@@ -141,12 +144,12 @@ class IncrementalUpdater:
                         will_reindex=False,
                     )
                 )
-        
+
         if not dry_run and active_names:
             deleted_count = self.metadata_repo.clear_stale_datamarts(active_names)
             if deleted_count > 0:
                 logger.info("Sync: removed %d stale datamarts from database", deleted_count)
-                
+
         return IncrementalUpdateResult(items=items)
 
     def _process_snapshot(
@@ -162,7 +165,7 @@ class IncrementalUpdater:
         resource_key = snapshot.unique_key
         previous = self.state_repo.get(resource_key)
         decision = self.comparator.compare(previous, snapshot.metadata_hash, snapshot.metadata)
-        
+
         file_name = resource.file_name or resource.title if resource else None
         page_id = resource.page_id if resource else None
         resource_type = resource.resource_type if resource else None
@@ -217,11 +220,12 @@ class IncrementalUpdater:
             new_id = snapshot.metadata.get("attachment_id")
             old_ver = previous.metadata.get("attachment_version_number")
             new_ver = snapshot.metadata.get("attachment_version_number")
-            
+
             if old_id and old_id == new_id and old_ver == new_ver:
                 logger.info(
                     "Skipping download for %s: attachment version %s is unchanged",
-                    resource_key, new_ver
+                    resource_key,
+                    new_ver,
                 )
                 can_skip_download = True
 
@@ -229,7 +233,7 @@ class IncrementalUpdater:
             # Обновляем метаданные витрины даже если нет s2t файла
             old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
             self.indexer.update_datamart(snapshot.datamart, old_attrs)
-            
+
             self.state_repo.upsert(
                 resource_key=resource_key,
                 datamart_name=snapshot.datamart.name,
@@ -249,7 +253,10 @@ class IncrementalUpdater:
                 resource_key=resource_key,
                 file_name=file_name,
                 metadata_changed=True,
-                reasons=[*decision.reasons, "no s2t resource" if not resource else "download url is absent"],
+                reasons=[
+                    *decision.reasons,
+                    "no s2t resource" if not resource else "download url is absent",
+                ],
                 will_download=False,
                 will_parse=False,
                 will_reindex=True,
@@ -261,11 +268,13 @@ class IncrementalUpdater:
             content_hash = previous.content_hash
             content_changed = False
             actually_downloaded = False
-            content = b"" # Not used if content_changed is False
+            content = b""  # Not used if content_changed is False
         else:
             try:
                 if hasattr(self.confluence_client, "download_resource"):
-                    content = self.confluence_client.download_resource(resource, datamart_page_id=snapshot.datamart.confluence_page_id)
+                    content = self.confluence_client.download_resource(
+                        resource, datamart_page_id=snapshot.datamart.confluence_page_id
+                    )
                 else:
                     content = self.confluence_client.download(url)
                 content_hash = self.hash_service.sha256_bytes(content)
@@ -273,12 +282,16 @@ class IncrementalUpdater:
                 content_changed = content_hash != previous_content_hash
                 actually_downloaded = True
             except (ConfluenceAuthError, ConfluenceError) as exc:
-                logger.warning("Failed to download S2T for %s: %s. Updating metadata only.", snapshot.datamart.name, exc)
+                logger.warning(
+                    "Failed to download S2T for %s: %s. Updating metadata only.",
+                    snapshot.datamart.name,
+                    exc,
+                )
                 # Если загрузка файла не удалась, мы все равно можем обновить метаданные самой витрины
                 # (стейкхолдеры, факты, изменения в релизах), которые мы уже получили из Confluence.
                 old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
                 self.indexer.update_datamart(snapshot.datamart, old_attrs)
-                
+
                 # Мы НЕ обновляем state_repo, чтобы при следующем запуске бот снова попробовал скачать файл.
                 return IncrementalUpdateItem(
                     datamart_name=snapshot.datamart.name,
@@ -307,8 +320,8 @@ class IncrementalUpdater:
                 synced=True,
                 updated_at=updated_at,
             )
-            # Если поменялись только метаданные (например, стейкхолдеры), 
-            # мы обновляем метаданные в БД и переиндексируем документы RAG, 
+            # Если поменялись только метаданные (например, стейкхолдеры),
+            # мы обновляем метаданные в БД и переиндексируем документы RAG,
             # но не перепаршиваем сам файл.
             old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
             self.indexer.update_datamart(snapshot.datamart, old_attrs)
@@ -378,7 +391,10 @@ class IncrementalUpdater:
         safe_name = self._safe_file_name(file_name or "s2t.bin")
         # Use datamart_name and file_name to generate a stable, predictable hash for the filename
         # This prevents the RAG context from losing files because the generated key changed.
-        key_hash = self.hash_service.stable_metadata_hash({"datamart": datamart_name, "file": safe_name})[:12]
+        key_hash = self.hash_service.stable_metadata_hash({
+            "datamart": datamart_name,
+            "file": safe_name,
+        })[:12]
         path = raw_dir / f"{key_hash}_{safe_name}"
         path.write_bytes(content)
         return path

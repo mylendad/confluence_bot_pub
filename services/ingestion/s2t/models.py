@@ -8,6 +8,7 @@ class S2TAttribute(BaseModel):
     Модель атрибута из S2T-файла.
     Описывает маппинг поля из источника в целевую таблицу.
     """
+
     datamart_name: str
     datamart_code: str | None = None
     owner: str | None = None
@@ -44,20 +45,19 @@ class S2TAttribute(BaseModel):
         Генерирует уникальный ключ атрибута для сравнения состояний.
         :return: Строковый ключ.
         """
-        return "|".join(
-            [
-                self.datamart_code or self.datamart_name,
-                self.target_schema or "",
-                self.target_table or "",
-                self.target_field or "",
-            ]
-        ).lower()
+        return "|".join([
+            self.datamart_code or self.datamart_name,
+            self.target_schema or "",
+            self.target_table or "",
+            self.target_field or "",
+        ]).lower()
 
 
 class S2TParseIssue(BaseModel):
     """
     Модель ошибки или замечания при парсинге S2T-файла.
     """
+
     sheet: str | None = None
     row_number: int | None = None
     message: str
@@ -67,6 +67,7 @@ class S2TParseResult(BaseModel):
     """
     Результат парсинга S2T-файла.
     """
+
     attributes: list[S2TAttribute] = Field(default_factory=list)
     processed_sheets: list[str] = Field(default_factory=list)
     issues: list[S2TParseIssue] = Field(default_factory=list)

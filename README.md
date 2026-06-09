@@ -1,5 +1,10 @@
 # Confluence S2T RAG Bot
 
+> **⚠️ ВАЖНО: Авторизация Confluence (cookies.txt)**
+>
+> В настоящее время для корректной работы парсера Confluence в корне проекта должен находиться актуальный файл `cookies.txt`.
+> Если при выполнении команды `Update RAG` (или `update-rag`) вы получаете ошибки `401` или `403` (Confluence Auth Error), убедитесь, что этот файл присутствует, содержит правильные cookie от вашей сессии и не устарел.
+
 Интеллектуальный помощник для работы с документацией витрин данных. Проект объединяет данные из Confluence, S2T-маппингов (Excel/CSV) и предоставляет RAG-поиск (Retrieval-Augmented Generation) через GigaChat.
 
 Проект организован в соответствии с лучшими практиками микросервисной архитектуры: логика разделена на независимые сервисы и общие компоненты.
@@ -7,11 +12,8 @@
 ## Быстрый старт
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-cp .env.example .env
-pytest
+make install
+make run
 ```
 
 ## Запуск приложения
@@ -19,16 +21,19 @@ pytest
 ### Web UI (FastAPI)
 Запуск сервера с веб-интерфейсом:
 ```bash
-python main.py
+python start.py
+```
+Или используя `make`:
+```bash
+make run
 ```
 После запуска интерфейс доступен по адресу: `http://localhost:8000/ui/`
 
 ### CLI (Командная строка)
 Для выполнения административных задач и локальных проверок:
 ```bash
-python cli.py update-rag --dry-run
-python cli.py ask "В каких витринах есть атрибут epk_id?"
-python cli.py chat
+.venv/bin/python -m services.bot.cli update-rag --dry-run
+.venv/bin/python -m services.bot.cli ask "В каких витринах есть атрибут epk_id?"
 ```
 
 ## Архитектура проекта

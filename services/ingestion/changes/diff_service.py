@@ -23,6 +23,7 @@ class DiffService:
     Сервис для вычисления разницы (diff) между старым и новым набором атрибутов S2T.
     Генерирует записи ChangeLogEntry для добавленных, удаленных и измененных атрибутов.
     """
+
     def diff_attributes(
         self,
         old: list[S2TAttribute],

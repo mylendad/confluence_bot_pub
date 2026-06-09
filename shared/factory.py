@@ -85,5 +85,6 @@ def build_jira_client(settings: Settings | None = None):
     :return: Экземпляр JiraClient.
     """
     from services.ingestion.confluence.jira_client import JiraClient
+
     settings = settings or get_settings()
     return JiraClient(settings)

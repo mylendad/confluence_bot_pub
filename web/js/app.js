@@ -332,6 +332,22 @@ function showStatusMessage(text, type) {
 
 async function testConnection() { await updateStatusIndicators(); }
 
+async function interruptUpdate() {
+    try {
+        const resp = await fetch(`${API_BASE}/api/interrupt-update`, { method: 'POST' });
+        if (resp.ok) {
+            if (pendingCommandMessageDiv) {
+                const bubble = pendingCommandMessageDiv.querySelector('.bubble');
+                if (bubble) bubble.innerHTML = `⚠️ Обновление RAG прервано пользователем.`;
+                pendingCommandMessageDiv = null;
+            }
+            pendingCommand = null;
+        }
+    } catch(e) {
+        console.error("Failed to interrupt", e);
+    }
+}
+
 // --- Логи ---
 async function fetchLogs() {
     if (clearedLogsDisplay) return; // Если нажали очистить, не тянем старые логи пока не перезагрузят или не нажмут обновить (если бы кнопка была)
@@ -353,15 +369,26 @@ async function fetchLogs() {
             
             logsArea.innerHTML = logsHtml || '(пусто)';
             logsArea.scrollTop = logsArea.scrollHeight;
+            
             if (pendingCommand) {
                 const logsText = logs.join('\n');
                 const success = new RegExp(`✅ Команда ${pendingCommand} завершена`).test(logsText);
                 const error = new RegExp(`❌ Команда ${pendingCommand} завершена с кодом`).test(logsText);
-                if (success || error) {
+                const cancelled = new RegExp(`Команда ${pendingCommand} была отменена`).test(logsText);
+                
+                if (success || error || cancelled) {
+                    if (pendingCommandMessageDiv) {
+                        pendingCommandMessageDiv.remove();
+                        pendingCommandMessageDiv = null;
+                    }
                     if (success) {
                         addMessage('bot', `✅ Обновление RAG завершено`);
                         if (pendingCommand === 'update-rag') loadLastEvents();
-                    } else if (error) addMessage('bot', `❌ Ошибка при выполнении обновления RAG`);
+                    } else if (cancelled) {
+                        addMessage('bot', `⚠️ Обновление RAG прервано.`);
+                    } else if (error) {
+                        addMessage('bot', `❌ Ошибка при выполнении обновления RAG`);
+                    }
                     pendingCommand = null;
                 }
             }
@@ -378,13 +405,37 @@ function downloadLogs() { window.location.href = `${API_BASE}/api/logs/download`
 async function runCommand(endpoint, commandName, displayName) {
     if (pendingCommand) { showStatusMessage(`Предыдущая команда ${pendingCommand} ещё выполняется`, 'error'); return; }
     pendingCommand = commandName;
-    addMessage('bot', `🔄 Обновление RAG запущено. Ожидайте <span class="typing" style="display:inline-block; padding:0;"><span>●</span><span>●</span><span>●</span></span>`);
+    
+    // Создаем сообщение с кнопкой отмены
+    pendingCommandMessageDiv = document.createElement('div');
+    pendingCommandMessageDiv.className = `message bot`;
+    pendingCommandMessageDiv.innerHTML = `
+        <div class="avatar">🔄</div>
+        <div class="message-content">
+            <div class="bubble" style="display: flex; align-items: center; justify-content: space-between; min-width: 250px;">
+                <span>Обновление RAG запущено. Ожидайте <span class="typing" style="display:inline-block; padding:0;"><span>●</span><span>●</span><span>●</span></span></span>
+                <button class="icon-btn stop-update-btn" style="color: #ff3b30; padding: 2px 6px; margin-left: 10px;" title="Прервать обновление">✖</button>
+            </div>
+        </div>
+    `;
+    chatArea.appendChild(pendingCommandMessageDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    
+    // Биндим кнопку отмены
+    const stopBtn = pendingCommandMessageDiv.querySelector('.stop-update-btn');
+    if (stopBtn) {
+        stopBtn.onclick = interruptUpdate;
+    }
+
     try {
         const resp = await fetch(`${API_BASE}${endpoint}`, { method: 'POST' });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.detail || data.message || 'Ошибка');
     } catch (err) {
-        addMessage('bot', `❌ Ошибка при запуске: ${err.message}`);
+        if (pendingCommandMessageDiv) {
+             pendingCommandMessageDiv.querySelector('.bubble').innerHTML = `❌ Ошибка при запуске: ${err.message}`;
+             pendingCommandMessageDiv = null;
+        }
         pendingCommand = null;
     }
 }

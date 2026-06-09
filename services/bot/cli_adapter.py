@@ -5,6 +5,7 @@ class CLIAdapter(BotInterface):
     """
     Адаптер для взаимодействия с ботом через командную строку (CLI).
     """
+
     def send_message(self, text: str) -> None:
         """
         Выводит текстовое сообщение в консоль.

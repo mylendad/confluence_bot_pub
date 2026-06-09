@@ -154,9 +154,7 @@ def test_incremental_update_added_s2t_field_is_reported_with_date(tmp_path: Path
     )
     # Используем вопрос, который не попадет в специфичные интенты и вызовет векторный поиск.
     # StubAnswerGenerator возвращает context, если он есть.
-    answer = retriever.answer(
-        "Расскажи про атрибут new_client_status_cd"
-    )
+    answer = retriever.answer("Расскажи про атрибут new_client_status_cd")
 
     assert first.parsed_count == 1
     assert first.changes_count == 0

@@ -9,6 +9,7 @@ from services.ingestion.s2t.models import S2TAttribute, S2TParseIssue, S2TParseR
 
 class CsvS2TParser:
     """Парсер S2T-файлов в формате CSV."""
+
     def parse(
         self, path: Path, datamart_name: str, s2t_file_date: date | None = None
     ) -> S2TParseResult:

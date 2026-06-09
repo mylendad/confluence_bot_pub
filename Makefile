@@ -11,10 +11,11 @@ RUFF = $(VENV_BIN)/ruff
 PYTEST = $(VENV_BIN)/pytest
 APP_MODULE = services.bot.main:app
 
-.PHONY: help install test lint format run clean
+.PHONY: help install test lint format run clean setup
 
 help:
 	@echo "Доступные команды:"
+	@echo "  make setup    - Подготовка окружения (создание .env и .venv)"
 	@echo "  make install  - Установка зависимостей (активирует существующий .venv)"
 	@echo "  make run      - Запуск сервера и открытие UI"
 	@echo "  make test     - Запуск тестов"
@@ -22,7 +23,17 @@ help:
 	@echo "  make format   - Форматирование ruff"
 	@echo "  make clean    - Очистка временных файлов"
 
-install:
+setup:
+	@if [ ! -f .env ]; then \
+		echo "Создаю .env из шаблона..."; \
+		cp .env.example .env; \
+	fi
+	@if [ ! -d $(VENV) ]; then \
+		echo "Создаю виртуальное окружение..."; \
+		python3 -m venv $(VENV); \
+	fi
+
+install: setup
 	@echo "Активация окружения и обновление pip..."
 	source $(VENV_BIN)/activate && \
 	$(PYTHON) -m pip install --upgrade pip
@@ -30,7 +41,9 @@ install:
 	source $(VENV_BIN)/activate && \
 	$(PIP) install -e ".[dev]"
 
-run:
+run: setup
+	@echo "Останавливаю процесс на порту 8000, если он существует..."
+	@kill -9 $$(lsof -t -i:8000) 2>/dev/null || true
 	@echo "Запуск сервера на http://127.0.0.1:8000..."
 	@if [ "$$(uname)" = "Darwin" ]; then \
 		open http://127.0.0.1:8000; \

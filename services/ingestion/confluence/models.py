@@ -7,6 +7,7 @@ class Stakeholder(BaseModel):
     """
     Модель данных стейкхолдера (заинтересованного лица).
     """
+
     name: str | None = None
     email: str | None = None
     role: str | None = None
@@ -18,6 +19,7 @@ class DatamartFact(BaseModel):
     """
     Модель атрибута (факта) витрины данных.
     """
+
     key: str
     label: str
     value: str
@@ -28,6 +30,7 @@ class ReleaseChange(BaseModel):
     """
     Модель изменения в релизе (задачи из журнала изменений).
     """
+
     version: str | None = None
     jira_key: str | None = None
     jira_title: str | None = None
@@ -44,6 +47,7 @@ class ConfluencePage(BaseModel):
     """
     Модель страницы Confluence с метаданными и содержимым.
     """
+
     id: str
     title: str
     url: str
@@ -59,6 +63,7 @@ class S2TResource(BaseModel):
     """
     Модель ресурса S2T (вложение или ссылка на файл).
     """
+
     id: str | None = None
     title: str
     url: str | None = None
@@ -87,6 +92,7 @@ class Datamart(BaseModel):
     """
     Модель витрины данных со всей собранной информацией.
     """
+
     name: str
     confluence_page_id: str
     confluence_url: str
@@ -106,5 +112,6 @@ class ParseResult(BaseModel):
     """
     Результат парсинга набора страниц Confluence.
     """
+
     datamarts: list[Datamart] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)

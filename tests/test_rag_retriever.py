@@ -20,17 +20,15 @@ class FailingAnswerGenerator(AnswerGenerator):
 def test_attribute_usage_structured_answer(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
-    metadata_repo.upsert_attributes(
-        [
-            S2TAttribute(
-                datamart_name="Витрина клиентов",
-                target_table="client_dm",
-                target_field="epk_id",
-                source_table="client_src",
-                source_field="epk_id",
-            )
-        ]
-    )
+    metadata_repo.upsert_attributes([
+        S2TAttribute(
+            datamart_name="Витрина клиентов",
+            target_table="client_dm",
+            target_field="epk_id",
+            source_table="client_src",
+            source_field="epk_id",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
 
     answer = retriever.answer("В каких витринах есть атрибут epk_id?")
@@ -41,17 +39,15 @@ def test_attribute_usage_structured_answer(tmp_path: Path) -> None:
 def test_owner_lookup_uses_structured_s2t_owner(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
-    metadata_repo.upsert_attributes(
-        [
-            S2TAttribute(
-                datamart_name="Витрина клиентских операций",
-                target_schema="dds_dm",
-                target_table="dm_client_operations",
-                target_field="epk_id",
-                owner="ivanov.ii@example.ru",
-            )
-        ]
-    )
+    metadata_repo.upsert_attributes([
+        S2TAttribute(
+            datamart_name="Витрина клиентских операций",
+            target_schema="dds_dm",
+            target_table="dm_client_operations",
+            target_field="epk_id",
+            owner="ivanov.ii@example.ru",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
 
     answer = retriever.answer("кто владелец Витрина клиентских операций")
@@ -63,15 +59,13 @@ def test_owner_lookup_uses_structured_s2t_owner(tmp_path: Path) -> None:
 def test_owner_lookup_does_not_answer_for_unknown_datamart(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
-    metadata_repo.upsert_attributes(
-        [
-            S2TAttribute(
-                datamart_name="Витрина клиентских операций",
-                target_field="epk_id",
-                owner="ivanov.ii@example.ru",
-            )
-        ]
-    )
+    metadata_repo.upsert_attributes([
+        S2TAttribute(
+            datamart_name="Витрина клиентских операций",
+            target_field="epk_id",
+            owner="ivanov.ii@example.ru",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
 
     answer = retriever.answer("кто владелец Витрина счетов")
@@ -105,18 +99,24 @@ def test_datamart_list_filters_junk(tmp_path: Path) -> None:
         Datamart(name="Витрина Маркеры", confluence_page_id="1", confluence_url="url1")
     )
     metadata_repo.upsert_datamart(
-        Datamart(name="Техническое задание -- Витрина карта мигранта", confluence_page_id="2", confluence_url="url2")
+        Datamart(
+            name="Техническое задание -- Витрина карта мигранта",
+            confluence_page_id="2",
+            confluence_url="url2",
+        )
     )
     metadata_repo.upsert_datamart(
-        Datamart(name="Функцональное решение -- Витрина", confluence_page_id="3", confluence_url="url3")
+        Datamart(
+            name="Функцональное решение -- Витрина", confluence_page_id="3", confluence_url="url3"
+        )
     )
     metadata_repo.upsert_datamart(
         Datamart(name="ТЗ - Витрина", confluence_page_id="4", confluence_url="url4")
     )
-    
+
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
     answer = retriever.answer("какие есть витрины")
-    
+
     assert "Витрина Маркеры" in answer.answer
     assert "Техническое задание" not in answer.answer
     assert "Функцональное решение" not in answer.answer
@@ -181,21 +181,19 @@ def test_last_year_changes_answer_includes_dates_and_added_fields(tmp_path: Path
     metadata_repo = MetadataRepository(db)
     history_repo = HistoryRepository(db)
     change_date = datetime.utcnow() - timedelta(days=3)
-    history_repo.add_many(
-        [
-            ChangeLogEntry(
-                id="change-1",
-                datamart_name="Витрина клиентских операций",
-                datamart_code="DM_CLIENT_OPS",
-                entity_type="attribute",
-                entity_name="new_client_status_cd",
-                change_type="added",
-                change_date=change_date,
-                detected_at=change_date,
-                s2t_file_name="s2t.xlsx",
-            )
-        ]
-    )
+    history_repo.add_many([
+        ChangeLogEntry(
+            id="change-1",
+            datamart_name="Витрина клиентских операций",
+            datamart_code="DM_CLIENT_OPS",
+            entity_type="attribute",
+            entity_name="new_client_status_cd",
+            change_type="added",
+            change_date=change_date,
+            detected_at=change_date,
+            s2t_file_name="s2t.xlsx",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), history_repo)
 
     answer = retriever.answer(
@@ -214,21 +212,19 @@ def test_current_year_changes_uses_january_first_period(tmp_path: Path) -> None:
     history_repo = HistoryRepository(db)
     now = datetime.utcnow()
     change_date = datetime(now.year, 2, 10)
-    history_repo.add_many(
-        [
-            ChangeLogEntry(
-                id="change-current-year",
-                datamart_name="Витрина клиентских операций",
-                datamart_code="DM_CLIENT_OPS",
-                entity_type="attribute",
-                entity_name="new_client_status_cd",
-                change_type="added",
-                change_date=change_date,
-                detected_at=change_date,
-                s2t_file_name="s2t.xlsx",
-            )
-        ]
-    )
+    history_repo.add_many([
+        ChangeLogEntry(
+            id="change-current-year",
+            datamart_name="Витрина клиентских операций",
+            datamart_code="DM_CLIENT_OPS",
+            entity_type="attribute",
+            entity_name="new_client_status_cd",
+            change_type="added",
+            change_date=change_date,
+            detected_at=change_date,
+            s2t_file_name="s2t.xlsx",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), history_repo)
 
     answer = retriever.answer(
@@ -243,17 +239,15 @@ def test_current_year_changes_uses_january_first_period(tmp_path: Path) -> None:
 def test_source_lineage_skips_missing_schema(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
-    metadata_repo.upsert_attributes(
-        [
-            S2TAttribute(
-                datamart_name="Витрина счетов",
-                target_table="dm_account_balance",
-                target_field="account_balance_amt",
-                source_table="account_balance",
-                source_field="balance_amt",
-            )
-        ]
-    )
+    metadata_repo.upsert_attributes([
+        S2TAttribute(
+            datamart_name="Витрина счетов",
+            target_table="dm_account_balance",
+            target_field="account_balance_amt",
+            source_table="account_balance",
+            source_field="balance_amt",
+        )
+    ])
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
 
     answer = retriever.answer("Из какого источника берется account_balance_amt?")
@@ -265,18 +259,16 @@ def test_source_lineage_skips_missing_schema(tmp_path: Path) -> None:
 def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
-    metadata_repo.upsert_attributes(
-        [
-            S2TAttribute(
-                datamart_name="Витрина счетов",
-                target_table="dm_account_balance",
-                target_field="account_balance_amt",
-                source_table="account_balance",
-                source_field="balance_amt",
-                transformation_logic="round(account_balance.balance_amt, 2)",
-            )
-        ]
-    )
+    metadata_repo.upsert_attributes([
+        S2TAttribute(
+            datamart_name="Витрина счетов",
+            target_table="dm_account_balance",
+            target_field="account_balance_amt",
+            source_table="account_balance",
+            source_field="balance_amt",
+            transformation_logic="round(account_balance.balance_amt, 2)",
+        )
+    ])
     vector_store = JsonVectorStore(tmp_path / "vs")
     from services.rag.indexer import RAGIndexer
     from shared.storage.document_repository import DocumentRepository
@@ -294,6 +286,7 @@ def test_vector_answer_returns_friendly_llm_error(tmp_path: Path) -> None:
     assert "Не удалось вызвать LLM" in answer.answer
     assert answer.sources
 
+
 def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
@@ -302,7 +295,13 @@ def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> Non
             name="Витрина Маркеров",
             confluence_page_id="1",
             confluence_url="url1",
-            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 1")]
+            facts=[
+                DatamartFact(
+                    key="business_stakeholders",
+                    label="Заинтересованные со стороны бизнеса",
+                    value="Owner 1",
+                )
+            ],
         )
     )
     metadata_repo.upsert_datamart(
@@ -310,7 +309,13 @@ def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> Non
             name="Витрина Маркеров Особенных решений",
             confluence_page_id="2",
             confluence_url="url2",
-            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 2")]
+            facts=[
+                DatamartFact(
+                    key="business_stakeholders",
+                    label="Заинтересованные со стороны бизнеса",
+                    value="Owner 2",
+                )
+            ],
         )
     )
     metadata_repo.upsert_datamart(
@@ -318,19 +323,28 @@ def test_datamart_fact_with_punctuation_and_longest_match(tmp_path: Path) -> Non
             name="Витрина «Метрики ТБ»",
             confluence_page_id="3",
             confluence_url="url3",
-            facts=[DatamartFact(key="business_stakeholders", label="Заинтересованные со стороны бизнеса", value="Owner 3")]
+            facts=[
+                DatamartFact(
+                    key="business_stakeholders",
+                    label="Заинтересованные со стороны бизнеса",
+                    value="Owner 3",
+                )
+            ],
         )
     )
-    
+
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
-    
+
     # Test longest match
-    answer1 = retriever.answer("Витрина Маркеров Особенных решений Заинтересованные со стороны бизнеса")
+    answer1 = retriever.answer(
+        "Витрина Маркеров Особенных решений Заинтересованные со стороны бизнеса"
+    )
     assert "Owner 2" in answer1.answer
-    
+
     # Test punctuation normalization
     answer2 = retriever.answer("Витрина Метрики ТБ Заинтересованные со стороны бизнеса")
     assert "Owner 3" in answer2.answer
+
 
 def test_release_changes_intent_robustness_to_typos(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
@@ -347,7 +361,7 @@ def test_release_changes_intent_robustness_to_typos(tmp_path: Path) -> None:
                     change_type="НОВОЕ",
                     summary="Первичный вывод витрины",
                 )
-            ]
+            ],
         )
     )
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))
@@ -359,23 +373,22 @@ def test_release_changes_intent_robustness_to_typos(tmp_path: Path) -> None:
     assert "20260515" in answer.answer
     assert "Первичный вывод витрины" in answer.answer
 
+
 def test_release_changes_priority_over_history(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
     metadata_repo = MetadataRepository(db)
     history_repo = HistoryRepository(db)
-    
+
     # Mock datamart with release changes
     metadata_repo.upsert_datamart(
         Datamart(
             name="Витрина Тест",
             confluence_page_id="123",
             confluence_url="https://confluence.example.ru/test",
-            release_changes=[
-                ReleaseChange(version="v1", summary="Business Release")
-            ]
+            release_changes=[ReleaseChange(version="v1", summary="Business Release")],
         )
     )
-    
+
     # Mock technical history
     history_repo.add_many([
         ChangeLogEntry(
@@ -384,10 +397,10 @@ def test_release_changes_priority_over_history(tmp_path: Path) -> None:
             entity_type="attribute",
             change_type="added",
             entity_name="test_field",
-            change_date=datetime.utcnow()
+            change_date=datetime.utcnow(),
         )
     ])
-    
+
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), history_repo)
 
     # Question with "год" should prefer release_changes (Confluence)
@@ -396,6 +409,7 @@ def test_release_changes_priority_over_history(tmp_path: Path) -> None:
     assert "Изменения в релизах" in answer.answer
     assert "Business Release" in answer.answer
     assert "Добавлены атрибуты" not in answer.answer  # This would be in technical history
+
 
 def test_release_changes_uses_resolution_date_label(tmp_path: Path) -> None:
     db = SQLite(tmp_path / "app.db")
@@ -407,11 +421,9 @@ def test_release_changes_uses_resolution_date_label(tmp_path: Path) -> None:
             confluence_url="https://confluence.example.ru/test",
             release_changes=[
                 ReleaseChange(
-                    version="v1",
-                    summary="Test",
-                    jira_done_at=datetime(2025, 12, 6, 8, 53)
+                    version="v1", summary="Test", jira_done_at=datetime(2025, 12, 6, 8, 53)
                 )
-            ]
+            ],
         )
     )
     retriever = RAGRetriever(metadata_repo, JsonVectorStore(tmp_path / "vs"), HistoryRepository(db))

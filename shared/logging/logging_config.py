@@ -6,6 +6,7 @@ class MemoryLogHandler(logging.Handler):
     """
     Обработчик логов, сохраняющий последние записи в оперативной памяти (в очереди с ограниченным размером).
     """
+
     def __init__(self, maxlen: int = 1000) -> None:
         """
         Инициализирует MemoryLogHandler.
@@ -34,7 +35,7 @@ class ColoredFormatter(logging.Formatter):
     """
     Пользовательский форматтер логов, добавляющий цвета в зависимости от уровня важности.
     """
-    
+
     # ANSI escape codes
     GREY = "\x1b[38;20m"
     YELLOW = "\x1b[33;20m"
@@ -42,7 +43,7 @@ class ColoredFormatter(logging.Formatter):
     BOLD_RED = "\x1b[31;1m"
     CYAN = "\x1b[36;20m"
     RESET = "\x1b[0m"
-    
+
     COLORS = {
         logging.DEBUG: GREY,
         logging.INFO: CYAN,
@@ -72,21 +73,23 @@ def configure_logging(level: str = "INFO") -> None:
     :param level: Уровень логирования (например, 'INFO', 'DEBUG').
     """
     # Set standard format for memory handler (plain text)
-    memory_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s"))
-    
+    memory_handler.setFormatter(
+        logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s")
+    )
+
     # Set colored format for console
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(ColoredFormatter())
-    
+
     handlers = [console_handler, memory_handler]
-    
+
     # We use basicConfig but manage handlers explicitly to avoid duplicates
     root = logging.getLogger()
     root.setLevel(getattr(logging, level.upper(), logging.INFO))
-    
+
     # Clear existing handlers to prevent duplicate output during re-config
     if root.hasHandlers():
         root.handlers.clear()
-        
+
     for handler in handlers:
         root.addHandler(handler)

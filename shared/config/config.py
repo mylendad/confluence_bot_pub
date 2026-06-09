@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     Класс для управления настройками приложения, использующий pydantic-settings.
     Загружает конфигурацию из переменных окружения и .env файла.
     """
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     confluence_base_url: str = "https://confluence.example.ru"
