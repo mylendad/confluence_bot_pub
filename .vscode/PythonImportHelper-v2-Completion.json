@@ -483,6 +483,22 @@
         "documentation": {}
     },
     {
+        "label": "HistoryRepository",
+        "importPath": "services.ingestion.changes.history_repository",
+        "description": "services.ingestion.changes.history_repository",
+        "isExtraImport": true,
+        "detail": "services.ingestion.changes.history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "services.ingestion.confluence.client",
+        "description": "services.ingestion.confluence.client",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.client",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceClient",
         "importPath": "services.ingestion.confluence.client",
         "description": "services.ingestion.confluence.client",
@@ -576,6 +592,14 @@
         "description": "services.ingestion.confluence.exceptions",
         "isExtraImport": true,
         "detail": "services.ingestion.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "JiraClient",
+        "importPath": "services.ingestion.confluence.jira_client",
+        "description": "services.ingestion.confluence.jira_client",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.jira_client",
         "documentation": {}
     },
     {
@@ -795,6 +819,14 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceParser",
+        "importPath": "services.ingestion.confluence.parser",
+        "description": "services.ingestion.confluence.parser",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.parser",
+        "documentation": {}
+    },
+    {
         "label": "S2TParseError",
         "importPath": "services.ingestion.s2t.exceptions",
         "description": "services.ingestion.s2t.exceptions",
@@ -859,6 +891,22 @@
         "documentation": {}
     },
     {
+        "label": "IncrementalUpdateResult",
+        "importPath": "services.ingestion.sync.incremental_updater",
+        "description": "services.ingestion.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
+        "label": "IncrementalUpdater",
+        "importPath": "services.ingestion.sync.incremental_updater",
+        "description": "services.ingestion.sync.incremental_updater",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.incremental_updater",
+        "documentation": {}
+    },
+    {
         "label": "MetadataSyncService",
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
@@ -883,6 +931,14 @@
         "documentation": {}
     },
     {
+        "label": "MetadataSyncService",
+        "importPath": "services.ingestion.sync.metadata_sync_service",
+        "description": "services.ingestion.sync.metadata_sync_service",
+        "isExtraImport": true,
+        "detail": "services.ingestion.sync.metadata_sync_service",
+        "documentation": {}
+    },
+    {
         "label": "S2TMetadataSnapshot",
         "importPath": "services.ingestion.sync.metadata_sync_service",
         "description": "services.ingestion.sync.metadata_sync_service",
@@ -912,6 +968,22 @@
         "description": "services.rag.indexer",
         "isExtraImport": true,
         "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "RAGIndexer",
+        "importPath": "services.rag.indexer",
+        "description": "services.rag.indexer",
+        "isExtraImport": true,
+        "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "JsonVectorStore",
+        "importPath": "services.rag.vector_store",
+        "description": "services.rag.vector_store",
+        "isExtraImport": true,
+        "detail": "services.rag.vector_store",
         "documentation": {}
     },
     {
@@ -1004,6 +1076,14 @@
     },
     {
         "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
         "importPath": "shared.config.config",
         "description": "shared.config.config",
         "isExtraImport": true,
@@ -1163,6 +1243,22 @@
         "documentation": {}
     },
     {
+        "label": "DocumentRepository",
+        "importPath": "shared.storage.document_repository",
+        "description": "shared.storage.document_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.document_repository",
+        "documentation": {}
+    },
+    {
+        "label": "MetadataRepository",
+        "importPath": "shared.storage.metadata_repository",
+        "description": "shared.storage.metadata_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.metadata_repository",
+        "documentation": {}
+    },
+    {
         "label": "MetadataRepository",
         "importPath": "shared.storage.metadata_repository",
         "description": "shared.storage.metadata_repository",
@@ -1264,6 +1360,22 @@
         "description": "shared.storage.s2t_state_repository",
         "isExtraImport": true,
         "detail": "shared.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "S2TStateRepository",
+        "importPath": "shared.storage.s2t_state_repository",
+        "description": "shared.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
+        "label": "SQLite",
+        "importPath": "shared.storage.sqlite",
+        "description": "shared.storage.sqlite",
+        "isExtraImport": true,
+        "detail": "shared.storage.sqlite",
         "documentation": {}
     },
     {
@@ -1555,15 +1667,6 @@
         "importPath": "logging",
         "description": "logging",
         "detail": "logging",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
         "documentation": {}
     },
     {
@@ -2334,6 +2437,14 @@
         "documentation": {}
     },
     {
+        "label": "PageSnapshotRepository",
+        "importPath": "shared.storage.page_snapshot_repository",
+        "description": "shared.storage.page_snapshot_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.page_snapshot_repository",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
@@ -2735,7 +2846,16 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n# Global registry for active background processes\n_active_processes: dict[str, asyncio.subprocess.Process] = {}\ndef _update_env_file(updates: dict[str, str]):\n    \"\"\"Обновляет или добавляет переменные в .env, сохраняя остальные.\"\"\"\n    lines = []\n    if ENV_PATH.exists():\n        lines = ENV_PATH.read_text(encoding=\"utf-8\").splitlines()\n    updated_keys = set()\n    new_lines = []",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n# Global registry for active background processes\n_active_processes: dict[str, asyncio.subprocess.Process] = {}\n# --- Эндпоинты для управления токенами ---\n@app.post(\n    \"/api/save-tokens\",\n    response_model=MessageResponse,\n    status_code=status.HTTP_403_FORBIDDEN,\n    summary=\"Сохранить токены (отключено)\",\n    tags=[\"Settings\"],",
+        "detail": "services.bot.main",
+        "documentation": {}
+    },
+    {
+        "label": "_is_update_running",
+        "kind": 5,
+        "importPath": "services.bot.main",
+        "description": "services.bot.main",
+        "peekOfCode": "_is_update_running = False\ndef _run_update_rag_task():\n    global _is_update_running\n    try:\n        from services.scenarios.update_rag_service import UpdateRagService\n        service = UpdateRagService()\n        service.run()\n    except Exception as e:\n        logger.exception(f\"Ошибка фонового обновления RAG: {e}\")\n    finally:",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -3331,6 +3451,24 @@
         "description": "services.rag.vector_store",
         "peekOfCode": "class JsonVectorStore:\n    \"\"\"\n    Локальное векторное хранилище на базе JSONL-файла.\n    Обеспечивает сохранение документов и поиск по сходству через эмбеддинги.\n    \"\"\"\n    def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:\n        \"\"\"\n        Инициализирует JsonVectorStore.\n        :param directory: Директория для хранения файла индекса.\n        :param embedder: Объект для вычисления эмбеддингов текстов.",
         "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "UpdateRagService",
+        "kind": 6,
+        "importPath": "services.scenarios.update_rag_service",
+        "description": "services.scenarios.update_rag_service",
+        "peekOfCode": "class UpdateRagService:\n    \"\"\"\n    Сервис сценария для инкрементального обновления базы знаний RAG.\n    \"\"\"\n    def __init__(self):\n        self.settings = get_settings()\n    def run(self, since: str | None = None, dry_run: bool = False) -> IncrementalUpdateResult:\n        \"\"\"\n        Выполняет инкрементальное обновление.\n        :param since: Опциональный фильтр даты (сейчас не используется напрямую в updater).",
+        "detail": "services.scenarios.update_rag_service",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.scenarios.update_rag_service",
+        "description": "services.scenarios.update_rag_service",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass UpdateRagService:\n    \"\"\"\n    Сервис сценария для инкрементального обновления базы знаний RAG.\n    \"\"\"\n    def __init__(self):\n        self.settings = get_settings()\n    def run(self, since: str | None = None, dry_run: bool = False) -> IncrementalUpdateResult:\n        \"\"\"\n        Выполняет инкрементальное обновление.",
+        "detail": "services.scenarios.update_rag_service",
         "documentation": {}
     },
     {

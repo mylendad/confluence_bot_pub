@@ -1,7 +1,6 @@
 import asyncio
 import copy
 import logging
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -54,84 +53,32 @@ logger = logging.getLogger(__name__)
 # Global registry for active background processes
 _active_processes: dict[str, asyncio.subprocess.Process] = {}
 
-
-def _update_env_file(updates: dict[str, str]):
-    """Обновляет или добавляет переменные в .env, сохраняя остальные."""
-    lines = []
-    if ENV_PATH.exists():
-        lines = ENV_PATH.read_text(encoding="utf-8").splitlines()
-
-    updated_keys = set()
-    new_lines = []
-
-    # Обновляем существующие строки
-    for line in lines:
-        if "=" in line and not line.strip().startswith("#"):
-            key = line.split("=", 1)[0].strip()
-            if key in updates:
-                new_lines.append(f"{key}={updates[key]}")
-                updated_keys.add(key)
-            else:
-                new_lines.append(line)
-        else:
-            new_lines.append(line)
-
-    # Добавляем новые переменные, которых не было
-    for key, value in updates.items():
-        if key not in updated_keys:
-            new_lines.append(f"{key}={value}")
-
-    ENV_PATH.write_text("\n".join(new_lines), encoding="utf-8")
-
-    # Сбрасываем кэш настроек после изменения .env
-    get_settings.cache_clear()
-
-
 # --- Эндпоинты для управления токенами ---
 @app.post(
     "/api/save-tokens",
     response_model=MessageResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Сохранить токены",
+    status_code=status.HTTP_403_FORBIDDEN,
+    summary="Сохранить токены (отключено)",
     tags=["Settings"],
-    description="Сохраняет переданные токены (Confluence, Jira, GigaChat) в локальный файл .env.",
+    description="Сохранение токенов через API отключено в целях безопасности. Настройте .env файл.",
 )
 async def save_tokens(
     request: Annotated[TokensSaveRequest, Body(description="Набор токенов для сохранения")],
 ):
-    updates = {}
-    if request.confluence_token is not None:
-        updates["CONFLUENCE_TOKEN"] = request.confluence_token
-    if request.jira_token is not None:
-        updates["JIRA_TOKEN"] = request.jira_token
-        updates["JIRA_API_TOKEN"] = request.jira_token
-    if request.gigachat_token is not None:
-        updates["GIGACHAT_CREDENTIALS"] = request.gigachat_token
-        updates["GIGACHAT_API_PERS"] = request.gigachat_token
-
-    if updates:
-        _update_env_file(updates)
-
-    return MessageResponse(message="Токены сохранены")
+    raise HTTPException(status_code=403, detail="Изменение настроек через API отключено в целях безопасности. Пожалуйста, пропишите токены напрямую в .env файле.")
 
 
 @app.post(
     "/api/clear-tokens",
     response_model=MessageResponse,
-    summary="Удалить токены",
+    status_code=status.HTTP_403_FORBIDDEN,
+    summary="Удалить токены (отключено)",
     tags=["Settings"],
-    description="Удаляет токены из конфигурации.",
+    description="Удаление токенов через API отключено в целях безопасности.",
 )
 async def clear_tokens():
-    updates = {
-        "CONFLUENCE_TOKEN": "",
-        "JIRA_TOKEN": "",
-        "JIRA_API_TOKEN": "",
-        "GIGACHAT_CREDENTIALS": "",
-        "GIGACHAT_API_PERS": "",
-    }
-    _update_env_file(updates)
-    return MessageResponse(message="Токены удалены")
+    raise HTTPException(status_code=403, detail="Изменение настроек через API отключено в целях безопасности. Пожалуйста, очистите токены напрямую в .env файле.")
+
 
 
 @app.get(
@@ -151,39 +98,18 @@ async def tokens_status():
 
 
 # --- Фоновые команды ---
-async def _run_cli_command_streaming(args: list[str], command_name: str):
+_is_update_running = False
+
+def _run_update_rag_task():
+    global _is_update_running
     try:
-        logger.info(f"Запуск команды {command_name}: python -m services.bot.cli {' '.join(args)}")
-        process = await asyncio.create_subprocess_exec(
-            sys.executable,
-            "-m",
-            "services.bot.cli",
-            *args,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            env={**os.environ, "PYTHONUNBUFFERED": "1"},
-        )
-        _active_processes[command_name] = process
-
-        async def read_stream(stream, log_func):
-            while True:
-                line = await stream.readline()
-                if not line:
-                    break
-                text = line.decode("utf-8", errors="replace").rstrip()
-                if text:
-                    log_func(f"[CLI] {text}")
-
-        await asyncio.gather(
-            read_stream(process.stdout, logger.info), read_stream(process.stderr, logger.error)
-        )
-        await process.wait()
-    except asyncio.CancelledError:
-        logger.info(f"Команда {command_name} была отменена.")
-    except Exception:
-        logger.exception(f"Ошибка команды {command_name}")
+        from services.scenarios.update_rag_service import UpdateRagService
+        service = UpdateRagService()
+        service.run()
+    except Exception as e:
+        logger.exception(f"Ошибка фонового обновления RAG: {e}")
     finally:
-        _active_processes.pop(command_name, None)
+        _is_update_running = False
 
 
 @app.post(
@@ -194,10 +120,13 @@ async def _run_cli_command_streaming(args: list[str], command_name: str):
     tags=["Commands"],
 )
 async def update_rag(background_tasks: BackgroundTasks):
-    if "update-rag" in _active_processes:
+    global _is_update_running
+    if _is_update_running:
         return MessageResponse(message="Обновление уже запущено")
-    background_tasks.add_task(_run_cli_command_streaming, ["update-rag"], "update-rag")
-    return MessageResponse(message="Команда запущена в фоне")
+    
+    _is_update_running = True
+    background_tasks.add_task(_run_update_rag_task)
+    return MessageResponse(message="Фоновое обновление запущено")
 
 
 @app.post(
@@ -207,15 +136,12 @@ async def update_rag(background_tasks: BackgroundTasks):
     tags=["Commands"],
 )
 async def interrupt_update():
-    process = _active_processes.get("update-rag")
-    if process:
-        try:
-            logger.info("Попытка остановить процесс обновления RAG...")
-            process.terminate()
-            return MessageResponse(message="Отправлен сигнал завершения процессу обновления")
-        except Exception as e:
-            logger.error(f"Ошибка при остановке процесса: {e}")
-            raise HTTPException(500, f"Не удалось остановить процесс: {e}")
+    global _is_update_running
+    if _is_update_running:
+        raise HTTPException(
+            status_code=501, 
+            detail="В новой архитектуре принудительное прерывание синхронизации временно не поддерживается."
+        )
     return MessageResponse(message="Процесс обновления не найден или уже завершен")
 
 
@@ -225,12 +151,6 @@ async def interrupt_update():
 async def shutdown(background_tasks: BackgroundTasks):
     async def _s():
         await asyncio.sleep(0.5)
-        # Kill all active background processes first
-        for name, proc in _active_processes.items():
-            try:
-                proc.terminate()
-            except Exception:
-                pass
         sys.exit(0)
 
     background_tasks.add_task(_s)
@@ -311,7 +231,7 @@ async def ask(request: Annotated[AskRequest, Body()]):
         return AskResponse(answer=answer.answer, sources=answer.sources)
     except Exception as e:
         logger.exception("Ask error")
-        raise HTTPException(500, detail=str(e))
+        raise HTTPException(500, detail=str(e)) from e
 
 
 @app.get("/health", summary="Health check", tags=["System"])
@@ -326,12 +246,12 @@ async def health():
     tags=["System"],
 )
 async def health_external():
-    c, l = build_confluence_client(), build_llm_generator()
+    client_c, client_l = build_confluence_client(), build_llm_generator()
     from shared.factory import build_jira_client
 
     j = build_jira_client()
     return ExternalHealthResponse(
-        confluence=c.check_health(), gigachat=l.check_health(), jira=j.check_health()
+        confluence=client_c.check_health(), gigachat=client_l.check_health(), jira=j.check_health()
     )
 
 
