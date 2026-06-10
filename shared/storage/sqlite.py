@@ -66,97 +66,27 @@ class SQLite:
 
     def init_schema(self) -> None:
         """
-        Инициализирует схему базы данных, создавая необходимые таблицы и индексы.
+        Инициализирует схему базы данных с помощью Alembic миграций.
         """
-        with self.connect() as conn:
-            conn.executescript(
-                """
-                create table if not exists datamarts (
-                    name text primary key,
-                    code text,
-                    confluence_page_id text,
-                    confluence_url text,
-                    stakeholders_json text not null default '[]',
-                    updated_at text
-                );
-                create table if not exists attributes (
-                    attribute_key text primary key,
-                    datamart_name text not null,
-                    payload_json text not null,
-                    content_hash text not null,
-                    parsed_at text not null
-                );
-                create index if not exists idx_attributes_datamart on attributes(datamart_name);
-                create index if not exists idx_attributes_target_field
-                    on attributes(json_extract(payload_json, '$.target_field'));
-                create table if not exists documents (
-                    id text primary key,
-                    text text not null,
-                    metadata_json text not null,
-                    content_hash text not null
-                );
-                create table if not exists change_log (
-                    id text primary key,
-                    datamart_name text,
-                    datamart_code text,
-                    entity_type text,
-                    entity_name text,
-                    change_type text,
-                    old_value text,
-                    new_value text,
-                    change_date text,
-                    detected_at text,
-                    source_url text,
-                    s2t_file_name text
-                );
-                create table if not exists s2t_state (
-                    resource_key text primary key,
-                    datamart_name text not null,
-                    page_id text,
-                    resource_type text,
-                    title text,
-                    file_name text,
-                    url text,
-                    metadata_json text not null,
-                    metadata_hash text not null,
-                    content_hash text,
-                    last_checked_at text not null,
-                    last_synced_at text,
-                    updated_at text
-                );
-                create index if not exists idx_s2t_state_datamart
-                    on s2t_state(datamart_name);
-                create table if not exists chat_history (
-                    id integer primary key autoincrement,
-                    session_id text not null,
-                    user_message text not null,
-                    bot_response text not null,
-                    sources_json text not null default '[]',
-                    created_at text not null
-                );
-                create index if not exists idx_chat_history_session on chat_history(session_id);
-                create table if not exists page_snapshots (
-                    datamart_page_id text primary key,
-                    version_map_json text not null,
-                    extracted_data_json text not null,
-                    updated_at text not null
-                );
-                """
-            )
-            self._ensure_column(conn, "datamarts", "facts_json", "text not null default '[]'")
-            self._ensure_column(
-                conn, "datamarts", "release_changes_json", "text not null default '[]'"
-            )
-
-    @staticmethod
-    def _ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) -> None:
-        """
-        Убеждается, что колонка существует в таблице, и добавляет её, если нет.
-        :param conn: Соединение с базой данных.
-        :param table: Имя таблицы.
-        :param column: Имя колонки.
-        :param ddl: Определение колонки (тип и т.д.).
-        """
-        columns = {row["name"] for row in conn.execute(f"pragma table_info({table})")}
-        if column not in columns:
-            conn.execute(f"alter table {table} add column {column} {ddl}")
+        try:
+            from alembic import command
+            from alembic.config import Config
+            import logging
+            
+            logger = logging.getLogger(__name__)
+            
+            base_dir = Path(__file__).parent.parent.parent
+            alembic_ini_path = base_dir / "alembic.ini"
+            
+            if alembic_ini_path.exists():
+                alembic_cfg = Config(str(alembic_ini_path))
+                alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{self.path.absolute()}")
+                command.upgrade(alembic_cfg, "head")
+                logger.info("Database schema initialized/updated successfully via Alembic.")
+            else:
+                logger.warning(f"alembic.ini not found at {alembic_ini_path}. Skipping migrations.")
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Failed to run alembic migrations: {e}")
+            raise

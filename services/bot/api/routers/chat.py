@@ -96,7 +96,7 @@ async def get_chat_history(session_id: Annotated[str, FastPath(description="ID �
     "/api/clear-chat-history", response_model=MessageResponse, summary="Очистить чат"
 )
 async def clear_chat_history(
-    request: Annotated[dict[str, Any], Body(example={"session_id": "123"})],
+    request: Annotated[dict[str, Any], Body(examples=[{"session_id": "123"}])],
 ):
     sid = request.get("session_id")
     if not sid:
