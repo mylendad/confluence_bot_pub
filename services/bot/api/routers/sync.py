@@ -4,6 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 
 from services.bot.http_adapter import MessageResponse, SyncLastEventsResponse, SyncStatusResponse
 from services.scenarios.sync_status_service import SyncStatusService
+from shared.logging.logging_config import memory_handler
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Sync"])
@@ -12,11 +13,14 @@ _is_update_running = False
 
 def _run_update_rag_task():
     global _is_update_running
+    command_name = "update-rag"
     try:
         from services.scenarios.update_rag_service import UpdateRagService
         service = UpdateRagService()
         service.run()
+        logger.info(f"✅ Команда {command_name} завершена")
     except Exception as e:
+        logger.error(f"❌ Команда {command_name} завершена с кодом 1")
         logger.exception(f"Ошибка фонового обновления RAG: {e}")
     finally:
         _is_update_running = False
@@ -31,6 +35,9 @@ async def update_rag(background_tasks: BackgroundTasks):
     global _is_update_running
     if _is_update_running:
         return MessageResponse(message="Обновление уже запущено")
+    
+    # Очищаем логи перед запуском нового обновления, чтобы UI не ловил старые сообщения
+    memory_handler.clear()
     
     _is_update_running = True
     background_tasks.add_task(_run_update_rag_task)
