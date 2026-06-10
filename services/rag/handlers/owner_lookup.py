@@ -17,7 +17,7 @@ class OwnerLookupHandler(BaseHandler):
             if not matched:
                 if self.metadata_repo.get_datamart(requested_datamart):
                     return RAGAnswer(
-                        answer=f"Для витрины `{requested_datamart}` файл S2T не найден или еще не распаршен, поэтому владелец в S2T не указан.",
+                        answer=f"Для витрины `{requested_datamart}` файл S2T не найден.",
                         sources=[],
                     )
                 available = ", ".join(sorted({attr.datamart_name for attr in attrs}))
