@@ -232,22 +232,22 @@ class IncrementalUpdater:
         if not resource or not url:
             # Обновляем метаданные витрины даже если нет s2t файла
             old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
-            self.indexer.update_datamart(snapshot.datamart, old_attrs)
-
-            self.state_repo.upsert(
-                resource_key=resource_key,
-                datamart_name=snapshot.datamart.name,
-                page_id=page_id,
-                resource_type=resource_type,
-                title=title,
-                file_name=file_name,
-                url=url,
-                metadata=snapshot.metadata,
-                metadata_hash=snapshot.metadata_hash,
-                content_hash=None,
-                synced=True,
-                updated_at=updated_at,
-            )
+            with self.metadata_repo.db.transaction():
+                self.indexer.update_datamart(snapshot.datamart, old_attrs)
+                self.state_repo.upsert(
+                    resource_key=resource_key,
+                    datamart_name=snapshot.datamart.name,
+                    page_id=page_id,
+                    resource_type=resource_type,
+                    title=title,
+                    file_name=file_name,
+                    url=url,
+                    metadata=snapshot.metadata,
+                    metadata_hash=snapshot.metadata_hash,
+                    content_hash=None,
+                    synced=True,
+                    updated_at=updated_at,
+                )
             return IncrementalUpdateItem(
                 datamart_name=snapshot.datamart.name,
                 resource_key=resource_key,
@@ -306,25 +306,26 @@ class IncrementalUpdater:
                 )
 
         if not content_changed:
-            self.state_repo.upsert(
-                resource_key=resource_key,
-                datamart_name=snapshot.datamart.name,
-                page_id=page_id,
-                resource_type=resource_type,
-                title=title,
-                file_name=file_name,
-                url=url,
-                metadata=snapshot.metadata,
-                metadata_hash=snapshot.metadata_hash,
-                content_hash=content_hash,
-                synced=True,
-                updated_at=updated_at,
-            )
-            # Если поменялись только метаданные (например, стейкхолдеры),
-            # мы обновляем метаданные в БД и переиндексируем документы RAG,
-            # но не перепаршиваем сам файл.
-            old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
-            self.indexer.update_datamart(snapshot.datamart, old_attrs)
+            with self.metadata_repo.db.transaction():
+                self.state_repo.upsert(
+                    resource_key=resource_key,
+                    datamart_name=snapshot.datamart.name,
+                    page_id=page_id,
+                    resource_type=resource_type,
+                    title=title,
+                    file_name=file_name,
+                    url=url,
+                    metadata=snapshot.metadata,
+                    metadata_hash=snapshot.metadata_hash,
+                    content_hash=content_hash,
+                    synced=True,
+                    updated_at=updated_at,
+                )
+                # Если поменялись только метаданные (например, стейкхолдеры),
+                # мы обновляем метаданные в БД и переиндексируем документы RAG,
+                # но не перепаршиваем сам файл.
+                old_attrs = self.metadata_repo.list_attributes(datamart_name=snapshot.datamart.name)
+                self.indexer.update_datamart(snapshot.datamart, old_attrs)
 
             return IncrementalUpdateItem(
                 datamart_name=snapshot.datamart.name,
@@ -348,22 +349,26 @@ class IncrementalUpdater:
             if previous is None and not old_attrs
             else self.diff_service.diff_attributes(old_attrs, new_attrs, source_url=url)
         )
-        self.history_repo.add_many(changes)
-        documents = self.indexer.update_datamart(snapshot.datamart, new_attrs)
-        self.state_repo.upsert(
-            resource_key=resource_key,
-            datamart_name=snapshot.datamart.name,
-            page_id=page_id,
-            resource_type=resource_type,
-            title=title,
-            file_name=file_name,
-            url=url,
-            metadata=snapshot.metadata,
-            metadata_hash=snapshot.metadata_hash,
-            content_hash=content_hash,
-            synced=True,
-            updated_at=updated_at,
-        )
+        
+        with self.metadata_repo.db.transaction():
+            if changes:
+                self.history_repo.add_many(changes)
+            documents = self.indexer.update_datamart(snapshot.datamart, new_attrs)
+            self.state_repo.upsert(
+                resource_key=resource_key,
+                datamart_name=snapshot.datamart.name,
+                page_id=page_id,
+                resource_type=resource_type,
+                title=title,
+                file_name=file_name,
+                url=url,
+                metadata=snapshot.metadata,
+                metadata_hash=snapshot.metadata_hash,
+                content_hash=content_hash,
+                synced=True,
+                updated_at=updated_at,
+            )
+
         return IncrementalUpdateItem(
             datamart_name=snapshot.datamart.name,
             resource_key=resource_key,

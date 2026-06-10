@@ -24,16 +24,23 @@ class JsonVectorStore:
 
     def replace_all(self, documents: list[RAGDocument]) -> None:
         """
-        Полностью заменяет все документы в хранилище.
+        Полностью заменяет все документы в хранилище атомарно.
         :param documents: Список новых документов для сохранения.
         """
-        with self.path.open("w", encoding="utf-8") as file:
-            for document in documents:
-                file.write(document.model_dump_json() + "\n")
+        temp_path = self.path.with_suffix(".jsonl.tmp")
+        try:
+            with temp_path.open("w", encoding="utf-8") as file:
+                for document in documents:
+                    file.write(document.model_dump_json() + "\n")
+            temp_path.replace(self.path)
+        except Exception:
+            if temp_path.exists():
+                temp_path.unlink()
+            raise
 
     def replace_for_datamart(self, datamart_name: str, documents: list[RAGDocument]) -> None:
         """
-        Заменяет документы только для указанной витрины.
+        Заменяет документы только для указанной витрины атомарно.
         :param datamart_name: Название витрины.
         :param documents: Новые документы для данной витрины.
         """

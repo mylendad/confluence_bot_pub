@@ -187,30 +187,44 @@ class MetadataSyncService:
     def _get_datamart_with_cache(self, page) -> Datamart | None:
         """
         Получает данные витрины, используя кэш снимков страниц, если он доступен.
-        :param page: Страница Confluence.
+        Если кэш невалиден, скачивает полную страницу (с body) и парсит её.
+        :param page: Страница Confluence (может быть без body_html, из discovery).
         :return: Объект Datamart или None.
         """
-        if not self.snapshot_repo:
-            return self.parser.parse_datamart_page(page, skip_jira=False)
+        if self.snapshot_repo:
+            snapshot = self.snapshot_repo.get(page.id)
+            if snapshot:
+                version_map, cached_datamart = snapshot
+                if self._verify_versions(version_map, page):
+                    return cached_datamart
 
-        snapshot = self.snapshot_repo.get(page.id)
-        if snapshot:
-            version_map, cached_datamart = snapshot
-            if self._verify_versions(version_map):
-                return cached_datamart
+        # Кэша нет или он устарел. Запрашиваем полную страницу.
+        logger.info("Cache miss or outdated for '%s' (ID: %s). Fetching full content.", page.title, page.id)
+        try:
+            full_page = self.parser.client.get_page(page.id)
+        except Exception as e:
+            logger.warning("Failed to fetch full page '%s': %s", page.title, e)
+            return None
 
-        datamart = self.parser.parse_datamart_page(page, skip_jira=False)
-        if datamart:
-            self.snapshot_repo.upsert(page.id, datamart.visited_pages, datamart)
+        datamart = self.parser.parse_datamart_page(full_page, skip_jira=False)
+        if datamart and self.snapshot_repo:
+            self.snapshot_repo.upsert(full_page.id, datamart.visited_pages, datamart)
         return datamart
 
-    def _verify_versions(self, version_map: dict[str, int]) -> bool:
+    def _verify_versions(self, version_map: dict[str, int], root_page) -> bool:
         """
         Проверяет, что версии страниц в Confluence совпадают с ожидаемыми.
         :param version_map: Словарь {page_id: version}.
+        :param root_page: Объект корневой страницы, версия которой уже известна из discovery.
         :return: True, если все версии совпадают.
         """
         for page_id, expected_version in version_map.items():
+            # Оптимизация: корневая страница уже загружена во время iter_top_level_pages
+            if page_id == root_page.id:
+                if root_page.version != expected_version:
+                    return False
+                continue
+                
             if hasattr(self, "_prefetched_versions") and page_id in self._prefetched_versions:
                 if self._prefetched_versions[page_id] != expected_version:
                     return False

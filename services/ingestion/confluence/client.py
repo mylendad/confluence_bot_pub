@@ -227,21 +227,23 @@ class ConfluenceClient:
         self._cache_get_page[page_id] = page
         return page
 
-    def search_pages(self, cql: str) -> Iterable[ConfluencePage]:
+    def search_pages(self, cql: str, include_body: bool = True) -> Iterable[ConfluencePage]:
         """
         Ищет страницы с использованием языка запросов CQL.
 
         :param cql: Запрос на языке CQL.
+        :param include_body: Если True (по умолчанию), скачивает body.storage страниц.
         :return: Итератор по объектам ConfluencePage.
         """
         limit = 50
         start = 0
+        expand_str = "body.storage,version,history.lastUpdated" if include_body else "version,history.lastUpdated"
         while True:
             payload = self._get(
                 "/rest/api/content/search",
                 {
                     "cql": cql,
-                    "expand": "body.storage,version,history.lastUpdated",
+                    "expand": expand_str,
                     "limit": limit,
                     "start": start,
                 },
@@ -477,6 +479,7 @@ class ConfluenceClient:
     def iter_top_level_pages(self) -> Iterable[ConfluencePage]:
         """
         Итерируется по всем страницам верхнего уровня, определенным в настройках (через ID корня или ключ пространства).
+        Во время обнаружения тело страницы не скачивается (include_body=False) для ускорения.
 
         :return: Итератор объектов ConfluencePage.
         """
@@ -487,7 +490,7 @@ class ConfluenceClient:
             cql = f'space="{self.settings.confluence_space_key}" and type=page'
 
         logger.info("Discovering pages using CQL: %s", cql)
-        yield from self.search_pages(cql)
+        yield from self.search_pages(cql, include_body=False)
 
     def _page_from_payload(self, payload: dict) -> ConfluencePage:
         """

@@ -1,8 +1,10 @@
 import sqlite3
+import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
+_local = threading.local()
 
 class SQLite:
     """
@@ -19,16 +21,46 @@ class SQLite:
         self.init_schema()
 
     @contextmanager
+    def transaction(self) -> Iterator[sqlite3.Connection]:
+        """
+        Глобальный контекстный менеджер (Unit of Work). 
+        Гарантирует атомарность серии вызовов connect().
+        """
+        if hasattr(_local, "conn") and _local.conn is not None:
+            yield _local.conn
+            return
+
+        conn = sqlite3.connect(self.path)
+        conn.row_factory = sqlite3.Row
+        _local.conn = conn
+        try:
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            _local.conn = None
+            conn.close()
+
+    @contextmanager
     def connect(self) -> Iterator[sqlite3.Connection]:
         """
         Контекстный менеджер для создания соединения с базой данных.
-        :return: Итератор с объектом соединения sqlite3.Connection.
+        Если вызван внутри transaction(), переиспользует текущее соединение.
         """
+        if hasattr(_local, "conn") and _local.conn is not None:
+            yield _local.conn
+            return
+
         conn = sqlite3.connect(self.path)
         conn.row_factory = sqlite3.Row
         try:
             yield conn
             conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
         finally:
             conn.close()
 
