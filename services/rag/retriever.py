@@ -7,6 +7,7 @@ from services.rag.llm import AnswerGenerator, StubAnswerGenerator
 from services.rag.models import RAGAnswer
 from services.rag.vector_store import JsonVectorStore
 from shared.storage.metadata_repository import MetadataRepository
+from shared.storage.s2t_state_repository import S2TStateRepository
 from shared.utils.text_utils import fuzzy_contains, normalize_text
 
 
@@ -110,6 +111,7 @@ class RAGRetriever:
         vector_store: JsonVectorStore,
         history_repo: HistoryRepository,
         answer_generator: AnswerGenerator | None = None,
+        state_repo: S2TStateRepository | None = None,
     ) -> None:
         """
         Инициализирует RAGRetriever.
@@ -117,11 +119,13 @@ class RAGRetriever:
         :param vector_store: Векторное хранилище для поиска по текстам.
         :param history_repo: Репозиторий для работы с историей изменений.
         :param answer_generator: Генератор ответов на базе LLM.
+        :param state_repo: Репозиторий состояний S2T ресурсов.
         """
         self.metadata_repo = metadata_repo
         self.vector_store = vector_store
         self.history_repo = history_repo
         self.answer_generator = answer_generator or StubAnswerGenerator()
+        self.state_repo = state_repo
         self.intent_classifier = IntentClassifier()
 
     def answer(self, question: str) -> RAGAnswer:
@@ -176,6 +180,21 @@ class RAGRetriever:
                 seen.add(key)
                 unique_sources.append(s)
         return unique_sources
+
+    def _get_s2t_info(self, datamart_name: str) -> dict:
+        """Получает информацию о файле S2T для витрины из репозитория состояний."""
+        if not self.state_repo:
+            return {}
+
+        states = self.state_repo.list_all()
+        # Ищем состояние для данной витрины, где есть имя файла
+        for s in states:
+            if s.datamart_name.lower() == datamart_name.lower() and s.file_name:
+                return {
+                    "s2t_file": s.file_name,
+                    "s2t_file_date": s.updated_at.date().isoformat() if s.updated_at else None,
+                }
+        return {}
 
     def _owner_lookup(self, question: str) -> RAGAnswer:
         """Поиск владельцев и ответственных за витрину."""
@@ -412,6 +431,7 @@ class RAGRetriever:
             )
 
         lines = []
+        sources = []
         for datamart, fact in matching:
             value = fact.get("value") or "-"
             links = fact.get("links") or []
@@ -421,19 +441,17 @@ class RAGRetriever:
                 )
                 value = f"{value} ({link_text})"
             lines.append(f"{datamart.get('name')}: {fact.get('label')} — {value}")
-        return RAGAnswer(
-            answer="\n".join(lines),
-            sources=[
-                {
-                    "datamart": datamart.get("name"),
-                    "confluence_url": datamart.get("confluence_url"),
-                    "fact_key": fact.get("key"),
-                    "fact_label": fact.get("label"),
-                    "s2t_file": "-",
-                }
-                for datamart, fact in matching[:10]
-            ],
-        )
+
+            source_item = {
+                "datamart": datamart.get("name"),
+                "confluence_url": datamart.get("confluence_url"),
+                "fact_key": fact.get("key"),
+                "fact_label": fact.get("label"),
+            }
+            source_item.update(self._get_s2t_info(datamart.get("name")))
+            sources.append(source_item)
+
+        return RAGAnswer(answer="\n".join(lines), sources=sources[:10])
 
     def _release_changes(self, question: str) -> RAGAnswer:
         """Поиск изменений в релизах из документации на Confluence."""
@@ -455,6 +473,7 @@ class RAGRetriever:
         matching.sort(key=sort_key, reverse=True)
 
         lines = ["Изменения в релизах (от новых к старым):"]
+        sources = []
         for datamart, change in matching[:30]:
             version = change.get("version") or "Без версии"
             change_type = (change.get("change_type") or "изменение").upper()
@@ -508,18 +527,16 @@ class RAGRetriever:
             lines.append("\n".join(parts))
             lines.append("")  # Spacer
 
-        return RAGAnswer(
-            answer="\n".join(lines),
-            sources=[
-                {
-                    "datamart": datamart.get("name"),
-                    "source_url": change.get("source_url") or datamart.get("confluence_url"),
-                    "version": change.get("version"),
-                    "jira_key": change.get("jira_key"),
-                }
-                for datamart, change in matching[:10]
-            ],
-        )
+            source_item = {
+                "datamart": datamart.get("name"),
+                "source_url": change.get("source_url") or datamart.get("confluence_url"),
+                "version": change.get("version"),
+                "jira_key": change.get("jira_key"),
+            }
+            source_item.update(self._get_s2t_info(datamart.get("name")))
+            sources.append(source_item)
+
+        return RAGAnswer(answer="\n".join(lines), sources=sources[:10])
 
     def _attribute_logic(self, question: str) -> RAGAnswer | None:
         """Получение логики преобразования атрибута из S2T."""

@@ -1551,6 +1551,10 @@ class ConfluenceParser:
         text = ConfluenceParser._clean_text(node.get_text(" ", strip=True))
         if change_type:
             text = re.sub(change_type, "", text, count=1, flags=re.IGNORECASE).strip()
+
+        # Удаляем цветовые индикаторы (Red, Blue, Green, Yellow, Grey, White, Black) в начале строки
+        text = re.sub(r"^(?:Red|Blue|Green|Yellow|Grey|White|Black)\s*[–—-]?\s*", "", text, flags=re.IGNORECASE)
+
         text = re.sub(r"^[\s:–—-]+", "", text)
         return text or None
 

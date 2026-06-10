@@ -189,11 +189,11 @@ async def _run_cli_command_streaming(args: list[str], command_name: str):
         )
         return_code = await process.wait()
         if return_code == 0:
-            logger.info(f"Команда {command_name} успешно завершена")
+            logger.info(f"✅ Команда {command_name} завершена")
         else:
-            logger.error(f"Команда {command_name} завершена с ошибкой (код {return_code})")
+            logger.error(f"❌ Команда {command_name} завершена с кодом {return_code}")
     except asyncio.CancelledError:
-        logger.info(f"Команда {command_name} была отменена.")
+        logger.info(f"Команда {command_name} была отменена")
     except Exception:
         logger.exception(f"Ошибка выполнения команды {command_name}")
     finally:
@@ -224,7 +224,7 @@ async def interrupt_update():
     process = _active_processes.get("update-rag")
     if process:
         try:
-            logger.info("Попытка остановить процесс обновления RAG...")
+            logger.info("Попытка остановки процесса обновления RAG...")
             process.terminate()
             return MessageResponse(message="Отправлен сигнал завершения процессу обновления")
         except Exception as e:
@@ -373,7 +373,7 @@ async def get_question_templates():
         QuestionTemplate(
             id="logic",
             label="Логика расчета",
-            template="Какая логика расчета у атрибута {attribute} в витрине {datamart}?",
+            template="Какая логика расчета у атрибута {attribute} in витрине {datamart}?",
         ),
         QuestionTemplate(
             id="history",
@@ -394,7 +394,8 @@ async def get_sync_last_events():
     states, dms = s_repo.list_all(), m_repo.list_datamarts()
     lp = max([s.last_synced_at for s in states if s.last_synced_at]).isoformat() if states else None
     lru = max([d.get("updated_at") for d in dms if d.get("updated_at")]) if dms else None
-    return SyncLastEventsResponse(last_parsing=lp, last_rag_update=lru, status="ok")
+    sync_status = "running" if "update-rag" in _active_processes else "ok"
+    return SyncLastEventsResponse(last_parsing=lp, last_rag_update=lru, status=sync_status)
 
 
 @app.get(
@@ -406,8 +407,11 @@ async def get_sync_last_events():
 async def get_sync_status():
     repo = build_state_repository()
     states = repo.list_all()
+    sync_status = "running" if "update-rag" in _active_processes else "ok"
     if not states:
-        return SyncStatusResponse(last_sync=None, total_datamarts=0, status="no_data", resources=[])
+        return SyncStatusResponse(
+            last_sync=None, total_datamarts=0, status=sync_status, resources=[]
+        )
     ls = (
         max([s.last_synced_at for s in states if s.last_synced_at]).isoformat()
         if any(s.last_synced_at for s in states)
@@ -425,7 +429,7 @@ async def get_sync_status():
     return SyncStatusResponse(
         last_sync=ls,
         total_datamarts=len(set(s.datamart_name for s in states)),
-        status="ok",
+        status=sync_status,
         resources=res,
     )
 

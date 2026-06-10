@@ -20,9 +20,14 @@ def build_retriever(settings: Settings | None = None) -> RAGRetriever:
     db = SQLite(settings.sqlite_db_path)
     metadata_repo = MetadataRepository(db)
     history_repo = HistoryRepository(db)
+    from shared.storage.s2t_state_repository import S2TStateRepository
+
+    state_repo = S2TStateRepository(db)
     vector_store = JsonVectorStore(settings.vector_store_dir)
     answer_generator = build_answer_generator(settings)
-    return RAGRetriever(metadata_repo, vector_store, history_repo, answer_generator)
+    return RAGRetriever(
+        metadata_repo, vector_store, history_repo, answer_generator, state_repo=state_repo
+    )
 
 
 def build_state_repository(settings: Settings | None = None) -> S2TStateRepository:

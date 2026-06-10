@@ -1267,6 +1267,14 @@
         "documentation": {}
     },
     {
+        "label": "S2TStateRepository",
+        "importPath": "shared.storage.s2t_state_repository",
+        "description": "shared.storage.s2t_state_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.s2t_state_repository",
+        "documentation": {}
+    },
+    {
         "label": "SQLite",
         "importPath": "shared.storage.sqlite",
         "description": "shared.storage.sqlite",

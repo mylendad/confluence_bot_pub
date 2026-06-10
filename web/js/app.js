@@ -244,8 +244,46 @@ async function loadLastEvents() {
         if (resp.ok) {
             const data = await resp.json();
             lastUpdateRagDateSpan.innerText = data.last_rag_update ? new Date(data.last_rag_update).toLocaleString() : 'Не выполнялся';
+            
+            // Если API говорит, что всё еще идет синхронизация, а мы об этом не знали
+            if (data.status === 'running' && !pendingCommand) {
+                pendingCommand = 'update-rag';
+                showPendingSyncMessage();
+            } else if (data.status === 'ok' && pendingCommand === 'update-rag') {
+                // Если API говорит, что всё закончилось, а мы всё еще ждем по логам
+                // Это может случиться, если логи проскочили мимо фронтенда
+                if (pendingCommandMessageDiv) {
+                    pendingCommandMessageDiv.remove();
+                    pendingCommandMessageDiv = null;
+                }
+                addMessage('bot', `✅ Обновление RAG завершено (подтверждено сервером)`);
+                pendingCommand = null;
+            }
         } else throw new Error();
-    } catch (err) { lastUpdateRagDateSpan.innerText = 'Ошибка'; }
+    } catch (err) { 
+        if (lastUpdateRagDateSpan) lastUpdateRagDateSpan.innerText = 'Ошибка'; 
+    }
+}
+
+function showPendingSyncMessage() {
+    if (pendingCommandMessageDiv) return;
+    
+    pendingCommandMessageDiv = document.createElement('div');
+    pendingCommandMessageDiv.className = `message bot`;
+    pendingCommandMessageDiv.innerHTML = `
+        <div class="avatar">🔄</div>
+        <div class="message-content">
+            <div class="bubble" style="display: flex; align-items: center; justify-content: space-between; min-width: 250px;">
+                <span>Обновление RAG выполняется в фоне... <span class="typing" style="display:inline-block; padding:0;"><span>●</span><span>●</span><span>●</span></span></span>
+                <button class="icon-btn stop-update-btn" style="color: #ff3b30; padding: 2px 6px; margin-left: 10px;" title="Прервать обновление">✖</button>
+            </div>
+        </div>
+    `;
+    chatArea.appendChild(pendingCommandMessageDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    
+    const stopBtn = pendingCommandMessageDiv.querySelector('.stop-update-btn');
+    if (stopBtn) stopBtn.onclick = interruptUpdate;
 }
 
 // --- Проверка статусов ---
