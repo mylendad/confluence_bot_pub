@@ -1,5 +1,31 @@
 [
     {
+        "label": "copy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "copy",
+        "description": "copy",
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -25,134 +51,6 @@
     },
     {
         "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "date",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "UTC",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "date",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "date",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "date",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "date",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "UTC",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "timedelta",
         "importPath": "datetime",
         "description": "datetime",
         "isExtraImport": true,
@@ -216,6 +114,134 @@
         "documentation": {}
     },
     {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "UTC",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -237,6 +263,785 @@
         "description": "datetime",
         "isExtraImport": true,
         "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "Annotated",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Annotated",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Protocol",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Sequence",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Body",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Body",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "status",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "BackgroundTasks",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "status",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "BackgroundTasks",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "AskRequest",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "ChatHistoryMessage",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "QuestionTemplate",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "TokensSaveRequest",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "TokensStatusResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncLastEventsResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncStatusResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "ExternalHealthResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "MessageResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncLastEventsResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "SyncStatusResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "AskResponse",
+        "importPath": "services.bot.http_adapter",
+        "description": "services.bot.http_adapter",
+        "isExtraImport": true,
+        "detail": "services.bot.http_adapter",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "importPath": "services.bot.service",
+        "description": "services.bot.service",
+        "isExtraImport": true,
+        "detail": "services.bot.service",
+        "documentation": {}
+    },
+    {
+        "label": "BotService",
+        "importPath": "services.bot.service",
+        "description": "services.bot.service",
+        "isExtraImport": true,
+        "detail": "services.bot.service",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "shared.config.config",
+        "description": "shared.config.config",
+        "isExtraImport": true,
+        "detail": "shared.config.config",
+        "documentation": {}
+    },
+    {
+        "label": "build_chat_history_repository",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_retriever",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_metadata_repository",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_confluence_client",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_jira_client",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_llm_generator",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_retriever",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_chat_history_repository",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_metadata_repository",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "build_state_repository",
+        "importPath": "shared.factory",
+        "description": "shared.factory",
+        "isExtraImport": true,
+        "detail": "shared.factory",
+        "documentation": {}
+    },
+    {
+        "label": "ChatMessage",
+        "importPath": "shared.storage.chat_history_repository",
+        "description": "shared.storage.chat_history_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "ChatHistoryRepository",
+        "importPath": "shared.storage.chat_history_repository",
+        "description": "shared.storage.chat_history_repository",
+        "isExtraImport": true,
+        "detail": "shared.storage.chat_history_repository",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "fuzzy_contains",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "fuzzy_contains",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "normalize_text",
+        "importPath": "shared.utils.text_utils",
+        "description": "shared.utils.text_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.text_utils",
+        "documentation": {}
+    },
+    {
+        "label": "SyncStatusService",
+        "importPath": "services.scenarios.sync_status_service",
+        "description": "services.scenarios.sync_status_service",
+        "isExtraImport": true,
+        "detail": "services.scenarios.sync_status_service",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "RedirectResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "memory_handler",
+        "importPath": "shared.logging.logging_config",
+        "description": "shared.logging.logging_config",
+        "isExtraImport": true,
+        "detail": "shared.logging.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "configure_logging",
+        "importPath": "shared.logging.logging_config",
+        "description": "shared.logging.logging_config",
+        "isExtraImport": true,
+        "detail": "shared.logging.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "configure_logging",
+        "importPath": "shared.logging.logging_config",
+        "description": "shared.logging.logging_config",
+        "isExtraImport": true,
+        "detail": "shared.logging.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
         "documentation": {}
     },
     {
@@ -387,22 +1192,6 @@
         "documentation": {}
     },
     {
-        "label": "BotService",
-        "importPath": "services.bot.service",
-        "description": "services.bot.service",
-        "isExtraImport": true,
-        "detail": "services.bot.service",
-        "documentation": {}
-    },
-    {
-        "label": "BotService",
-        "importPath": "services.bot.service",
-        "description": "services.bot.service",
-        "isExtraImport": true,
-        "detail": "services.bot.service",
-        "documentation": {}
-    },
-    {
         "label": "DiffService",
         "importPath": "services.ingestion.changes.diff_service",
         "description": "services.ingestion.changes.diff_service",
@@ -539,6 +1328,46 @@
         "documentation": {}
     },
     {
+        "label": "ConfluenceClient",
+        "importPath": "services.ingestion.confluence.client",
+        "description": "services.ingestion.confluence.client",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "services.ingestion.confluence.client",
+        "description": "services.ingestion.confluence.client",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceClient",
+        "importPath": "services.ingestion.confluence.client",
+        "description": "services.ingestion.confluence.client",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.client",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceAuthError",
+        "importPath": "services.ingestion.confluence.exceptions",
+        "description": "services.ingestion.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluenceError",
+        "importPath": "services.ingestion.confluence.exceptions",
+        "description": "services.ingestion.confluence.exceptions",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.exceptions",
+        "documentation": {}
+    },
+    {
         "label": "ConfluenceAuthError",
         "importPath": "services.ingestion.confluence.exceptions",
         "description": "services.ingestion.confluence.exceptions",
@@ -579,19 +1408,11 @@
         "documentation": {}
     },
     {
-        "label": "ConfluenceError",
-        "importPath": "services.ingestion.confluence.exceptions",
-        "description": "services.ingestion.confluence.exceptions",
+        "label": "JiraClient",
+        "importPath": "services.ingestion.confluence.jira_client",
+        "description": "services.ingestion.confluence.jira_client",
         "isExtraImport": true,
-        "detail": "services.ingestion.confluence.exceptions",
-        "documentation": {}
-    },
-    {
-        "label": "ConfluenceAuthError",
-        "importPath": "services.ingestion.confluence.exceptions",
-        "description": "services.ingestion.confluence.exceptions",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.exceptions",
+        "detail": "services.ingestion.confluence.jira_client",
         "documentation": {}
     },
     {
@@ -628,30 +1449,6 @@
     },
     {
         "label": "ConfluencePage",
-        "importPath": "services.ingestion.confluence.models",
-        "description": "services.ingestion.confluence.models",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.models",
-        "documentation": {}
-    },
-    {
-        "label": "S2TResource",
-        "importPath": "services.ingestion.confluence.models",
-        "description": "services.ingestion.confluence.models",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.models",
-        "documentation": {}
-    },
-    {
-        "label": "ConfluencePage",
-        "importPath": "services.ingestion.confluence.models",
-        "description": "services.ingestion.confluence.models",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.models",
-        "documentation": {}
-    },
-    {
-        "label": "Datamart",
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
         "isExtraImport": true,
@@ -667,23 +1464,7 @@
         "documentation": {}
     },
     {
-        "label": "ParseResult",
-        "importPath": "services.ingestion.confluence.models",
-        "description": "services.ingestion.confluence.models",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.models",
-        "documentation": {}
-    },
-    {
-        "label": "ReleaseChange",
-        "importPath": "services.ingestion.confluence.models",
-        "description": "services.ingestion.confluence.models",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.models",
-        "documentation": {}
-    },
-    {
-        "label": "S2TResource",
+        "label": "DatamartFact",
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
         "isExtraImport": true,
@@ -699,6 +1480,86 @@
         "documentation": {}
     },
     {
+        "label": "ReleaseChange",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChange",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "S2TResource",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ConfluencePage",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "Datamart",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
+        "label": "ParseResult",
+        "importPath": "services.ingestion.confluence.models",
+        "description": "services.ingestion.confluence.models",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.models",
+        "documentation": {}
+    },
+    {
         "label": "Datamart",
         "importPath": "services.ingestion.confluence.models",
         "description": "services.ingestion.confluence.models",
@@ -1032,190 +1893,6 @@
         "description": "services.rag.vector_store",
         "isExtraImport": true,
         "detail": "services.rag.vector_store",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "get_settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "Settings",
-        "importPath": "shared.config.config",
-        "description": "shared.config.config",
-        "isExtraImport": true,
-        "detail": "shared.config.config",
-        "documentation": {}
-    },
-    {
-        "label": "build_retriever",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_chat_history_repository",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_confluence_client",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_llm_generator",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_metadata_repository",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_retriever",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "build_state_repository",
-        "importPath": "shared.factory",
-        "description": "shared.factory",
-        "isExtraImport": true,
-        "detail": "shared.factory",
-        "documentation": {}
-    },
-    {
-        "label": "configure_logging",
-        "importPath": "shared.logging.logging_config",
-        "description": "shared.logging.logging_config",
-        "isExtraImport": true,
-        "detail": "shared.logging.logging_config",
-        "documentation": {}
-    },
-    {
-        "label": "configure_logging",
-        "importPath": "shared.logging.logging_config",
-        "description": "shared.logging.logging_config",
-        "isExtraImport": true,
-        "detail": "shared.logging.logging_config",
-        "documentation": {}
-    },
-    {
-        "label": "memory_handler",
-        "importPath": "shared.logging.logging_config",
-        "description": "shared.logging.logging_config",
-        "isExtraImport": true,
-        "detail": "shared.logging.logging_config",
         "documentation": {}
     },
     {
@@ -1483,62 +2160,6 @@
         "documentation": {}
     },
     {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Annotated",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Protocol",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
         "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
@@ -1643,106 +2264,6 @@
         "documentation": {}
     },
     {
-        "label": "asyncio",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
-        "documentation": {}
-    },
-    {
-        "label": "copy",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "copy",
-        "description": "copy",
-        "detail": "copy",
-        "documentation": {}
-    },
-    {
-        "label": "logging",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "logging",
-        "description": "logging",
-        "detail": "logging",
-        "documentation": {}
-    },
-    {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
-        "label": "BackgroundTasks",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Body",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "status",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "RedirectResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
-        "label": "Response",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
-        "isExtraImport": true,
-        "detail": "fastapi.responses",
-        "documentation": {}
-    },
-    {
         "label": "StaticFiles",
         "importPath": "fastapi.staticfiles",
         "description": "fastapi.staticfiles",
@@ -1751,99 +2272,99 @@
         "documentation": {}
     },
     {
-        "label": "AskRequest",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "chat_router",
+        "importPath": "services.bot.api.routers",
+        "description": "services.bot.api.routers",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.bot.api.routers",
         "documentation": {}
     },
     {
-        "label": "AskResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "data_router",
+        "importPath": "services.bot.api.routers",
+        "description": "services.bot.api.routers",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.bot.api.routers",
         "documentation": {}
     },
     {
-        "label": "ChatHistoryMessage",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "settings_router",
+        "importPath": "services.bot.api.routers",
+        "description": "services.bot.api.routers",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.bot.api.routers",
         "documentation": {}
     },
     {
-        "label": "ExternalHealthResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "sync_router",
+        "importPath": "services.bot.api.routers",
+        "description": "services.bot.api.routers",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.bot.api.routers",
         "documentation": {}
     },
     {
-        "label": "MessageResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "system_router",
+        "importPath": "services.bot.api.routers",
+        "description": "services.bot.api.routers",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.bot.api.routers",
         "documentation": {}
     },
     {
-        "label": "QuestionTemplate",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "SyncLastEventsResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "SyncStatusResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "TokensSaveRequest",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "TokensStatusResponse",
-        "importPath": "services.bot.http_adapter",
-        "description": "services.bot.http_adapter",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "services.bot.http_adapter",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "ChatMessage",
-        "importPath": "shared.storage.chat_history_repository",
-        "description": "shared.storage.chat_history_repository",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "shared.storage.chat_history_repository",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
-        "label": "ChatHistoryRepository",
-        "importPath": "shared.storage.chat_history_repository",
-        "description": "shared.storage.chat_history_repository",
+        "label": "RAGAnswer",
+        "importPath": "services.rag.models",
+        "description": "services.rag.models",
         "isExtraImport": true,
-        "detail": "shared.storage.chat_history_repository",
+        "detail": "services.rag.models",
         "documentation": {}
     },
     {
@@ -2096,12 +2617,187 @@
         "documentation": {}
     },
     {
-        "label": "time",
-        "kind": 6,
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
         "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "clean_text",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "fact_key",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "links_from_node",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_RE",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "OWNER_LABELS",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "clean_text",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "fact_key",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "links_from_node",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "JIRA_KEY_RE",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "PLACEHOLDER_TEXTS",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "clean_text",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "page_id_from_url",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "LATEST_MARKERS",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "SUPPORTED_S2T_SUFFIXES",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "attachment_lookup_key",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "file_name_from_url",
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "importPath": "services.ingestion.confluence.urls",
+        "description": "services.ingestion.confluence.urls",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.urls",
+        "documentation": {}
+    },
+    {
+        "label": "confluence_urljoin",
+        "importPath": "services.ingestion.confluence.urls",
+        "description": "services.ingestion.confluence.urls",
+        "isExtraImport": true,
+        "detail": "services.ingestion.confluence.urls",
+        "documentation": {}
+    },
+    {
+        "label": "parse_date_from_text",
+        "importPath": "shared.utils.date_utils",
+        "description": "shared.utils.date_utils",
+        "isExtraImport": true,
+        "detail": "shared.utils.date_utils",
         "documentation": {}
     },
     {
@@ -2178,6 +2874,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "Iterable",
         "importPath": "collections.abc",
         "description": "collections.abc",
@@ -2194,22 +2899,6 @@
         "documentation": {}
     },
     {
-        "label": "confluence_urljoin",
-        "importPath": "services.ingestion.confluence.urls",
-        "description": "services.ingestion.confluence.urls",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.urls",
-        "documentation": {}
-    },
-    {
-        "label": "confluence_urljoin",
-        "importPath": "services.ingestion.confluence.urls",
-        "description": "services.ingestion.confluence.urls",
-        "isExtraImport": true,
-        "detail": "services.ingestion.confluence.urls",
-        "documentation": {}
-    },
-    {
         "label": "lru_cache",
         "importPath": "functools",
         "description": "functools",
@@ -2226,84 +2915,43 @@
         "documentation": {}
     },
     {
-        "label": "re",
-        "kind": 6,
+        "label": "ChecklistExtractor",
+        "importPath": "services.ingestion.confluence.extractors.checklist_extractor",
+        "description": "services.ingestion.confluence.extractors.checklist_extractor",
         "isExtraImport": true,
-        "importPath": "re",
-        "description": "re",
-        "detail": "re",
+        "detail": "services.ingestion.confluence.extractors.checklist_extractor",
         "documentation": {}
     },
     {
-        "label": "BeautifulSoup",
-        "importPath": "bs4",
-        "description": "bs4",
+        "label": "FactExtractor",
+        "importPath": "services.ingestion.confluence.extractors.fact_extractor",
+        "description": "services.ingestion.confluence.extractors.fact_extractor",
         "isExtraImport": true,
-        "detail": "bs4",
+        "detail": "services.ingestion.confluence.extractors.fact_extractor",
         "documentation": {}
     },
     {
-        "label": "parse_date_from_text",
-        "importPath": "shared.utils.date_utils",
-        "description": "shared.utils.date_utils",
+        "label": "JiraReleaseEnricher",
+        "importPath": "services.ingestion.confluence.extractors.jira_enricher",
+        "description": "services.ingestion.confluence.extractors.jira_enricher",
         "isExtraImport": true,
-        "detail": "shared.utils.date_utils",
+        "detail": "services.ingestion.confluence.extractors.jira_enricher",
         "documentation": {}
     },
     {
-        "label": "fuzzy_contains",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
+        "label": "ReleaseChangesExtractor",
+        "importPath": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "description": "services.ingestion.confluence.extractors.release_changes_extractor",
         "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
+        "detail": "services.ingestion.confluence.extractors.release_changes_extractor",
         "documentation": {}
     },
     {
-        "label": "normalize_text",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
+        "label": "S2TDiscovery",
+        "importPath": "services.ingestion.confluence.extractors.s2t_discovery",
+        "description": "services.ingestion.confluence.extractors.s2t_discovery",
         "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
-        "documentation": {}
-    },
-    {
-        "label": "normalize_text",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
-        "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
-        "documentation": {}
-    },
-    {
-        "label": "normalize_text",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
-        "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
-        "documentation": {}
-    },
-    {
-        "label": "normalize_text",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
-        "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
-        "documentation": {}
-    },
-    {
-        "label": "fuzzy_contains",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
-        "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
-        "documentation": {}
-    },
-    {
-        "label": "normalize_text",
-        "importPath": "shared.utils.text_utils",
-        "description": "shared.utils.text_utils",
-        "isExtraImport": true,
-        "detail": "shared.utils.text_utils",
+        "detail": "services.ingestion.confluence.extractors.s2t_discovery",
         "documentation": {}
     },
     {
@@ -2445,6 +3093,158 @@
         "documentation": {}
     },
     {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "ABC",
+        "importPath": "abc",
+        "description": "abc",
+        "isExtraImport": true,
+        "detail": "abc",
+        "documentation": {}
+    },
+    {
+        "label": "abstractmethod",
+        "importPath": "abc",
+        "description": "abc",
+        "isExtraImport": true,
+        "detail": "abc",
+        "documentation": {}
+    },
+    {
+        "label": "AttributeCompositionHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "AttributeLogicHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "AttributeUsageHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFactHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartListHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "LastYearChangesHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "OwnerLookupHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChangesHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "SourceLineageHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "VectorAnswerHandler",
+        "importPath": "services.rag.handlers",
+        "description": "services.rag.handlers",
+        "isExtraImport": true,
+        "detail": "services.rag.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "QueryParser",
+        "importPath": "services.rag.query_parser",
+        "description": "services.rag.query_parser",
+        "isExtraImport": true,
+        "detail": "services.rag.query_parser",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
@@ -2475,6 +3275,22 @@
         "description": "services.rag.prompts",
         "isExtraImport": true,
         "detail": "services.rag.prompts",
+        "documentation": {}
+    },
+    {
+        "label": "IntentDispatcher",
+        "importPath": "services.rag.dispatcher",
+        "description": "services.rag.dispatcher",
+        "isExtraImport": true,
+        "detail": "services.rag.dispatcher",
+        "documentation": {}
+    },
+    {
+        "label": "IntentClassifier",
+        "importPath": "services.rag.intent_classifier",
+        "description": "services.rag.intent_classifier",
+        "isExtraImport": true,
+        "detail": "services.rag.intent_classifier",
         "documentation": {}
     },
     {
@@ -2542,12 +3358,70 @@
         "documentation": {}
     },
     {
+        "label": "op",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "context",
+        "importPath": "alembic",
+        "description": "alembic",
+        "isExtraImport": true,
+        "detail": "alembic",
+        "documentation": {}
+    },
+    {
+        "label": "sqlalchemy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "engine_from_config",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "pool",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "fileConfig",
+        "importPath": "logging.config",
+        "description": "logging.config",
+        "isExtraImport": true,
+        "detail": "logging.config",
+        "documentation": {}
+    },
+    {
         "label": "sqlite3",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "sqlite3",
         "description": "sqlite3",
         "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
         "documentation": {}
     },
     {
@@ -2573,6 +3447,30 @@
         "importPath": "pytest",
         "description": "pytest",
         "detail": "pytest",
+        "documentation": {}
+    },
+    {
+        "label": "TestClient",
+        "importPath": "fastapi.testclient",
+        "description": "fastapi.testclient",
+        "isExtraImport": true,
+        "detail": "fastapi.testclient",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "importPath": "services.bot.main",
+        "description": "services.bot.main",
+        "isExtraImport": true,
+        "detail": "services.bot.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "importPath": "services.bot.main",
+        "description": "services.bot.main",
+        "isExtraImport": true,
+        "detail": "services.bot.main",
         "documentation": {}
     },
     {
@@ -2609,11 +3507,75 @@
         "documentation": {}
     },
     {
-        "label": "app",
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "isExtraImport": true,
-        "detail": "services.bot.main",
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.chat",
+        "description": "services.bot.api.routers.chat",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nrouter = APIRouter(tags=[\"Chat\"])\n@router.post(\"/ask\", response_model=AskResponse, summary=\"Задать вопрос\")\nasync def ask(request: Annotated[AskRequest, Body()]):\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token\n    try:",
+        "detail": "services.bot.api.routers.chat",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.chat",
+        "description": "services.bot.api.routers.chat",
+        "peekOfCode": "router = APIRouter(tags=[\"Chat\"])\n@router.post(\"/ask\", response_model=AskResponse, summary=\"Задать вопрос\")\nasync def ask(request: Annotated[AskRequest, Body()]):\n    settings = copy.deepcopy(get_settings())\n    if request.confluence_token:\n        settings.confluence_token = request.confluence_token\n    if request.gigachat_token:\n        settings.gigachat_credentials = request.gigachat_token\n    try:\n        service = BotService(build_retriever(settings))",
+        "detail": "services.bot.api.routers.chat",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.data",
+        "description": "services.bot.api.routers.data",
+        "peekOfCode": "router = APIRouter(tags=[\"Data\"])\n@router.get(\"/api/datamarts/list\", response_model=list[str], summary=\"Список витрин\")\nasync def list_datamarts():\n    meta_repo = build_metadata_repository()\n    datamarts = meta_repo.list_datamarts()\n    junk = r\"\\bтз\\b|техническ[ои][еи] задани[ея]|чек лист|препятствия|функциональное решение|функцональное решение|страниц[аы] для 2лс|копия|изменения в релизах\"\n    filtered = []\n    for dm in datamarts:\n        name = dm.get(\"name\", \"\")\n        if not name:",
+        "detail": "services.bot.api.routers.data",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.settings",
+        "description": "services.bot.api.routers.settings",
+        "peekOfCode": "router = APIRouter(tags=[\"Settings\"])\n@router.post(\n    \"/api/save-tokens\",\n    response_model=MessageResponse,\n    status_code=status.HTTP_403_FORBIDDEN,\n    summary=\"Сохранить токены (отключено)\",\n    description=\"Сохранение токенов через API отключено в целях безопасности. Настройте .env файл.\",\n)\nasync def save_tokens(\n    request: Annotated[TokensSaveRequest, Body(description=\"Набор токенов для сохранения\")],",
+        "detail": "services.bot.api.routers.settings",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.sync",
+        "description": "services.bot.api.routers.sync",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nrouter = APIRouter(tags=[\"Sync\"])\n_is_update_running = False\ndef _run_update_rag_task():\n    global _is_update_running\n    try:\n        from services.scenarios.update_rag_service import UpdateRagService\n        service = UpdateRagService()\n        service.run()\n    except Exception as e:",
+        "detail": "services.bot.api.routers.sync",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.sync",
+        "description": "services.bot.api.routers.sync",
+        "peekOfCode": "router = APIRouter(tags=[\"Sync\"])\n_is_update_running = False\ndef _run_update_rag_task():\n    global _is_update_running\n    try:\n        from services.scenarios.update_rag_service import UpdateRagService\n        service = UpdateRagService()\n        service.run()\n    except Exception as e:\n        logger.exception(f\"Ошибка фонового обновления RAG: {e}\")",
+        "detail": "services.bot.api.routers.sync",
+        "documentation": {}
+    },
+    {
+        "label": "_is_update_running",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.sync",
+        "description": "services.bot.api.routers.sync",
+        "peekOfCode": "_is_update_running = False\ndef _run_update_rag_task():\n    global _is_update_running\n    try:\n        from services.scenarios.update_rag_service import UpdateRagService\n        service = UpdateRagService()\n        service.run()\n    except Exception as e:\n        logger.exception(f\"Ошибка фонового обновления RAG: {e}\")\n    finally:",
+        "detail": "services.bot.api.routers.sync",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "services.bot.api.routers.system",
+        "description": "services.bot.api.routers.system",
+        "peekOfCode": "router = APIRouter(tags=[\"System\"])\n@router.post(\"/api/shutdown\", response_model=MessageResponse, summary=\"Выключить сервер\")\nasync def shutdown(background_tasks: BackgroundTasks):\n    async def _s():\n        await asyncio.sleep(0.5)\n        sys.exit(0)\n    background_tasks.add_task(_s)\n    return MessageResponse(message=\"Сервер останавливается\")\n@router.get(\"/api/logs/download\", summary=\"Скачать логи\")\nasync def download_logs():",
+        "detail": "services.bot.api.routers.system",
         "documentation": {}
     },
     {
@@ -2819,16 +3781,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent.parent\nENV_PATH = BASE_DIR / \".env\"\napp = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()",
-        "detail": "services.bot.main",
-        "documentation": {}
-    },
-    {
-        "label": "ENV_PATH",
-        "kind": 5,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "ENV_PATH = BASE_DIR / \".env\"\napp = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)",
+        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent.parent\napp = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2837,7 +3790,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "app = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)\n# Global registry for active background processes",
+        "peekOfCode": "app = FastAPI(\n    title=\"Confluence S2T RAG Bot\",\n    description=\"API для работы с RAG-ботом по документации витрин данных\",\n    version=\"1.0.0\",\n    docs_url=\"/docs\",\n    redoc_url=\"/redoc\",\n)\nconfigure_logging()\nlogger = logging.getLogger(__name__)\napp.include_router(settings_router)",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2846,16 +3799,7 @@
         "kind": 5,
         "importPath": "services.bot.main",
         "description": "services.bot.main",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n# Global registry for active background processes\n_active_processes: dict[str, asyncio.subprocess.Process] = {}\n# --- Эндпоинты для управления токенами ---\n@app.post(\n    \"/api/save-tokens\",\n    response_model=MessageResponse,\n    status_code=status.HTTP_403_FORBIDDEN,\n    summary=\"Сохранить токены (отключено)\",\n    tags=[\"Settings\"],",
-        "detail": "services.bot.main",
-        "documentation": {}
-    },
-    {
-        "label": "_is_update_running",
-        "kind": 5,
-        "importPath": "services.bot.main",
-        "description": "services.bot.main",
-        "peekOfCode": "_is_update_running = False\ndef _run_update_rag_task():\n    global _is_update_running\n    try:\n        from services.scenarios.update_rag_service import UpdateRagService\n        service = UpdateRagService()\n        service.run()\n    except Exception as e:\n        logger.exception(f\"Ошибка фонового обновления RAG: {e}\")\n    finally:",
+        "peekOfCode": "logger = logging.getLogger(__name__)\napp.include_router(settings_router)\napp.include_router(chat_router)\napp.include_router(sync_router)\napp.include_router(system_router)\napp.include_router(data_router)\nstatic_path = BASE_DIR / \"web\"\napp.mount(\"/ui\", StaticFiles(directory=str(static_path), html=True), name=\"ui\")\n@app.get(\"/\", include_in_schema=False)\nasync def root():",
         "detail": "services.bot.main",
         "documentation": {}
     },
@@ -2929,6 +3873,204 @@
         "description": "services.ingestion.changes.models",
         "peekOfCode": "class ChangeLogEntry(BaseModel):\n    \"\"\"\n    Модель записи в журнале изменений (аудит изменений в атрибутах или метаданных).\n    \"\"\"\n    id: str\n    datamart_name: str\n    datamart_code: str | None = None\n    entity_type: str\n    entity_name: str\n    change_type: str",
         "detail": "services.ingestion.changes.models",
+        "documentation": {}
+    },
+    {
+        "label": "ChecklistExtractor",
+        "kind": 6,
+        "importPath": "services.ingestion.confluence.extractors.checklist_extractor",
+        "description": "services.ingestion.confluence.extractors.checklist_extractor",
+        "peekOfCode": "class ChecklistExtractor:\n    def __init__(self, client: ConfluenceClient):\n        self.client = client\n    def extract_checklist_facts(\n        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None\n    ) -> list[DatamartFact]:\n        checklist_page = self._find_checklist_page_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions\n        )\n        if not checklist_page or not checklist_page.body_html:",
+        "detail": "services.ingestion.confluence.extractors.checklist_extractor",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.checklist_extractor",
+        "description": "services.ingestion.confluence.extractors.checklist_extractor",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ChecklistExtractor:\n    def __init__(self, client: ConfluenceClient):\n        self.client = client\n    def extract_checklist_facts(\n        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None\n    ) -> list[DatamartFact]:\n        checklist_page = self._find_checklist_page_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions\n        )",
+        "detail": "services.ingestion.confluence.extractors.checklist_extractor",
+        "documentation": {}
+    },
+    {
+        "label": "FactExtractor",
+        "kind": 6,
+        "importPath": "services.ingestion.confluence.extractors.fact_extractor",
+        "description": "services.ingestion.confluence.extractors.fact_extractor",
+        "peekOfCode": "class FactExtractor:\n    def extract_stakeholders(self, html: str) -> list[Stakeholder]:\n        soup = BeautifulSoup(html, \"html.parser\")\n        stakeholders: list[Stakeholder] = []\n        for row in soup.find_all(\"tr\"):\n            cells = [cell.get_text(\" \", strip=True) for cell in row.find_all([\"th\", \"td\"])]\n            if len(cells) >= 2 and fuzzy_contains(cells[0], OWNER_LABELS):\n                stakeholders.extend(self._stakeholders_from_text(cells[1], row))\n        if stakeholders:\n            return stakeholders",
+        "detail": "services.ingestion.confluence.extractors.fact_extractor",
+        "documentation": {}
+    },
+    {
+        "label": "JiraReleaseEnricher",
+        "kind": 6,
+        "importPath": "services.ingestion.confluence.extractors.jira_enricher",
+        "description": "services.ingestion.confluence.extractors.jira_enricher",
+        "peekOfCode": "class JiraReleaseEnricher:\n    def __init__(self, jira_client: JiraClient | None):\n        self.jira_client = jira_client\n    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            logger.warning(\"JiraClient is None. Skipping Jira enrichment.\")\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        logger.info(f\"Enriching {len(changes)} release changes with Jira data...\")\n        for change in changes:",
+        "detail": "services.ingestion.confluence.extractors.jira_enricher",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.jira_enricher",
+        "description": "services.ingestion.confluence.extractors.jira_enricher",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass JiraReleaseEnricher:\n    def __init__(self, jira_client: JiraClient | None):\n        self.jira_client = jira_client\n    def enrich_release_changes(self, changes: list[ReleaseChange]) -> None:\n        if not self.jira_client:\n            logger.warning(\"JiraClient is None. Skipping Jira enrichment.\")\n            return\n        field_mapping = self.jira_client.get_field_mapping()\n        logger.info(f\"Enriching {len(changes)} release changes with Jira data...\")",
+        "detail": "services.ingestion.confluence.extractors.jira_enricher",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChangesExtractor",
+        "kind": 6,
+        "importPath": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "description": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "peekOfCode": "class ReleaseChangesExtractor:\n    def __init__(self, client: ConfluenceClient):\n        self.client = client\n    def extract_release_changes(\n        self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None\n    ) -> list[ReleaseChange]:\n        release_page = self._find_release_page_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions\n        )\n        if not release_page or not release_page.body_html:",
+        "detail": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "description": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ReleaseChangesExtractor:\n    def __init__(self, client: ConfluenceClient):\n        self.client = client\n    def extract_release_changes(\n        self, page: ConfluencePage, html: str, visited_versions: dict[str, int] | None = None\n    ) -> list[ReleaseChange]:\n        release_page = self._find_release_page_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions\n        )",
+        "detail": "services.ingestion.confluence.extractors.release_changes_extractor",
+        "documentation": {}
+    },
+    {
+        "label": "S2TDiscovery",
+        "kind": 6,
+        "importPath": "services.ingestion.confluence.extractors.s2t_discovery",
+        "description": "services.ingestion.confluence.extractors.s2t_discovery",
+        "peekOfCode": "class S2TDiscovery:\n    def __init__(self, client: ConfluenceClient, settings):\n        self.client = client\n        self.settings = settings\n    def find_s2t_candidates(\n        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None\n    ) -> list[S2TResource]:\n        return self._find_s2t_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions\n        )",
+        "detail": "services.ingestion.confluence.extractors.s2t_discovery",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.s2t_discovery",
+        "description": "services.ingestion.confluence.extractors.s2t_discovery",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass S2TDiscovery:\n    def __init__(self, client: ConfluenceClient, settings):\n        self.client = client\n        self.settings = settings\n    def find_s2t_candidates(\n        self, page: ConfluencePage, visited_versions: dict[str, int] | None = None\n    ) -> list[S2TResource]:\n        return self._find_s2t_recursive(\n            page, depth=0, visited=set(), visited_versions=visited_versions",
+        "detail": "services.ingestion.confluence.extractors.s2t_discovery",
+        "documentation": {}
+    },
+    {
+        "label": "clean_text",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def clean_text(value: str) -> str:\n    return re.sub(r\"\\s+\", \" \", value).strip()\ndef fact_key(label: str) -> str:\n    normalized = normalize_text(label)\n    for key, aliases in FACT_ALIASES.items():\n        if any(alias in normalized for alias in aliases):\n            return key\n    return \"unknown\"\ndef links_from_node(node) -> list[dict[str, str]]:\n    links = []",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "fact_key",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def fact_key(label: str) -> str:\n    normalized = normalize_text(label)\n    for key, aliases in FACT_ALIASES.items():\n        if any(alias in normalized for alias in aliases):\n            return key\n    return \"unknown\"\ndef links_from_node(node) -> list[dict[str, str]]:\n    links = []\n    for link in node.find_all(\"a\"):\n        href = link.get(\"href\")",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "links_from_node",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def links_from_node(node) -> list[dict[str, str]]:\n    links = []\n    for link in node.find_all(\"a\"):\n        href = link.get(\"href\")\n        if not href:\n            continue\n        links.append({\"title\": link.get_text(\" \", strip=True) or href, \"url\": href})\n    return links\ndef page_id_from_url(url: str) -> str | None:\n    parsed = urlparse(url)",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "page_id_from_url",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def page_id_from_url(url: str) -> str | None:\n    parsed = urlparse(url)\n    query = parse_qs(parsed.query)\n    page_id = query.get(\"pageId\", [None])[0]\n    if page_id:\n        return page_id\n    path_parts = [part for part in parsed.path.split(\"/\") if part]\n    for part in path_parts:\n        if part.isdigit():\n            return part",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "file_name_from_url",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def file_name_from_url(url: str | None) -> str | None:\n    if not url:\n        return None\n    path = urlparse(url).path\n    if not path or path.endswith(\"/\"):\n        return None\n    return unquote(path.rsplit(\"/\", 1)[-1])\ndef attachment_lookup_key(value: str | None) -> str | None:\n    if not value:\n        return None",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "attachment_lookup_key",
+        "kind": 2,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "def attachment_lookup_key(value: str | None) -> str | None:\n    if not value:\n        return None\n    return unquote(value).strip().casefold()",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "OWNER_LABELS",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "OWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "EMAIL_RE",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "SUPPORTED_S2T_SUFFIXES",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "LATEST_MARKERS",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "FACT_ALIASES",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "FACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],\n    \"db_name\": [\"имя витрины в бд\", \"витрина в бд\", \"название витрины в бд\"],",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "JIRA_KEY_RE",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\ndef clean_text(value: str) -> str:\n    return re.sub(r\"\\s+\", \" \", value).strip()\ndef fact_key(label: str) -> str:\n    normalized = normalize_text(label)\n    for key, aliases in FACT_ALIASES.items():",
+        "detail": "services.ingestion.confluence.extractors.utils",
+        "documentation": {}
+    },
+    {
+        "label": "PLACEHOLDER_TEXTS",
+        "kind": 5,
+        "importPath": "services.ingestion.confluence.extractors.utils",
+        "description": "services.ingestion.confluence.extractors.utils",
+        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\ndef clean_text(value: str) -> str:\n    return re.sub(r\"\\s+\", \" \", value).strip()\ndef fact_key(label: str) -> str:\n    normalized = normalize_text(label)\n    for key, aliases in FACT_ALIASES.items():\n        if any(alias in normalized for alias in aliases):",
+        "detail": "services.ingestion.confluence.extractors.utils",
         "documentation": {}
     },
     {
@@ -3053,7 +4195,7 @@
         "kind": 6,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "class ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
+        "peekOfCode": "class ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Работает как фасад над набором Extractors.\n    \"\"\"\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,\n        jira_client: JiraClient | None = None,",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -3062,70 +4204,7 @@
         "kind": 5,
         "importPath": "services.ingestion.confluence.parser",
         "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nOWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "OWNER_LABELS",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "OWNER_LABELS = [\n    \"заинтересованные лица\",\n    \"заинтересовпнные лица\",\n    \"владельцы\",\n    \"ответственные\",\n    \"контакты\",\n]\nEMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "EMAIL_RE",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "EMAIL_RE = re.compile(r\"[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)+\")\nSUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "SUPPORTED_S2T_SUFFIXES",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "SUPPORTED_S2T_SUFFIXES = (\".xlsx\", \".xls\", \".csv\")\nLATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "LATEST_MARKERS",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "LATEST_MARKERS = {\"новый\", \"new\", \"latest\", \"актуальный\"}\nFACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "FACT_ALIASES",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "FACT_ALIASES = {\n    \"business_stakeholders\": [\n        \"заинтересованные со стороны бизнеса\",\n        \"заинтересованное лица\",\n        \"заинтересованные лица\",\n        \"заинтересованные фио\",\n    ],\n    \"meta_links\": [\"мета\", \"ка фо\", \"карта данных\", \"смд\"],\n    \"ke\": [\"кэ\"],\n    \"db_name\": [\"имя витрины в бд\", \"витрина в бд\", \"название витрины в бд\"],",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "JIRA_KEY_RE",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "JIRA_KEY_RE = re.compile(r\"\\b[A-Z][A-Z0-9]+-\\d+\\b\")\nPLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"",
-        "detail": "services.ingestion.confluence.parser",
-        "documentation": {}
-    },
-    {
-        "label": "PLACEHOLDER_TEXTS",
-        "kind": 5,
-        "importPath": "services.ingestion.confluence.parser",
-        "description": "services.ingestion.confluence.parser",
-        "peekOfCode": "PLACEHOLDER_TEXTS = {\n    \"получение подробных данных проблемы\",\n    \"статус\",\n}\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Обеспечивает сбор данных о стейкхолдерах, атрибутах витрины, истории релизов и поиск файлов S2T.\n    \"\"\"\n    def __init__(",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass ConfluenceParser:\n    \"\"\"\n    Парсер страниц Confluence для извлечения информации о витринах данных.\n    Работает как фасад над набором Extractors.\n    \"\"\"\n    def __init__(\n        self,\n        client: ConfluenceClient,\n        settings: Settings,",
         "detail": "services.ingestion.confluence.parser",
         "documentation": {}
     },
@@ -3328,6 +4407,114 @@
         "documentation": {}
     },
     {
+        "label": "AttributeUsageHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.attribute_handlers",
+        "description": "services.rag.handlers.attribute_handlers",
+        "peekOfCode": "class AttributeUsageHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        token = self.query_parser.extract_attribute_name(question)\n        if not token:\n            return RAGAnswer(answer=\"Не удалось определить атрибут в вопросе.\", sources=[])\n        attrs = self.metadata_repo.find_attribute_usage(token)\n        if not attrs:\n            return RAGAnswer(answer=f\"Данных по атрибуту `{token}` нет.\", sources=[])\n        marts = sorted({attr.datamart_name for attr in attrs})\n        return RAGAnswer(",
+        "detail": "services.rag.handlers.attribute_handlers",
+        "documentation": {}
+    },
+    {
+        "label": "AttributeCompositionHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.attribute_handlers",
+        "description": "services.rag.handlers.attribute_handlers",
+        "peekOfCode": "class AttributeCompositionHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        datamart = self.query_parser.extract_datamart_name(question)\n        attrs = (\n            self.metadata_repo.list_attributes(datamart_name=datamart)\n            if datamart\n            else self.metadata_repo.list_attributes()\n        )\n        if not attrs:\n            if datamart and self.metadata_repo.get_datamart(datamart):",
+        "detail": "services.rag.handlers.attribute_handlers",
+        "documentation": {}
+    },
+    {
+        "label": "AttributeLogicHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.attribute_handlers",
+        "description": "services.rag.handlers.attribute_handlers",
+        "peekOfCode": "class AttributeLogicHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        attrs = self.query_parser.attrs_from_question(question)\n        if not attrs:\n            return None\n        lines = [\n            f\"{attr.target_field}: {attr.transformation_logic or 'логика не указана'}\"\n            for attr in attrs\n        ]\n        return RAGAnswer(answer=\"\\n\".join(lines), sources=[self._source(attr) for attr in attrs])",
+        "detail": "services.rag.handlers.attribute_handlers",
+        "documentation": {}
+    },
+    {
+        "label": "SourceLineageHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.attribute_handlers",
+        "description": "services.rag.handlers.attribute_handlers",
+        "peekOfCode": "class SourceLineageHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        attrs = self.query_parser.attrs_from_question(question)\n        if not attrs:\n            datamart_name = self.query_parser.extract_datamart_name(question)\n            if datamart_name:\n                attrs = self.metadata_repo.list_attributes(datamart_name=datamart_name)\n                if attrs:\n                    sources_map: dict[str, set[str]] = {}\n                    for attr in attrs:",
+        "detail": "services.rag.handlers.attribute_handlers",
+        "documentation": {}
+    },
+    {
+        "label": "BaseHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.base",
+        "description": "services.rag.handlers.base",
+        "peekOfCode": "class BaseHandler(ABC):\n    def __init__(self, metadata_repo, vector_store, history_repo, answer_generator, query_parser):\n        self.metadata_repo = metadata_repo\n        self.vector_store = vector_store\n        self.history_repo = history_repo\n        self.answer_generator = answer_generator\n        self.query_parser = query_parser\n    @abstractmethod\n    def handle(self, question: str) -> RAGAnswer | None:\n        pass",
+        "detail": "services.rag.handlers.base",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartFactHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.datamart_fact",
+        "description": "services.rag.handlers.datamart_fact",
+        "peekOfCode": "class DatamartFactHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        fact_key = self._fact_key_from_question(question)\n        datamarts = self.query_parser.datamarts_from_question(question)\n        if not datamarts:\n            requested_name = self.query_parser.extract_datamart_name(question)\n            if requested_name:\n                return RAGAnswer(\n                    answer=f\"Витрина `{requested_name}` найдена, но данных по запросу на её странице нет.\",\n                    sources=[],",
+        "detail": "services.rag.handlers.datamart_fact",
+        "documentation": {}
+    },
+    {
+        "label": "DatamartListHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.datamart_list",
+        "description": "services.rag.handlers.datamart_list",
+        "peekOfCode": "class DatamartListHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        datamarts = self.metadata_repo.list_datamarts()\n        if not datamarts:\n            return RAGAnswer(\n                answer=\"Витрины не найдены. Сначала выполните `update-rag` или `parse-s2t`.\",\n                sources=[],\n            )\n        junk_patterns = [\n            r\"\\bтз\\b\", r\"техническ[ои][еи] задани[ея]\", r\"чек лист\", r\"препятствия\",",
+        "detail": "services.rag.handlers.datamart_list",
+        "documentation": {}
+    },
+    {
+        "label": "LastYearChangesHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.history",
+        "description": "services.rag.handlers.history",
+        "peekOfCode": "class LastYearChangesHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        until = datetime.utcnow()\n        since = self._changes_period_start(question, until)\n        requested_datamart = self.query_parser.extract_datamart_name(question)\n        changes = self.history_repo.list_changes(since=since)\n        if requested_datamart:\n            changes = [\n                change\n                for change in changes",
+        "detail": "services.rag.handlers.history",
+        "documentation": {}
+    },
+    {
+        "label": "ReleaseChangesHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.history",
+        "description": "services.rag.handlers.history",
+        "peekOfCode": "class ReleaseChangesHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        datamarts = self.query_parser.datamarts_from_question(question)\n        matching: list[tuple[dict, dict]] = []\n        for datamart in datamarts:\n            for change in json.loads(datamart.get(\"release_changes_json\") or \"[]\"):\n                matching.append((datamart, change))\n        if not matching:\n            return RAGAnswer(answer=\"Изменения в релизах для витрины не найдены.\", sources=[])\n        def sort_key(item):",
+        "detail": "services.rag.handlers.history",
+        "documentation": {}
+    },
+    {
+        "label": "OwnerLookupHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.owner_lookup",
+        "description": "services.rag.handlers.owner_lookup",
+        "peekOfCode": "class OwnerLookupHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        attrs = self.metadata_repo.list_attributes()\n        if not attrs:\n            return RAGAnswer(\n                answer=\"Данных по владельцам нет. Сначала распарсьте S2T и соберите RAG.\",\n                sources=[],\n            )\n        requested_datamart = self.query_parser.extract_datamart_name(question)\n        if requested_datamart:",
+        "detail": "services.rag.handlers.owner_lookup",
+        "documentation": {}
+    },
+    {
+        "label": "VectorAnswerHandler",
+        "kind": 6,
+        "importPath": "services.rag.handlers.vector",
+        "description": "services.rag.handlers.vector",
+        "peekOfCode": "class VectorAnswerHandler(BaseHandler):\n    def handle(self, question: str) -> RAGAnswer | None:\n        docs = self.vector_store.search(question, k=5)\n        if not docs:\n            return RAGAnswer(\n                answer=\"Данных для ответа нет. Сначала распарсьте S2T и соберите RAG.\",\n                sources=[],\n            )\n        context = \"\\n\".join(item.document.text for item in docs)\n        try:",
+        "detail": "services.rag.handlers.vector",
+        "documentation": {}
+    },
+    {
+        "label": "IntentDispatcher",
+        "kind": 6,
+        "importPath": "services.rag.dispatcher",
+        "description": "services.rag.dispatcher",
+        "peekOfCode": "class IntentDispatcher:\n    def __init__(self, metadata_repo, vector_store, history_repo, answer_generator, intent_classifier):\n        self.intent_classifier = intent_classifier\n        self.query_parser = QueryParser(metadata_repo)\n        args = (metadata_repo, vector_store, history_repo, answer_generator, self.query_parser)\n        self.handlers = {\n            \"datamart_list\": DatamartListHandler(*args),\n            \"datamart_fact\": DatamartFactHandler(*args),\n            \"release_changes\": ReleaseChangesHandler(*args),\n            \"owner_lookup\": OwnerLookupHandler(*args),",
+        "detail": "services.rag.dispatcher",
+        "documentation": {}
+    },
+    {
         "label": "LocalTextEmbedder",
         "kind": 6,
         "importPath": "services.rag.embeddings",
@@ -3343,6 +4530,15 @@
         "description": "services.rag.indexer",
         "peekOfCode": "class RAGIndexer:\n    \"\"\"\n    Класс для индексации данных о витринах и атрибутах в RAG-систему.\n    Отвечает за преобразование объектов Datamart и S2TAttribute в RAGDocument.\n    \"\"\"\n    def __init__(\n        self,\n        metadata_repo: MetadataRepository,\n        document_repo: DocumentRepository,\n        vector_store: JsonVectorStore,",
         "detail": "services.rag.indexer",
+        "documentation": {}
+    },
+    {
+        "label": "IntentClassifier",
+        "kind": 6,
+        "importPath": "services.rag.intent_classifier",
+        "description": "services.rag.intent_classifier",
+        "peekOfCode": "class IntentClassifier:\n    \"\"\"\n    Классификатор намерений пользователя на основе текста вопроса.\n    \"\"\"\n    def classify(self, question: str) -> str:\n        q = normalize_text(question)\n        if \"измен\" in q and any(\n            word in q for word in [\"период\", \"дата\", \"датам\", \"история\", \"текущ\"]\n        ):\n            if \"релиз\" not in q:",
+        "detail": "services.rag.intent_classifier",
         "documentation": {}
     },
     {
@@ -3427,12 +4623,12 @@
         "documentation": {}
     },
     {
-        "label": "IntentClassifier",
+        "label": "QueryParser",
         "kind": 6,
-        "importPath": "services.rag.retriever",
-        "description": "services.rag.retriever",
-        "peekOfCode": "class IntentClassifier:\n    \"\"\"\n    Классификатор намерений пользователя на основе текста вопроса.\n    \"\"\"\n    def classify(self, question: str) -> str:\n        \"\"\"\n        Классифицирует вопрос пользователя для определения стратегии поиска ответа.\n        :param question: Текст вопроса пользователя.\n        \"\"\"\n        q = normalize_text(question)",
-        "detail": "services.rag.retriever",
+        "importPath": "services.rag.query_parser",
+        "description": "services.rag.query_parser",
+        "peekOfCode": "class QueryParser:\n    def __init__(self, metadata_repo):\n        self.metadata_repo = metadata_repo\n    def normalize_cx(self, text: str) -> str:\n        return text.replace(\"С\", \"C\").replace(\"с\", \"c\").replace(\"Х\", \"X\").replace(\"х\", \"x\")\n    def matches_datamart(\n        self, actual_name: str | None, requested_name: str, actual_code: str | None = None\n    ) -> bool:\n        requested = self.normalize_cx(normalize_text(requested_name))\n        actual = self.normalize_cx(normalize_text(actual_name or \"\"))",
+        "detail": "services.rag.query_parser",
         "documentation": {}
     },
     {
@@ -3451,6 +4647,24 @@
         "description": "services.rag.vector_store",
         "peekOfCode": "class JsonVectorStore:\n    \"\"\"\n    Локальное векторное хранилище на базе JSONL-файла.\n    Обеспечивает сохранение документов и поиск по сходству через эмбеддинги.\n    \"\"\"\n    def __init__(self, directory: Path, embedder: LocalTextEmbedder | None = None) -> None:\n        \"\"\"\n        Инициализирует JsonVectorStore.\n        :param directory: Директория для хранения файла индекса.\n        :param embedder: Объект для вычисления эмбеддингов текстов.",
         "detail": "services.rag.vector_store",
+        "documentation": {}
+    },
+    {
+        "label": "ChatHistoryService",
+        "kind": 6,
+        "importPath": "services.scenarios.chat_history_service",
+        "description": "services.scenarios.chat_history_service",
+        "peekOfCode": "class ChatHistoryService:\n    def clear_history(self, session_id: str) -> None:\n        repo = build_chat_history_repository()\n        with repo.db.connect() as conn:\n            conn.execute(\"DELETE FROM chat_history WHERE session_id = ?\", (session_id,))",
+        "detail": "services.scenarios.chat_history_service",
+        "documentation": {}
+    },
+    {
+        "label": "SyncStatusService",
+        "kind": 6,
+        "importPath": "services.scenarios.sync_status_service",
+        "description": "services.scenarios.sync_status_service",
+        "peekOfCode": "class SyncStatusService:\n    def get_last_events(self) -> SyncLastEventsResponse:\n        s_repo = build_state_repository()\n        m_repo = build_metadata_repository()\n        states = s_repo.list_all()\n        dms = m_repo.list_datamarts()\n        lp = max([s.last_synced_at for s in states if s.last_synced_at]).isoformat() if states and any(s.last_synced_at for s in states) else None\n        lru = max([d.get(\"updated_at\") for d in dms if d.get(\"updated_at\")]) if dms else None\n        return SyncLastEventsResponse(last_parsing=lp, last_rag_update=lru, status=\"ok\")\n    def get_status(self) -> SyncStatusResponse:",
+        "detail": "services.scenarios.sync_status_service",
         "documentation": {}
     },
     {
@@ -3523,6 +4737,60 @@
         "description": "shared.logging.logging_config",
         "peekOfCode": "memory_handler = MemoryLogHandler()\ndef configure_logging(level: str = \"INFO\") -> None:\n    \"\"\"\n    Настраивает систему логирования приложения.\n    :param level: Уровень логирования (например, 'INFO', 'DEBUG').\n    \"\"\"\n    # Set standard format for memory handler (plain text)\n    memory_handler.setFormatter(\n        logging.Formatter(\"%(asctime)s %(levelname)s [%(name)s] %(message)s\")\n    )",
         "detail": "shared.logging.logging_config",
+        "documentation": {}
+    },
+    {
+        "label": "upgrade",
+        "kind": 2,
+        "importPath": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "description": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "peekOfCode": "def upgrade() -> None:\n    \"\"\"Upgrade schema.\"\"\"\n    op.execute(\"\"\"\n    create table if not exists datamarts (\n        name text primary key,\n        code text,\n        confluence_page_id text,\n        confluence_url text,\n        stakeholders_json text not null default '[]',\n        updated_at text,",
+        "detail": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "documentation": {}
+    },
+    {
+        "label": "downgrade",
+        "kind": 2,
+        "importPath": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "description": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "peekOfCode": "def downgrade() -> None:\n    \"\"\"Downgrade schema.\"\"\"\n    op.execute(\"drop table if exists page_snapshots;\")\n    op.execute(\"drop index if exists idx_chat_history_session;\")\n    op.execute(\"drop table if exists chat_history;\")\n    op.execute(\"drop index if exists idx_s2t_state_datamart;\")\n    op.execute(\"drop table if exists s2t_state;\")\n    op.execute(\"drop table if exists change_log;\")\n    op.execute(\"drop table if exists documents;\")\n    op.execute(\"drop index if exists idx_attributes_target_field;\")",
+        "detail": "shared.storage.migrations.versions.92ce3d43fd51_initial_schema",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_offline",
+        "kind": 2,
+        "importPath": "shared.storage.migrations.env",
+        "description": "shared.storage.migrations.env",
+        "peekOfCode": "def run_migrations_offline() -> None:\n    url = config.get_main_option(\"sqlalchemy.url\")\n    context.configure(\n        url=url,\n        target_metadata=target_metadata,\n        literal_binds=True,\n        dialect_opts={\"paramstyle\": \"named\"},\n    )\n    with context.begin_transaction():\n        context.run_migrations()",
+        "detail": "shared.storage.migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "run_migrations_online",
+        "kind": 2,
+        "importPath": "shared.storage.migrations.env",
+        "description": "shared.storage.migrations.env",
+        "peekOfCode": "def run_migrations_online() -> None:\n    url = config.get_main_option(\"sqlalchemy.url\")\n    connectable = engine_from_config(\n        config.get_section(config.config_ini_section, {}),\n        prefix=\"sqlalchemy.\",\n        poolclass=pool.NullPool,\n        url=url,\n    )\n    with connectable.connect() as connection:\n        context.configure(",
+        "detail": "shared.storage.migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 5,
+        "importPath": "shared.storage.migrations.env",
+        "description": "shared.storage.migrations.env",
+        "peekOfCode": "config = context.config\n# Interpret the config file for Python logging.\n# This line sets up loggers basically.\nif config.config_file_name is not None:\n    fileConfig(config.config_file_name)\n# add your model's MetaData object here\n# for 'autogenerate' support\n# from myapp import mymodel\n# target_metadata = mymodel.Base.metadata\ntarget_metadata = None",
+        "detail": "shared.storage.migrations.env",
+        "documentation": {}
+    },
+    {
+        "label": "target_metadata",
+        "kind": 5,
+        "importPath": "shared.storage.migrations.env",
+        "description": "shared.storage.migrations.env",
+        "peekOfCode": "target_metadata = None\n# other values from the config, defined by the needs of env.py,\n# can be acquired:\n# my_important_option = config.get_main_option(\"my_important_option\")\n# ... etc.\ndef run_migrations_offline() -> None:\n    url = config.get_main_option(\"sqlalchemy.url\")\n    context.configure(\n        url=url,\n        target_metadata=target_metadata,",
+        "detail": "shared.storage.migrations.env",
         "documentation": {}
     },
     {
@@ -3603,6 +4871,15 @@
         "importPath": "shared.storage.sqlite",
         "description": "shared.storage.sqlite",
         "peekOfCode": "class SQLite:\n    \"\"\"\n    Класс для управления базой данных SQLite, включая инициализацию схемы и управление соединениями.\n    \"\"\"\n    def __init__(self, path: Path) -> None:\n        \"\"\"\n        Инициализирует объект SQLite и создает базу данных, если она не существует.\n        :param path: Путь к файлу базы данных SQLite.\n        \"\"\"\n        self.path = path",
+        "detail": "shared.storage.sqlite",
+        "documentation": {}
+    },
+    {
+        "label": "_local",
+        "kind": 5,
+        "importPath": "shared.storage.sqlite",
+        "description": "shared.storage.sqlite",
+        "peekOfCode": "_local = threading.local()\nclass SQLite:\n    \"\"\"\n    Класс для управления базой данных SQLite, включая инициализацию схемы и управление соединениями.\n    \"\"\"\n    def __init__(self, path: Path) -> None:\n        \"\"\"\n        Инициализирует объект SQLite и создает базу данных, если она не существует.\n        :param path: Путь к файлу базы данных SQLite.\n        \"\"\"",
         "detail": "shared.storage.sqlite",
         "documentation": {}
     },
@@ -3724,6 +5001,69 @@
         "documentation": {}
     },
     {
+        "label": "test_health",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_health():\n    response = client.get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\ndef test_questions_templates():\n    response = client.get(\"/api/questions/templates\")\n    assert response.status_code == 200\n    data = response.json()\n    assert isinstance(data, list)\n    assert len(data) > 0",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_questions_templates",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_questions_templates():\n    response = client.get(\"/api/questions/templates\")\n    assert response.status_code == 200\n    data = response.json()\n    assert isinstance(data, list)\n    assert len(data) > 0\n    assert \"owner\" in [t[\"id\"] for t in data]\ndef test_clear_chat_history_requires_session_id():\n    response = client.post(\"/api/clear-chat-history\", json={})\n    assert response.status_code == 400",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_clear_chat_history_requires_session_id",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_clear_chat_history_requires_session_id():\n    response = client.post(\"/api/clear-chat-history\", json={})\n    assert response.status_code == 400\ndef test_save_tokens_is_forbidden():\n    response = client.post(\"/api/save-tokens\", json={\"confluence_token\": \"test\"})\n    assert response.status_code == 403\n    assert \"безопасности\" in response.json()[\"detail\"]\ndef test_clear_tokens_is_forbidden():\n    response = client.post(\"/api/clear-tokens\")\n    assert response.status_code == 403",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_save_tokens_is_forbidden",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_save_tokens_is_forbidden():\n    response = client.post(\"/api/save-tokens\", json={\"confluence_token\": \"test\"})\n    assert response.status_code == 403\n    assert \"безопасности\" in response.json()[\"detail\"]\ndef test_clear_tokens_is_forbidden():\n    response = client.post(\"/api/clear-tokens\")\n    assert response.status_code == 403\n    assert \"безопасности\" in response.json()[\"detail\"]\ndef test_interrupt_update_is_not_implemented():\n    response = client.post(\"/api/interrupt-update\")",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_clear_tokens_is_forbidden",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_clear_tokens_is_forbidden():\n    response = client.post(\"/api/clear-tokens\")\n    assert response.status_code == 403\n    assert \"безопасности\" in response.json()[\"detail\"]\ndef test_interrupt_update_is_not_implemented():\n    response = client.post(\"/api/interrupt-update\")\n    # Will be 501 or message that it's not running depending on state, \n    # but since it's not running, it returns 200 with \"already finished\" or 501.\n    # Current behavior: if not running, returns 200. Let's check:\n    assert response.status_code == 200",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_interrupt_update_is_not_implemented",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_interrupt_update_is_not_implemented():\n    response = client.post(\"/api/interrupt-update\")\n    # Will be 501 or message that it's not running depending on state, \n    # but since it's not running, it returns 200 with \"already finished\" or 501.\n    # Current behavior: if not running, returns 200. Let's check:\n    assert response.status_code == 200\n    assert \"не найден\" in response.json()[\"message\"]",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "client = TestClient(app)\ndef test_health():\n    response = client.get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\"}\ndef test_questions_templates():\n    response = client.get(\"/api/questions/templates\")\n    assert response.status_code == 200\n    data = response.json()\n    assert isinstance(data, list)",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
         "label": "test_parse_s2t_records_changes_on_reparse",
         "kind": 2,
         "importPath": "tests.test_cli",
@@ -3818,7 +5158,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_client_uses_configured_ssl_verification() -> None:\n    client = ConfluenceClient(\n        Settings(\n            _env_file=None,\n            confluence_base_url=\"https://confluence.example.ru\",\n            confluence_verify_ssl=False,\n        )\n    )\n    assert client._client._transport._pool._ssl_context.check_hostname is False\n    assert client._client._transport._pool._ssl_context.verify_mode == 0",
+        "peekOfCode": "def test_client_uses_configured_ssl_verification() -> None:\n    client = ConfluenceClient(\n        Settings(\n            _env_file=None,\n            confluence_base_url=\"https://confluence.example.ru\",\n            confluence_verify_ssl=False,\n        )\n    )\n    assert client.http._transport._pool._ssl_context.check_hostname is False\n    assert client.http._transport._pool._ssl_context.verify_mode == 0",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },
@@ -3827,7 +5167,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_basic_auth_is_used_when_username_is_configured() -> None:\n    auth, headers = ConfluenceClient._auth_config(\n        Settings(\n            _env_file=None,\n            confluence_username=\"user\",\n            confluence_api_token=\"secret-token\",\n        )\n    )\n    assert auth == (\"user\", \"secret-token\")\n    assert headers == {\"Accept\": \"application/json\"}",
+        "peekOfCode": "def test_basic_auth_is_used_when_username_is_configured() -> None:\n    auth, headers = ConfluenceClient._auth_config(\n        Settings(\n            _env_file=None,\n            confluence_auth_type=\"basic\",\n            confluence_username=\"user\",\n            confluence_api_token=\"secret-token\",\n        )\n    )\n    assert auth == (\"user\", \"secret-token\")",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },
@@ -3836,7 +5176,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_non_ascii_api_token_is_auth_error() -> None:\n    with pytest.raises(ConfluenceAuthError, match=\"CONFLUENCE_TOKEN\"):\n        ConfluenceClient._auth_config(\n            Settings(\n                _env_file=None,\n                confluence_auth_type=\"bearer\",\n                confluence_auth_token=\"ваш_новый_api_token\",\n            )\n        )\ndef test_attachment_download_401_is_auth_error() -> None:",
+        "peekOfCode": "def test_non_ascii_api_token_is_auth_error() -> None:\n    with pytest.raises(ConfluenceAuthError, match=\"CONFLUENCE_TOKEN\"):\n        ConfluenceClient._auth_config(\n            Settings(\n                _env_file=None,\n                confluence_auth_type=\"bearer\",\n                confluence_api_token=\"ваш_новый_api_token\",\n            )\n        )\ndef test_attachment_download_401_is_auth_error() -> None:",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },
@@ -3845,7 +5185,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_client",
         "description": "tests.test_confluence_client",
-        "peekOfCode": "def test_attachment_download_401_is_auth_error() -> None:\n    client = ConfluenceClient(\n        Settings(_env_file=None, confluence_base_url=\"https://example.atlassian.net/wiki\"),\n        httpx.Client(\n            base_url=\"https://example.atlassian.net/wiki\",\n            transport=httpx.MockTransport(lambda request: httpx.Response(401)),\n        ),\n    )\n    with pytest.raises(ConfluenceAuthError):\n        client.download(\"https://example.atlassian.net/wiki/download/attachments/42/s2t.xlsx\")",
+        "peekOfCode": "def test_attachment_download_401_is_auth_error() -> None:\n    client = ConfluenceClient(\n        Settings(_env_file=None, confluence_base_url=\"https://example.atlassian.net/wiki\", confluence_page_url=None),\n        httpx.Client(\n            base_url=\"https://example.atlassian.net/wiki\",\n            transport=httpx.MockTransport(lambda request: httpx.Response(401)),\n        ),\n    )\n    with pytest.raises(ConfluenceAuthError):\n        client.download(\"https://example.atlassian.net/wiki/download/attachments/42/s2t.xlsx\")",
         "detail": "tests.test_confluence_client",
         "documentation": {}
     },
@@ -3881,7 +5221,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "def test_extract_stakeholders_from_table() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    html = \"\"\"\n    <table><tr><td>Заинтересованные лица</td>\n    <td><a href=\"/u/ivanov\">Иванов Иван</a> ivanov@example.ru;\n    Петров Петр petrov@example.ru</td></tr></table>\n    \"\"\"\n    stakeholders = parser.extract_stakeholders(html)\n    assert len(stakeholders) == 2\n    assert stakeholders[0].email == \"ivanov@example.ru\"",
+        "peekOfCode": "def test_extract_stakeholders_from_table() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    html = \"\"\"\n    <table><tr><td>Заинтересованные лица</td>\n    <td><a href=\"/u/ivanov\">Иванов Иван</a> ivanov@example.ru;\n    Петров Петр petrov@example.ru</td></tr></table>\n    \"\"\"\n    stakeholders = parser.fact_extractor.extract_stakeholders(html)\n    assert len(stakeholders) == 2\n    assert stakeholders[0].email == \"ivanov@example.ru\"",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -3899,7 +5239,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "def test_choose_latest_s2t_prefers_title_date_then_version() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidates = [\n        S2TResource(title=\"s2t_2024_01_01.xlsx\", updated_at=datetime(2026, 1, 1), version=10),\n        S2TResource(title=\"s2t_2025_01_01.xlsx\", updated_at=datetime(2025, 1, 1), version=1),\n        S2TResource(title=\"s2t.xlsx\", updated_at=datetime(2026, 5, 1), version=1),\n    ]\n    for item in candidates:\n        item.file_date = parser.choose_latest_s2t([item]).file_date\n    selected = parser.choose_latest_s2t(candidates)",
+        "peekOfCode": "def test_choose_latest_s2t_prefers_title_date_then_version() -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidates = [\n        S2TResource(title=\"s2t_2024_01_01.xlsx\", updated_at=datetime(2026, 1, 1), version=10),\n        S2TResource(title=\"s2t_2025_01_01.xlsx\", updated_at=datetime(2025, 1, 1), version=1),\n        S2TResource(title=\"s2t.xlsx\", updated_at=datetime(2026, 5, 1), version=1),\n    ]\n    for item in candidates:\n        item.file_date = parser.s2t_discovery.choose_latest_s2t([item]).file_date\n    selected = parser.s2t_discovery.choose_latest_s2t(candidates)",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
@@ -3953,7 +5293,7 @@
         "kind": 2,
         "importPath": "tests.test_confluence_parser",
         "description": "tests.test_confluence_parser",
-        "peekOfCode": "def test_latest_row_without_date_is_not_warning(caplog) -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidate = S2TResource(\n        title=\"arbitrary_name.xlsx\",\n        resource_type=\"table_latest_row\",\n        updated_at=datetime(2026, 5, 16),\n        version=4,\n    )\n    selected = parser.choose_latest_s2t([candidate])\n    assert selected is candidate",
+        "peekOfCode": "def test_latest_row_without_date_is_not_warning(caplog) -> None:\n    parser = ConfluenceParser(FakeClient(), Settings())\n    candidate = S2TResource(\n        title=\"arbitrary_name.xlsx\",\n        resource_type=\"table_latest_row\",\n        updated_at=datetime(2026, 5, 16),\n        version=4,\n    )\n    selected = parser.s2t_discovery.choose_latest_s2t([candidate])\n    assert selected is candidate",
         "detail": "tests.test_confluence_parser",
         "documentation": {}
     },
