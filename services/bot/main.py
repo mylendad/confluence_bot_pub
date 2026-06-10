@@ -165,23 +165,37 @@ async def _run_cli_command_streaming(args: list[str], command_name: str):
         )
         _active_processes[command_name] = process
 
-        async def read_stream(stream, log_func):
+        async def read_stream(stream, is_stderr: bool):
             while True:
                 line = await stream.readline()
                 if not line:
                     break
                 text = line.decode("utf-8", errors="replace").rstrip()
                 if text:
-                    log_func(f"[CLI] {text}")
+                    # Попытка определить уровень логирования из самой строки (она обычно содержит INFO/WARNING/ERROR)
+                    if " ERROR " in text or " CRITICAL " in text:
+                        logger.error(f"[CLI] {text}")
+                    elif " WARNING " in text:
+                        logger.warning(f"[CLI] {text}")
+                    elif " DEBUG " in text:
+                        logger.debug(f"[CLI] {text}")
+                    else:
+                        # По умолчанию все из stdout и stderr пишем в INFO, чтобы не пугать пользователя
+                        # так как большинство библиотек пишут логи в stderr.
+                        logger.info(f"[CLI] {text}")
 
         await asyncio.gather(
-            read_stream(process.stdout, logger.info), read_stream(process.stderr, logger.error)
+            read_stream(process.stdout, is_stderr=False), read_stream(process.stderr, is_stderr=True)
         )
-        await process.wait()
+        return_code = await process.wait()
+        if return_code == 0:
+            logger.info(f"Команда {command_name} успешно завершена")
+        else:
+            logger.error(f"Команда {command_name} завершена с ошибкой (код {return_code})")
     except asyncio.CancelledError:
         logger.info(f"Команда {command_name} была отменена.")
     except Exception:
-        logger.exception(f"Ошибка команды {command_name}")
+        logger.exception(f"Ошибка выполнения команды {command_name}")
     finally:
         _active_processes.pop(command_name, None)
 
