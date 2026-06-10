@@ -35,7 +35,7 @@ def test_extract_stakeholders_from_table() -> None:
     Петров Петр petrov@example.ru</td></tr></table>
     """
 
-    stakeholders = parser.extract_stakeholders(html)
+    stakeholders = parser.fact_extractor.extract_stakeholders(html)
 
     assert len(stakeholders) == 2
     assert stakeholders[0].email == "ivanov@example.ru"
@@ -93,9 +93,9 @@ def test_choose_latest_s2t_prefers_title_date_then_version() -> None:
         S2TResource(title="s2t.xlsx", updated_at=datetime(2026, 5, 1), version=1),
     ]
     for item in candidates:
-        item.file_date = parser.choose_latest_s2t([item]).file_date
+        item.file_date = parser.s2t_discovery.choose_latest_s2t([item]).file_date
 
-    selected = parser.choose_latest_s2t(candidates)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.title == "s2t.xlsx"
@@ -126,9 +126,9 @@ def test_find_s2t_candidate_from_table_date_and_neighbor_download_link() -> None
         """,
     )
 
-    candidates = parser.find_s2t_candidates(page)
+    candidates = parser.s2t_discovery.find_s2t_candidates(page)
 
-    selected = parser.choose_latest_s2t(candidates)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.file_date.isoformat() == "2026-05-10"
@@ -161,7 +161,7 @@ def test_same_table_date_prefers_bottom_link() -> None:
         """,
     )
 
-    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page))
+    selected = parser.s2t_discovery.choose_latest_s2t(parser.s2t_discovery.find_s2t_candidates(page))
 
     assert selected is not None
     assert selected.file_name == "bottom.xlsx"
@@ -185,7 +185,7 @@ def test_table_link_keeps_confluence_cloud_context_path() -> None:
         """,
     )
 
-    selected = parser.choose_latest_s2t(parser.find_s2t_candidates(page))
+    selected = parser.s2t_discovery.choose_latest_s2t(parser.s2t_discovery.find_s2t_candidates(page))
 
     assert selected is not None
     assert selected.url == "https://example.atlassian.net/wiki/download/attachments/42/current.xlsx"
@@ -222,9 +222,9 @@ def test_table_candidate_is_enriched_from_confluence_attachment_api() -> None:
         """,
     )
 
-    candidates = parser.find_s2t_candidates(page)
+    candidates = parser.s2t_discovery.find_s2t_candidates(page)
 
-    selected = parser.choose_latest_s2t(candidates)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.resource_type == "table_link"
@@ -262,9 +262,9 @@ def test_find_s2t_candidate_from_latest_non_empty_row_when_date_is_new() -> None
         """,
     )
 
-    candidates = parser.find_s2t_candidates(page)
+    candidates = parser.s2t_discovery.find_s2t_candidates(page)
 
-    selected = parser.choose_latest_s2t(candidates)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.resource_type == "table_latest_row"
@@ -282,7 +282,7 @@ def test_latest_row_without_date_is_not_warning(caplog) -> None:
         version=4,
     )
 
-    selected = parser.choose_latest_s2t([candidate])
+    selected = parser.s2t_discovery.choose_latest_s2t([candidate])
 
     assert selected is candidate
     assert "S2T date is absent" not in caplog.text
@@ -311,8 +311,8 @@ def test_find_s2t_candidate_from_child_s2t_page_table() -> None:
         url="https://confluence.example.ru/spaces/TH/pages/458753/datamart",
     )
 
-    candidates = parser.find_s2t_candidates(page)
-    selected = parser.choose_latest_s2t(candidates)
+    candidates = parser.s2t_discovery.find_s2t_candidates(page)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.resource_type == "table_link"
@@ -341,9 +341,9 @@ def test_find_s2t_candidate_from_confluence_attachment_macro() -> None:
         """,
     )
 
-    candidates = parser.find_s2t_candidates(page)
+    candidates = parser.s2t_discovery.find_s2t_candidates(page)
 
-    selected = parser.choose_latest_s2t(candidates)
+    selected = parser.s2t_discovery.choose_latest_s2t(candidates)
 
     assert selected is not None
     assert selected.title == "current_s2t.xlsx"
