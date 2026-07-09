@@ -19,9 +19,8 @@ from services.ingestion.s2t.parser import S2TParser
 from services.ingestion.sync.incremental_updater import IncrementalUpdater, IncrementalUpdateResult
 from services.ingestion.sync.metadata_sync_service import MetadataSyncService
 from services.rag.indexer import RAGIndexer
-from services.rag.vector_store import JsonVectorStore
 from shared.config.config import get_settings
-from shared.factory import build_retriever
+from shared.factory import build_retriever, build_vector_store
 from shared.logging.logging_config import configure_logging
 from shared.storage.document_repository import DocumentRepository
 from shared.storage.metadata_repository import MetadataRepository
@@ -42,7 +41,7 @@ def _repos():
     metadata_repo = MetadataRepository(db)
     document_repo = DocumentRepository(db)
     history_repo = HistoryRepository(db)
-    vector_store = JsonVectorStore(settings.vector_store_dir)
+    vector_store = build_vector_store(settings)
     indexer = RAGIndexer(metadata_repo, document_repo, vector_store)
     return settings, metadata_repo, history_repo, indexer
 
@@ -156,7 +155,7 @@ def update_rag(
     metadata_repo = MetadataRepository(db)
     history_repo = HistoryRepository(db)
     document_repo = DocumentRepository(db)
-    vector_store = JsonVectorStore(settings.vector_store_dir)
+    vector_store = build_vector_store(settings)
     indexer = RAGIndexer(metadata_repo, document_repo, vector_store)
     jira_client = None
     # Fix: Also check for jira_auth_token

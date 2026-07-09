@@ -30,6 +30,12 @@ class MemoryLogHandler(logging.Handler):
         """
         return list(self.logs)
 
+    def clear(self) -> None:
+        """
+        Очищает список накопленных логов.
+        """
+        self.logs.clear()
+
 
 class ColoredFormatter(logging.Formatter):
     """

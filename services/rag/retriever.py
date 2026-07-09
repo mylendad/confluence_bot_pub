@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from services.ingestion.changes.history_repository import HistoryRepository
 from services.rag.llm import AnswerGenerator, StubAnswerGenerator
 from services.rag.models import RAGAnswer
-from services.rag.vector_store import JsonVectorStore
+from services.rag.vector_store import VectorStore
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.s2t_state_repository import S2TStateRepository
 from shared.utils.text_utils import fuzzy_contains, normalize_text
@@ -108,7 +108,7 @@ class RAGRetriever:
     def __init__(
         self,
         metadata_repo: MetadataRepository,
-        vector_store: JsonVectorStore,
+        vector_store: VectorStore,
         history_repo: HistoryRepository,
         answer_generator: AnswerGenerator | None = None,
         state_repo: S2TStateRepository | None = None,

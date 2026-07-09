@@ -1,13 +1,31 @@
 from services.ingestion.changes.history_repository import HistoryRepository
 from services.ingestion.confluence.client import ConfluenceClient
+from services.rag.embeddings import build_embedder
 from services.rag.llm import AnswerGenerator, build_answer_generator
 from services.rag.retriever import RAGRetriever
-from services.rag.vector_store import JsonVectorStore
+from services.rag.vector_store import ChromaVectorStore, JsonVectorStore
 from shared.config.config import Settings, get_settings
 from shared.storage.chat_history_repository import ChatHistoryRepository
 from shared.storage.metadata_repository import MetadataRepository
 from shared.storage.s2t_state_repository import S2TStateRepository
 from shared.storage.sqlite import SQLite
+
+
+def build_vector_store(settings: Settings):
+    """
+    Создает векторное хранилище в зависимости от настройки embedding_provider.
+    - "sentence_transformers" → ChromaVectorStore с реальными нейронными эмбеддингами.
+    - "local" (по умолчанию) → JsonVectorStore с TF-подобным косинусным сходством.
+    :param settings: Объект настроек приложения.
+    :return: Экземпляр VectorStore.
+    """
+    if settings.embedding_provider == "sentence_transformers":
+        embedder = build_embedder(
+            provider="sentence_transformers",
+            model_name=settings.embedding_model,
+        )
+        return ChromaVectorStore(settings.vector_store_dir, embedder=embedder)
+    return JsonVectorStore(settings.vector_store_dir)
 
 
 def build_retriever(settings: Settings | None = None) -> RAGRetriever:
@@ -20,10 +38,8 @@ def build_retriever(settings: Settings | None = None) -> RAGRetriever:
     db = SQLite(settings.sqlite_db_path)
     metadata_repo = MetadataRepository(db)
     history_repo = HistoryRepository(db)
-    from shared.storage.s2t_state_repository import S2TStateRepository
-
     state_repo = S2TStateRepository(db)
-    vector_store = JsonVectorStore(settings.vector_store_dir)
+    vector_store = build_vector_store(settings)
     answer_generator = build_answer_generator(settings)
     return RAGRetriever(
         metadata_repo, vector_store, history_repo, answer_generator, state_repo=state_repo

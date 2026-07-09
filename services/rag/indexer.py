@@ -3,7 +3,7 @@ import json
 from services.ingestion.confluence.models import Datamart
 from services.ingestion.s2t.models import S2TAttribute
 from services.rag.models import RAGDocument
-from services.rag.vector_store import JsonVectorStore
+from services.rag.vector_store import JsonVectorStore, VectorStore
 from shared.storage.document_repository import DocumentRepository
 from shared.storage.metadata_repository import MetadataRepository
 from shared.utils.hashing import stable_hash
@@ -19,7 +19,7 @@ class RAGIndexer:
         self,
         metadata_repo: MetadataRepository,
         document_repo: DocumentRepository,
-        vector_store: JsonVectorStore,
+        vector_store: VectorStore,
     ) -> None:
         """
         Инициализирует RAGIndexer.
